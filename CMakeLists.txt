@@ -3,17 +3,17 @@ PROJECT(SublimeCode)
 
 FIND_PACKAGE(Doxygen)
 
-set(SC_ENABLE_TESTS NO CACHE "Enable test-suite")
-set(SC_ENABLE_DOC NO CACHE "Enable documentation generation")
+set(SC_ENABLE_TESTS NO)
+set(SC_ENABLE_DOC NO)
 
 add_subdirectory(src)
 add_subdirectory(lib)
 
 #Need to define a framework
-if(${SC_ENABLE_TESTS})
+if(SC_ENABLE_TESTS)
 	add_subdirectory(tests)
-endif(${SC_ENABLE_TESTS})
+endif(SC_ENABLE_TESTS)
 
-if(${SC_ENABLE_DOC} AND ${DOXYGEN_FOUND})
+if(SC_ENABLE_DOC AND DOXYGEN_FOUND)
 	add_subdirectory(doc) 
-endif(${SC_ENABLE_DOC})
+endif(SC_ENABLE_DOC AND DOXYGEN_FOUND)
