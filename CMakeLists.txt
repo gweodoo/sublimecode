@@ -29,8 +29,6 @@ FIND_PACKAGE(Doxygen)
 # Global vars :
 # - SV_ENABLE_TESTS : activate test suite
 # - SC_ENABLE_FOC : activate doxygen generation from source code
-SET(SC_ENABLE_TESTS NO)
-SET(SC_ENABLE_DOC NO)
 
 #########################################
 # Sub loadings
