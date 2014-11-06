@@ -1,0 +1,19 @@
+FIND_PROGRAM(CTAGS_EXECUTABLE NAMES ctags)
+
+IF (CTAGS_EXECUTABLE)
+		SET(CTAGS_FOUND TRUE)
+ENDIF(CTAGS_EXECUTABLE)
+
+IF (CTAGS_FOUND)
+		# show which CCtags was found only if not quiet
+		IF (NOT CTags_FIND_QUIETLY)
+				MESSAGE(STATUS "Found CTags: ${CTAGS_EXECUTABLE}")
+		ENDIF (NOT CTags_FIND_QUIETLY)
+ELSE (CTAGS_FOUND)
+		# fatal error if CTags is required but not found
+		IF (CTags_FIND_REQUIRED)
+				MESSAGE(FATAL_ERROR "Could NOT find CTags")
+		ELSEIF(NOT CTags_FIND_QUIETLY)
+				MESSAGE(STATUS "Could NOT find CTags (missing: CTAGS_EXECUTABLE)")  	
+		ENDIF (CTags_FIND_REQUIRED)
+ENDIF (CTAGS_FOUND)

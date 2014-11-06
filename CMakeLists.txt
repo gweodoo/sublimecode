@@ -19,16 +19,38 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(SublimeCode)
-SET(SC_VERSION "1.0")
-
-##########################################
-# Externals libs
-FIND_PACKAGE(Doxygen)
 
 ##########################################
 # Global vars :
 # - SV_ENABLE_TESTS : activate test suite
 # - SC_ENABLE_FOC : activate doxygen generation from source code
+set(SC_VERSION "1.0")
+set(SC_ENABLE_TESTS "no")
+set(SC_ENABLE_DOC "no")
+set(SC_EXTRA_FLAGS "-Wall -ansi -pedantic -Wextra")
+#CMake Vars
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_VERBOSE_MAKEFILE "no")
+set(CMAKE_EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}/install")
+
+##########################################
+#displaying vars
+include(cmake/macros.cmake)
+print_variable_content("SC_VERSION")
+print_variable_content("CMAKE_BUILD_TYPE")
+print_variable_status("SC_ENABLE_DOC")
+print_variable_status("SC_ENABLE_TESTS")
+print_variable_status("CMAKE_VERBOSE_MAKEFILE")
+print_variable_content("SC_EXTRA_FLAGS")
+print_variable_content("CMAKE_EXECUTABLE_OUTPUT_PATH")
+print_variable_content("CMAKE_PREFIX_PATH")
+
+##########################################
+# Externals libs
+FIND_PACKAGE(Doxygen)
+FIND_PACKAGE(CTags)
 
 #########################################
 # Sub loadings
