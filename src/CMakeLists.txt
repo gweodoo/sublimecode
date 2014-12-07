@@ -16,3 +16,8 @@
 # along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   #
 #                                                                         #
 ###########################################################################
+
+file(GLOB_RECURSE SRC *.cpp)
+file(GLOB_RECURSE HDR *.h)
+
+add_executable(sublimeCode ${SRC} ${HDR})
