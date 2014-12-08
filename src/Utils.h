@@ -17,8 +17,8 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef COMMON_UTILS_H
-#define COMMON_UTILS_H
+#ifndef UTILS_H
+#define UTILS_H
 
 /******* COMMON *******/
 #include<cstdlib>

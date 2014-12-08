@@ -17,4 +17,13 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "utils.h"
+#ifndef PARSING_H
+#define PARSING_H
+
+#include "Utils.h"
+
+class TagssParser {
+	std::hash_map<> tagsTable;
+};
+
+#endif
