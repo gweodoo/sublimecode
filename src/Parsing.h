@@ -21,9 +21,12 @@
 #define PARSING_H
 
 #include "Utils.h"
+#include "Launcher.h"
 
-class TagssParser {
-	std::hash_map<> tagsTable;
+class TagsParser {
+private:
+	Launcher generatorLauncher;
+public:
 };
 
 #endif

@@ -26,6 +26,7 @@
 #include<iostream>
 #include<iomanip>
 #include<fstream>
+#include<hash_map>
 
 /**** MACROS *****/
 #define scDebug(u) {std::cout << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)

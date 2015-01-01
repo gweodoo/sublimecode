@@ -49,8 +49,9 @@ print_variable_content("CMAKE_PREFIX_PATH")
 
 ##########################################
 # Externals libs
+FIND_PACKAGE(CTags REQUIRED)
+FIND_PACKAGE(CScope REQUIRED)
 FIND_PACKAGE(Doxygen)
-FIND_PACKAGE(CTags)
 
 #########################################
 # Sub loadings

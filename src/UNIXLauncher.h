@@ -22,8 +22,8 @@
 
 #include "Launcher.h"
 
-class UNIXLauncher : public Launcher {	
+class UNIXLauncher : public Launcher {
 
-}
+};
 
 #endif

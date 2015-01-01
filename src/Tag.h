@@ -23,8 +23,10 @@
 #include "Utils.h"
 
 class Tag {
+private:
 	std::string name;
-	std::string filename;	
+	std::string filename;
+	std::string pattern;
 };
 
 #endif

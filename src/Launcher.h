@@ -21,7 +21,8 @@
 #define LAUNCHER_H
 
 
-class Launcher {	
-}
+class Launcher {
+
+};
 
 #endif
