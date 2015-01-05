@@ -18,10 +18,17 @@
 /***************************************************************************/
 
 #include "Utils.h"
+#include "mainwindow.h"
+#include <QApplication>
 
 using namespace std;
 
 int main(int argc, char **argv){
-	scDebug("START MAIN");
-	return 0;
+	//scDebug("START MAIN");
+	//return 0;
+	QApplication a(argc, argv);
+	MainWindow w;
+	w.show();
+	
+	return a.exec();
 }

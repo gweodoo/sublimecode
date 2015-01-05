@@ -19,5 +19,6 @@
 
 file(GLOB_RECURSE SRC *.cpp)
 file(GLOB_RECURSE HDR *.h)
-
+include_directories(${QT_INCLUDES})
 add_executable(sublimeCode ${SRC} ${HDR})
+target_link_libraries(sublimeCode ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
