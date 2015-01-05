@@ -17,10 +17,22 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "TagsManager.h"
-size_t TagsManager::hashTag(Tag& tag) const{
-	size_t hash = 0;
-	for(int i=0; i<tag.getName().size(); i++){
-		hash+=(i*tag.getName()[i]);
-	}
-}
+#ifndef CONFIGURATION_H
+#define CONFIGURATION_H
+
+#include "Utils.h"
+
+class Configuration
+{
+private:
+    std::string sourcesDir;
+    std::string destDir;
+
+public:
+    Configuration(std::string sources, std::string dest);
+    std::string getSourcesDir() const;
+    std::string getDestDir() const;
+    ~Configuration();
+};
+
+#endif // CONFIGURATION_H

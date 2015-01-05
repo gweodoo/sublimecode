@@ -17,10 +17,20 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "TagsManager.h"
-size_t TagsManager::hashTag(Tag& tag) const{
-	size_t hash = 0;
-	for(int i=0; i<tag.getName().size(); i++){
-		hash+=(i*tag.getName()[i]);
-	}
-}
+#include "TagsManagerImpl.h"
+
+TagsManagerImpl::TagsManagerImpl() {
+
+    }
+
+Tag* TagsManagerImpl::findTag ( std::string name ) {
+
+    }
+
+bool TagsManagerImpl::delTag ( Tag& old ) {
+
+    }
+
+bool TagsManagerImpl::addTag ( Tag& nw ) {
+
+    }

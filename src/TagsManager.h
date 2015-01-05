@@ -27,6 +27,8 @@ public:
 	virtual bool addTag(Tag& nw) = 0;
 	virtual bool delTag(Tag& old) = 0;
 	virtual Tag* findTag(std::string name) = 0;
+	size_t hashTag(Tag& tag) const;
+
 };
 
 #endif // TAGSMANAGER_H

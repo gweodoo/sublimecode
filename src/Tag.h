@@ -23,29 +23,30 @@
 #include "Utils.h"
 
 typedef enum tagType_e {
-	TYPE_CLASS,
-	TYPE_STRUCT,
-	TYPE_MEMBER,
-	TYPE_FUNCTION,
-	TYPE_UNION,
-	TYPE_VAR,
-	TYPE_FILE,
-	TYPE_ENUM,
-	TYPE_DEFINE
+	TYPE_CLASS = 0,
+	TYPE_STRUCT = 1,
+	TYPE_MEMBER = 2,
+	TYPE_FUNCTION = 3,
+	TYPE_UNION = 4,
+	TYPE_VAR = 5,
+	TYPE_FILE = 6,
+	TYPE_ENUM = 7,
+	TYPE_DEFINE = 8
 } tagType;
 
 class Tag {
-private:
+public:
+	const short NB_TAGS_TYPES = 9;
 	virtual bool setName(std::string name) = 0;
 	virtual bool setFileName(std::string fileName) = 0;
 	virtual bool setAddress(std::string address) = 0;
 	virtual bool setType(tagType type) = 0;
-	virtual std::string getName() = 0;
-	virtual std::string getFileName() = 0;
-	virtual std::string getAddress() = 0;
-	virtual std::string getType() = 0;
-	virtual std::string getInfoByKey(std::string key) = 0;
-
+	virtual std::string getName() const = 0;
+	virtual std::string getFileName() const = 0;
+	virtual std::string getAddress() const = 0;
+	virtual std::string getType() const = 0;
+	virtual std::string getInfoByKey(std::string key) const = 0;
+	bool operator==(const Tag& t2);
 };
 
 #endif

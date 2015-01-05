@@ -17,10 +17,20 @@
 /*                                                                         */
 /***************************************************************************/
 
+#ifndef TAGSMANAGERIMPL_H
+#define TAGSMANAGERIMPL_H
+
 #include "TagsManager.h"
-size_t TagsManager::hashTag(Tag& tag) const{
-	size_t hash = 0;
-	for(int i=0; i<tag.getName().size(); i++){
-		hash+=(i*tag.getName()[i]);
-	}
-}
+
+class TagsManagerImpl :  public TagsManager
+{
+private:
+	std::vector<std::map<size_t, Tag*> > hashtable;
+public:
+	TagsManagerImpl();
+	virtual Tag* findTag ( std::string name );
+	virtual bool delTag ( Tag& old );
+	virtual bool addTag ( Tag& nw );
+};
+
+#endif // TAGSMANAGERIMPL_H

@@ -18,3 +18,7 @@
 /***************************************************************************/
 
 #include "Tag.h"
+
+bool Tag::operator==(const Tag& t2){
+	return this->getName() == t2.getName();
+}
