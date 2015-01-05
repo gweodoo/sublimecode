@@ -17,17 +17,4 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef UTILS_H
-#define UTILS_H
-
-/******* COMMON *******/
-#include<cstdlib>
-#include<unistd.h>
-#include<iostream>
-#include<iomanip>
-#include<fstream>
-
-/**** MACROS *****/
-#define scDebug(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)
-
-#endif
+#include "TagsManager.h"

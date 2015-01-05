@@ -16,18 +16,17 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef TAGSMANAGER_H
+#define TAGSMANAGER_H
 
-#ifndef UTILS_H
-#define UTILS_H
+#include "Tag.h"
 
-/******* COMMON *******/
-#include<cstdlib>
-#include<unistd.h>
-#include<iostream>
-#include<iomanip>
-#include<fstream>
+class TagsManager
+{
+public:
+	virtual bool addTag(Tag& nw) = 0;
+	virtual bool delTag(Tag& old) = 0;
+	virtual Tag* findTag(std::string name) = 0;
+};
 
-/**** MACROS *****/
-#define scDebug(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)
-
-#endif
+#endif // TAGSMANAGER_H

@@ -22,11 +22,30 @@
 
 #include "Utils.h"
 
+typedef enum tagType_e {
+	TYPE_CLASS,
+	TYPE_STRUCT,
+	TYPE_MEMBER,
+	TYPE_FUNCTION,
+	TYPE_UNION,
+	TYPE_VAR,
+	TYPE_FILE,
+	TYPE_ENUM,
+	TYPE_DEFINE
+} tagType;
+
 class Tag {
 private:
-	std::string name;
-	std::string filename;
-	std::string pattern;
+	virtual bool setName(std::string name) = 0;
+	virtual bool setFileName(std::string fileName) = 0;
+	virtual bool setAddress(std::string address) = 0;
+	virtual bool setType(tagType type) = 0;
+	virtual std::string getName() = 0;
+	virtual std::string getFileName() = 0;
+	virtual std::string getAddress() = 0;
+	virtual std::string getType() = 0;
+	virtual std::string getInfoByKey(std::string key) = 0;
+
 };
 
 #endif

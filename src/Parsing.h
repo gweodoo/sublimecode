@@ -24,9 +24,8 @@
 #include "Launcher.h"
 
 class TagsParser {
-private:
-	Launcher generatorLauncher;
 public:
+	virtual bool loadFromFile(std::ifstream inputFile) = 0;
 };
 
 #endif
