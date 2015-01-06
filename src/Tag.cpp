@@ -19,6 +19,9 @@
 
 #include "Tag.h"
 
+const char* tabTypeNames[] = {"CLASS", "DEFINE", "ENUMERATOR", "FUNCTION", "FILE", "ENUM", "MEMBER", "PROTO", "STRUCT", "TYPEDEF", "UNION", "VAR", "ID","NAMESPACE",  "UNKNOWN"};
+
+
 bool Tag::operator==(const Tag& t2){
 	return this->getName() == t2.getName();
 }

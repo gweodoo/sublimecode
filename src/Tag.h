@@ -24,16 +24,23 @@
 
 typedef enum tagType_e {
 	TYPE_CLASS = 0,
-	TYPE_STRUCT = 1,
-	TYPE_MEMBER = 2,
+	TYPE_DEFINE = 1,
+	TYPE_ENUMERATOR = 2,
 	TYPE_FUNCTION = 3,
-	TYPE_UNION = 4,
-	TYPE_VAR = 5,
-	TYPE_FILE = 6,
-	TYPE_ENUM = 7,
-	TYPE_DEFINE = 8
+	TYPE_FILE = 4,
+	TYPE_ENUM = 5,
+	TYPE_MEMBER = 6,
+	TYPE_PROTO = 7,
+	TYPE_STRUCT = 8,
+	TYPE_TYPEDEF = 9,
+	TYPE_UNION = 10,
+	TYPE_VAR = 11,
+	TYPE_ID = 12,
+	TYPE_NAMESPACE = 13,
+	TYPE_UNKNOWN = 14
 } tagType;
 
+extern const char* tabTypeNames[];
 #define FIELD_ACCESS "access"
 #define FIELD_FILE "file"
 #define FIELD_KIND "kind"
@@ -45,7 +52,7 @@ typedef enum tagType_e {
 
 class Tag {
 public:
-	static const short NB_TAGS_TYPES = 9;
+	static const short NB_TAGS_TYPES = 15;
 	virtual bool setName(std::string name) = 0;
 	virtual bool setFileName(std::string fileName) = 0;
 	virtual bool setAddress(std::string address) = 0;

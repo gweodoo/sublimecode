@@ -18,9 +18,16 @@
 /***************************************************************************/
 
 #include "TagsManager.h"
+using namespace std;
+
 size_t TagsManager::hashTag(Tag* tag) const{
+	return hashTag(tag->getName());
+}
+
+size_t TagsManager::hashTag(std::string name) const{
 	size_t hash = 0;
-	for(int i=0; i<tag->getName().size(); i++){
-		hash+=(i*tag->getName()[i]);
+	for(int i=0; i<name.size(); i++){
+		hash+=(i+1)*name[i];
 	}
+	return hash;
 }

@@ -20,12 +20,17 @@
 #define TAGSPARSERIMPL_H
 
 #include "TagsParser.h"
+#include "TagImpl.h"
+#include "TagsManagerImpl.h"
 
 class TagsParserImpl :  public TagsParser
 {
+private:
+	TagsManagerImpl* myTagMan;
 public:
-	TagsParserImpl();
+	TagsParserImpl(TagsManagerImpl* man);
 	virtual bool loadFromFile ( std::string inputFile );
+	virtual tagType identifyTypeFromFile(std::string type);
 };
 
 #endif // TAGSPARSERIMPL_H

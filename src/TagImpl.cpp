@@ -65,13 +65,12 @@ bool TagImpl::addInfoByKey ( std::string key, string value ) {
 	return true;
 }
 
-
 void TagImpl::display() const {
 	cout
 	<< "\tName = " << name<< endl
 	<< "\tFileName = " << fileName<< endl
-	<< "\tAddress = " << address<< endl
-	<< "\tType = " << type<< endl;
+	<< "\tAddress = \"" << address<<"\""<< endl
+	<< "\tType = " << tabTypeNames[type]<< endl;
 	if(additionalInfo.size() > 0){
 		cout << "\tAdditionnal : "<< endl;
 		for(map<string,string>::const_iterator it = additionalInfo.begin(); it != additionalInfo.end(); it++)

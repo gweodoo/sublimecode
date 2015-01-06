@@ -26,10 +26,10 @@ using namespace std;
 class TagsManagerImpl :  public TagsManager
 {
 private:
-	std::vector<std::map<size_t, Tag*>* > hashtable;
+	std::vector<std::multimap<size_t, Tag*>* > hashtable;
 public:
 	TagsManagerImpl();
-	virtual Tag* findSpecificTag ( std::string name );
+	virtual std::vector<Tag*>* findSpecificTag ( std::string name );
 	virtual std::vector<Tag*>* findTagsBy(tagType type);
 	virtual bool delTag ( Tag* old );
 	virtual bool addTag ( Tag* nw );

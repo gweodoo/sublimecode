@@ -21,25 +21,26 @@
 
 TagsManagerImpl::TagsManagerImpl() {
 	for(int i=0; i < Tag::NB_TAGS_TYPES; i++){
-		hashtable.push_back(new map<size_t, Tag*>);
+		hashtable.push_back(new multimap<size_t, Tag*>);
 	}
 }
 
-Tag* TagsManagerImpl::findSpecificTag ( std::string name ) {
-	for(vector<std::map<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
-		for(map<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
-			Tag * cur = itmap->second;
-			if(cur->getName() == name)
-				return cur;
+std::vector<Tag*>* TagsManagerImpl::findSpecificTag ( std::string name ) {
+	std::vector<Tag*>* vec = new std::vector<Tag*>;
+	for(vector<std::multimap<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		std::pair<std::multimap<size_t,Tag*>::iterator, std::multimap<size_t,Tag*>::iterator> pair;
+		pair = (*it)->equal_range(hashTag(name));
+		for(multimap<size_t,Tag*>::iterator it = pair.first; it != pair.second; it++){
+			vec->push_back(it->second);
 		}
 	}
-	return NULL;
+	return vec;
 }
 
 std::vector<Tag*>* TagsManagerImpl::findTagsBy ( tagType type ) {
 	std::vector<Tag*>* vec = new std::vector<Tag*>;
-	for(vector<std::map<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
-		for(map<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+	for(vector<std::multimap<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		for(multimap<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
 			Tag * cur = itmap->second;
 			if(cur->getType() == type)
 				vec->push_back(cur);
@@ -54,14 +55,16 @@ bool TagsManagerImpl::delTag ( Tag* old ) {
 
 bool TagsManagerImpl::addTag ( Tag* nw ) {
 	hashtable[static_cast<short>(nw->getType())]->insert(std::pair<size_t, Tag*>(hashTag(nw),nw));
+	return true;
+
 }
 
 void TagsManagerImpl::display() const {
-	for(vector<std::map<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
-		cout << " -------------- " << endl;
-		for(map<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+	for(vector<std::multimap<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		cout << " -------------- " << tabTypeNames[it - hashtable.begin()] << " -------------- " << endl;
+		for(multimap<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
 			(*itmap).second->display();
+			cout << endl;
 		}
-		cout << endl;
 	}
 }
