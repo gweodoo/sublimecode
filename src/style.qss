@@ -1,0 +1,23 @@
+
+QWidget 
+{
+	 
+}
+
+QGroupBox 
+{
+	border: 2px solid gray;
+	border-radius: 5px;
+	margin-top: 0.5em;
+}
+
+QGroupBox::title 
+{
+    subcontrol-origin: margin;
+    left: 10px;
+}
+
+#leftWidget
+{
+
+}

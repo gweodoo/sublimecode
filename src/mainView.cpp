@@ -17,22 +17,19 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Utils.h"
-#include "mainwindow.h"
 #include "mainView.h"
-#include <QApplication>
-#include "TagsManagerImpl.h"
-#include "TagImpl.h"
-#include "TagsParserImpl.h"
-#include "LauncherCscope.h"
+#include "ui_mainView.h"
 
+MainView::MainView(QString file, QWidget *parent)
+{
+	this->resize(1200, 800);
+    
+	ui.setupUi(this);
+	ui.getCentralWidget()->show();
+	ui.getWebView()->load(QUrl(file));
+}
 
-using namespace std;
+MainView::~MainView()
+{
 
-int main(int argc, char **argv){
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
-
-	return a.exec();
 }

@@ -17,22 +17,57 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Utils.h"
-#include "mainwindow.h"
-#include "mainView.h"
-#include <QApplication>
-#include "TagsManagerImpl.h"
-#include "TagImpl.h"
-#include "TagsParserImpl.h"
-#include "LauncherCscope.h"
+#ifndef UI_MAINWINDOW1_H
+#define UI_MAINWINDOW1_H
 
+#include <QtCore/QVariant>
+#include <QtGui/QAction>
+#include <QtGui/QApplication>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QHeaderView>
+#include <QtGui/QLineEdit>
+#include <QtGui/QMainWindow>
+#include <QtGui/QMenuBar>
+#include <QtGui/QPushButton>
+#include <QtGui/QStatusBar>
+#include <QtGui/QToolBar>
+#include <QtGui/QWidget>
+#include <QtGui/QLabel>
+#include <QtGui/QDesktopWidget>
 
-using namespace std;
+QT_BEGIN_NAMESPACE
 
-int main(int argc, char **argv){
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
+class UI_MainWindow1
+{
+private: 
+    QWidget *centralWidget;
+    QPushButton *Parcourir;
+    QPushButton *Parcourir1;
+    QPushButton *Finish;
+    QLineEdit *lineEdit;
+    QLineEdit *lineEdit1;
+    QMenuBar *menuBar;
+    QToolBar *mainToolBar;
+    QStatusBar *statusBar;
+    QLabel *labelParcourir;
+    QLabel *labelParcourir1;
+    int width, height;
+    int screenWidth, screenHeight;
+    int x, y;
+    QRect rect;
 
-	return a.exec();
-}
+public:
+    explicit UI_MainWindow1();
+    ~UI_MainWindow1();
+    void setupUi(QMainWindow *MainWindow);
+    void retranslateUi(QMainWindow *MainWindow);
+    QLineEdit *getLineEdit();
+    QLineEdit *getLineEdit1();
+    QPushButton *getParcourir();
+    QPushButton *getParcourir1();
+    QPushButton *getFinish();
+};
+
+QT_END_NAMESPACE
+
+#endif // UI_MAINWINDOW_H

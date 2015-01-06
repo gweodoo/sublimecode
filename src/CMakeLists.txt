@@ -19,11 +19,11 @@
 
 file(GLOB_RECURSE SRC *.cpp)
 file(GLOB_RECURSE HDR *.h)
-#include_directories(${QT_INCLUDES})
-#add_executable(sublimeCode ${SRC} ${HDR})
-#target_link_libraries(sublimeCode ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 file(GLOB_RECURSE UI *.ui)
 file(GLOB_RECURSE RES *.qrc)
+
+find_package(Qt4 REQUIRED)
+set(QT_USE_QTWEBKIT TRUE)
 
 INCLUDE(${QT_USE_FILE})
 
@@ -34,3 +34,6 @@ INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 add_executable(sublimeCode ${SRC} ${HDR_MOC} ${UI_HDR} ${RES_RCC})
 
 TARGET_LINK_LIBRARIES(sublimeCode ${QT_LIBRARIES})
+
+
+

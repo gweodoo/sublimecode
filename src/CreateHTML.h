@@ -1,5 +1,5 @@
 /***************************************************************************/
-/*                                                                         */
+/*                                                                        */
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
@@ -15,24 +15,22 @@
 /* You should have received a copy of the GNU General Public License       */
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
-/***************************************************************************/
-
-#include "Utils.h"
-#include "mainwindow.h"
-#include "mainView.h"
-#include <QApplication>
-#include "TagsManagerImpl.h"
-#include "TagImpl.h"
-#include "TagsParserImpl.h"
-#include "LauncherCscope.h"
-
+/***************************************************************************/ 
+#ifndef CREATEHTML_H
+#define CREATEHTML_H
+#include <QString>
 
 using namespace std;
 
-int main(int argc, char **argv){
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
+class CreateHTML {
 
-	return a.exec();
-}
+public:
+    explicit CreateHTML();
+    ~CreateHTML();
+    void CreateHTMLfile(QString file);
+    void CreateHTMLbase(const char* file);
+
+private:
+};
+
+#endif
