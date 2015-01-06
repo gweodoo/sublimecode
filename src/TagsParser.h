@@ -25,7 +25,7 @@
 
 class TagsParser {
 public:
-	virtual bool loadFromFile(std::ifstream inputFile) = 0;
+	virtual bool loadFromFile(std::string inputFile) = 0;
 };
 
 #endif

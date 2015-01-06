@@ -25,7 +25,27 @@ TagsManagerImpl::TagsManagerImpl() {
 	}
 }
 
-Tag* TagsManagerImpl::findTag ( std::string name ) {
+Tag* TagsManagerImpl::findSpecificTag ( std::string name ) {
+	for(vector<std::map<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		for(map<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+			Tag * cur = itmap->second;
+			if(cur->getName() == name)
+				return cur;
+		}
+	}
+	return NULL;
+}
+
+std::vector<Tag*>* TagsManagerImpl::findTagsBy ( tagType type ) {
+	std::vector<Tag*>* vec = new std::vector<Tag*>;
+	for(vector<std::map<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		for(map<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+			Tag * cur = itmap->second;
+			if(cur->getType() == type)
+				vec->push_back(cur);
+		}
+	}
+	return vec;
 }
 
 bool TagsManagerImpl::delTag ( Tag* old ) {

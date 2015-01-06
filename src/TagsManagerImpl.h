@@ -29,7 +29,8 @@ private:
 	std::vector<std::map<size_t, Tag*>* > hashtable;
 public:
 	TagsManagerImpl();
-	virtual Tag* findTag ( std::string name );
+	virtual Tag* findSpecificTag ( std::string name );
+	virtual std::vector<Tag*>* findTagsBy(tagType type);
 	virtual bool delTag ( Tag* old );
 	virtual bool addTag ( Tag* nw );
 	virtual void display() const;

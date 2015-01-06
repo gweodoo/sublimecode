@@ -26,7 +26,8 @@ class TagsManager
 public:
 	virtual bool addTag(Tag* nw) = 0;
 	virtual bool delTag(Tag* old) = 0;
-	virtual Tag* findTag(std::string name) = 0;
+	virtual Tag* findSpecificTag(std::string name) = 0;
+	virtual  std::vector<Tag*>*  findTagsBy(tagType type) = 0;
 	size_t hashTag(Tag* tag) const;
 	virtual void display() const = 0;
 
