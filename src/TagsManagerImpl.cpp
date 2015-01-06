@@ -20,17 +20,28 @@
 #include "TagsManagerImpl.h"
 
 TagsManagerImpl::TagsManagerImpl() {
-
-    }
+	for(int i=0; i < Tag::NB_TAGS_TYPES; i++){
+		hashtable.push_back(new map<size_t, Tag*>);
+	}
+}
 
 Tag* TagsManagerImpl::findTag ( std::string name ) {
+}
 
-    }
+bool TagsManagerImpl::delTag ( Tag* old ) {
+	hashtable[static_cast<short>(old->getType())]->erase(hashTag(old));
+}
 
-bool TagsManagerImpl::delTag ( Tag& old ) {
+bool TagsManagerImpl::addTag ( Tag* nw ) {
+	hashtable[static_cast<short>(nw->getType())]->insert(std::pair<size_t, Tag*>(hashTag(nw),nw));
+}
 
-    }
-
-bool TagsManagerImpl::addTag ( Tag& nw ) {
-
-    }
+void TagsManagerImpl::display() const {
+	for(vector<std::map<size_t, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		cout << " -------------- " << endl;
+		for(map<size_t, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+			(*itmap).second->display();
+		}
+		cout << endl;
+	}
+}

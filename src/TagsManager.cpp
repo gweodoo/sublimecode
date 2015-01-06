@@ -18,9 +18,9 @@
 /***************************************************************************/
 
 #include "TagsManager.h"
-size_t TagsManager::hashTag(Tag& tag) const{
+size_t TagsManager::hashTag(Tag* tag) const{
 	size_t hash = 0;
-	for(int i=0; i<tag.getName().size(); i++){
-		hash+=(i*tag.getName()[i]);
+	for(int i=0; i<tag->getName().size(); i++){
+		hash+=(i*tag->getName()[i]);
 	}
 }

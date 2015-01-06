@@ -16,20 +16,32 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
-#ifndef TAGSMANAGER_H
-#define TAGSMANAGER_H
+
+#ifndef TAGIMPL_H
+#define TAGIMPL_H
 
 #include "Tag.h"
-
-class TagsManager
+class TagImpl : public Tag
 {
+private:
+	std::string name;
+	std::string fileName;
+	std::string address;
+	tagType type;
+	std::map<std::string, std::string> additionalInfo;
 public:
-	virtual bool addTag(Tag* nw) = 0;
-	virtual bool delTag(Tag* old) = 0;
-	virtual Tag* findTag(std::string name) = 0;
-	size_t hashTag(Tag* tag) const;
-	virtual void display() const = 0;
-
+	explicit TagImpl(std::string name, std::string fileName, std::string address, tagType type);
+	virtual bool setName(std::string name);
+	virtual bool setFileName(std::string fileName);
+	virtual bool setAddress(std::string address);
+	virtual bool setType(tagType type);
+	virtual bool addInfoByKey(std::string key, std::string value);
+	virtual std::string getName() const;
+	virtual std::string getFileName() const;
+	virtual std::string getAddress() const;
+	virtual tagType getType() const;
+	virtual std::string getInfoByKey(std::string key) const;
+	virtual void display() const;
 };
 
-#endif // TAGSMANAGER_H
+#endif // TAGIMPL_H

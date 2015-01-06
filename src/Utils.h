@@ -28,7 +28,7 @@
 #include<fstream>
 #include<map>
 #include<vector>
-
+#include<typeinfo>
 /**** MACROS *****/
 #define scDebug(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)
 #define scError(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)

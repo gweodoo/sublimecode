@@ -21,16 +21,18 @@
 #define TAGSMANAGERIMPL_H
 
 #include "TagsManager.h"
+using namespace std;
 
 class TagsManagerImpl :  public TagsManager
 {
 private:
-	std::vector<std::map<size_t, Tag*> > hashtable;
+	std::vector<std::map<size_t, Tag*>* > hashtable;
 public:
 	TagsManagerImpl();
 	virtual Tag* findTag ( std::string name );
-	virtual bool delTag ( Tag& old );
-	virtual bool addTag ( Tag& nw );
+	virtual bool delTag ( Tag* old );
+	virtual bool addTag ( Tag* nw );
+	virtual void display() const;
 };
 
 #endif // TAGSMANAGERIMPL_H
