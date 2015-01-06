@@ -20,15 +20,28 @@
 #include "Utils.h"
 #include "mainwindow.h"
 #include <QApplication>
+#include "TagsManagerImpl.h"
+#include "TagImpl.h"
+#include "TagsParserImpl.h"
 
 using namespace std;
 
 int main(int argc, char **argv){
-	//scDebug("START MAIN");
-	//return 0;
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
-	
-	return a.exec();
+	TagImpl tag1("tag1", "tag.c", 1034, TYPE_FUNCTION);
+	TagImpl tag2("tag2", "tag.c", 66, TYPE_MEMBER);
+
+	TagsManagerImpl tagMan;
+
+/**	tagMan.addTag(&tag1);
+	tagMan.addTag(&tag2);
+	tag1.addInfoByKey(FIELD_CLASS, "mySuperClass");
+	cout << "TAG = " << tag1.getInfoByKey(FIELD_CLASS);
+	tagMan.display();
+	cout << "You pla " << endl;
+	tagMan.delTag(&tag1);
+**/
+	TagsParserImpl tagParse(&tagMan);
+	tagParse.loadFromFile("/home/adamj/Téléchargements/vlc-2.1.5/tags");
+	//tagMan.display();
+	tagMan.findSpecificTag("OMX_MARKTYPE", "modules/codec/omxil/OMX_Types.h", 297)->display();
 }

@@ -55,12 +55,12 @@ public:
 	static const short NB_TAGS_TYPES = 15;
 	virtual bool setName(std::string name) = 0;
 	virtual bool setFileName(std::string fileName) = 0;
-	virtual bool setAddress(std::string address) = 0;
+	virtual bool setLineNumber(size_t line) = 0;
 	virtual bool setType(tagType type) = 0;
 	virtual bool addInfoByKey(std::string key, std::string value) = 0;
 	virtual std::string getName() const = 0;
 	virtual std::string getFileName() const = 0;
-	virtual std::string getAddress() const = 0;
+	virtual size_t getLineNumber() const = 0;
 	virtual tagType getType() const = 0;
 	virtual std::string getInfoByKey(std::string key) const = 0;
 	bool operator==(const Tag& t2);

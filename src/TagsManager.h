@@ -26,10 +26,10 @@ class TagsManager
 public:
 	virtual bool addTag(Tag* nw) = 0;
 	virtual bool delTag(Tag* old) = 0;
-	virtual std::vector<Tag*>* findSpecificTag(std::string name) = 0;
+	virtual Tag* findSpecificTag( std::string name, std::string filename, size_t line ) = 0;
 	virtual  std::vector<Tag*>*  findTagsBy(tagType type) = 0;
-	size_t hashTag(Tag* tag) const;
-	size_t hashTag(std::string name) const;
+	std::string hashTag(Tag* tag) const;
+	std::string hashTag(std::string name, std::string filename, size_t line) const;
 	virtual void display() const = 0;
 
 };

@@ -20,14 +20,12 @@
 #include "TagsManager.h"
 using namespace std;
 
-size_t TagsManager::hashTag(Tag* tag) const{
-	return hashTag(tag->getName());
+std::string TagsManager::hashTag(Tag* tag) const{
+	return hashTag(tag->getName(), tag->getFileName(), tag->getLineNumber());
 }
 
-size_t TagsManager::hashTag(std::string name) const{
-	size_t hash = 0;
-	for(int i=0; i<name.size(); i++){
-		hash+=(i+1)*name[i];
-	}
-	return hash;
+std::string TagsManager::hashTag(std::string name, std::string filename, size_t line) const{
+	stringstream ss;
+	ss << filename << ":" << line << ":" << name;
+	return ss.str();
 }

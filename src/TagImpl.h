@@ -26,19 +26,19 @@ class TagImpl : public Tag
 private:
 	std::string name;
 	std::string fileName;
-	std::string address;
+	size_t lineNumber;
 	tagType type;
 	std::map<std::string, std::string> additionalInfo;
 public:
-	explicit TagImpl(std::string name, std::string fileName, std::string address, tagType type);
+	explicit TagImpl(std::string name, std::string fileName, size_t line, tagType type);
 	virtual bool setName(std::string name);
 	virtual bool setFileName(std::string fileName);
-	virtual bool setAddress(std::string address);
+	virtual bool setLineNumber(size_t line);
 	virtual bool setType(tagType type);
 	virtual bool addInfoByKey(std::string key, std::string value);
 	virtual std::string getName() const;
 	virtual std::string getFileName() const;
-	virtual std::string getAddress() const;
+	virtual size_t getLineNumber() const;
 	virtual tagType getType() const;
 	virtual std::string getInfoByKey(std::string key) const;
 	virtual void display() const;

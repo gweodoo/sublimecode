@@ -20,10 +20,10 @@
 #include "TagImpl.h"
 using namespace std;
 
-TagImpl::TagImpl(std::string name, std::string fileName, std::string address, tagType type) {
+TagImpl::TagImpl(std::string name, std::string fileName, size_t line, tagType type) {
 	this->name = name;
 	this->fileName = fileName;
-	this->address = address;
+	this->lineNumber = line;
 	this->type = type;
 }
 
@@ -34,8 +34,8 @@ bool TagImpl::setFileName(std::string fileName){
 	this->fileName = fileName;
 	return true;
 };
-bool TagImpl::setAddress(std::string address){
-	this->address = address;
+bool TagImpl::setLineNumber(size_t line){
+	this->lineNumber = line;
 	return true;
 };
 bool TagImpl::setType(tagType type){
@@ -48,8 +48,8 @@ std::string TagImpl::getName() const{
 std::string TagImpl::getFileName() const{
 	return fileName;
 };
-std::string TagImpl::getAddress() const{
-	return address;
+size_t TagImpl::getLineNumber() const{
+	return lineNumber;
 };
 tagType TagImpl::getType() const{
 	return type;
@@ -69,7 +69,7 @@ void TagImpl::display() const {
 	cout
 	<< "\tName = " << name<< endl
 	<< "\tFileName = " << fileName<< endl
-	<< "\tAddress = \"" << address<<"\""<< endl
+	<< "\tLine number = " << lineNumber << endl
 	<< "\tType = " << tabTypeNames[type]<< endl;
 	if(additionalInfo.size() > 0){
 		cout << "\tAdditionnal : "<< endl;

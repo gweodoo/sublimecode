@@ -33,7 +33,8 @@ bool TagsParserImpl::loadFromFile ( std::string inputFile ) {
 
 	string cur;
 	std::string part;
-	string name, filename, address = "TODO";
+	string name, filename;
+	size_t line= 0;
 	tagType type;
 
 	while(getline(fileFd, cur, '\n')){
@@ -47,27 +48,10 @@ bool TagsParserImpl::loadFromFile ( std::string inputFile ) {
 		name = tab[0]; tab.erase(tab.begin());
 		filename = tab[0]; tab.erase(tab.begin());
 
-		string concat = "";
-		bool end = false;
-		for(vector<string>::iterator it = tab.begin(); it != tab.end() && !end;){
-			concat += *it;
-			if((*it).size() < 2){
-				concat += *it;
-				it = tab.erase(it);
-				continue;
-			}
-			if((*it).substr((*it).size()-2).compare(";\"") == 0)
-				end = true;
-
-			it = tab.erase(it);
-		}
-		address = concat.substr(2,concat.size()-6); //remove prefix (2) + suffix (4)
-		//cout << tab[0] << endl;
+		line = atoi(tab[0].substr(0,tab[0].size() - 2).c_str()); tab.erase(tab.begin());
 		type = identifyTypeFromFile(tab[0]); tab.erase(tab.begin());
-		//cout << tab[0] << endl;
-		Tag* curTag = new TagImpl(name, filename, address, type);
+		Tag* curTag = new TagImpl(name, filename, line, type);
 		for(vector<string>::iterator it = tab.begin(); it != tab.end(); it++){
-			//cout << *it << endl;
 			int splitter = (*it).find(":");
 			string key = (*it).substr(0, splitter);
 			string value = (*it).substr(splitter+1, (*it).size());
