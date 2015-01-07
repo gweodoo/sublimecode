@@ -19,6 +19,7 @@
 
 #include "LauncherCscope.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 
 
@@ -26,5 +27,26 @@
 
 bool LauncherCscope::initExternalTool(){
 	
+	if(this->isLaunched==true){
 	
+		return this->isLaunched;
+	}
+	else
+	{
+		if(system("cd /../ && cscope -b -q -k")==-1)
+		{
+			perror("Initializing cscope");
+		}
+	}
 }
+void* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
+{
+
+}
+
+bool LauncherCscope::getIsLaunched(){
+	
+	return this->isLaunched;
+}
+
+	

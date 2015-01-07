@@ -23,10 +23,13 @@
 #include "TagsManagerImpl.h"
 #include "TagImpl.h"
 #include "TagsParserImpl.h"
+#include "LauncherCscope.h"
+
 
 using namespace std;
 
 int main(int argc, char **argv){
+
 	TagImpl tag1("tag1", "tag.c", 1034, TYPE_FUNCTION);
 	TagImpl tag2("tag2", "tag.c", 66, TYPE_MEMBER);
 
@@ -44,4 +47,14 @@ int main(int argc, char **argv){
 	tagParse.loadFromFile("/home/adamj/Téléchargements/vlc-2.1.5/tags");
 	//tagMan.display();
 	tagMan.findSpecificTag("OMX_MARKTYPE", "modules/codec/omxil/OMX_Types.h", 297)->display();
+	QApplication a(argc, argv);
+	MainWindow w;
+	w.show();
+	LauncherCscope* launcher=new LauncherCscope();
+	launcher->initExternalTool();
+	cout<<launcher->getIsLaunched();
+	
+	
+	return a.exec();
+
 }

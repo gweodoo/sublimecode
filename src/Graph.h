@@ -27,9 +27,9 @@
 class Graph {
 
 public : 
-	virtual std::vector<Tag*>&  getFunctionsCalledBy(std::string name)=0;
-	virtual std::vector<Tag*>& getFunctionsCallingThis(std::string name)=0;
-	virtual std::vector<Tag*>& getFilesIncludedBy(std::string name)=0;
+	virtual std::vector<Tag*>  getFunctionsCalledBy(std::string name)=0;
+	virtual std::vector<Tag*> getFunctionsCallingThis(std::string name)=0;
+	virtual std::vector<Tag*> getFilesIncludedBy(std::string name)=0;
 	virtual Tag* getTagByName(std::string name)=0;
 	virtual int getCountFunctionApparition(std::name)=0;
 	virtual int getCountFunctionLength(std::name)=0;

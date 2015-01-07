@@ -19,13 +19,14 @@
 
 #ifndef LAUNCHER_H
 #define LAUNCHER_H
-
+#include"Utils.h"
 
 class Launcher {
 
 public :
 	virtual bool initExternalTool()=0;
-	virtual void* launchCommandExternalTool(int command, vector<void*> arg)=0;
+	virtual void* launchCommandExternalTool(int command, std::string arg)=0;
+	
 };
 
 #endif

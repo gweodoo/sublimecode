@@ -23,18 +23,15 @@
 #include"Launcher.h"
 
 
-class LauncherCscope:Launcher {
-
-public :
-	 bool initExternalTool();
-	 void* launchCommandExternalTool(int command, vector<void*> arg);
-	 
-
+class LauncherCscope: Launcher {
 
 private :
 	 bool isLaunched;
-	 
 
-	
+public :
+	virtual bool initExternalTool();
+	virtual void* launchCommandExternalTool(int command, std::string arg);
+	 bool getIsLaunched();
+
 };
 #endif
