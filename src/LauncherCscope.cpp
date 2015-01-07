@@ -29,26 +29,29 @@
 using namespace std;
 
 
-LauncherCscope::LauncherCscope(Configuration* myconfiguration)
+LauncherCscope::LauncherCscope(Configuration* myconfiguration,TagsManager*myTagManager)
 {
-this->myConfiguration=myconfiguration;
-this->isLaunched=false;
+	this->myTagManager=myTagManager;
+	this->myConfiguration=myconfiguration;
+	this->isLaunched=false;
 }
 
 
 bool LauncherCscope::initExternalTool(){
 	
+	scDebug("Start initExternalTool");
 	if(this->isLaunched==true){
 	
 		return this->isLaunched;
 	}
 	else
 	{
-		string commandCscopeConstruct=string("cd ") +(string)this->myConfiguration->getSourcesDir() +string(" && cscope -bqk  ");
+		string commandCscopeConstruct=string("cd ") +(string)this->myConfiguration->getSourcesDir() +string(" && cscope -bqkR ");
 		string commandFileMove_1=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.in.out ")+(string)this->myConfiguration->getDestDir();
 		string commandFileMove_2=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.out ")+(string)this->myConfiguration->getDestDir();
 		string commandFileMove_3=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.po.out ")+(string)this->myConfiguration->getDestDir();
 
+		//scDebug("ConstructingCscope "<<commandCscopeConstruct);
 		if(system(commandCscopeConstruct.c_str())==-1)
 		{
 			perror("Initializing Cscope");
@@ -144,6 +147,8 @@ bool LauncherCscope::getIsLaunched(){
 std::vector<Tag*>* LauncherCscope::cscopeOutputParser(std::string output){
 
 	vector<CscopeOutput*>* listOfCscopeOutput=new vector<CscopeOutput*>();
+	
+	this->listOfLastTagAsked=new vector<Tag*>();
 	stringstream outputAsStream(output);
 	string readLine;
 	while(getline(outputAsStream,readLine)){
@@ -180,7 +185,16 @@ std::vector<Tag*>* LauncherCscope::cscopeOutputParser(std::string output){
 		count=0;
 		listOfCscopeOutput->push_back(newCscopeOutputLine);
 	}
+	for(int i=0;i<listOfCscopeOutput->size();i++)
+	{
 	
+
+		Tag* myNewTag=this->myTagManager->findSpecificTag(listOfCscopeOutput->at(i)->getTagName(),listOfCscopeOutput->at(i)->getFileName(),listOfCscopeOutput->at(i)->getLine());
+		if(myNewTag!=NULL) this->listOfLastTagAsked->push_back(myNewTag);
+		
+	}
+	
+	return this->listOfLastTagAsked;
 		
 	
 }

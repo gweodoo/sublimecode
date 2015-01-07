@@ -29,25 +29,32 @@
 class CscopeOutput
 {
 public:
-CscopeOutput(std::string fileName,std::string tagName,std::string signature,int line );
-CscopeOutput();
-~CscopeOutput();
-
-std::string getFileName();
-std::string getTagName();
-std::string getSignature();
-int getLine();
-
-void setFileName(std::string fileName);
-void setTagName(std::string tagName);
-void setSignature(std::string signature);
-void setLine(int line);
+	CscopeOutput(std::string fileName,std::string tagName,std::string signature,int line );
+	CscopeOutput();
+	~CscopeOutput();
+	/**
+	* classical getter for fileName-tagName-Line-Signature
+	*/
+	std::string getFileName();
+	std::string getTagName();
+	std::string getSignature();
+	int getLine();
+	/**
+	* classical setter for fileName-tagName-Line-Signature
+	*/
+	void setFileName(std::string fileName);
+	void setTagName(std::string tagName);
+	void setSignature(std::string signature);
+	void setLine(int line);
 
 private:
-std::string fileName;
-std::string tagName;
-std::string signature;
-int line;
+	/**
+	 * Needs 4 attributes Cscope always giving as output fileName-tagName-Line-Signature
+	 */
+	std::string fileName;
+	std::string tagName;
+	std::string signature;
+	int line;
 
 };
 

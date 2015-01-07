@@ -1,5 +1,8 @@
 #include "CscopeOutput.h"
 
+/**
+ * classical constructor with attribute initialization parameters
+ */
 CscopeOutput::CscopeOutput(std::string fileName,std::string tagName,std::string signature,int line )
 {
 
@@ -9,10 +12,16 @@ CscopeOutput::CscopeOutput(std::string fileName,std::string tagName,std::string 
 	this->signature=signature;
 }
 
+/**
+ * classical constructor without attribute initialization
+ */
 CscopeOutput::~CscopeOutput()
 {
 
 }
+/**
+ * ---------------getters definition---------------------------
+ */
 std::string CscopeOutput::getFileName()
 {
 	return fileName;
@@ -29,6 +38,9 @@ std::string CscopeOutput::getTagName()
 {
 	return tagName;
 }
+/**
+ * --------------setters definition----------------------------
+ */
 void CscopeOutput::setFileName(std::string fileName)
 {
 this->fileName=fileName;
@@ -43,7 +55,7 @@ this->tagName=tagName;
 }
 CscopeOutput::CscopeOutput()
 {
-
+	
 }
 void CscopeOutput::setSignature(std::string signature)
 {

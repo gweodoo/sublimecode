@@ -15,13 +15,14 @@
  *
  */
 #include "GraphCaller.h"
+#include "TagsManager.h"
 
-GraphCaller::GraphCaller( Configuration* myConf)
+GraphCaller::GraphCaller( Configuration* myConf,TagsManager*myTagManager)
 
 
 {
 	if(myConf!=NULL){
-		Launcher* myLauncher=new LauncherCscope(myConf);
+		Launcher* myLauncher=new LauncherCscope(myConf,myTagManager);
 		this->myLauncher=myLauncher;
 	}
 }	

@@ -26,6 +26,7 @@ TagsManagerImpl::TagsManagerImpl() {
 }
 
 Tag* TagsManagerImpl::findSpecificTag ( std::string name, std::string filename, size_t line ) {
+	//scDebug("name:"<<name <<" fileName :"<<filename << " line : "<<line);
 	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
 		map<string,Tag*>::iterator itmap = (*it)->find(hashTag(name, filename, line));
 		if(itmap != (*it)->end())

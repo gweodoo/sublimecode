@@ -21,7 +21,9 @@
 #define LAUNCHER_H
 #include"Utils.h"
 #include "Tag.h"
-
+/**
+ * main interface for an external tool launcher
+ */
 class Launcher {
 
 public :

@@ -22,17 +22,34 @@
 #include "Configuration.h"
 #include"Launcher.h"
 #include "Tag.h"
+#include "TagsManager.h"
 
-
+/**
+ * class implementing the Launcher interface specificly to cscope
+ */
 class LauncherCscope: public  Launcher {
 
 private :
+	
+	/**
+	 * myTagManager - needed for searching specific tag given a function name and its line
+	 * isLaunched - needed internally tin order to know if the cscope db is already constructed
+	 * myConfiguration - need to know information about where sources are and the working directory
+	 * 
+	 */
+	 TagsManager* myTagManager;
 	 bool isLaunched;
 	 Configuration* myConfiguration;
+	 std::vector<Tag*>*listOfLastTagAsked ;
+	 /**
+	  * need internally for parsing cscope output
+	  */
 	 std::vector<Tag*>* cscopeOutputParser(std::string output);
-	 std::string getPartFromString(std::string stringToSearchIn,int numberOfPar);
+	
+	
 public :
-	 LauncherCscope(Configuration* myconfiguration);
+	
+	 LauncherCscope(Configuration* myconfiguration,TagsManager* myTagManager);
 	 bool initExternalTool();
 	 bool closeExternalTool();
 	 std::vector<Tag*>* launchCommandExternalTool(int command, std::string arg);

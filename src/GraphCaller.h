@@ -20,12 +20,28 @@
 #include "Launcher.h"
 #include "LauncherCscope.h"
 #include "Configuration.h"
+#include "TagsManager.h"
+/**
+ * Object Implementing the Graph interface specific to Cscope
+ */
 class GraphCaller:public Graph
 {
 public:
-	
+	/**
+	 * constructor
+	 */
+	GraphCaller (Configuration * myConf,TagsManager*myTagManager);
+	/**
+	 * destructor
+	 */
 	~GraphCaller();
+	/**
+	 * getter
+	 */
 	Launcher* getLauncher();
+	/**
+	 * functions implementing the Graph Interface
+	 */
 	std::vector<Tag*>*  getFunctionsCalledBy(std::string name);
 	std::vector<Tag*>* getFunctionsCallingThis(std::string name);
 	std::vector<Tag*>* getFilesIncludedBy(std::string name);
@@ -34,9 +50,12 @@ public:
 	int getCountFunctionLength(std::string name);
 	int getCountFunctionCalled(std::string name);
 	int getCountFunctionCalling(std::string name);
-	GraphCaller (Configuration * myConf);
+	
 
 private:
+	/**
+	 * only attribute Launcher
+	 */
 	Launcher* myLauncher;
 	
 	
