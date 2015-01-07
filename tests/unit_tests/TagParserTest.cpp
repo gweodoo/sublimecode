@@ -17,24 +17,19 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef TAGSMANAGERIMPL_H
-#define TAGSMANAGERIMPL_H
+#include "../../src/TagImpl.h"
+#include "../../src/TagsManagerImpl.h"
+#include "../../src/TagsParserImpl.h"
+#include <cassert>
 
-#include "TagsManager.h"
 using namespace std;
 
-class TagsManagerImpl :  public TagsManager
-{
-private:
-	std::vector<std::map<std::string, Tag*>* > hashtable;
-public:
-	TagsManagerImpl();
-	virtual Tag* findSpecificTag ( std::string name, std::string filename, size_t line );
-	virtual std::vector<Tag*>* findTagsBy(tagType type);
-	virtual bool delTag ( Tag* old );
-	virtual bool addTag ( Tag* nw );
-	virtual void display() const;
-	virtual bool isEmpty() const;
-};
+int main(void) {
+	TagsManagerImpl tagMan;
+	TagsParserImpl tagParse(&tagMan);
 
-#endif // TAGSMANAGERIMPL_H
+	tagParse.loadFromFile("tags");
+	assert(tagMan.findSpecificTag("OMX_MARKTYPE", "modules/codec/omxil/OMX_Types.h", 297) != NULL);
+	assert(tagMan.findSpecificTag("OMX_MARKTYPE", "modules/codec/omxil/OMX_Types.h", 207) == NULL);
+	return 0;
+}

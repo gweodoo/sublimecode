@@ -16,3 +16,14 @@
 # along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   #
 #                                                                         #
 ###########################################################################
+
+
+set(TEST_FILES TagTest TagManagerTest TagParserTest)
+set(SRC_FILES ${CMAKE_SOURCE_DIR}/src/Utils.cpp ${CMAKE_SOURCE_DIR}/src/UNIXLauncher.cpp  ${CMAKE_SOURCE_DIR}/src/Utils.cpp ${CMAKE_SOURCE_DIR}/src/Configuration.cpp ${CMAKE_SOURCE_DIR}/src/Launcher.cpp ${CMAKE_SOURCE_DIR}/src/Tag.cpp ${CMAKE_SOURCE_DIR}/src/TagImpl.cpp ${CMAKE_SOURCE_DIR}/src/TagsManager.cpp ${CMAKE_SOURCE_DIR}/src/TagsManagerImpl.cpp ${CMAKE_SOURCE_DIR}/src/TagsParser.cpp ${CMAKE_SOURCE_DIR}/src/TagsParserImpl.cpp)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tags ${CMAKE_CURRENT_BINARY_DIR}/tags)
+
+foreach(i ${TEST_FILES})
+	add_executable(${i}Bin ${i} ${SRC_FILES})
+	add_test(UnitTest_${i} ${EXECUTABLE_OUTPUT_PATH}/${i}Bin)
+endforeach(i)

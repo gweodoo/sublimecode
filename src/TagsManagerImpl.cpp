@@ -44,6 +44,7 @@ std::vector<Tag*>* TagsManagerImpl::findTagsBy ( tagType type ) {
 
 bool TagsManagerImpl::delTag ( Tag* old ) {
 	hashtable[static_cast<short>(old->getType())]->erase(hashTag(old));
+	return true;
 }
 
 bool TagsManagerImpl::addTag ( Tag* nw ) {
@@ -60,3 +61,12 @@ void TagsManagerImpl::display() const {
 		}
 	}
 }
+
+bool TagsManagerImpl::isEmpty() const {
+	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		if(!(*it)->empty())
+			return false;
+	}
+	return true;
+}
+

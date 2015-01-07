@@ -17,24 +17,33 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef TAGSMANAGERIMPL_H
-#define TAGSMANAGERIMPL_H
+#include "../../src/TagImpl.h"
+#include "../../src/TagsManagerImpl.h"
+#include <cassert>
 
-#include "TagsManager.h"
 using namespace std;
 
-class TagsManagerImpl :  public TagsManager
-{
-private:
-	std::vector<std::map<std::string, Tag*>* > hashtable;
-public:
-	TagsManagerImpl();
-	virtual Tag* findSpecificTag ( std::string name, std::string filename, size_t line );
-	virtual std::vector<Tag*>* findTagsBy(tagType type);
-	virtual bool delTag ( Tag* old );
-	virtual bool addTag ( Tag* nw );
-	virtual void display() const;
-	virtual bool isEmpty() const;
-};
+int main(void) {
+	TagImpl tag("nameTag", "FileNameTag", 459, TYPE_STRUCT);
+	TagImpl tag2("nameTag2", "FileNameTag2", 666, TYPE_FUNCTION);
+	TagsManagerImpl tagMan;
 
-#endif // TAGSMANAGERIMPL_H
+
+	assert(tagMan.isEmpty());
+
+	assert(tagMan.addTag(&tag));
+	assert(tagMan.addTag(&tag2));
+	tagMan.display();
+
+	assert(! tagMan.isEmpty());
+	assert(tagMan.findSpecificTag("nameTag", "FileNameTag", 459) == &tag);
+	assert(tagMan.findSpecificTag("nameTag", "FileNameTag", 469) == NULL);
+	assert(tagMan.findSpecificTag("nameTag", "ErrorNameTag", 459) == NULL);
+	assert(tagMan.findSpecificTag("errorTag", "FileNameTag", 459) == NULL);
+
+	assert(tagMan.delTag(&tag));
+	assert(tagMan.delTag(&tag2));
+
+	assert(tagMan.isEmpty());
+	return 0;
+}

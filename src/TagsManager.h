@@ -31,6 +31,7 @@ public:
 	std::string hashTag(Tag* tag) const;
 	std::string hashTag(std::string name, std::string filename, size_t line) const;
 	virtual void display() const = 0;
+	virtual bool isEmpty() const = 0;
 
 };
 

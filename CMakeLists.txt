@@ -25,7 +25,7 @@ PROJECT(SublimeCode)
 # - SV_ENABLE_TESTS : activate test suite
 # - SC_ENABLE_FOC : activate doxygen generation from source code
 set(SC_VERSION "1.0")
-set(SC_ENABLE_TESTS "no")
+set(SC_ENABLE_TESTS "yes")
 set(SC_ENABLE_DOC "no")
 set(SC_EXTRA_FLAGS "-Wall -ansi -pedantic -Wextra")
 #CMake Vars
@@ -66,6 +66,7 @@ ENDIF(SC_ENABLE_DOC AND DOXYGEN_FOUND)
 
 #Need to define a framework
 IF(SC_ENABLE_TESTS)
+	enable_testing()
 	ADD_SUBDIRECTORY(tests)
 ENDIF(SC_ENABLE_TESTS)
 

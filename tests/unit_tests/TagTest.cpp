@@ -17,24 +17,22 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef TAGSMANAGERIMPL_H
-#define TAGSMANAGERIMPL_H
+#include "../../src/TagImpl.h"
+#include <cassert>
 
-#include "TagsManager.h"
 using namespace std;
 
-class TagsManagerImpl :  public TagsManager
-{
-private:
-	std::vector<std::map<std::string, Tag*>* > hashtable;
-public:
-	TagsManagerImpl();
-	virtual Tag* findSpecificTag ( std::string name, std::string filename, size_t line );
-	virtual std::vector<Tag*>* findTagsBy(tagType type);
-	virtual bool delTag ( Tag* old );
-	virtual bool addTag ( Tag* nw );
-	virtual void display() const;
-	virtual bool isEmpty() const;
-};
+int main(void) {
+	TagImpl tag("nameTag", "FileNameTag", 459, TYPE_STRUCT);
 
-#endif // TAGSMANAGERIMPL_H
+	tag.display();file:///home/adamj/Documents/cours/S9/PFE/SublimeCode/tests/unit_tests/TagTest.cpp
+	assert(tag.getFileName() == "FileNameTag");
+	assert(tag.getName() == "nameTag");
+	assert(tag.getLineNumber() == 459);
+	assert(tag.getType() == TYPE_STRUCT);
+
+	tag.addInfoByKey("key", "value");
+	assert(tag.getInfoByKey("key") == "value");
+
+	return 0;
+}
