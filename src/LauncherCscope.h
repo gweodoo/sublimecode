@@ -17,15 +17,24 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef LAUNCHER_H
-#define LAUNCHER_H
+#ifndef LAUNCHERCSCOPE_H
+#define LAUNCHERCSCOPE_H
+
+#include"Launcher.h"
 
 
-class Launcher {
+class LauncherCscope:Launcher {
 
 public :
-	virtual bool initExternalTool()=0;
-	virtual void* launchCommandExternalTool(int command, vector<void*> arg)=0;
-};
+	 bool initExternalTool();
+	 void* launchCommandExternalTool(int command, vector<void*> arg);
+	 
 
+
+private :
+	 bool isLaunched;
+	 
+
+	
+};
 #endif
