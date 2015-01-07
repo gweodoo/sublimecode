@@ -42,10 +42,10 @@ public:
 	/**
 	 * functions implementing the Graph Interface
 	 */
-	std::vector<Tag*>*  getFunctionsCalledBy(std::string name);
-	std::vector<Tag*>* getFunctionsCallingThis(std::string name);
-	std::vector<Tag*>* getFilesIncludedBy(std::string name);
-	Tag* getTagByName(std::string name);
+	std::vector<FunctionGraph*>*  getFunctionsCalledBy(std::string name);
+	std::vector<FunctionGraph*>* getFunctionsCallingThis(std::string name);
+	std::vector<FunctionGraph*>* getFilesIncludedBy(std::string name);
+	
 	int getCountFunctionApparition(std::string name);
 	int getCountFunctionLength(std::string name);
 	int getCountFunctionCalled(std::string name);

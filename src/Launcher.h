@@ -21,6 +21,7 @@
 #define LAUNCHER_H
 #include"Utils.h"
 #include "Tag.h"
+#include "FunctionGraph.h"
 /**
  * main interface for an external tool launcher
  */
@@ -29,7 +30,7 @@ class Launcher {
 public :
 	virtual bool initExternalTool()=0;
 	virtual bool closeExternalTool()=0;
-	virtual std::vector<Tag*>* launchCommandExternalTool(int command, std::string arg)=0;
+	virtual std::vector<FunctionGraph*>* launchCommandExternalTool(int command, std::string arg)=0;
 	
 };
 

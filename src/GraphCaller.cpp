@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+#include "FunctionGraph.h"
 #include "GraphCaller.h"
 #include "TagsManager.h"
 
@@ -28,31 +29,33 @@ GraphCaller::GraphCaller( Configuration* myConf,TagsManager*myTagManager)
 }	
 
 
-std::vector<Tag*>* GraphCaller::getFunctionsCalledBy(std::string name){
+std::vector<FunctionGraph*>* GraphCaller::getFunctionsCalledBy(std::string name){
 
 	return this->myLauncher->launchCommandExternalTool(1,name);
 	
 }
 
-std::vector< Tag* >* GraphCaller::getFunctionsCallingThis(std::string name)
+std::vector<FunctionGraph*>* GraphCaller::getFunctionsCallingThis(std::string name)
 {
 	return this->myLauncher->launchCommandExternalTool(2,name);
 }
-std::vector< Tag* >* GraphCaller::getFilesIncludedBy(std::string name)
+std::vector<FunctionGraph*>* GraphCaller::getFilesIncludedBy(std::string name)
 {
-	return this->myLauncher->launchCommandExternalTool(3,name);
+	return this->myLauncher->launchCommandExternalTool(7,name);
 }
 int GraphCaller::getCountFunctionApparition(std::string name)
 {
 
+	
 }
 int GraphCaller::getCountFunctionCalled(std::string name)
 {
 
+	return (this->myLauncher->launchCommandExternalTool(1,name))->size();
 }
 int GraphCaller::getCountFunctionCalling(std::string name)
 {
-
+	return (this->myLauncher->launchCommandExternalTool(2,name))->size();
 }
 int GraphCaller::getCountFunctionLength(std::string name)
 {
@@ -63,10 +66,7 @@ Launcher* GraphCaller::getLauncher()
 return this->myLauncher;
 }
 
-Tag* GraphCaller::getTagByName(std::string name)
-{
 
-}
 
 
 

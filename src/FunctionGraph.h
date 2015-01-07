@@ -16,8 +16,8 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
-#ifndef CSCOPEOUTPUT_H
-#define CSCOPEOUTPUT_H
+#ifndef FUNCTIONGRAPH_H
+#define FUNCTIONGRAPH_H
 
 #include"Utils.h"
 
@@ -26,12 +26,12 @@
  * 
  */
 
-class CscopeOutput
+class FunctionGraph
 {
 public:
-	CscopeOutput(std::string fileName,std::string tagName,std::string signature,int line );
-	CscopeOutput();
-	~CscopeOutput();
+	FunctionGraph(std::string fileName,std::string tagName,std::string signature,int line );
+	FunctionGraph();
+	~FunctionGraph();
 	/**
 	* classical getter for fileName-tagName-Line-Signature
 	*/
@@ -58,4 +58,4 @@ private:
 
 };
 
-#endif // CSCOPEOUTPUT_H
+#endif // FUNCTIONGRAPH_H

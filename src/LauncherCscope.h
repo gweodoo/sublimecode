@@ -23,6 +23,7 @@
 #include"Launcher.h"
 #include "Tag.h"
 #include "TagsManager.h"
+#include "FunctionGraph.h"
 
 /**
  * class implementing the Launcher interface specificly to cscope
@@ -44,15 +45,15 @@ private :
 	 /**
 	  * need internally for parsing cscope output
 	  */
-	 std::vector<Tag*>* cscopeOutputParser(std::string output);
-	
+	std::vector<FunctionGraph*>* cscopeOutputParser(std::string output);
+	std::string launchExternalTool(int command, std::string arg);
 	
 public :
 	
 	 LauncherCscope(Configuration* myconfiguration,TagsManager* myTagManager);
 	 bool initExternalTool();
 	 bool closeExternalTool();
-	 std::vector<Tag*>* launchCommandExternalTool(int command, std::string arg);
+	 std::vector<FunctionGraph*>* launchCommandExternalTool(int command, std::string arg);
 	 bool getIsLaunched();
 	 
 

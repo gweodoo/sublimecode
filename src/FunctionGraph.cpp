@@ -1,9 +1,9 @@
-#include "CscopeOutput.h"
+#include "FunctionGraph.h"
 
 /**
  * classical constructor with attribute initialization parameters
  */
-CscopeOutput::CscopeOutput(std::string fileName,std::string tagName,std::string signature,int line )
+FunctionGraph::FunctionGraph(std::string fileName,std::string tagName,std::string signature,int line )
 {
 
 	this->fileName=fileName;
@@ -15,49 +15,49 @@ CscopeOutput::CscopeOutput(std::string fileName,std::string tagName,std::string 
 /**
  * classical constructor without attribute initialization
  */
-CscopeOutput::~CscopeOutput()
+FunctionGraph::~FunctionGraph()
 {
 
 }
 /**
  * ---------------getters definition---------------------------
  */
-std::string CscopeOutput::getFileName()
+std::string FunctionGraph::getFileName()
 {
 	return fileName;
 }
-int CscopeOutput::getLine()
+int FunctionGraph::getLine()
 {
 	return line;
 }
-std::string CscopeOutput::getSignature()
+std::string FunctionGraph::getSignature()
 {
 	return signature;
 }
-std::string CscopeOutput::getTagName()
+std::string FunctionGraph::getTagName()
 {
 	return tagName;
 }
 /**
  * --------------setters definition----------------------------
  */
-void CscopeOutput::setFileName(std::string fileName)
+void FunctionGraph::setFileName(std::string fileName)
 {
 this->fileName=fileName;
 }
-void CscopeOutput::setLine(int line)
+void FunctionGraph::setLine(int line)
 {
 this->line=line;
 }
-void CscopeOutput::setTagName(std::string tagName)
+void FunctionGraph::setTagName(std::string tagName)
 {
 this->tagName=tagName;
 }
-CscopeOutput::CscopeOutput()
+FunctionGraph::FunctionGraph()
 {
 	
 }
-void CscopeOutput::setSignature(std::string signature)
+void FunctionGraph::setSignature(std::string signature)
 {
 this->signature=signature;
 }
