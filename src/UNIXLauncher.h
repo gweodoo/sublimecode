@@ -24,6 +24,7 @@
 
 class UNIXLauncher : public Launcher {
 
+	
 };
 
 #endif

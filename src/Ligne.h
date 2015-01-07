@@ -17,11 +17,11 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef LAUNCHER_H
-#define LAUNCHER_H
+#ifndef LIGNE_H
+#define LIGNE_H
 
 
-class Launcher {
+class Ligne {
 
 
 };

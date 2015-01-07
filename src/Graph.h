@@ -17,12 +17,26 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef LAUNCHER_H
-#define LAUNCHER_H
+#ifndef GRAPH_H
+#define GRAPH_H
 
 
-class Launcher {
+/**
+ * calling/called graph for methods abstract interface
+ */
+class Graph {
 
+public : 
+	virtual std::vector<Tag*>  getFunctionsCalledBy(std::string name)=0;
+	virtual std::vector<Tag*> getFunctionsCallingThis(std::string name)=0;
+	virtual std::vector<Tag*> getFilesIncludedBy(std::string name)=0;
+	virtual Tag* getTagByName(std::string name)=0;
+	virtual int getCountFunctionApparition(std::name)=0;
+	virtual int getCountFunctionLength(std::name)=0;
+	virtual int getCountFunctionCalled(std::name)=0;
+	virtual int getCountFunctionCalling(std::name)=0;
+	
+	
 
 };
 
