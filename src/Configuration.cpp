@@ -18,7 +18,21 @@
 #include "Configuration.h"
 
 Configuration::Configuration(std::string sources, std::string dest) {
+
+	this->sourcesDir=sources;
+	this->destDir=dest;
 }
+
+std::string Configuration::getSourcesDir() const
+{
+	return this->sourcesDir;
+}
+
+std::string Configuration::getDestDir() const
+{
+	return this->destDir;
+}
+
 
 Configuration::~Configuration() {
 }

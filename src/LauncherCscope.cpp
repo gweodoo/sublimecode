@@ -21,8 +21,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+using namespace std;
 
 
+LauncherCscope::LauncherCscope(Configuration* myconfiguration)
+{
+this->myConfiguration=myconfiguration;
+this->isLaunched=false;
+}
 
 
 bool LauncherCscope::initExternalTool(){
@@ -33,15 +39,81 @@ bool LauncherCscope::initExternalTool(){
 	}
 	else
 	{
-		if(system("cd /../ && cscope -b -q -k")==-1)
+		string commandCscopeConstruct=string("cd ") +(string)this->myConfiguration->getSourcesDir() +string(" && cscope -bqk  ");
+		string commandFileMove_1=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.in.out ")+(string)this->myConfiguration->getDestDir();
+		string commandFileMove_2=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.out ")+(string)this->myConfiguration->getDestDir();
+		string commandFileMove_3=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.po.out ")+(string)this->myConfiguration->getDestDir();
+
+		if(system(commandCscopeConstruct.c_str())==-1)
 		{
-			perror("Initializing cscope");
+			perror("Initializing Cscope");
 		}
+	
+		if(system(commandFileMove_1.c_str())==-1)
+		{
+		
+			perror("Moving file Cscope");
+		}
+		if(system(commandFileMove_2.c_str())==-1)
+		{
+		
+			perror("Moving file Cscope");
+		}
+		if(system(commandFileMove_3.c_str())==-1)
+		{
+		
+			perror("Moving file Cscope");
+		}
+		
+		this->isLaunched=true;
+		return true;
 	}
 }
+
+bool LauncherCscope::closeExternalTool()
+{
+	string commandFileRemove_1=string("rm -rf ")+(string)this->myConfiguration->getDestDir()+string("/cscope* ");
+	if(system(commandFileRemove_1.c_str())==-1) perror("closing External Tool");
+	else return true;
+	
+}
+
+/**
+ * launch the external tool with the given command and parameter
+ * the id of the command does not match the id given in the manual
+ * 
+ */
 void* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
 {
 
+	void * responseToReturn=NULL;
+	FILE * myCommandOutput=NULL;
+	char buffer[256];
+	string result="";
+	
+	if(!arg.empty()){
+		switch(command)
+		{
+			/** list of the function called by**/
+			case 1:
+				string command=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L2 ")+arg;
+				cout<<command<<endl;
+				if((myCommandOutput=popen(command.c_str(),"r"))==NULL)perror("searching Called Function");
+				
+				while(!feof(myCommandOutput)){
+				
+					if(fgets(buffer,256,myCommandOutput)!=NULL){
+					
+						result+=buffer;
+					}
+				}
+				cout<<result<<endl;	
+				break;
+				
+			
+		}
+	}
+		
 }
 
 bool LauncherCscope::getIsLaunched(){

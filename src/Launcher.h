@@ -25,6 +25,7 @@ class Launcher {
 
 public :
 	virtual bool initExternalTool()=0;
+	virtual bool closeExternalTool()=0;
 	virtual void* launchCommandExternalTool(int command, std::string arg)=0;
 	
 };

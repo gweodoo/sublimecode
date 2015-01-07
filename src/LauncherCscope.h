@@ -19,19 +19,23 @@
 
 #ifndef LAUNCHERCSCOPE_H
 #define LAUNCHERCSCOPE_H
-
+#include "Configuration.h"
 #include"Launcher.h"
 
 
-class LauncherCscope: Launcher {
+class LauncherCscope: public  Launcher {
 
 private :
 	 bool isLaunched;
+	 Configuration* myConfiguration;
 
 public :
-	virtual bool initExternalTool();
-	virtual void* launchCommandExternalTool(int command, std::string arg);
+	 LauncherCscope(Configuration* myconfiguration);
+	 bool initExternalTool();
+	 bool closeExternalTool();
+	 void* launchCommandExternalTool(int command, std::string arg);
 	 bool getIsLaunched();
+	 
 
 };
 #endif
