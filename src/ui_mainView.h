@@ -25,6 +25,8 @@ public:
 	void retranslateUi(QMainWindow *MainView);
 	QWidget *getCentralWidget();
 	QWebView *getWebView();
+	QPushButton * getPushButton();
+	QLineEdit * getLineEdit();
     
 private:
 	QWidget *centralWidget;

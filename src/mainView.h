@@ -10,11 +10,16 @@ class MainView : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainView(QString file, QWidget *parent = 0);
-    ~MainView();
+	explicit MainView();
+	explicit MainView(QString file);
+	//explicit MainView(QString file, QWidget *parent = 0);
+	~MainView();
+	
+public slots:
+	void handlePushButton();
 
 private:
-	Ui_MainView ui;
+	Ui_MainView * ui;
 };
 
 #endif // MAINVIEW_H

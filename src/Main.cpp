@@ -20,6 +20,7 @@
 #include "Utils.h"
 #include "mainView.h"
 #include "mainwindow.h"
+#include "CreateHTML.h"
 #include <QApplication>
 #include <QFile>
 #include <QIODevice>
@@ -29,18 +30,19 @@ using namespace std;
 
 int main(int argc, char **argv){
 
-    QApplication a(argc, argv);
-   
-    QFile file(":/style.qss");
-   
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        a.setStyleSheet(file.readAll());
-        file.close();
-    }
+	QApplication a(argc, argv);
+	
+	//Affichage vue
+	QFile file(":/style.qss");
+	
+	if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		a.setStyleSheet(file.readAll());
+		file.close();
+	}
 
-    MainWindow w;
-    w.show();
+	MainView w;
+	w.show();
 
-    return a.exec();
+	return a.exec();
 }

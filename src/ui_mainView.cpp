@@ -98,3 +98,13 @@ QWebView * Ui_MainView::getWebView()
 {
 	return this->webView;
 }
+
+QPushButton * Ui_MainView::getPushButton()
+{
+	return this->pushButton;
+}
+
+QLineEdit * Ui_MainView::getLineEdit()
+{
+	return this->lineEdit;
+}

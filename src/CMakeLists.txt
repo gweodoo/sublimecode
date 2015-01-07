@@ -22,7 +22,7 @@ file(GLOB_RECURSE HDR *.h)
 file(GLOB_RECURSE UI *.ui)
 file(GLOB_RECURSE RES *.qrc)
 
-find_package(Qt4 REQUIRED)
+find_package(Qt4 REQUIRED QtGui QtXml QtXmlPatterns)
 set(QT_USE_QTWEBKIT TRUE)
 
 INCLUDE(${QT_USE_FILE})
@@ -33,7 +33,5 @@ QT4_ADD_RESOURCES(RES_RCC ${RES})
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 add_executable(sublimeCode ${SRC} ${HDR_MOC} ${UI_HDR} ${RES_RCC})
 
-TARGET_LINK_LIBRARIES(sublimeCode ${QT_LIBRARIES})
-
-
+TARGET_LINK_LIBRARIES(sublimeCode ${QT_LIBRARIES} Qt4::QtGui Qt4::QtXml)
 

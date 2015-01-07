@@ -19,7 +19,33 @@
 
 #include "mainView.h"
 #include "ui_mainView.h"
+#include "CreateHTML.h"
+#include <QDebug>
 
+MainView::MainView()
+{
+	ui = new Ui_MainView();
+	this->resize(1200, 800);
+    
+	ui->setupUi(this);
+	ui->getCentralWidget()->show();
+	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/html.htm"));
+		
+	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
+}
+
+MainView::MainView(QString file)
+{
+	ui = new Ui_MainView();
+	this->resize(1200, 800);
+    
+	ui->setupUi(this);
+	ui->getCentralWidget()->show();
+	ui->getWebView()->setHtml(file);
+	
+	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
+}
+/*
 MainView::MainView(QString file, QWidget *parent)
 {
 	this->resize(1200, 800);
@@ -28,8 +54,21 @@ MainView::MainView(QString file, QWidget *parent)
 	ui.getCentralWidget()->show();
 	ui.getWebView()->load(QUrl(file));
 }
-
+*/
 MainView::~MainView()
 {
 
+}
+
+void MainView::handlePushButton()
+{
+	qDebug() << ui->getLineEdit()->text();
+	
+	//Creation d'un XML test
+	CreateHTML c;
+	QString html;
+	c.CreateXML();
+	html = c.TransformToHTML();
+	
+	ui->getWebView()->setHtml(html);
 }

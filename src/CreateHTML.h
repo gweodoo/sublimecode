@@ -25,10 +25,17 @@ using namespace std;
 class CreateHTML {
 
 public:
-    explicit CreateHTML();
-    ~CreateHTML();
-    void CreateHTMLfile(QString file);
-    void CreateHTMLbase(const char* file);
+	explicit CreateHTML();
+	~CreateHTML();
+	void CreateHTMLfile(QString file);
+	void CreateHTMLbase(const char* file);
+
+	void CreateHTMLbegin(const char* file);
+	void CreateHTMLbody(const char* file);
+	void CreateHTMLend(const char* file);
+
+	void CreateXML();
+	QString TransformToHTML();
 
 private:
 };
