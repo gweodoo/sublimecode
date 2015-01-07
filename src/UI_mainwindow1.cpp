@@ -18,7 +18,7 @@
 /***************************************************************************/
 
 #include "UI_mainwindow1.h"
-#include "../ui_mainView.h"
+#include "ui_mainView.h"
 
 UI_MainWindow1::UI_MainWindow1(){}
 UI_MainWindow1::~UI_MainWindow1(){}

@@ -23,6 +23,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QFile>
 #include "CreateHTML.h"
 #include "mainView.h"
 

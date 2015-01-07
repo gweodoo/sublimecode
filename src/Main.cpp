@@ -18,21 +18,29 @@
 /***************************************************************************/
 
 #include "Utils.h"
-#include "mainwindow.h"
 #include "mainView.h"
+#include "mainwindow.h"
 #include <QApplication>
-#include "TagsManagerImpl.h"
-#include "TagImpl.h"
-#include "TagsParserImpl.h"
-#include "LauncherCscope.h"
-
-
+#include <QFile>
+#include <QIODevice>
+#include <QStyle>
+ 
 using namespace std;
 
 int main(int argc, char **argv){
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
 
-	return a.exec();
+    QApplication a(argc, argv);
+   
+    QFile file(":/style.qss");
+   
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        a.setStyleSheet(file.readAll());
+        file.close();
+    }
+
+    MainWindow w;
+    w.show();
+
+    return a.exec();
 }

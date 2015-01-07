@@ -41,6 +41,7 @@ void CreateHTML::CreateHTMLbase(const char* file)
 	myfile << "<html>" << endl;
 	myfile << "<head>" << endl;
 	myfile << "<title>Page Title</title>" << endl;
+	myfile << "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" << endl;
 	myfile << "</head>" << endl;
 	myfile << "<body>" << endl;
 	myfile << "<p>Denis la pute</p>" << endl;

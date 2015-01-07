@@ -18,6 +18,7 @@
 /***************************************************************************/ 
 
 #include "mainwindow.h"
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -50,7 +51,14 @@ void MainWindow::Finish()
 {
 	fileNameSourceTest = ui->getLineEdit()->text();
 	fileNameDestinationTest = ui->getLineEdit1()->text();
-
+	if(fileNameDestination=="")
+		fileNameDestination = "Sources";
+	else fileNameDestination = fileNameDestination + "/Sources";
+	if (QDir().exists(fileNameDestination)){
+		QDir().remove(fileNameDestination);
+	}
+	QDir().mkdir(fileNameDestination);
+	
 	QMessageBox qmb;
 	if(fileNameSourceTest==""){
 		qmb.setText("Remplir les sources du projet");
@@ -58,11 +66,20 @@ void MainWindow::Finish()
 	}
 	else {
 		if(fileNameDestinationTest==""){
-			fileNameDestination="home.html";
+			fileNameDestination=fileNameDestination+"/home.html";
 		}
 		else fileNameDestination=fileNameDestination+"/home.html";
 		CreateHTML *c = new CreateHTML();
 		c->CreateHTMLfile(fileNameDestination);
+	        if(fileNameDestinationTest==""){
+			fileNameDestinationTest="Sources/style.css";
+		}
+		else fileNameDestinationTest=fileNameDestinationTest+"/Sources/style.css";
+		if (QFile::exists(fileNameDestinationTest))
+		{
+			QFile::remove(fileNameDestinationTest);
+		}
+		QFile::copy("../../src/style.css", fileNameDestinationTest);
 		MainView *w = new MainView(fileNameDestination);
 		w->show();
 		this->hide();
