@@ -16,28 +16,39 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef CSCOPEOUTPUT_H
+#define CSCOPEOUTPUT_H
 
-#ifndef LAUNCHERCSCOPE_H
-#define LAUNCHERCSCOPE_H
-#include "Configuration.h"
-#include"Launcher.h"
-#include "Tag.h"
+#include"Utils.h"
 
+/**
+ * Represents a Line output given by cscope;
+ * 
+ */
 
-class LauncherCscope: public  Launcher {
+class CscopeOutput
+{
+public:
+CscopeOutput(std::string fileName,std::string tagName,std::string signature,int line );
+CscopeOutput();
+~CscopeOutput();
 
-private :
-	 bool isLaunched;
-	 Configuration* myConfiguration;
-	 std::vector<Tag*>* cscopeOutputParser(std::string output);
-	 std::string getPartFromString(std::string stringToSearchIn,int numberOfPar);
-public :
-	 LauncherCscope(Configuration* myconfiguration);
-	 bool initExternalTool();
-	 bool closeExternalTool();
-	 std::vector<Tag*>* launchCommandExternalTool(int command, std::string arg);
-	 bool getIsLaunched();
-	 
+std::string getFileName();
+std::string getTagName();
+std::string getSignature();
+int getLine();
+
+void setFileName(std::string fileName);
+void setTagName(std::string tagName);
+void setSignature(std::string signature);
+void setLine(int line);
+
+private:
+std::string fileName;
+std::string tagName;
+std::string signature;
+int line;
 
 };
-#endif
+
+#endif // CSCOPEOUTPUT_H

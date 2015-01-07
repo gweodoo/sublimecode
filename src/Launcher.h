@@ -20,13 +20,14 @@
 #ifndef LAUNCHER_H
 #define LAUNCHER_H
 #include"Utils.h"
+#include "Tag.h"
 
 class Launcher {
 
 public :
 	virtual bool initExternalTool()=0;
 	virtual bool closeExternalTool()=0;
-	virtual void* launchCommandExternalTool(int command, std::string arg)=0;
+	virtual std::vector<Tag*>* launchCommandExternalTool(int command, std::string arg)=0;
 	
 };
 

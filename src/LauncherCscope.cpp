@@ -20,6 +20,10 @@
 #include "LauncherCscope.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <sstream>
+#include<iostream>
+#include<string>
+#include "CscopeOutput.h"
 
 using namespace std;
 
@@ -83,35 +87,49 @@ bool LauncherCscope::closeExternalTool()
  * the id of the command does not match the id given in the manual
  * 
  */
-void* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
+vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
 {
 
+	
 	void * responseToReturn=NULL;
 	FILE * myCommandOutput=NULL;
 	char buffer[256];
 	string result="";
+	string commandToExecute="";
 	
 	if(!arg.empty()){
 		switch(command)
 		{
 			/** list of the function called by**/
 			case 1:
-				string command=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L2 ")+arg;
-				cout<<command<<endl;
-				if((myCommandOutput=popen(command.c_str(),"r"))==NULL)perror("searching Called Function");
+				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L2 ")+arg;
+			break;
+			case 2:
+				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L3 ")+arg;
+			break;
+			case 3:
+				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L8 ")+arg;
+			break;
+		}
+		if(command==1||command==2||command==3){
+		
+			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
+			
+			while(!feof(myCommandOutput)){
+			
+				if(fgets(buffer,256,myCommandOutput)!=NULL){
 				
-				while(!feof(myCommandOutput)){
-				
-					if(fgets(buffer,256,myCommandOutput)!=NULL){
-					
-						result+=buffer;
-					}
+					result.append(buffer);
 				}
-				cout<<result<<endl;	
-				break;
 				
+			}
+			if(myCommandOutput) pclose(myCommandOutput);
+			
+			return this->cscopeOutputParser(result);
+							
 			
 		}
+		
 	}
 		
 }
@@ -119,6 +137,49 @@ void* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
 bool LauncherCscope::getIsLaunched(){
 	
 	return this->isLaunched;
+}
+
+std::vector<Tag*>* LauncherCscope::cscopeOutputParser(std::string output){
+
+	vector<CscopeOutput*>* listOfCscopeOutput=new vector<CscopeOutput*>();
+	stringstream outputAsStream(output);
+	string readLine;
+	while(getline(outputAsStream,readLine)){
+	
+		
+		stringstream readLineAsStream(readLine);
+		string part;
+		int count=0;
+		CscopeOutput* newCscopeOutputLine=new CscopeOutput();
+		while(getline(readLineAsStream,part,' ')){
+				
+	
+			
+			switch(count){
+			
+				
+				case 0:
+					newCscopeOutputLine->setFileName(part);
+					break;
+				case 1:
+					newCscopeOutputLine->setTagName(part);
+					break;
+				case 2:
+					newCscopeOutputLine->setLine(atoi(part.c_str()));
+					break;
+				case 3:
+					newCscopeOutputLine->setSignature(part);
+					break;
+					
+				
+			}
+			count++;
+		}
+		count=0;
+		listOfCscopeOutput->push_back(newCscopeOutputLine);
+	}
+		
+	
 }
 
 	
