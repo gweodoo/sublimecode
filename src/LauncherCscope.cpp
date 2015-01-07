@@ -23,6 +23,7 @@
 #include <sstream>
 #include<iostream>
 #include<string>
+#include <list>
 #include "CscopeOutput.h"
 
 using namespace std;
@@ -89,9 +90,9 @@ bool LauncherCscope::closeExternalTool()
  */
 vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
 {
-
+	if(!this->isLaunched) this->initExternalTool();
 	
-	void * responseToReturn=NULL;
+	
 	FILE * myCommandOutput=NULL;
 	char buffer[256];
 	string result="";
@@ -131,6 +132,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, std::string
 		}
 		
 	}
+	
 		
 }
 
@@ -178,6 +180,7 @@ std::vector<Tag*>* LauncherCscope::cscopeOutputParser(std::string output){
 		count=0;
 		listOfCscopeOutput->push_back(newCscopeOutputLine);
 	}
+	
 		
 	
 }

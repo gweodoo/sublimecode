@@ -19,22 +19,21 @@
 
 #ifndef GRAPH_H
 #define GRAPH_H
-
-
+#include "Tag.h"
 /**
  * calling/called graph for methods abstract interface
  */
 class Graph {
 
 public : 
-	virtual std::vector<Tag*>  getFunctionsCalledBy(std::string name)=0;
-	virtual std::vector<Tag*> getFunctionsCallingThis(std::string name)=0;
-	virtual std::vector<Tag*> getFilesIncludedBy(std::string name)=0;
+	virtual std::vector<Tag*>*  getFunctionsCalledBy(std::string name)=0;
+	virtual std::vector<Tag*>* getFunctionsCallingThis(std::string name)=0;
+	virtual std::vector<Tag*>* getFilesIncludedBy(std::string name)=0;
 	virtual Tag* getTagByName(std::string name)=0;
-	virtual int getCountFunctionApparition(std::name)=0;
-	virtual int getCountFunctionLength(std::name)=0;
-	virtual int getCountFunctionCalled(std::name)=0;
-	virtual int getCountFunctionCalling(std::name)=0;
+	virtual int getCountFunctionApparition(std::string name)=0;
+	virtual int getCountFunctionLength(std::string name)=0;
+	virtual int getCountFunctionCalled(std::string name)=0;
+	virtual int getCountFunctionCalling(std::string name)=0;
 	
 	
 
