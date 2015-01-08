@@ -33,9 +33,6 @@ public :
 	virtual int getCountFunctionLength(std::string name)=0;
 	virtual int getCountFunctionCalled(std::string name)=0;
 	virtual int getCountFunctionCalling(std::string name)=0;
-	
-	
-
 };
 
 #endif

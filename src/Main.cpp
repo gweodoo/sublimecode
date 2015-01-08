@@ -41,7 +41,7 @@ int main(int argc, char **argv){
 		file.close();
 	}
 
-	MainView w;
+	MainWindow w;
 	w.show();
 
 	return a.exec();

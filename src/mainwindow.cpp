@@ -18,6 +18,7 @@
 /***************************************************************************/ 
 
 #include "mainwindow.h"
+#include "dialog.h"
 #include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -80,7 +81,7 @@ void MainWindow::Finish()
 			QFile::remove(fileNameDestinationTest);
 		}
 		QFile::copy("../../src/style.css", fileNameDestinationTest);
-		MainView *w = new MainView(fileNameDestination);
+		Dialog *w = new Dialog(fileNameSourceTest);
 		w->show();
 		this->hide();
 	}
