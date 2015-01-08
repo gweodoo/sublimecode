@@ -30,7 +30,8 @@ private:
 	tagType type;
 	std::map<std::string, std::string> additionalInfo;
 public:
-	explicit TagImpl(std::string name, std::string fileName, size_t line, tagType type);
+	explicit TagImpl(std::string name, std::string fileName = OUT_OF_SCOPE_TAG, size_t line = 0, tagType type = TYPE_UNKNOWN);
+	explicit TagImpl(std::string name);
 	virtual bool setName(std::string name);
 	virtual bool setFileName(std::string fileName);
 	virtual bool setLineNumber(size_t line);

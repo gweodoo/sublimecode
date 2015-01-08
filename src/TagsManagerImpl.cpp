@@ -19,7 +19,8 @@
 
 #include "TagsManagerImpl.h"
 
-TagsManagerImpl::TagsManagerImpl() {
+TagsManagerImpl::TagsManagerImpl(Configuration *config) {
+	this->config = config;
 	for(int i=0; i < Tag::NB_TAGS_TYPES; i++){
 		hashtable.push_back(new map<string, Tag*>);
 	}
@@ -69,5 +70,17 @@ bool TagsManagerImpl::isEmpty() const {
 			return false;
 	}
 	return true;
+}
+
+std::vector< Tag* >* TagsManagerImpl::getTagsByName ( string name ) {
+	std::vector<Tag *>* list = new vector<Tag*>;
+	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		for(map<string, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+			if(itmap->second->getName() == name){
+				list->push_back(itmap->second);
+			}
+		}
+	}
+	return list;
 }
 

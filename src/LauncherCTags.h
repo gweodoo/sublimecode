@@ -36,9 +36,10 @@ private:
 
 public:
 	LauncherCTags(Configuration* config, std::vector<std::string>* listPaths = NULL, std::string exe = "ctags", std::string opts = GLOBAL_OPTIONS);
-	void generateTagsFile();
+	bool generateTagsFile();
 	bool addPathToAnalyze(std::string filename);
 	void display() const;
+	std::string constructCommand() const;
 };
 
 #endif // LAUNCHERCTAGS_H

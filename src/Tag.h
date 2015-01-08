@@ -53,6 +53,8 @@ extern const char* tabTypeNames[];
 class Tag {
 public:
 	static const short NB_TAGS_TYPES = 15;
+	static const std::string OUT_OF_SCOPE_TAG;
+	
 	virtual bool setName(std::string name) = 0;
 	virtual bool setFileName(std::string fileName) = 0;
 	virtual bool setLineNumber(size_t line) = 0;

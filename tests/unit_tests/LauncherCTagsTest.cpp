@@ -17,21 +17,24 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "../../src/TagImpl.h"
-#include "../../src/TagsManagerImpl.h"
-#include "../../src/TagsParserImpl.h"
+#include "../../src/LauncherCTags.h"
 #include <cassert>
 
 using namespace std;
 
 int main(void) {
-	Configuration config(".", ".");
-	TagsManagerImpl tagMan(&config);
-	TagsParserImpl tagParse(&tagMan);
+	Configuration config("..", ".");
+	LauncherCTags launcher(&config), launcher2(&config);
 
-	tagParse.loadFromFile("tags");
+	assert(launcher.addPathToAnalyze("my/super/path"));
 
-	assert(tagMan.findSpecificTag("OMX_MARKTYPE", "modules/codec/omxil/OMX_Types.h", 297) != NULL);
-	assert(tagMan.findSpecificTag("OMX_MARKTYPE", "modules/codec/omxil/OMX_Types.h", 207) == NULL);
+	assert(launcher.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags my/super/path ");
+	assert(launcher.generateTagsFile());
+
+	assert(launcher2.addPathToAnalyze("../../src/"));
+	assert(launcher2.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags ../../src/ ");
+	assert(launcher2.generateTagsFile());
+
+
 	return 0;
 }

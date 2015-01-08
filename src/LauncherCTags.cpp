@@ -35,21 +35,15 @@ LauncherCTags::LauncherCTags (Configuration *config, std::vector<std::string>* l
 		this->listPaths = new vector<string>;
 }
 
-void LauncherCTags::generateTagsFile() {
-	std::string command = pathExecutable + " " + options + " " + GLOBAL_OPTIONS;
-	std::string path = " -f " + config->getDestDir() + "/tags " ;
-	std::string list = "";
-
-	for(vector<string>::iterator it = listPaths->begin(); it != listPaths->end(); it++)
-		list += (*it) + " ";
-
-	command += path + list;
-
-	system(command.c_str());
+bool LauncherCTags::generateTagsFile() {
+	int ret = system(constructCommand().c_str());
+	if(ret == -1) return false;
+	return WEXITSTATUS(ret) == 0 ? true : false;
 }
 
 bool LauncherCTags::addPathToAnalyze ( string path ) {
 	listPaths->push_back(path);
+	return true;
 }
 
 void LauncherCTags::display() const {
@@ -64,4 +58,14 @@ void LauncherCTags::display() const {
 
 }
 
+std::string LauncherCTags::constructCommand() const {
+	std::string command = pathExecutable + " " + options + " " + GLOBAL_OPTIONS;
+	std::string path = " -f " + config->getDestDir() + "/tags " ;
+	std::string list = "";
 
+	for(vector<string>::iterator it = listPaths->begin(); it != listPaths->end(); it++)
+		list += (*it) + " ";
+
+	command += path + list;
+	return command;
+}

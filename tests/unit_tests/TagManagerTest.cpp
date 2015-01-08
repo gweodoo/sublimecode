@@ -24,16 +24,19 @@
 using namespace std;
 
 int main(void) {
+	Configuration config(".", ".");
 	TagImpl tag("nameTag", "FileNameTag", 459, TYPE_STRUCT);
 	TagImpl tag2("nameTag2", "FileNameTag2", 666, TYPE_FUNCTION);
-	TagsManagerImpl tagMan;
+	TagImpl tag3("nameTag2", "FileNameTag3", 435, TYPE_FUNCTION);
+
+	TagsManagerImpl tagMan(&config);
 
 
 	assert(tagMan.isEmpty());
 
 	assert(tagMan.addTag(&tag));
 	assert(tagMan.addTag(&tag2));
-	tagMan.display();
+	assert(tagMan.addTag(&tag3));
 
 	assert(! tagMan.isEmpty());
 	assert(tagMan.findSpecificTag("nameTag", "FileNameTag", 459) == &tag);
@@ -41,8 +44,11 @@ int main(void) {
 	assert(tagMan.findSpecificTag("nameTag", "ErrorNameTag", 459) == NULL);
 	assert(tagMan.findSpecificTag("errorTag", "FileNameTag", 459) == NULL);
 
+	assert(tagMan.getTagsByName("nameTag2")->size() == 2);
+
 	assert(tagMan.delTag(&tag));
 	assert(tagMan.delTag(&tag2));
+	assert(tagMan.delTag(&tag3));
 
 	assert(tagMan.isEmpty());
 	return 0;

@@ -21,20 +21,23 @@
 #define TAGSMANAGERIMPL_H
 
 #include "TagsManager.h"
+#include "Configuration.h"
 using namespace std;
 
 class TagsManagerImpl :  public TagsManager
 {
 private:
+	Configuration* config;
 	std::vector<std::map<std::string, Tag*>* > hashtable;
 public:
-	TagsManagerImpl();
+	TagsManagerImpl(Configuration *config);
 	virtual Tag* findSpecificTag ( std::string name, std::string filename, size_t line );
 	virtual std::vector<Tag*>* findTagsBy(tagType type);
 	virtual bool delTag ( Tag* old );
 	virtual bool addTag ( Tag* nw );
 	virtual void display() const;
 	virtual bool isEmpty() const;
+	virtual std::vector<Tag*>* getTagsByName(std::string name);
 };
 
 #endif // TAGSMANAGERIMPL_H

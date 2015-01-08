@@ -32,6 +32,7 @@ public:
 	std::string hashTag(std::string name, std::string filename, size_t line) const;
 	virtual void display() const = 0;
 	virtual bool isEmpty() const = 0;
+	virtual std::vector<Tag*>* getTagsByName(std::string name) = 0;
 
 };
 
