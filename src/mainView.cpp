@@ -29,7 +29,7 @@ MainView::MainView()
     
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
-	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/html.htm"));
+	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
 		
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 }
@@ -71,4 +71,5 @@ void MainView::handlePushButton()
 	html = c.TransformToHTML();
 	
 	ui->getWebView()->setHtml(html);
+	ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("/home/ubuntu/Documents/SublimeCode/src/style.css"));
 }

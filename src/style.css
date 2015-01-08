@@ -1,3 +1,10 @@
-body{
-	background-color: #FFFAF0;	
+
+body
+{
+	background-color: #F5FAF0;	
+}
+
+tr
+{
+	border: 2px solid red;
 }

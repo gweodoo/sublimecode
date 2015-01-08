@@ -21,3 +21,8 @@ QGroupBox::title
 {
 
 }
+
+QWebView
+{
+	
+}
