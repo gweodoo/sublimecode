@@ -91,7 +91,7 @@ bool LauncherCscope::closeExternalTool()
  * the id of the command does not match the id given in the manual
  * 
  */
-vector<FunctionGraph*>* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
+vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, std::string arg)
 {
 	
 		/**
@@ -110,7 +110,10 @@ bool LauncherCscope::getIsLaunched(){
 	
 	return this->isLaunched;
 }
-
+/**
+ * parse the output from a cscope command
+ * and return a vector of Function Graph Object (functionName-fileName-call's line- signature)
+ */
 std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string output){
 
 	vector<FunctionGraph*>* listOfCscopeOutput=new vector<FunctionGraph*>();
@@ -159,6 +162,9 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 	
 	
 }
+/**
+ * 
+ */
 std::string LauncherCscope::launchExternalTool(int command, std::string arg){
 
 	if(!this->isLaunched) this->initExternalTool();
