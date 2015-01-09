@@ -32,12 +32,14 @@ private:
 public:
 	TagsManagerImpl(Configuration *config);
 	virtual Tag* findSpecificTag ( std::string name, std::string filename, size_t line );
-	virtual std::vector<Tag*>* findTagsBy(tagType type);
+	virtual std::vector<Tag*>* findTagsByType(tagType type);
 	virtual bool delTag ( Tag* old );
 	virtual bool addTag ( Tag* nw );
 	virtual void display() const;
 	virtual bool isEmpty() const;
 	virtual std::vector<Tag*>* getTagsByName(std::string name);
+	virtual std::vector<Tag*>* getTagsByFile(std::string filename);
+	virtual std::vector<std::string>* getTagNamesByType(tagType type);
 };
 
 #endif // TAGSMANAGERIMPL_H

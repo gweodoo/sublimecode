@@ -27,12 +27,14 @@ public:
 	virtual bool addTag(Tag* nw) = 0;
 	virtual bool delTag(Tag* old) = 0;
 	virtual Tag* findSpecificTag( std::string name, std::string filename, size_t line ) = 0;
-	virtual  std::vector<Tag*>*  findTagsBy(tagType type) = 0;
+	virtual  std::vector<Tag*>*  findTagsByType(tagType type) = 0;
 	std::string hashTag(Tag* tag) const;
 	std::string hashTag(std::string name, std::string filename, size_t line) const;
 	virtual void display() const = 0;
 	virtual bool isEmpty() const = 0;
 	virtual std::vector<Tag*>* getTagsByName(std::string name) = 0;
+	virtual std::vector<Tag*>* getTagsByFile(std::string filename) = 0;
+	virtual std::vector<std::string>* getTagNamesByType(tagType type) = 0;
 
 };
 

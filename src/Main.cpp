@@ -22,27 +22,25 @@
 #include "mainwindow.h"
 #include "CreateHTML.h"
 #include <QApplication>
-#include <QFile>
-#include <QIODevice>
-#include <QStyle>
- 
+
+#include "TagsManagerImpl.h"
+#include "TagImpl.h"
+#include "TagsParserImpl.h"
+#include "LauncherCscope.h"
+#include "LauncherCTags.h"
+
+
 using namespace std;
 
 int main(int argc, char **argv){
 
-	QApplication a(argc, argv);
-	
-	//Affichage vue
-	QFile file(":/style.qss");
-	
-	if(file.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		a.setStyleSheet(file.readAll());
-		file.close();
-	}
+	Configuration config("..", ".");
+	LauncherCTags launcher(&config);
+	TagsManagerImpl manager(&config);
+	TagsParserImpl parser(&manager);
 
-	MainWindow w;
-	w.show();
-
-	return a.exec();
+	launcher.addPathToAnalyze("/home/adamj/Téléchargements/vlc-2.1.5");
+	launcher.generateTagsFile();
+	parser.loadFromFile("./tags");
+	manager.findSpecificTag("OMX_MARKTYPE", "/home/adamj/Téléchargements/vlc-2.1.5/modules/codec/omxil/OMX_Types.h", 297)->display();
 }

@@ -36,7 +36,7 @@ Tag* TagsManagerImpl::findSpecificTag ( std::string name, std::string filename, 
 	return NULL;
 }
 
-std::vector<Tag*>* TagsManagerImpl::findTagsBy ( tagType type ) {
+std::vector<Tag*>* TagsManagerImpl::findTagsByType ( tagType type ) {
 	std::vector<Tag*>* vec = new std::vector<Tag*>;
 	for(map<string, Tag*>::const_iterator it = hashtable[type]->begin(); it != hashtable[type]->end(); it++){
 		vec->push_back(it->second);
@@ -83,4 +83,26 @@ std::vector< Tag* >* TagsManagerImpl::getTagsByName ( string name ) {
 	}
 	return list;
 }
+
+std::vector< Tag* >* TagsManagerImpl::getTagsByFile ( string filename ) {
+	std::vector<Tag *>* list = new vector<Tag*>;
+	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		for(map<string, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+			if(itmap->second->getFileName() == filename){
+				list->push_back(itmap->second);
+			}
+		}
+	}
+	return list;
+}
+
+vector< string >* TagsManagerImpl::getTagNamesByType ( tagType type ) {
+	vector<Tag*>* vec = findTagsByType(type);
+	vector<string>* list = new vector<string>;
+	for(vector<Tag*>::iterator it = vec->begin(); it != vec->end(); it++)
+		list->push_back((*it)->getName());
+
+	return list;
+}
+
 
