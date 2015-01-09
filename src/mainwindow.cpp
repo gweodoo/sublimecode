@@ -19,6 +19,7 @@
 
 #include "mainwindow.h"
 #include "dialog.h"
+#include "Utils.h"
 #include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -26,6 +27,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui = new UI_MainWindow1();
     ui->setupUi(this);
+
+    QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+    
     QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));
     QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
     QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
@@ -48,6 +56,18 @@ void MainWindow::Rechercher_Destination()
 	ui->getLineEdit1()->setText(fileNameDestination);	
 }
 
+int exists(const char *fname)
+{
+    if( access( fname, F_OK ) != -1 ) {
+    // file exists
+	    return 1;
+    } else {
+    // file doesn't exist
+	    return 0;
+    }
+}
+
+
 void MainWindow::Finish()
 {
 	fileNameSourceTest = ui->getLineEdit()->text();
@@ -61,11 +81,14 @@ void MainWindow::Finish()
 	QDir().mkdir(fileNameDestination);
 	
 	QMessageBox qmb;
+	QMessageBox qmb2;
 	if(fileNameSourceTest==""){
 		qmb.setText("Remplir les sources du projet");
 		qmb.exec();
 	}
 	else {
+		if(exists(fileNameSource.toLatin1().data()) == 1)
+		{
 		if(fileNameDestinationTest==""){
 			fileNameDestination=fileNameDestination+"/home.html";
 		}
@@ -84,6 +107,11 @@ void MainWindow::Finish()
 		Dialog *w = new Dialog(fileNameSourceTest);
 		w->show();
 		this->hide();
+		}
+		else {
+			qmb2.setText("Le fichier source n'existe pas");
+			qmb2.exec();
+		}
 	}
 }
 

@@ -1,10 +1,28 @@
+/***************************************************************************/
+/*                                                                        */
+/* This file is part of Sublime Code.                                      */
+/*                                                                         */
+/* Sublime Code is free software: you can redistribute it and/or modify    */
+/* it under the terms of the GNU General Public License as published by    */
+/* the Free Software Foundation, either version 3 of the License, or       */
+/* (at your option) any later version.                                     */
+/*                                                                         */
+/* Sublime Code is distributed in the hope that it will be useful,         */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of          */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           */
+/* GNU General Public License for more details.                            */
+/*                                                                         */
+/* You should have received a copy of the GNU General Public License       */
+/* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
+/*                                                                         */
+/***************************************************************************/ 
+
 #include "ui_mainView.h"
 
 void Ui_MainView::setupUi(QMainWindow *MainView)
 {
 	if (MainView->objectName().isEmpty())
 		MainView->setObjectName(QString("MainView"));
-	MainView->setFixedSize(1200, 800);
 	centralWidget = new QWidget(MainView);
 	centralWidget->setObjectName(QString("centralWidget"));
 	leftWidget = new QWidget(centralWidget);
@@ -64,9 +82,15 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 
 	MainView->setWindowTitle("Sublime Code");
 	
-	MainView->setWindowTitle("Sublime Code");
-	MainView->move (((QApplication::desktop()->screenGeometry().width() - MainView->width()) /2), 
-			((QApplication::desktop()->screenGeometry().height() - MainView->height()) /2));
+	this->width = MainView->width();
+	this->height = MainView->height();
+	
+	this->rect = QApplication::desktop()->screenGeometry();
+ 
+	this->screenWidth = this->rect.width();
+	this->screenHeight = this->rect.height();
+
+        MainView->resize(screenWidth, screenHeight);
        
 	retranslateUi(MainView);
 

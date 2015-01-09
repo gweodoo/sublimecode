@@ -1,3 +1,22 @@
+/***************************************************************************/
+/*                                                                        */
+/* This file is part of Sublime Code.                                      */
+/*                                                                         */
+/* Sublime Code is free software: you can redistribute it and/or modify    */
+/* it under the terms of the GNU General Public License as published by    */
+/* the Free Software Foundation, either version 3 of the License, or       */
+/* (at your option) any later version.                                     */
+/*                                                                         */
+/* Sublime Code is distributed in the hope that it will be useful,         */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of          */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           */
+/* GNU General Public License for more details.                            */
+/*                                                                         */
+/* You should have received a copy of the GNU General Public License       */
+/* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
+/*                                                                         */
+/***************************************************************************/ 
+
 #include "dialog.h"
 #include "ui_dialog.h"
 #include <QDebug>
@@ -6,14 +25,22 @@ Dialog::Dialog(QString file, QWidget *parent) :
     QDialog(parent)
 {
     ui = new Ui_Dialog();
-    QString mpath = file;
+    mpath = file;
     ui->setupUi(this);
+    
+    QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+    
     model = new CFileSystemModel();
     ui->getTreeView()->setModel(model); 
     ui->getTreeView()->setRootIndex(model->index(mpath));
     ui->getTreeView()->setColumnHidden(1, true);
     ui->getTreeView()->setColumnHidden(2, true);
     ui->getTreeView()->setColumnHidden(3, true);
+    model->checkAllBoxes(mpath);
     QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(Finish()));
     QObject::connect(ui->getSelectAll(), SIGNAL(clicked()), this, SLOT(SelectAll()));
     QObject::connect(ui->getdeSelectAll(), SIGNAL(clicked()), this, SLOT(DeSelectAll()));
@@ -36,25 +63,22 @@ void Dialog::Finish()
 
 void Dialog::SelectAll()
 {
-	qDebug() << "toto";
+	updateCheckAllComboBox(mpath);
 }
 
 void Dialog::DeSelectAll()
 {
-	qDebug() << "tata";
+	updateunCheckAllComboBox(mpath);
 }
 
-void Dialog::updateCheckAllComboBox()
+void Dialog::updateCheckAllComboBox(QString mpath)
 {
-// 	m_d->m_ignoreChange = true;
-// 	unsigned checkedCount = checkedFilesCount();
-// 	if (checkedCount == 0)
-// 	m_d->m_ui.checkAllCheckBox->setCheckState(Qt::Unchecked);
-// 	else if (checkedCount == m_d->m_ui.fileView->model()->rowCount())
-// 	m_d->m_ui.checkAllCheckBox->setCheckState(Qt::Checked);
-// 	else
-// 	m_d->m_ui.checkAllCheckBox->setCheckState(Qt::PartiallyChecked);
-// 	
-// 	m_d->m_ignoreChange = false;
+	model->checkAllBoxes(mpath);
 }
+
+void Dialog::updateunCheckAllComboBox(QString mpath)
+{
+	model->uncheckAllBoxes(mpath);
+}
+
 

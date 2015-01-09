@@ -25,9 +25,23 @@ UI_MainWindow1::~UI_MainWindow1(){}
 
 void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 {	
+	this->rect = QApplication::desktop()->screenGeometry();
+ 
+	this->screenWidth = this->rect.width();
+	this->screenHeight = this->rect.height();
+	
+	this->width = MainWindow->width();
+	this->height = MainWindow->height();
+	
+	this->x = (this->screenWidth - this->width) /2;
+	this->y = (this->screenHeight - this->height) /2;
+
+	MainWindow->move ( this->x, this->y );
+//         MainWindow->resize(screenWidth/4, screenHeight/4);
+	
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString("MainWindow"));
-        MainWindow->resize(400, 300);
+	MainWindow->resize(400, 300);
         this->menuBar = new QMenuBar(MainWindow);
 	this->menuBar->setObjectName(QString("menuBar"));
         MainWindow->setMenuBar(this->menuBar);
@@ -42,7 +56,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
         MainWindow->setStatusBar(this->statusBar);
         this->Parcourir = new QPushButton(this->centralWidget);
         this->Parcourir->setObjectName(QString("Parcourir"));
-        this->Parcourir->setGeometry(QRect(300, 50, 91, 27));
+	this->Parcourir->setGeometry(QRect(300, 50, 91, 27));
 	this->Parcourir->setText(QString("Parcourir..."));
         this->lineEdit = new QLineEdit(this->centralWidget);
         this->lineEdit->setObjectName(QString("lineEdit"));
@@ -60,22 +74,10 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->labelParcourir1->setText("Dossier de destination :");
 	this->Finish = new QPushButton(this->centralWidget);
         this->Finish->setGeometry(QRect(300, 220, 91, 27));
-	this->Finish->setText(QString("Finish"));
+	this->Finish->setText(QString("Suivant"));
         retranslateUi(MainWindow);
 	MainWindow->setWindowTitle("Sublime Code");
 	
-	this->width = MainWindow->width();
-	this->height = MainWindow->height();
-	
-	this->rect = QApplication::desktop()->screenGeometry();
- 
-	this->screenWidth = this->rect.width();
-	this->screenHeight = this->rect.height();
- 
-	this->x = (this->screenWidth - this->width) /2;
-	this->y = (this->screenHeight - this->height) /2;
-
-	MainWindow->move ( this->x, this->y );
         QMetaObject::connectSlotsByName(MainWindow);
 } // setupUi
 

@@ -1,5 +1,9 @@
 /***************************************************************************/
+<<<<<<< HEAD
 /*                                                                         */
+=======
+/*                                                                        */
+>>>>>>> Source file existence
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
@@ -15,7 +19,7 @@
 /* You should have received a copy of the GNU General Public License       */
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
-/***************************************************************************/
+/***************************************************************************/ 
 
 #include "Configuration.h"
 

@@ -26,7 +26,9 @@
 #include <QFile>
 #include "CreateHTML.h"
 #include "mainView.h"
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "UI_mainwindow1.h"
 
 //namespace Ui {
@@ -41,7 +43,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     UI_MainWindow1 *ui;
-
+    
 private:
     //Ui::MainWindow *ui;
     QString fileNameSource;

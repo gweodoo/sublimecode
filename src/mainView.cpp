@@ -25,19 +25,23 @@
 MainView::MainView()
 {
 	ui = new Ui_MainView();
-	this->resize(1200, 800);
     
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
 	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
 		
+	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+	QPalette palette;
+	palette.setBrush(QPalette::Background, bkgnd);
+	this->setPalette(palette);
+	
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 }
 
 MainView::MainView(QString file)
 {
 	ui = new Ui_MainView();
-	this->resize(1200, 800);
     
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
@@ -45,16 +49,7 @@ MainView::MainView(QString file)
 	
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 }
-/*
-MainView::MainView(QString file, QWidget *parent)
-{
-	this->resize(1200, 800);
-    
-	ui.setupUi(this);
-	ui.getCentralWidget()->show();
-	ui.getWebView()->load(QUrl(file));
-}
-*/
+
 MainView::~MainView()
 {
 

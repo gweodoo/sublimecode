@@ -1,7 +1,27 @@
 
-QWidget 
+QWidget
 {
-	 
+	color: white;
+}
+
+QTreeView
+{
+	color: black;
+}
+
+QMessageBox 
+{
+	color : black;
+}
+
+QPushButton
+{
+	color: black;
+}
+
+QLineEdit
+{
+	color: black;
 }
 
 QGroupBox 
