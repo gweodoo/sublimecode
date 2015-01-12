@@ -18,3 +18,31 @@
 /***************************************************************************/
 
 #include "Utils.h"
+using namespace std;
+
+bool checkCommandExistency(std::string command, bool required){
+	std::string starter = "which "+command+" > /dev/null 2>&1";
+	int ret = system(starter.c_str());
+	if(WEXITSTATUS(ret) != 0) {
+		if(required){
+			scError("Command " << command << " is required");
+		} else {
+			scWarning("Command " << command << " wasn't found");
+		}
+	}
+}
+
+void checkNeededExecutable(){
+	checkCommandExistency("ctags", true);
+	checkCommandExistency("cscope", true);
+
+	checkCommandExistency("git");
+	checkCommandExistency("hg");
+	checkCommandExistency("cvs");
+	checkCommandExistency("svn");
+
+	checkCommandExistency("edze");
+
+
+
+}

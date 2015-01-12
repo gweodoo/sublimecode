@@ -36,9 +36,17 @@
 /**** MACROS *****/
 #ifdef NDEBUG
 #define scDebug(u)
-#define scError(u) {std::cerr << u << std::endl; exit(1);} while(0)
+#define scError(u) {std::cerr << "ERROR: " << u << std::endl; exit(1);} while(0)
+#define scWarning(u) {std::cerr << "WARNING: "<< u <<std::endl; exit(1);} while(0)
+
 #else
 #define scDebug(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)
-#define scError(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
+#define scError(u) {std::cerr << "ERROR: " << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
+#define scWarning(u) {std::cerr << "WARNING: " << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
+
 #endif
+
+void checkNeededExecutable();
+bool checkCommandExistency(std::string command, bool required = false);
+
 #endif
