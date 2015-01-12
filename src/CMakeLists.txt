@@ -17,7 +17,7 @@
 #                                                                         #
 ###########################################################################
 
-file(GLOB_RECURSE SRC *.cpp)
+file(GLOB_RECURSE SRC */*.cpp *.cpp)
 file(GLOB_RECURSE HDR *.h)
 file(GLOB_RECURSE UI *.ui)
 file(GLOB_RECURSE RES *.qrc)
@@ -34,4 +34,3 @@ INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 add_executable(sublimeCode ${SRC} ${HDR_MOC} ${UI_HDR} ${RES_RCC})
 
 TARGET_LINK_LIBRARIES(sublimeCode ${QT_LIBRARIES} Qt4::QtGui Qt4::QtXml)
-

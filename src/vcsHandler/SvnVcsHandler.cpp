@@ -1,5 +1,5 @@
 /***************************************************************************/
-/*                                                                         */
+/*                                                                        */
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
@@ -17,24 +17,29 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#include "SvnVcsHandler.h"
+using namespace std;
 
-Configuration::Configuration(std::string sources, std::string dest) {
+SvnVcsHandler::SvnVcsHandler(Configuration *config) : VcsHandler(config) {}
 
-	this->sourcesDir=sources;
-	this->destDir=dest;
+void SvnVcsHandler::checkoutBranch ( std::string branch ) {
+
 }
 
-std::string Configuration::getSourcesDir() const
-{
-	return this->sourcesDir;
+void SvnVcsHandler::downloadFromAddress ( std::string address ) {
+
+	string workDir = config->getDestDir()+"/sources_svn";
+	//TODO check existing folder
+	std::string command = "svn checkout "+address+"/trunk "+workDir;
+	this->address = address;
+	system(command.c_str());
 }
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
+std::vector<std::string>  SvnVcsHandler::getBranchesList() {
+	std::string command = "svn ls "+address+"/branches";
+	return VcsHandler::executeBranchesGetter(command);
 }
 
-
-Configuration::~Configuration() {
+std::string SvnVcsHandler::getLastRevision() const {
 }
+

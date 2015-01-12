@@ -17,24 +17,25 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#include "VcsHandler.h"
+using namespace std;
 
-Configuration::Configuration(std::string sources, std::string dest) {
-
-	this->sourcesDir=sources;
-	this->destDir=dest;
+VcsHandler::VcsHandler(Configuration *config){
+	this->config = config;
 }
 
-std::string Configuration::getSourcesDir() const
-{
-	return this->sourcesDir;
+std::vector< std::string > VcsHandler::executeBranchesGetter(std::string command) {
+	FILE * outputFile = popen(command.c_str(), "r");
+	string output = "", cur ="";
+	char buf[250];
+	while(fgets(buf, 250, outputFile) != NULL)
+		output += buf;
+
+	stringstream flux(output);
+
+	while(getline(flux, cur, '\n')){
+		branchlist.push_back(cur);
+	}
+	return branchlist;
 }
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
-}
-
-
-Configuration::~Configuration() {
-}

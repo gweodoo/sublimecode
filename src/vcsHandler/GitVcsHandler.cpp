@@ -17,24 +17,28 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#include "GitVcsHandler.h"
+using namespace std;
 
-Configuration::Configuration(std::string sources, std::string dest) {
+GitVcsHandler::GitVcsHandler(Configuration *config) : VcsHandler(config) {}
 
-	this->sourcesDir=sources;
-	this->destDir=dest;
+void GitVcsHandler::checkoutBranch ( std::string branch ) {
+
 }
 
-std::string Configuration::getSourcesDir() const
-{
-	return this->sourcesDir;
+void GitVcsHandler::downloadFromAddress ( std::string address ) {
+	std::string command = "git clone "+address+" "+config->getDestDir()+"/sources_git";
+	this->address = address;
+	system(command.c_str());
 }
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
+std::vector<std::string>  GitVcsHandler::getBranchesList() {
+	std::string command = "git --git-dir "+config->getDestDir()+"/sources_git/.git branch --list | rev | cut -f1 -d" " | rev";
+	return VcsHandler::executeBranchesGetter(command);
+
 }
 
+std::string GitVcsHandler::getLastRevision() const {
 
-Configuration::~Configuration() {
 }
+

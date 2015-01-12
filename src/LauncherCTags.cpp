@@ -22,7 +22,7 @@
 using namespace std;
 
 const std::string LauncherCTags::DEF_EXEC = "ctags";
-const std::string LauncherCTags::GLOBAL_OPTIONS = "-Rn --c-kinds=+cdefgmnstuv";
+const std::string LauncherCTags::GLOBAL_OPTIONS = "-Rn --c-kinds=+cdefgmnstuvx";
 
 LauncherCTags::LauncherCTags (Configuration *config, std::vector<std::string>* listPaths, string exe, string opts ) {
 	this->pathExecutable = exe;

@@ -17,24 +17,26 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#include "MercurialVcsHandler.h"
+using namespace std;
 
-Configuration::Configuration(std::string sources, std::string dest) {
+MercurialVcsHandler::MercurialVcsHandler(Configuration *config) : VcsHandler(config) {}
 
-	this->sourcesDir=sources;
-	this->destDir=dest;
+std::string MercurialVcsHandler::getLastRevision() const {
+
+    }
+
+void MercurialVcsHandler::checkoutBranch ( std::string branch ) {
+
+    }
+
+void MercurialVcsHandler::downloadFromAddress ( std::string address ) {
+	std::string command = "hg clone "+address+" "+config->getDestDir()+"/sources_mercurial";
+	this->address = address;
+	system(command.c_str());
 }
 
-std::string Configuration::getSourcesDir() const
-{
-	return this->sourcesDir;
-}
-
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
-}
-
-
-Configuration::~Configuration() {
+std::vector<std::string> MercurialVcsHandler::getBranchesList() {
+	std::string command = "hg -R "+config->getDestDir()+"/sources_mercurial branches | cut -f1 -d\" \"";
+	return VcsHandler::executeBranchesGetter(command);
 }

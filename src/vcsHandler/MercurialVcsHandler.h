@@ -17,24 +17,19 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#ifndef MERCURIALVCSHANDLER_H
+#define MERCURIALVCSHANDLER_H
 
-Configuration::Configuration(std::string sources, std::string dest) {
+#include "VcsHandler.h"
 
-	this->sourcesDir=sources;
-	this->destDir=dest;
-}
-
-std::string Configuration::getSourcesDir() const
+class MercurialVcsHandler :  VcsHandler
 {
-	return this->sourcesDir;
-}
+public:
+	MercurialVcsHandler(Configuration *config);
+	virtual std::string getLastRevision() const;
+	virtual void checkoutBranch ( std::string branch );
+	virtual void downloadFromAddress ( std::string address );
+	std::vector< std::string > getBranchesList();
+};
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
-}
-
-
-Configuration::~Configuration() {
-}
+#endif // MERCURIALVCSHANDLER_H

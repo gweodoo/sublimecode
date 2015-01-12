@@ -17,24 +17,28 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#include "CvsVcsHandler.h"
 
-Configuration::Configuration(std::string sources, std::string dest) {
+void CvsVcsHandler::checkoutBranch ( std::string branch ) {
 
-	this->sourcesDir=sources;
-	this->destDir=dest;
 }
 
-std::string Configuration::getSourcesDir() const
-{
-	return this->sourcesDir;
+void CvsVcsHandler::downloadFromAddress ( std::string address ) {
+	std::string command = "cvs checkout -d "+ config->getDestDir()+"/sources_cvs "+address;
+	this->address = address;
+	scError("Not implemented");
+	system(command.c_str());
 }
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
+CvsVcsHandler::CvsVcsHandler ( Configuration* config )  : VcsHandler(config) {}
+
+std::vector<std::string>  CvsVcsHandler::getBranchesList(){
+	std:: string command = "ls -l";
+
+	scError("Not implemented");
+	return VcsHandler::executeBranchesGetter(command);
 }
 
+std::string CvsVcsHandler::getLastRevision() const {
 
-Configuration::~Configuration() {
 }

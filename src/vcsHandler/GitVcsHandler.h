@@ -17,24 +17,18 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#ifndef GITVCSHANDLER_H
+#define GITVCSHANDLER_H
 
-Configuration::Configuration(std::string sources, std::string dest) {
-
-	this->sourcesDir=sources;
-	this->destDir=dest;
-}
-
-std::string Configuration::getSourcesDir() const
+#include "VcsHandler.h"
+class GitVcsHandler :  VcsHandler
 {
-	return this->sourcesDir;
-}
+public:
+	GitVcsHandler(Configuration *config);
+	virtual void checkoutBranch ( std::string branch );
+	virtual void downloadFromAddress ( std::string address );
+	virtual std::string getLastRevision() const;
+	virtual std::vector<std::string>  getBranchesList();
+};
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
-}
-
-
-Configuration::~Configuration() {
-}
+#endif // GITVCSHANDLER_H

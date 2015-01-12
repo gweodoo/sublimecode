@@ -1,5 +1,5 @@
 /***************************************************************************/
-/*                                                                         */
+/*                                                                        */
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
@@ -16,25 +16,25 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef VCSHANDLER_H
+#define VCSHANDLER_H
 
-#include "Configuration.h"
+#include "../Utils.h"
+#include "../Configuration.h"
 
-Configuration::Configuration(std::string sources, std::string dest) {
-
-	this->sourcesDir=sources;
-	this->destDir=dest;
-}
-
-std::string Configuration::getSourcesDir() const
+class VcsHandler
 {
-	return this->sourcesDir;
-}
+protected:
+	Configuration *config;
+	std::vector<std::string> branchlist;
+	std::string address;
+public:
+	VcsHandler(Configuration *config);
+	virtual void downloadFromAddress(std::string address) = 0;
+	virtual void checkoutBranch(std::string branch) = 0;
+	virtual std::string getLastRevision() const = 0;
+	virtual std::vector<std::string>  getBranchesList() = 0;
+	std::vector< std::string > executeBranchesGetter(std::string command);
+};
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
-}
-
-
-Configuration::~Configuration() {
-}
+#endif // VCSHANDLER_H

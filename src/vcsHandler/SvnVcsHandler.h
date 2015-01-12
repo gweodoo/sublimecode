@@ -1,5 +1,5 @@
 /***************************************************************************/
-/*                                                                         */
+/*                                                                        */
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
@@ -17,24 +17,19 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#ifndef SVNVCSHANDLER_H
+#define SVNVCSHANDLER_H
 
-Configuration::Configuration(std::string sources, std::string dest) {
+#include "VcsHandler.h"
 
-	this->sourcesDir=sources;
-	this->destDir=dest;
-}
-
-std::string Configuration::getSourcesDir() const
+class SvnVcsHandler :  VcsHandler
 {
-	return this->sourcesDir;
-}
+public:
+	SvnVcsHandler ( Configuration* config );
+	virtual void checkoutBranch ( std::string branch );
+	virtual void downloadFromAddress ( std::string address );
+	virtual std::string getLastRevision() const;
+	virtual std::vector<std::string>  getBranchesList();
+};
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
-}
-
-
-Configuration::~Configuration() {
-}
+#endif // SVNVCSHANDLER_H

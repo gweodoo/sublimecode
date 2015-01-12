@@ -17,24 +17,19 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "Configuration.h"
+#ifndef CVSVCSHANDLER_H
+#define CVSVCSHANDLER_H
 
-Configuration::Configuration(std::string sources, std::string dest) {
+#include "VcsHandler.h"
 
-	this->sourcesDir=sources;
-	this->destDir=dest;
-}
-
-std::string Configuration::getSourcesDir() const
+class CvsVcsHandler :  VcsHandler
 {
-	return this->sourcesDir;
-}
+public:
+    virtual void checkoutBranch ( std::string branch );
+    virtual void downloadFromAddress ( std::string address );
+    CvsVcsHandler ( Configuration* config );
+    virtual std::string getLastRevision() const;
+    virtual std::vector<std::string> getBranchesList();
+};
 
-std::string Configuration::getDestDir() const
-{
-	return this->destDir;
-}
-
-
-Configuration::~Configuration() {
-}
+#endif // CVSVCSHANDLER_H
