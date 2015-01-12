@@ -1,5 +1,5 @@
 /***************************************************************************/
-/*                                                                         */
+/*                                                                        */
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
@@ -17,17 +17,14 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef CVSVCSHANDLER_H
-#define CVSVCSHANDLER_H
+#include "ZipTarballHandler.h"
+using namespace std;
 
-#include "VcsHandler.h"
+ZipTarballHandler::ZipTarballHandler(Configuration *config) : TarballHandler(config) {
+}
 
-class CvsVcsHandler :  VcsHandler
-{
-public:
-    virtual void getProject ( std::string address );
-    CvsVcsHandler ( Configuration* config );
-    virtual std::vector<std::string> getBranchesList();
-};
+void ZipTarballHandler::getProject ( std::string address ) {
+	std::string command = "unzip "+address+" -d "+config->getDestDir()+"/sources_zip";
+	system(command.c_str());
+}
 
-#endif // CVSVCSHANDLER_H

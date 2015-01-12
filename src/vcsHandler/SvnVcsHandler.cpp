@@ -22,11 +22,7 @@ using namespace std;
 
 SvnVcsHandler::SvnVcsHandler(Configuration *config) : VcsHandler(config) {}
 
-void SvnVcsHandler::checkoutBranch ( std::string branch ) {
-
-}
-
-void SvnVcsHandler::downloadFromAddress ( std::string address ) {
+void SvnVcsHandler::getProject ( std::string address ) {
 
 	string workDir = config->getDestDir()+"/sources_svn";
 	//TODO check existing folder
@@ -38,8 +34,5 @@ void SvnVcsHandler::downloadFromAddress ( std::string address ) {
 std::vector<std::string>  SvnVcsHandler::getBranchesList() {
 	std::string command = "svn ls "+address+"/branches";
 	return VcsHandler::executeBranchesGetter(command);
-}
-
-std::string SvnVcsHandler::getLastRevision() const {
 }
 

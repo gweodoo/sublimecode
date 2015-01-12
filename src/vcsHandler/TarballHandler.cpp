@@ -17,17 +17,10 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef CVSVCSHANDLER_H
-#define CVSVCSHANDLER_H
+#include "TarballHandler.h"
 
-#include "VcsHandler.h"
+TarballHandler::TarballHandler ( Configuration* config ) : Handler(config) {}
 
-class CvsVcsHandler :  VcsHandler
-{
-public:
-    virtual void getProject ( std::string address );
-    CvsVcsHandler ( Configuration* config );
-    virtual std::vector<std::string> getBranchesList();
-};
-
-#endif // CVSVCSHANDLER_H
+std::vector< std::string > TarballHandler::getBranchesList() {
+	//NOT USED WITH TARBALL
+}

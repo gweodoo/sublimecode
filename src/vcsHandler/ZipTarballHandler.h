@@ -1,5 +1,5 @@
 /***************************************************************************/
-/*                                                                         */
+/*                                                                        */
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
@@ -17,17 +17,17 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef CVSVCSHANDLER_H
-#define CVSVCSHANDLER_H
 
-#include "VcsHandler.h"
+#ifndef ZIPTARBALLHANDLER_H
+#define ZIPTARBALLHANDLER_H
 
-class CvsVcsHandler :  VcsHandler
+#include "TarballHandler.h"
+
+class ZipTarballHandler :  public TarballHandler
 {
 public:
-    virtual void getProject ( std::string address );
-    CvsVcsHandler ( Configuration* config );
-    virtual std::vector<std::string> getBranchesList();
+	ZipTarballHandler(Configuration *config);
+	virtual void getProject(std::string address);
 };
 
-#endif // CVSVCSHANDLER_H
+#endif // ZIPTARBALLHANDLER_H

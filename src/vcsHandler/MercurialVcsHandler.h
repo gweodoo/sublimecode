@@ -26,9 +26,7 @@ class MercurialVcsHandler :  VcsHandler
 {
 public:
 	MercurialVcsHandler(Configuration *config);
-	virtual std::string getLastRevision() const;
-	virtual void checkoutBranch ( std::string branch );
-	virtual void downloadFromAddress ( std::string address );
+	virtual void getProject ( std::string address );
 	std::vector< std::string > getBranchesList();
 };
 

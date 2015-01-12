@@ -19,20 +19,15 @@
 #ifndef VCSHANDLER_H
 #define VCSHANDLER_H
 
-#include "../Utils.h"
-#include "../Configuration.h"
+#include "Handler.h"
 
-class VcsHandler
+class VcsHandler : public Handler
 {
 protected:
-	Configuration *config;
 	std::vector<std::string> branchlist;
-	std::string address;
 public:
 	VcsHandler(Configuration *config);
-	virtual void downloadFromAddress(std::string address) = 0;
-	virtual void checkoutBranch(std::string branch) = 0;
-	virtual std::string getLastRevision() const = 0;
+	virtual void getProject(std::string address) = 0;
 	virtual std::vector<std::string>  getBranchesList() = 0;
 	std::vector< std::string > executeBranchesGetter(std::string command);
 };

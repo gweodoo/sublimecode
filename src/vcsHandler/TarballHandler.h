@@ -16,18 +16,19 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef TARBALLHANDLER_H
+#define TARBALLHANDLER_H
 
-#ifndef CVSVCSHANDLER_H
-#define CVSVCSHANDLER_H
+#include "Handler.h"
 
-#include "VcsHandler.h"
-
-class CvsVcsHandler :  VcsHandler
+class TarballHandler :  public Handler
 {
+protected:
+	std::string executable;
 public:
-    virtual void getProject ( std::string address );
-    CvsVcsHandler ( Configuration* config );
-    virtual std::vector<std::string> getBranchesList();
+	TarballHandler ( Configuration* config );
+	virtual void getProject(std::string address) = 0;
+	virtual std::vector<std::string>  getBranchesList();
 };
 
-#endif // CVSVCSHANDLER_H
+#endif // TARBALLHANDLER_H

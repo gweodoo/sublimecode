@@ -17,17 +17,16 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef CVSVCSHANDLER_H
-#define CVSVCSHANDLER_H
+#ifndef TARBZ2TARBALLHANDLER_H
+#define TARBZ2TARBALLHANDLER_H
 
-#include "VcsHandler.h"
+#include "TarballHandler.h"
 
-class CvsVcsHandler :  VcsHandler
+class Tarbz2TarballHandler :  public TarballHandler
 {
 public:
-    virtual void getProject ( std::string address );
-    CvsVcsHandler ( Configuration* config );
-    virtual std::vector<std::string> getBranchesList();
+	Tarbz2TarballHandler(Configuration *config);
+	virtual void getProject(std::string address);
 };
 
-#endif // CVSVCSHANDLER_H
+#endif // TARBZ2TARBALLHANDLER_H

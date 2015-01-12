@@ -17,17 +17,6 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef CVSVCSHANDLER_H
-#define CVSVCSHANDLER_H
+#include "Handler.h"
 
-#include "VcsHandler.h"
-
-class CvsVcsHandler :  VcsHandler
-{
-public:
-    virtual void getProject ( std::string address );
-    CvsVcsHandler ( Configuration* config );
-    virtual std::vector<std::string> getBranchesList();
-};
-
-#endif // CVSVCSHANDLER_H
+Handler::Handler(Configuration *config) : config(config) {}

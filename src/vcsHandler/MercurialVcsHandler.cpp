@@ -22,15 +22,7 @@ using namespace std;
 
 MercurialVcsHandler::MercurialVcsHandler(Configuration *config) : VcsHandler(config) {}
 
-std::string MercurialVcsHandler::getLastRevision() const {
-
-    }
-
-void MercurialVcsHandler::checkoutBranch ( std::string branch ) {
-
-    }
-
-void MercurialVcsHandler::downloadFromAddress ( std::string address ) {
+void MercurialVcsHandler::getProject ( std::string address ) {
 	std::string command = "hg clone "+address+" "+config->getDestDir()+"/sources_mercurial";
 	this->address = address;
 	system(command.c_str());

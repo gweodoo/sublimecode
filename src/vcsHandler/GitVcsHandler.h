@@ -25,9 +25,7 @@ class GitVcsHandler :  VcsHandler
 {
 public:
 	GitVcsHandler(Configuration *config);
-	virtual void checkoutBranch ( std::string branch );
-	virtual void downloadFromAddress ( std::string address );
-	virtual std::string getLastRevision() const;
+	virtual void getProject ( std::string address );
 	virtual std::vector<std::string>  getBranchesList();
 };
 

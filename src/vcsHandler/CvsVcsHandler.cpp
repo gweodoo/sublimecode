@@ -19,11 +19,7 @@
 
 #include "CvsVcsHandler.h"
 
-void CvsVcsHandler::checkoutBranch ( std::string branch ) {
-
-}
-
-void CvsVcsHandler::downloadFromAddress ( std::string address ) {
+void CvsVcsHandler::getProject ( std::string address ) {
 	std::string command = "cvs checkout -d "+ config->getDestDir()+"/sources_cvs "+address;
 	this->address = address;
 	scError("Not implemented");
@@ -39,6 +35,3 @@ std::vector<std::string>  CvsVcsHandler::getBranchesList(){
 	return VcsHandler::executeBranchesGetter(command);
 }
 
-std::string CvsVcsHandler::getLastRevision() const {
-
-}

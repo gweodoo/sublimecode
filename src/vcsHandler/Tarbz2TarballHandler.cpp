@@ -17,17 +17,11 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef CVSVCSHANDLER_H
-#define CVSVCSHANDLER_H
+#include "Tarbz2TarballHandler.h"
 
-#include "VcsHandler.h"
+Tarbz2TarballHandler::Tarbz2TarballHandler(Configuration *config) : TarballHandler(config) {}
 
-class CvsVcsHandler :  VcsHandler
-{
-public:
-    virtual void getProject ( std::string address );
-    CvsVcsHandler ( Configuration* config );
-    virtual std::vector<std::string> getBranchesList();
-};
-
-#endif // CVSVCSHANDLER_H
+void Tarbz2TarballHandler::getProject ( std::string address ) {
+	std::string command = "mkdir "+config->getDestDir()+"/sources_tbz2 && tar -xjf "+address+" -C "+config->getDestDir()+"/sources_tbz2";
+	system(command.c_str());
+}
