@@ -26,13 +26,13 @@
 class Graph {
 
 public : 
-	virtual std::vector<FunctionGraph*>*  getFunctionsCalledBy(std::string name)=0;
-	virtual std::vector<FunctionGraph*>* getFunctionsCallingThis(std::string name)=0;
-	virtual std::vector<FunctionGraph*>* getFilesIncludedBy(std::string name)=0;
-	virtual int getCountFunctionApparition(std::string name)=0;
-	virtual int getCountFunctionLength(std::string name)=0;
-	virtual int getCountFunctionCalled(std::string name)=0;
-	virtual int getCountFunctionCalling(std::string name)=0;
+	virtual std::vector<Tag*>*  getFunctionsCalledBy(Tag * tagAssociatedToFunction)=0;
+	virtual std::vector<Tag*>* getFunctionsCallingThis(Tag * tagAssociatedToFunction)=0;
+	virtual std::vector<Tag*>* getFilesIncludedBy(Tag * tagAssociatedToFunction)=0;
+	virtual int getCountFunctionApparition(Tag * tagAssociatedToFunction)=0;
+	virtual int getCountFunctionLength(Tag * tagAssociatedToFunction)=0;
+	virtual int getCountFunctionCalled(Tag * tagAssociatedToFunction)=0;
+	virtual int getCountFunctionCalling(Tag * tagAssociatedToFunction)=0;
 };
 
 #endif

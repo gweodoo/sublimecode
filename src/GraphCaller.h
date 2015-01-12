@@ -21,6 +21,7 @@
 #include "LauncherCscope.h"
 #include "Configuration.h"
 #include "TagsManager.h"
+#include "Tag.h"
 /**
  * Object Implementing the Graph interface specific to Cscope
  */
@@ -42,14 +43,14 @@ public:
 	/**
 	 * functions implementing the Graph Interface
 	 */
-	std::vector<FunctionGraph*>*  getFunctionsCalledBy(std::string name);
-	std::vector<FunctionGraph*>* getFunctionsCallingThis(std::string name);
-	std::vector<FunctionGraph*>* getFilesIncludedBy(std::string name);
+	std::vector<Tag*>* getFunctionsCalledBy(Tag* name);
+	std::vector<Tag*>* getFunctionsCallingThis(Tag* name);
+	std::vector<Tag*>* getFilesIncludedBy(Tag* name);
 	
-	int getCountFunctionApparition(std::string name);
-	int getCountFunctionLength(std::string name);
-	int getCountFunctionCalled(std::string name);
-	int getCountFunctionCalling(std::string name);
+	int getCountFunctionApparition(Tag* name);
+	int getCountFunctionLength(Tag* name);
+	int getCountFunctionCalled(Tag* name);
+	int getCountFunctionCalling(Tag* name);
 	
 
 private:

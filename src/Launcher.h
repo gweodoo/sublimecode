@@ -30,7 +30,7 @@ class Launcher {
 public :
 	virtual bool initExternalTool()=0;
 	virtual bool closeExternalTool()=0;
-	virtual std::vector<FunctionGraph*>* launchCommandExternalTool(int command, std::string arg)=0;
+	virtual std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)=0;
 	
 };
 

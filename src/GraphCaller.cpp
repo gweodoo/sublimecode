@@ -29,35 +29,35 @@ GraphCaller::GraphCaller( Configuration* myConf,TagsManager*myTagManager)
 }	
 
 
-std::vector<FunctionGraph*>* GraphCaller::getFunctionsCalledBy(std::string name){
+std::vector<Tag*>* GraphCaller::getFunctionsCalledBy(Tag * tagAssociatedToFunction){
 
-	return this->myLauncher->launchCommandExternalTool(1,name);
+	return this->myLauncher->launchCommandExternalTool(1,tagAssociatedToFunction);
 	
 }
 
-std::vector<FunctionGraph*>* GraphCaller::getFunctionsCallingThis(std::string name)
+std::vector<Tag*>* GraphCaller::getFunctionsCallingThis(Tag * tagAssociatedToFunction)
 {
-	return this->myLauncher->launchCommandExternalTool(2,name);
+	return this->myLauncher->launchCommandExternalTool(2,tagAssociatedToFunction);
 }
-std::vector<FunctionGraph*>* GraphCaller::getFilesIncludedBy(std::string name)
+std::vector<Tag*>* GraphCaller::getFilesIncludedBy(Tag * tagAssociatedToFunction)
 {
-	return this->myLauncher->launchCommandExternalTool(7,name);
+	return this->myLauncher->launchCommandExternalTool(7,tagAssociatedToFunction);
 }
-int GraphCaller::getCountFunctionApparition(std::string name)
+int GraphCaller::getCountFunctionApparition(Tag * tagAssociatedToFunction)
 {
 
 	
 }
-int GraphCaller::getCountFunctionCalled(std::string name)
+int GraphCaller::getCountFunctionCalled(Tag * tagAssociatedToFunction)
 {
 
-	return (this->myLauncher->launchCommandExternalTool(1,name))->size();
+	return (this->myLauncher->launchCommandExternalTool(1,tagAssociatedToFunction))->size();
 }
-int GraphCaller::getCountFunctionCalling(std::string name)
+int GraphCaller::getCountFunctionCalling(Tag * tagAssociatedToFunction)
 {
-	return (this->myLauncher->launchCommandExternalTool(2,name))->size();
+	return (this->myLauncher->launchCommandExternalTool(2,tagAssociatedToFunction))->size();
 }
-int GraphCaller::getCountFunctionLength(std::string name)
+int GraphCaller::getCountFunctionLength(Tag * tagAssociatedToFunction)
 {
 
 }

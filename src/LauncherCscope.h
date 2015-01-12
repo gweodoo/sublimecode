@@ -24,6 +24,7 @@
 #include "Tag.h"
 #include "TagsManager.h"
 #include "FunctionGraph.h"
+#include "TagIdentifier.h"
 
 /**
  * class implementing the Launcher interface specificly to cscope
@@ -38,6 +39,7 @@ private :
 	 * myConfiguration - need to know information about where sources are and the working directory
 	 * 
 	 */
+	 TagIdentifier* myTagIdentifier;
 	 TagsManager* myTagManager;
 	 bool isLaunched;
 	 Configuration* myConfiguration;
@@ -46,14 +48,29 @@ private :
 	  * need internally for parsing cscope output
 	  */
 	std::vector<FunctionGraph*>* cscopeOutputParser(std::string output);
+	std::vector<FunctionGraph*>* getGlobalDefinitionsFrom(std::string nameOfFunction);
+	void removeNotFunctionOutput(std::vector<FunctionGraph*>* listOfGlobalDefinitions);
+	std::vector<std::vector<std::string>*>* getNumberOfArgumentAndTypeForFunction(std::vector<FunctionGraph*>* listOfGlobalDefinitions);
+	std::string getArgumentType(std::string  argumentAndTypeToParse);
 	std::string launchExternalTool(int command, std::string arg);
+	std::string removeSpaceFromString(std::string stringToParse);
+	std::vector<std::string>* getTypeForVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
+	std::vector<std::string>* getVariablesNamesInFunctionCall(std::string callExpression);
+	int getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction);
+	void removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* calledFunctionToFind, std::vector< FunctionGraph* >* listOfGlobalDefinitions, std::vector< std::vector< std::string >* >* listOfTypesforGlobalDefinitions);
+	void removeMatchesFromHAndC(std::vector<std::vector<std::string>*>* listOfTypes,std::vector<FunctionGraph*>* listOfGlobalDefinitions);
+	void removeFromListFunctionNotBelonginToStackCall( int lineStart,int lineStop,std::vector<FunctionGraph*>* listOfFunctionCalled,Tag * functionAssociatedToTag);
+	bool isValidCaracter(char& caracterToTest);
+	int  getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
+	
+	
 	
 public :
 	
 	 LauncherCscope(Configuration* myconfiguration,TagsManager* myTagManager);
 	 bool initExternalTool();
 	 bool closeExternalTool();
-	 std::vector<FunctionGraph*>* launchCommandExternalTool(int command, std::string arg);
+	 std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction);
 	 bool getIsLaunched();
 	 
 

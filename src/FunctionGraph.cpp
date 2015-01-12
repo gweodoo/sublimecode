@@ -17,7 +17,7 @@ FunctionGraph::FunctionGraph(std::string fileName,std::string tagName,std::strin
  */
 FunctionGraph::~FunctionGraph()
 {
-
+	this->signature=std::string("");
 }
 /**
  * ---------------getters definition---------------------------
@@ -32,7 +32,8 @@ int FunctionGraph::getLine()
 }
 std::string FunctionGraph::getSignature()
 {
-	return signature;
+	
+	return this->signature;
 }
 std::string FunctionGraph::getTagName()
 {
@@ -43,15 +44,15 @@ std::string FunctionGraph::getTagName()
  */
 void FunctionGraph::setFileName(std::string fileName)
 {
-this->fileName=fileName;
+	this->fileName=fileName;
 }
 void FunctionGraph::setLine(int line)
 {
-this->line=line;
+	this->line=line;
 }
 void FunctionGraph::setTagName(std::string tagName)
 {
-this->tagName=tagName;
+	this->tagName=tagName;
 }
 FunctionGraph::FunctionGraph()
 {
@@ -59,7 +60,7 @@ FunctionGraph::FunctionGraph()
 }
 void FunctionGraph::setSignature(std::string signature)
 {
-this->signature=signature;
+	this->signature=signature;
 }
 
 
