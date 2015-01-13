@@ -36,8 +36,12 @@ LauncherCTags::LauncherCTags (Configuration *config, std::vector<std::string>* l
 }
 
 bool LauncherCTags::generateTagsFile() {
+	//int ret= system("ctags -Rn -f /home/alexandre/Documents/tags /home/alexandre/Documents/vlc-2.1.5");
 	int ret = system(constructCommand().c_str());
+	
+	cout << "size : " << constructCommand().size() << endl;
 	if(ret == -1) return false;
+	cout << WEXITSTATUS(ret) << endl;
 	return WEXITSTATUS(ret) == 0 ? true : false;
 }
 

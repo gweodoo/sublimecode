@@ -21,11 +21,12 @@
 #include "ui_dialog.h"
 #include <QDebug>
 
-Dialog::Dialog(QString file, QWidget *parent) :
+Dialog::Dialog(Configuration *config, QWidget *parent) :
     QDialog(parent)
 {
     ui = new Ui_Dialog();
-    mpath = file;
+    this->config = config;
+    mpath = QString::fromStdString(config->getSourcesDir());
     ui->setupUi(this);
     
     QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
@@ -54,9 +55,13 @@ Dialog::~Dialog()
 void Dialog::Finish()
 {
    foreach (const QPersistentModelIndex &value, model->checkedIndexes)
-     qDebug() << value.data().toString();
+   {
+	QFileInfo fileInfo = model->filePath(value);
+	absolutePath = fileInfo.absolutePath().toStdString() + "/" + value.data().toString().toStdString();
+	fileList.push_back(absolutePath);
+   }
    
-   MainView *w = new MainView();
+   MainView *w = new MainView(this->config, fileList);
    w->show();
    this->hide();
 }

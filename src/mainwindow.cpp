@@ -25,6 +25,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+	
     ui = new UI_MainWindow1();
     ui->setupUi(this);
 
@@ -33,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
-    
+        
     QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));
     QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
     QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
@@ -56,14 +57,14 @@ void MainWindow::Rechercher_Destination()
 	ui->getLineEdit1()->setText(fileNameDestination);	
 }
 
-int exists(const char *fname)
+bool MainWindow::exists(const char *fname)
 {
     if( access( fname, F_OK ) != -1 ) {
     // file exists
-	    return 1;
+	    return true;
     } else {
     // file doesn't exist
-	    return 0;
+	    return false;
     }
 }
 
@@ -87,24 +88,25 @@ void MainWindow::Finish()
 		qmb.exec();
 	}
 	else {
-		if(exists(fileNameSource.toLatin1().data()) == 1)
-		{
-		if(fileNameDestinationTest==""){
-			fileNameDestination=fileNameDestination+"/home.html";
-		}
-		else fileNameDestination=fileNameDestination+"/home.html";
-		CreateHTML *c = new CreateHTML();
-		c->CreateHTMLfile(fileNameDestination);
-	        if(fileNameDestinationTest==""){
-			fileNameDestinationTest="Sources/style.css";
-		}
-		else fileNameDestinationTest=fileNameDestinationTest+"/Sources/style.css";
-		if (QFile::exists(fileNameDestinationTest))
-		{
-			QFile::remove(fileNameDestinationTest);
-		}
-		QFile::copy("../../src/style.css", fileNameDestinationTest);
-		Dialog *w = new Dialog(fileNameSourceTest);
+ 		if(exists(fileNameSource.toLatin1().data()) == true)
+ 		{
+// 		if(fileNameDestinationTest==""){
+// 			fileNameDestination=fileNameDestination+"/home.html";
+// 		}
+// 		else fileNameDestination=fileNameDestination+"/home.html";
+// 		CreateHTML *c = new CreateHTML();
+// 		c->CreateHTMLfile(fileNameDestination);
+// 	        if(fileNameDestinationTest==""){
+// 			fileNameDestinationTest="Sources/style.css";
+// 		}
+// 		else fileNameDestinationTest=fileNameDestinationTest+"/Sources/style.css";
+// 		if (QFile::exists(fileNameDestinationTest))
+// 		{
+// 			QFile::remove(fileNameDestinationTest);
+// 		}
+// 		QFile::copy("../../src/style.css", fileNameDestinationTest);
+		config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
+		Dialog *w = new Dialog(config);
 		w->show();
 		this->hide();
 		}

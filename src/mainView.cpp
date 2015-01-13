@@ -24,28 +24,47 @@
 
 MainView::MainView()
 {
+// 	ui = new Ui_MainView();
+//     
+// 	ui->setupUi(this);
+// 	ui->getCentralWidget()->show();
+// 	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
+// 		
+// 	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+// 	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+// 	QPalette palette;
+// 	palette.setBrush(QPalette::Background, bkgnd);
+// 	this->setPalette(palette);
+// 	
+// 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
+}
+
+MainView::MainView(Configuration *c, std::vector<std::string> fileList)
+{
 	ui = new Ui_MainView();
-    
+		
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
-	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
-		
+	config = new Configuration(c->getSourcesDir(), c->getDestDir());
+	myfileList = fileList;
+
+	LauncherCTags launcher(config);
+	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
+		launcher.addPathToAnalyze(*it);
+	}
+	launcher.generateTagsFile();
+	cout << launcher.constructCommand();
+	launcher.display();
+	
 	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
 	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
 	QPalette palette;
 	palette.setBrush(QPalette::Background, bkgnd);
 	this->setPalette(palette);
 	
-	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
-}
-
-MainView::MainView(QString file)
-{
-	ui = new Ui_MainView();
-    
-	ui->setupUi(this);
-	ui->getCentralWidget()->show();
-	ui->getWebView()->setHtml(file);
+	if (ui->getRadioType()->isChecked()){
+		ui->gettypeSelector()->setVisible(true);
+	}
 	
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 }
@@ -57,14 +76,19 @@ MainView::~MainView()
 
 void MainView::handlePushButton()
 {
-	qDebug() << ui->getLineEdit()->text();
-	
-	//Creation d'un XML test
-	CreateHTML c;
+	this->tag = ui->getLineEdit()->text().toStdString();
+	CreateHTML *c = new CreateHTML(config);
 	QString html;
-	c.CreateXML();
-	html = c.TransformToHTML();
 	
-	ui->getWebView()->setHtml(html);
-	ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("/home/ubuntu/Documents/SublimeCode/src/style.css"));
+	if(ui->getRadioName()->isChecked()){
+		c->createXMLSearchByTags(tag);
+		html = c->TransformToHTML("/home/alexandre/Documents/SublimeCode/myXLMSearchByTags.xml", "/home/alexandre/Documents/SublimeCode/src/transformSearchByTags.xsl");
+		ui->getWebView()->setHtml(html);
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("/home/alexandre/Documents/SublimeCode/src/style.css"));
+	}
+	else if (ui->getRadioType()->isChecked()){
+	}
+	else if(ui->getRadioFile()->isChecked()){
+		
+	}
 }

@@ -31,22 +31,39 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	leftWidget->setStyleSheet(QString("border-right: 1px solid gray"));
 	tagGroupBox = new QGroupBox(leftWidget);
 	tagGroupBox->setObjectName(QString("tagGroupBox"));
-	tagGroupBox->setGeometry(QRect(10, 10, 221, 111));
+	tagGroupBox->setGeometry(QRect(10, 10, 221, 151));
+	radio1 = new QRadioButton(tagGroupBox);
+	radio1->setObjectName(QString("radio1"));
+	radio1->setGeometry(QRect(10, 55, 99, 27));
+	radio1->setText(": By Name");
+	radio2 = new QRadioButton(tagGroupBox);
+	radio2->setObjectName(QString("radio2"));
+	radio2->setGeometry(QRect(10, 75, 99, 27));
+	radio2->setText(": By Type");
+	typeSelector = new QComboBox(tagGroupBox);
+	typeSelector->setObjectName("typeSelector");
+	typeSelector->setGeometry(QRect(100, 75, 109, 27));
+	typeSelector->setVisible(false);
+	radio3 = new QRadioButton(tagGroupBox);
+	radio3->setObjectName(QString("radio3"));
+	radio3->setGeometry(QRect(10, 95, 99, 27));
+	radio3->setText(": By File");
+	radio1->setChecked(true);
 	pushButton = new QPushButton(tagGroupBox);
 	pushButton->setObjectName(QString("pushButton"));
-	pushButton->setGeometry(QRect(60, 70, 99, 27));
+	pushButton->setGeometry(QRect(60, 120, 99, 27));
 	lineEdit = new QLineEdit(tagGroupBox);
 	lineEdit->setObjectName(QString("lineEdit"));
 	lineEdit->setGeometry(QRect(10, 30, 201, 27));
 	otherGroupBox = new QGroupBox(leftWidget);
 	otherGroupBox->setObjectName(QString("otherGroupBox"));
-	otherGroupBox->setGeometry(QRect(10, 130, 221, 71));
+	otherGroupBox->setGeometry(QRect(10, 170, 221, 71));
 	callGraphButton = new QPushButton(otherGroupBox);
 	callGraphButton->setObjectName(QString("callGraphButton"));
 	callGraphButton->setGeometry(QRect(10, 30, 201, 31));
 	StatsGroupBox = new QGroupBox(leftWidget);
 	StatsGroupBox->setObjectName(QString("StatsGroupBox"));
-	StatsGroupBox->setGeometry(QRect(10, 210, 221, 151));
+	StatsGroupBox->setGeometry(QRect(10, 250, 221, 151));
 	stats1Button = new QPushButton(StatsGroupBox);
 	stats1Button->setObjectName(QString("stats1Button"));
 	stats1Button->setGeometry(QRect(10, 30, 201, 31));
@@ -74,7 +91,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	menuView->setObjectName(QString("menuView"));
 	MainView->setMenuBar(menuBar);
 	webView = new QWebView(MainView);
-	webView->setGeometry(QRect(240, 0, 960, 800));
+	webView->setGeometry(QRect(240, 30, 860, 700));
 
 	menuBar->addAction(menuFile->menuAction());
 	menuBar->addAction(menuEdit->menuAction());
@@ -132,3 +149,24 @@ QLineEdit * Ui_MainView::getLineEdit()
 {
 	return this->lineEdit;
 }
+
+QRadioButton* Ui_MainView::getRadioName()
+{
+	return this->radio1;
+}
+
+QRadioButton* Ui_MainView::getRadioType()
+{
+	return this->radio2;
+}
+
+QRadioButton* Ui_MainView::getRadioFile()
+{
+	return this->radio3;
+}
+
+QComboBox* Ui_MainView::gettypeSelector()
+{
+	return this->typeSelector;
+}
+

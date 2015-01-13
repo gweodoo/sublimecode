@@ -29,6 +29,7 @@ private:
     std::string destDir;
 
 public:
+    Configuration();
     Configuration(std::string sources, std::string dest);
     std::string getSourcesDir() const;
     std::string getDestDir() const;

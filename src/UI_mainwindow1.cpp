@@ -37,7 +37,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->y = (this->screenHeight - this->height) /2;
 
 	MainWindow->move ( this->x, this->y );
-//         MainWindow->resize(screenWidth/4, screenHeight/4);
+        MainWindow->resize(screenWidth/4, screenHeight/4);
 	
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString("MainWindow"));

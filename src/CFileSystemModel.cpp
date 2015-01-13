@@ -18,6 +18,7 @@
 /***************************************************************************/ 
 
 #include "CFileSystemModel.h"
+#include "Utils.h"
 #include <QDebug>
 
 CFileSystemModel::CFileSystemModel()
@@ -72,7 +73,7 @@ bool CFileSystemModel::recursiveCheck(const QModelIndex &index, const QVariant &
         int childrenCount = rowCount(index);
         QModelIndex child;
         for(i=0; i<childrenCount; i++)
-        {
+	{
 	    child = QDirModel::index(i, 0, index);
             setData(child, value, Qt::CheckStateRole);
         }
@@ -103,7 +104,7 @@ void CFileSystemModel::uncheckAllBoxes(QString mpath)
     for(i=0; i<childrenCount; i++)
     {
 	child = QDirModel::index(i, 0, parent);
-        setData(child, 0, Qt::CheckStateRole);
+	setData(child, 0, Qt::CheckStateRole);
     }
 }
 

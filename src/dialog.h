@@ -35,13 +35,17 @@ class Dialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit Dialog(QString file, QWidget *parent = 0);
+    explicit Dialog(Configuration *config, QWidget *parent = 0);
     ~Dialog();
     Ui_Dialog *ui;
 
 private:
     CFileSystemModel *model;
     QString mpath;
+    std::vector<std::string> fileList;
+    Configuration *config;
+    QModelIndex *index;
+    std::string absolutePath;
 
 public slots:
 	void Finish();

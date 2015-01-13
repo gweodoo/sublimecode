@@ -19,6 +19,10 @@
 #ifndef CREATEHTML_H
 #define CREATEHTML_H
 #include <QString>
+#include "Configuration.h"
+#include "LauncherCTags.h"
+#include "TagsParserImpl.h"
+#include "TagsManagerImpl.h"
 
 using namespace std;
 
@@ -27,6 +31,7 @@ class CreateHTML {
 public:
 	explicit CreateHTML();
 	~CreateHTML();
+        CreateHTML(Configuration *c);
 	void CreateHTMLfile(QString file);
 	void CreateHTMLbase(const char* file);
 
@@ -35,9 +40,16 @@ public:
 	void CreateHTMLend(const char* file);
 
 	void CreateXML();
-	QString TransformToHTML();
+	void createXMLSearchByTags(string tag);
+	QString TransformToHTML(QString fileXML, QString fileXSL);
 
 private:
+	Configuration *config;
+	TagsParserImpl *tpi;
+	TagsManagerImpl *myTagMan;
+	std::vector<Tag *>* list;
+	std::ostringstream ostr;
+	std::string fileNameSubString;
 };
 
 #endif

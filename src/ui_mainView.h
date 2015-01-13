@@ -34,6 +34,8 @@
 #include <QWidget>
 #include <QWebView>
 #include <QtGui/QDesktopWidget>
+#include <QRadioButton>
+#include <QComboBox>
 
 QT_BEGIN_NAMESPACE
 
@@ -46,8 +48,13 @@ public:
 	QWebView *getWebView();
 	QPushButton * getPushButton();
 	QLineEdit * getLineEdit();
+	QRadioButton *getRadioName();
+	QRadioButton *getRadioType();
+	QRadioButton *getRadioFile();
+	QComboBox *gettypeSelector();
     
 private:
+	QComboBox *typeSelector;
 	QWidget *centralWidget;
 	QWidget *leftWidget;
 	QGroupBox *tagGroupBox;
@@ -65,6 +72,7 @@ private:
 	QMenu *menuEdit;
 	QMenu *menuView;
 	QWebView *webView;
+	QRadioButton *radio1, *radio2, *radio3;
 	int width, height;
 	int screenWidth, screenHeight;
 	int x, y;

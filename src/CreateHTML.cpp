@@ -18,15 +18,22 @@
 /***************************************************************************/ 
 
 #include <iostream>
-#include <fstream>  
+#include <fstream> 
+#include <sstream> 
 #include "CreateHTML.h"
 #include <QtXml>
 #include <QtCore>
 #include <QDebug>
 #include <QXmlQuery>
 
-CreateHTML::CreateHTML(){}
+CreateHTML::CreateHTML(){
+}
 CreateHTML::~CreateHTML(){}
+
+CreateHTML::CreateHTML(Configuration* c)
+{
+	config = new Configuration(c->getSourcesDir(), c->getDestDir());
+}
 
 void CreateHTML::CreateHTMLfile(QString file)
 {
@@ -84,7 +91,7 @@ void CreateHTML::CreateHTMLend(const char* file)
 
 void CreateHTML::CreateXML()
 {
-	QFile file("/home/ubuntu/Documents/myXLM.xml");
+	QFile file("/home/alexandre/Documents/myXLM.xml");
 	QDomDocument document;
 
 	QDomElement root = document.createElement("MyRowTiTi");
@@ -124,14 +131,73 @@ void CreateHTML::CreateXML()
 	}
 }
 
-QString CreateHTML::TransformToHTML()
+void CreateHTML::createXMLSearchByTags(string tag)
+{	
+	QFile file("../../myXLMSearchByTags.xml");
+	QDomDocument document;
+	
+	QDomElement root = document.createElement("SearchByTags");
+	document.appendChild(root);
+	
+	this->myTagMan = new TagsManagerImpl(config);
+	this->tpi = new TagsParserImpl(myTagMan);
+	tpi->loadFromFile(config->getDestDir()+"/tags");
+	list = myTagMan->getTagsByName(tag);
+
+	for (int i=0; i<list->size(); i++)
+	{
+		QDomElement element = document.createElement("Tags");
+		
+		QDomElement element1 = document.createElement("Number");
+		QDomElement element2 = document.createElement("Line");
+	        QDomElement element3 = document.createElement("Path");
+	        QDomElement element4 = document.createElement("Type");
+
+		element.appendChild(element1);
+		element.appendChild(element2);
+		element.appendChild(element3);
+		element.appendChild(element4);
+		
+		ostr << list->at(i)->getLineNumber();
+		std::string lineNumberString = ostr.str();
+		ostr.str("");
+		ostr.clear();
+		
+		fileNameSubString = list->at(i)->getFileName().substr(config->getSourcesDir().size(), list->at(i)->getFileName().size());
+		
+		QDomText txt1 = document.createTextNode(QString::number(i+1));
+		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
+		QDomText txt3 = document.createTextNode(QString::fromStdString(fileNameSubString));
+		QDomText txt4 = document.createTextNode(QString::fromStdString(tabTypeNames[list->at(i)->getType()]));
+
+		element1.appendChild(txt1);
+		element2.appendChild(txt2);
+		element3.appendChild(txt3);
+		element4.appendChild(txt4);
+		
+		root.appendChild(element);
+	}
+	
+	if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		qDebug() << "Open file failed";
+	}
+	else
+	{
+		QTextStream stream(&file);
+		stream << document.toString();
+		file.close();
+		qDebug() << "Done";
+	}
+}
+
+
+QString CreateHTML::TransformToHTML(QString fileXML, QString fileXSL)
 {
 	QString out;
 	QXmlQuery query(QXmlQuery::XSLT20);
-	query.setFocus(QUrl("/home/ubuntu/Documents/myXLM.xml"));
-	query.setQuery(QUrl("/home/ubuntu/Documents/SublimeCode/src/transform.xsl"));
+	query.setFocus(QUrl(fileXML));
+	query.setQuery(QUrl(fileXSL));
 	query.evaluateTo(&out);
-	qDebug() << out;
-	//webview->setHtml(out);
 	return out;
 }

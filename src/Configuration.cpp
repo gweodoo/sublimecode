@@ -23,6 +23,7 @@
 
 #include "Configuration.h"
 
+Configuration::Configuration(){};
 Configuration::Configuration(std::string sources, std::string dest) {
 
 	this->sourcesDir=sources;

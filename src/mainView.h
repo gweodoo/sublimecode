@@ -22,6 +22,9 @@
 #include <QMainWindow>
 #include "ui_mainView.h"
 #include <QString>
+#include "Configuration.h"
+#include "LauncherCTags.h"
+#include "TagsManagerImpl.h"
 
 class MainView : public QMainWindow
 {
@@ -29,8 +32,7 @@ class MainView : public QMainWindow
 
 public:
 	explicit MainView();
-	explicit MainView(QString file);
-	//explicit MainView(QString file, QWidget *parent = 0);
+	MainView(Configuration *c, std::vector<std::string> fileList);
 	~MainView();
 	
 public slots:
@@ -38,6 +40,9 @@ public slots:
 
 private:
 	Ui_MainView * ui;
+	Configuration *config;
+	std::vector<std::string> myfileList;
+	string tag;
 };
 
 #endif // MAINVIEW_H
