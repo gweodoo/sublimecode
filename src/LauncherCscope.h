@@ -59,9 +59,12 @@ private :
 	int getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction);
 	void removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* calledFunctionToFind, std::vector< FunctionGraph* >* listOfGlobalDefinitions, std::vector< std::vector< std::string >* >* listOfTypesforGlobalDefinitions);
 	void removeMatchesFromHAndC(std::vector<std::vector<std::string>*>* listOfTypes,std::vector<FunctionGraph*>* listOfGlobalDefinitions);
+	void removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions);
 	void removeFromListFunctionNotBelonginToStackCall( int lineStart,int lineStop,std::vector<FunctionGraph*>* listOfFunctionCalled,Tag * functionAssociatedToTag);
 	bool isValidCaracter(char& caracterToTest);
 	int  getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
+	 void removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions,Tag * tagAssociatedToFunction);
+	 FunctionGraph* removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction);
 	
 	
 	
