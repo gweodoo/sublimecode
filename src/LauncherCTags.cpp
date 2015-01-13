@@ -36,13 +36,25 @@ LauncherCTags::LauncherCTags (Configuration *config, std::vector<std::string>* l
 }
 
 bool LauncherCTags::generateTagsFile() {
-	//int ret= system("ctags -Rn -f /home/alexandre/Documents/tags /home/alexandre/Documents/vlc-2.1.5");
-	int ret = system(constructCommand().c_str());
-	
-	cout << "size : " << constructCommand().size() << endl;
-	if(ret == -1) return false;
-	cout << WEXITSTATUS(ret) << endl;
-	return WEXITSTATUS(ret) == 0 ? true : false;
+	std::string command = pathExecutable + options + " " + GLOBAL_OPTIONS + " -f " + config->getDestDir() + "/tags " + listPaths->front();
+	std::string chainStr = "";
+	int chainSize = 0;
+	int ret =0,i = 1;
+
+	system(command.c_str());
+	while(i < listPaths->size()){
+		chainStr = "";
+		chainSize = 0;
+		while(chainSize < 100000 && i < listPaths->size()){
+			chainStr += listPaths->at(i) + " ";
+			chainSize +=listPaths->at(i).size();
+			i++;
+		}
+		command = pathExecutable + options + " -a " + GLOBAL_OPTIONS + " -f " + config->getDestDir() + "/tags " + chainStr;
+		system(command.c_str());
+	}
+	return true;
+
 }
 
 bool LauncherCTags::addPathToAnalyze ( string path ) {

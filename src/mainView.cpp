@@ -53,7 +53,6 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		launcher.addPathToAnalyze(*it);
 	}
 	launcher.generateTagsFile();
-	cout << launcher.constructCommand();
 	launcher.display();
 	
 	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
