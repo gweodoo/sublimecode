@@ -57,8 +57,10 @@ void Dialog::Finish()
    foreach (const QPersistentModelIndex &value, model->checkedIndexes)
    {
 	QFileInfo fileInfo = model->filePath(value);
+	if(fileInfo.isFile()){
 	absolutePath = fileInfo.absolutePath().toStdString() + "/" + value.data().toString().toStdString();
 	fileList.push_back(absolutePath);
+	}
    }
    
    MainView *w = new MainView(this->config, fileList);

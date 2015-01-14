@@ -45,3 +45,13 @@ QGroupBox::title
 QWebView
 {
 }
+
+QComboBox
+{
+	color: black;
+}
+
+QCompleter
+{
+	color: black;
+}

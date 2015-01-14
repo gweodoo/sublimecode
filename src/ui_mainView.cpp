@@ -91,7 +91,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	menuView->setObjectName(QString("menuView"));
 	MainView->setMenuBar(menuBar);
 	webView = new QWebView(MainView);
-	webView->setGeometry(QRect(240, 30, 860, 700));
+	webView->setGeometry(QRect(240, 30, 980, 700));
 
 	menuBar->addAction(menuFile->menuAction());
 	menuBar->addAction(menuEdit->menuAction());

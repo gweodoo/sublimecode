@@ -25,6 +25,7 @@
 #include "Configuration.h"
 #include "LauncherCTags.h"
 #include "TagsManagerImpl.h"
+#include "Tag.h"
 
 class MainView : public QMainWindow
 {
@@ -37,12 +38,16 @@ public:
 	
 public slots:
 	void handlePushButton();
+	void handlePushRadioType();
 
 private:
 	Ui_MainView * ui;
 	Configuration *config;
-	std::vector<std::string> myfileList;
-	string tag;
+	std::vector<std::string> allfileList;
+	std::string tag;
+	QStringList wordList;
+	std::string pathToAnalyse;
+	std::string relativePathToAnalyse;
 };
 
 #endif // MAINVIEW_H

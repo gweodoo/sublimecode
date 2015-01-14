@@ -100,9 +100,7 @@ void CreateHTML::CreateXML()
 	for(int i = 0; i < 5; i++)
 	{
 		QDomElement element = document.createElement("MyRowToTo");
-		//element.setAttribute("Name", "MyRow number " + QString::number(i));
-		//element.setAttribute("ID", QString::number(i));
-		
+
 		QDomElement element1 = document.createElement("Name");
 		QDomElement element2 = document.createElement("ID");
 		
@@ -191,6 +189,65 @@ void CreateHTML::createXMLSearchByTags(string tag)
 	}
 }
 
+void CreateHTML::createXMLSearchByType(int type)
+{	
+	QFile file("../../myXLMSearchByType.xml");
+	QDomDocument document;
+	
+	QDomElement root = document.createElement("SearchByType");
+	document.appendChild(root);
+		
+	this->myTagMan = new TagsManagerImpl(config);
+	this->tpi = new TagsParserImpl(myTagMan);
+	tpi->loadFromFile(config->getDestDir()+"/tags");
+	list = myTagMan->findTagsByType(static_cast<tagType>(type));
+
+	for (int i=0; i<list->size(); i++)
+	{
+		QDomElement element = document.createElement("Type");
+		
+		QDomElement element1 = document.createElement("Number");
+		QDomElement element2 = document.createElement("Line");
+	        QDomElement element3 = document.createElement("Path");
+	        QDomElement element4 = document.createElement("Name");
+
+		element.appendChild(element1);
+		element.appendChild(element2);
+		element.appendChild(element3);
+		element.appendChild(element4);
+		
+		ostr << list->at(i)->getLineNumber();
+		std::string lineNumberString = ostr.str();
+		ostr.str("");
+		ostr.clear();
+		
+		fileNameSubString = list->at(i)->getFileName().substr(config->getSourcesDir().size(), list->at(i)->getFileName().size());
+		
+		QDomText txt1 = document.createTextNode(QString::number(i+1));
+		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
+		QDomText txt3 = document.createTextNode(QString::fromStdString(fileNameSubString));
+		QDomText txt4 = document.createTextNode(QString::fromStdString(list->at(i)->getName()));
+
+		element1.appendChild(txt1);
+		element2.appendChild(txt2);
+		element3.appendChild(txt3);
+		element4.appendChild(txt4);
+		
+		root.appendChild(element);
+	}
+	
+	if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		qDebug() << "Open file failed";
+	}
+	else
+	{
+		QTextStream stream(&file);
+		stream << document.toString();
+		file.close();
+		qDebug() << "Done";
+	}
+}
 
 QString CreateHTML::TransformToHTML(QString fileXML, QString fileXSL)
 {

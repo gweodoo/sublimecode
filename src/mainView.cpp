@@ -21,20 +21,26 @@
 #include "ui_mainView.h"
 #include "CreateHTML.h"
 #include <QDebug>
+#include <QCompleter>
+#include <QDirIterator>
 
 MainView::MainView()
 {
-// 	ui = new Ui_MainView();
-//     
-// 	ui->setupUi(this);
-// 	ui->getCentralWidget()->show();
-// 	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
-// 		
-// 	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-// 	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-// 	QPalette palette;
-// 	palette.setBrush(QPalette::Background, bkgnd);
-// 	this->setPalette(palette);
+	ui = new Ui_MainView();
+    
+	ui->setupUi(this);
+	ui->getCentralWidget()->show();
+	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
+		
+	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+	QPalette palette;
+	palette.setBrush(QPalette::Background, bkgnd);
+	this->setPalette(palette);
+	
+	for (int i=0; i<15; i++){
+		ui->gettypeSelector()->addItem(tabTypeNames[i]);
+	}
 // 	
 // 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 }
@@ -46,14 +52,29 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
 	config = new Configuration(c->getSourcesDir(), c->getDestDir());
-	myfileList = fileList;
-
+	
+	QDirIterator it(QString::fromStdString(c->getSourcesDir()), QDir::Files, QDirIterator::Subdirectories);
+	while (it.hasNext()) {
+		relativePathToAnalyse = it.next().toStdString();
+		allfileList.push_back(relativePathToAnalyse.substr(config->getSourcesDir().size(), relativePathToAnalyse.size()));
+	}
+	
+	for (int i=0; i<15; i++){
+		ui->gettypeSelector()->addItem(tabTypeNames[i]);
+	}
+	
 	LauncherCTags launcher(config);
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
 		launcher.addPathToAnalyze(*it);
+		pathToAnalyse = *it;
+		wordList.push_back(QString::fromStdString(pathToAnalyse.substr(config->getSourcesDir().size(), pathToAnalyse.size())));
 	}
 	launcher.generateTagsFile();
-	launcher.display();
+	  
+	QCompleter *completer = new QCompleter(wordList, this);
+	completer->setCaseSensitivity(Qt::CaseInsensitive);
+	//completer->set
+	ui->getLineEdit()->setCompleter(completer);
 	
 	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
 	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
@@ -66,6 +87,9 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	}
 	
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
+	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
+	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
+	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 }
 
 MainView::~MainView()
@@ -81,13 +105,32 @@ void MainView::handlePushButton()
 	
 	if(ui->getRadioName()->isChecked()){
 		c->createXMLSearchByTags(tag);
-		html = c->TransformToHTML("/home/alexandre/Documents/SublimeCode/myXLMSearchByTags.xml", "/home/alexandre/Documents/SublimeCode/src/transformSearchByTags.xsl");
+		html = c->TransformToHTML("../../myXLMSearchByTags.xml", "../../src/transformSearchByTags.xsl");
 		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("/home/alexandre/Documents/SublimeCode/src/style.css"));
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("../../src/style.css"));
 	}
 	else if (ui->getRadioType()->isChecked()){
+		c->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
+		html = c->TransformToHTML("../../myXLMSearchByType.xml", "../../src/transformSearchByType.xsl");
+		ui->getWebView()->setHtml(html);
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("../../src/style.css"));
 	}
 	else if(ui->getRadioFile()->isChecked()){
 		
 	}
 }
+
+void MainView::handlePushRadioType()
+{
+	if(ui->getRadioType()->isChecked()==true)
+	{
+		ui->gettypeSelector()->setVisible(true);
+		ui->getLineEdit()->setReadOnly(true);
+	}
+	else 
+	{
+		ui->gettypeSelector()->setVisible(false);
+		ui->getLineEdit()->setReadOnly(false);
+	}
+}
+

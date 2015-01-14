@@ -41,6 +41,7 @@ public:
 
 	void CreateXML();
 	void createXMLSearchByTags(string tag);
+	void createXMLSearchByType(int type);
 	QString TransformToHTML(QString fileXML, QString fileXSL);
 
 private:
