@@ -1,9 +1,5 @@
 /***************************************************************************/
-<<<<<<< HEAD
 /*                                                                         */
-=======
-/*                                                                        */
->>>>>>> Source file existence
 /* This file is part of Sublime Code.                                      */
 /*                                                                         */
 /* Sublime Code is free software: you can redistribute it and/or modify    */
