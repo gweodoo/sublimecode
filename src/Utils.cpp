@@ -20,7 +20,7 @@
 #include "Utils.h"
 using namespace std;
 
-bool checkCommandExistency(std::string command, bool required){
+void checkCommandExistency(std::string command, bool required){
 	std::string starter = "which "+command+" > /dev/null 2>&1";
 	int ret = system(starter.c_str());
 	if(WEXITSTATUS(ret) != 0) {

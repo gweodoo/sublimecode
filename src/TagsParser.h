@@ -26,7 +26,7 @@
 class TagsParser {
 
 public:
-	virtual bool loadFromFile(std::string inputFile) = 0;
+	virtual void loadFromFile(std::string inputFile) = 0;
 	virtual tagType identifyTypeFromFile(std::string type) = 0;
 };
 

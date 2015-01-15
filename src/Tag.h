@@ -103,27 +103,23 @@ public:
 	/**
 	 * set tag name (should be deprecated, and replaced by constructor)
 	 * \param[in] name the name used to set
-	 * \return true if set is ok
 	 */
-	virtual bool setName(std::string name) = 0;
+	virtual void setName(std::string name) = 0;
 	/**
 	 * set tag filename (should be deprecated, and replaced by constructor)
 	 * \param[in] fileName the name used to set
-	 * \return true if set is ok
 	 */
-	virtual bool setFileName(std::string fileName) = 0;
+	virtual void setFileName(std::string fileName) = 0;
 	/**
 	 * set tag lineNumber (should be deprecated, and replaced by constructor)
 	 * \param[in] line the name used to set
-	 * \return true if set is ok
 	 */
-	virtual bool setLineNumber(size_t line) = 0;
+	virtual void setLineNumber(size_t line) = 0;
 	/**
 	 * set tag type (should be deprecated, and replaced by constructor)
 	 * \param[in] type the name used to set
-	 * \return true if set is ok
 	 */
-	virtual bool setType(tagType type) = 0;
+	virtual void setType(tagType type) = 0;
 	/**
 	 * set a key-value item to insert (should be deprecated, and replaced by constructor)
 	 * \param[in] key the item key

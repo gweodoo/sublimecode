@@ -30,7 +30,7 @@ void ProjectInfo::addFilesList ( std::vector< std::string > filesList ) {
 	//	cout << *it << endl;
 }
 
-bool ProjectInfo::analyzeSourcesTree() {
+void ProjectInfo::analyzeSourcesTree() {
 	string authors = "No authors found", type = "Cannot be termined";
 	for(std::vector<string>::iterator it = filesTree.begin(); it != filesTree.end(); it++){
 		if((*it) == "/Makefile.in" || (*it) == "/Makefile.am" || (*it) == "/configure.ac"){

@@ -24,7 +24,7 @@ TagsParserImpl::TagsParserImpl(TagsManagerImpl* man) {
 	myTagMan = man;
 }
 
-bool TagsParserImpl::loadFromFile ( std::string inputFile ) {
+void TagsParserImpl::loadFromFile ( std::string inputFile ) {
 	assert(inputFile != "");
 	std::vector<string> tab;
 	ifstream fileFd(inputFile.c_str());

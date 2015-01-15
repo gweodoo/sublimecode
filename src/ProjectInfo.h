@@ -32,7 +32,7 @@ private:
 public:
 	ProjectInfo(Configuration *config);
 	void addFilesList(std::vector<std::string> filesList);
-	bool analyzeSourcesTree();
+	void analyzeSourcesTree();
 
 };
 

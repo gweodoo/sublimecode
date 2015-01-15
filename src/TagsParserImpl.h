@@ -29,7 +29,7 @@ private:
 	TagsManagerImpl* myTagMan;
 public:
 	TagsParserImpl(TagsManagerImpl* man);
-	virtual bool loadFromFile ( std::string inputFile );
+	virtual void loadFromFile ( std::string inputFile );
 	virtual tagType identifyTypeFromFile(std::string type);
 };
 

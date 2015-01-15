@@ -47,6 +47,6 @@
 #endif
 
 void checkNeededExecutable();
-bool checkCommandExistency(std::string command, bool required = false);
+void checkCommandExistency(std::string command, bool required = false);
 
 #endif

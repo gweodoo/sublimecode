@@ -27,39 +27,36 @@ TagImpl::TagImpl(std::string name, std::string fileName, size_t line, tagType ty
 	this->type = type;
 }
 
-bool TagImpl::setName(std::string name){
+void TagImpl::setName(std::string name){
 	this->name = name;
-};
-bool TagImpl::setFileName(std::string fileName){
+}
+void TagImpl::setFileName(std::string fileName){
 	this->fileName = fileName;
-	return true;
-};
-bool TagImpl::setLineNumber(size_t line){
+}
+void TagImpl::setLineNumber(size_t line){
 	this->lineNumber = line;
-	return true;
-};
-bool TagImpl::setType(tagType type){
+}
+void TagImpl::setType(tagType type){
 	this->type = type;
-	return true;
-};
+}
 std::string TagImpl::getName() const{
 	return name;
-};
+}
 std::string TagImpl::getFileName() const{
 	return fileName;
-};
+}
 size_t TagImpl::getLineNumber() const{
 	return lineNumber;
-};
+}
 tagType TagImpl::getType() const{
 	return type;
-};
+}
 std::string TagImpl::getInfoByKey(std::string key)const{
 	map<std::string, string>::const_iterator it = additionalInfo.find(key);
 	if(it != additionalInfo.end())
 		return it->second;
 	return "";
-};
+}
 bool TagImpl::addInfoByKey ( std::string key, string value ) {
 	additionalInfo[key] = value;
 	return true;

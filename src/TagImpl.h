@@ -32,10 +32,10 @@ private:
 public:
 	explicit TagImpl(std::string name, std::string fileName = OUT_OF_SCOPE_TAG, size_t line = 0, tagType type = TYPE_UNKNOWN);
 	explicit TagImpl(std::string name);
-	virtual bool setName(std::string name);
-	virtual bool setFileName(std::string fileName);
-	virtual bool setLineNumber(size_t line);
-	virtual bool setType(tagType type);
+	virtual void setName(std::string name);
+	virtual void setFileName(std::string fileName);
+	virtual void setLineNumber(size_t line);
+	virtual void setType(tagType type);
 	virtual bool addInfoByKey(std::string key, std::string value);
 	virtual std::string getName() const;
 	virtual std::string getFileName() const;
