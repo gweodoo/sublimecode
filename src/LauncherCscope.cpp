@@ -105,6 +105,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		/**
 		* launch cscope and get the output
 		*/
+	
 		if(command==1)
 		{
 			string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
@@ -688,43 +689,64 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* ca
  */
 int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction)
 {
+	cout<<"looking for the end of function "<<tagAssociatedToFunction->getName()<<endl;
+	cout <<"opening line should be " <<tagAssociatedToFunction->getLineNumber() << " in file : "<< tagAssociatedToFunction->getFileName()<<endl;
 	ifstream stream(tagAssociatedToFunction->getFileName().c_str());
-	string currentLine;
-	int numberOfLine=0;
-	int niveauBraceBracket=0;
-	int functionInitialPos=0;
-	for(int i=0;i<tagAssociatedToFunction->getLineNumber()-1;i++) getline(stream,currentLine);
-	bool functionNameAlreadyRead=false;
-	bool endOfFunctionFound=false;
-	do
-	{
-		if(numberOfLine==0)
+	int numberOfEndLine=0;
+	if(stream!=0){
+		string currentLine;
+		int numberOfLine=0;
+		int niveauBraceBracket=0;
+		int functionInitialPos=0;
+		bool firstBraceBracketAlreyFound=false;
+		for(int i=1;i<tagAssociatedToFunction->getLineNumber();i++) 
 		{
+			cout <<"skipping line number "<<i<<endl;
 			getline(stream,currentLine);
-			functionInitialPos=currentLine.find(tagAssociatedToFunction->getName());
-			
-			for(int p=functionInitialPos;p<currentLine.length();p++)
+			cout<<" line read is "<<currentLine<<endl;
+		}
+		bool functionNameAlreadyRead=false;
+		bool endOfFunctionFound=false;
+		do
+		{
+			cout<<"in the do "<<endl;
+			if(numberOfLine==0)
 			{
-				if(currentLine.at(p)=='{')niveauBraceBracket++;
-				if(currentLine.at(p)=='}')niveauBraceBracket--;
+				getline(stream,currentLine);
+				functionInitialPos=currentLine.find(tagAssociatedToFunction->getName());
+				
+				for(int p=functionInitialPos;p<currentLine.length();p++)
+				{
+					cout <<" character read is "<<currentLine.at(p)<<endl;
+					if(currentLine.at(p)=='{')
+					{
+						niveauBraceBracket++;
+						firstBraceBracketAlreyFound=true;
+					}if(currentLine.at(p)=='}')niveauBraceBracket--;
+				}
+				functionNameAlreadyRead=true;
 			}
-			functionNameAlreadyRead=true;
-		}
-		else
-		{
-			getline(stream,currentLine);
+			else
+			{
+				getline(stream,currentLine);
+				
+				for(int p=0;p<currentLine.length();p++)
+				{	if(currentLine.at(p)=='{')
+					{
+						firstBraceBracketAlreyFound=true;
+						niveauBraceBracket++;
+					}
+					if(currentLine.at(p)=='}')niveauBraceBracket--;
+				}
+			}
 			
-			for(int p=0;p<currentLine.length();p++)
-			{	if(currentLine.at(p)=='{') niveauBraceBracket++;
-				if(currentLine.at(p)=='}')niveauBraceBracket--;
-			}
-		}
-		
-		if(functionNameAlreadyRead==true&&niveauBraceBracket==0)endOfFunctionFound=true;
-		numberOfLine++;
-	}while(endOfFunctionFound==false);
+			if(functionNameAlreadyRead==true&&niveauBraceBracket==0&&firstBraceBracketAlreyFound)endOfFunctionFound=true;
+			numberOfLine++;
+		}while(endOfFunctionFound==false);
 	
-	return numberOfLine;
+		numberOfEndLine=numberOfLine+tagAssociatedToFunction->getLineNumber()-1;
+	}	
+	 return numberOfEndLine;
 }
 /**
  * this function removes from the function called which do not belong to the function 
