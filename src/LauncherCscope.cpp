@@ -689,8 +689,7 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* ca
  */
 int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction)
 {
-	cout<<"looking for the end of function "<<tagAssociatedToFunction->getName()<<endl;
-	cout <<"opening line should be " <<tagAssociatedToFunction->getLineNumber() << " in file : "<< tagAssociatedToFunction->getFileName()<<endl;
+	
 	ifstream stream(tagAssociatedToFunction->getFileName().c_str());
 	int numberOfEndLine=0;
 	if(stream!=0){
@@ -701,7 +700,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 		bool firstBraceBracketAlreyFound=false;
 		for(int i=1;i<tagAssociatedToFunction->getLineNumber();i++) 
 		{
-			cout <<"skipping line number "<<i<<endl;
+			
 			getline(stream,currentLine);
 			cout<<" line read is "<<currentLine<<endl;
 		}
@@ -709,7 +708,6 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 		bool endOfFunctionFound=false;
 		do
 		{
-			cout<<"in the do "<<endl;
 			if(numberOfLine==0)
 			{
 				getline(stream,currentLine);
@@ -717,7 +715,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 				
 				for(int p=functionInitialPos;p<currentLine.length();p++)
 				{
-					cout <<" character read is "<<currentLine.at(p)<<endl;
+					
 					if(currentLine.at(p)=='{')
 					{
 						niveauBraceBracket++;
