@@ -17,25 +17,51 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef CONFIGURATION_H
-#define CONFIGURATION_H
+#include "ClocLanguageItem.h"
+using namespace std;
 
-#include "Utils.h"
+ClocLanguageItem::ClocLanguageItem(){
+	this->name = "";
+	this->nbFiles = 0;
+	this->nbBlankLines = 0;
+	this->nbCommentLines = 0;
+	this->nbCodeLines = 0;
+}
 
-class Configuration
-{
-private:
-    std::string sourcesDir;
-    std::string destDir;
-    std::string scRootPath;
+void ClocLanguageItem::fillFromString(std::string chain){
+	stringstream flux(chain);
+	string cur;
+	vector<string> vec;
+	while(getline(flux, cur, ',')){
+		vec.push_back(cur);
+	}
+	nbFiles = atoi(vec[0].c_str());
+	name = vec[1].c_str();
+	nbBlankLines = atoi(vec[2].c_str());
+	nbCommentLines = atoi(vec[3].c_str());
+	nbCodeLines = atoi(vec[4].c_str());
+}
+std::string ClocLanguageItem::getName() const{
+	return name;
+}
+size_t ClocLanguageItem::getNbFiles() const{
+	return nbFiles;
+}
+size_t ClocLanguageItem::getNbBlankLines() const{
+	return nbBlankLines;
+}
+size_t ClocLanguageItem::getNbCommentLines() const{
+	return nbCommentLines;
+}
+size_t ClocLanguageItem::getNbCodeLines() const{
+	return nbCodeLines;
+}
 
-public:
-    Configuration();
-    Configuration(std::string sources, std::string dest);
-    std::string getSourcesDir() const;
-    std::string getDestDir() const;
-    std::string getRootPath() const;
-    ~Configuration();
-};
+void ClocLanguageItem::display() const {
+	cout << "LANGUAGE = " << name << endl
+	<< "NB FILES = " << nbFiles<< endl
+	<< "NB BLANK = " << nbBlankLines<< endl
+	<< "NB COMME = " << nbCommentLines<< endl
+	<< "NB CODE  = " << nbCodeLines<< endl;
 
-#endif // CONFIGURATION_H
+}

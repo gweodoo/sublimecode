@@ -16,26 +16,28 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef CLOCLANGUAGEITEM_H
+#define CLOCLANGUAGEITEM_H
 
-#ifndef CONFIGURATION_H
-#define CONFIGURATION_H
+#include "../Utils.h"
 
-#include "Utils.h"
-
-class Configuration
-{
+class ClocLanguageItem {
 private:
-    std::string sourcesDir;
-    std::string destDir;
-    std::string scRootPath;
+	std::string name;
+	size_t nbFiles;
+	size_t nbBlankLines;
+	size_t nbCommentLines;
+	size_t nbCodeLines;
 
 public:
-    Configuration();
-    Configuration(std::string sources, std::string dest);
-    std::string getSourcesDir() const;
-    std::string getDestDir() const;
-    std::string getRootPath() const;
-    ~Configuration();
+	ClocLanguageItem();
+	void fillFromString(std::string chain);
+	std::string getName() const;
+	size_t getNbFiles() const;
+	size_t getNbBlankLines() const;
+	size_t getNbCommentLines() const;
+	size_t getNbCodeLines() const;
+	void display() const;
 };
 
-#endif // CONFIGURATION_H
+#endif // CLOCLANGUAGEITEM_H

@@ -16,26 +16,19 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef CLOCPARSER_H
+#define CLOCPARSER_H
+#include "../Utils.h"
+#include "ClocLanguageItem.h"
 
-#ifndef CONFIGURATION_H
-#define CONFIGURATION_H
-
-#include "Utils.h"
-
-class Configuration
-{
+class ClocParser {
 private:
-    std::string sourcesDir;
-    std::string destDir;
-    std::string scRootPath;
-
+	std::vector<ClocLanguageItem*> tabLanguages;
 public:
-    Configuration();
-    Configuration(std::string sources, std::string dest);
-    std::string getSourcesDir() const;
-    std::string getDestDir() const;
-    std::string getRootPath() const;
-    ~Configuration();
+	void runWith(std::string path);
+	void display() const;
+	std::map<std::string, float> getRatioComments_Code() const;
+	std::map<std::string, float> getRatioCode_Total() const;
 };
 
-#endif // CONFIGURATION_H
+#endif // CLOCPARSER_H

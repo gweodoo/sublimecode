@@ -1,0 +1,19 @@
+FIND_PROGRAM(CLOC_EXECUTABLE NAMES cloc)
+
+IF (CLOC_EXECUTABLE)
+		SET(CLOC_FOUND TRUE)
+ENDIF(CLOC_EXECUTABLE)
+
+IF (CLOC_FOUND)
+		# show which Cloc was found only if not quiet
+		IF (NOT Cloc_FIND_QUIETLY)
+				MESSAGE(STATUS "Found Cloc: ${CLOC_EXECUTABLE}")
+		ENDIF (NOT Cloc_FIND_QUIETLY)
+ELSE (CLOC_FOUND)
+		# fatal error if Cloc is required but not found
+		IF (Cloc_FIND_REQUIRED)
+				MESSAGE(FATAL_ERROR "Could NOT find Cloc")
+		ELSEIF(NOT Cloc_FIND_QUIETLY)
+				MESSAGE(STATUS "Could NOT find Cloc (missing: CLOC_EXECUTABLE)")
+		ENDIF (Cloc_FIND_REQUIRED)
+ENDIF (CLOC_FOUND)

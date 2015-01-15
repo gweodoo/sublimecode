@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
+    palette.setColor(QPalette::Text, Qt::black);
     this->setPalette(palette);
         
     QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));

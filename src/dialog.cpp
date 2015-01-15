@@ -33,6 +33,7 @@ Dialog::Dialog(Configuration *config, QWidget *parent) :
     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
+    
     this->setPalette(palette);
     
     model = new CFileSystemModel();

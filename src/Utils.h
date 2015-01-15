@@ -33,6 +33,8 @@
 #include<functional>
 #include<string>
 #include<sstream>
+#include <cerrno>
+#include <cstring>
 /**** MACROS *****/
 #ifdef NDEBUG
 #define scDebug(u)

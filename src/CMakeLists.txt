@@ -22,9 +22,8 @@ file(GLOB_RECURSE HDR *.h)
 file(GLOB_RECURSE UI *.ui)
 file(GLOB_RECURSE RES *.qrc)
 
-find_package(Qt4 REQUIRED QtGui QtXml QtXmlPatterns)
 set(QT_USE_QTWEBKIT TRUE)
-
+file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_BINARY_DIR})
 INCLUDE(${QT_USE_FILE})
 
 QT4_WRAP_CPP(HDR_MOC ${HDR})
