@@ -56,7 +56,7 @@ private :
 	std::string removeSpaceFromString(std::string stringToParse);
 	std::vector<std::string>* getTypeForVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
 	std::vector<std::string>* getVariablesNamesInFunctionCall(std::string callExpression);
-	int getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction);
+	
 	void removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* calledFunctionToFind, std::vector< FunctionGraph* >* listOfGlobalDefinitions, std::vector< std::vector< std::string >* >* listOfTypesforGlobalDefinitions);
 	void removeMatchesFromHAndC(std::vector<std::vector<std::string>*>* listOfTypes,std::vector<FunctionGraph*>* listOfGlobalDefinitions);
 	void removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions);
@@ -64,7 +64,7 @@ private :
 	bool isValidCaracter(char& caracterToTest);
 	Tag * getTagFromFunctionGraphOutput(FunctionGraph* outputFunction);
 	int  getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
-	 void removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions,Tag * tagAssociatedToFunction);
+	 void removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions,std::string fileName);
 	 FunctionGraph* removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction);
 	
 	
@@ -74,7 +74,11 @@ public :
 	 LauncherCscope(Configuration* myconfiguration,TagsManager* myTagManager);
 	 bool initExternalTool();
 	 bool closeExternalTool();
+	 int getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction);
+	 
 	 std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction);
+	 std::vector<std::string >* launchCommandExternalTool(int command, std::string  fileName);
+	 int launchCommandExternalTool(Tag *tagAssociatedToFunction);
 	 bool getIsLaunched();
 	 
 

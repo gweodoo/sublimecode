@@ -48,7 +48,8 @@ public:
 	 */
 	std::vector<Tag*>* getFunctionsCalledBy(Tag* name);
 	std::vector<Tag*>* getFunctionsCallingThis(Tag* name);
-	std::vector<Tag*>* getFilesIncludedBy(Tag* name);
+	int getFunctionLength(Tag * tagAssociatedToFunction);
+	std::vector<std::string>* getFilesIncludedBy(std::string name);
 	
 	int getCountFunctionApparition(Tag* name);
 	int getCountFunctionLength(Tag* name);
