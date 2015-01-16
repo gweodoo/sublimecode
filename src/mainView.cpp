@@ -21,7 +21,6 @@
 #include "ui_mainView.h"
 #include "CreateHTML.h"
 #include <QDebug>
-#include <QCompleter>
 #include <QDirIterator>
 
 MainView::MainView()
@@ -59,6 +58,10 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		allfileList.push_back(relativePathToAnalyse.substr(config->getSourcesDir().size(), relativePathToAnalyse.size()));
 	}
 	
+// 	for(vector<string>::iterator it = allfileList.begin(); it != allfileList.end(); it++){
+// 		qDebug() << QString::fromStdString(*it);
+// 	}
+	
 	for (int i=0; i<15; i++){
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
 	}
@@ -70,18 +73,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		wordList.push_back(QString::fromStdString(pathToAnalyse.substr(config->getSourcesDir().size(), pathToAnalyse.size())));
 	}
 	launcher.generateTagsFile();
-	  
-	QCompleter *completer = new QCompleter(wordList, this);
-	completer->setCaseSensitivity(Qt::CaseInsensitive);
-	//completer->set
-	ui->getLineEdit()->setCompleter(completer);
-	
-// 	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-// 	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-// 	QPalette palette;
-// 	palette.setBrush(QPalette::Background, bkgnd);
-// 	this->setPalette(palette);
-	
+	  	
 	if (ui->getRadioType()->isChecked()){
 		ui->gettypeSelector()->setVisible(true);
 	}
@@ -98,7 +90,7 @@ MainView::~MainView()
 }
 
 void MainView::handlePushButton()
-{/*
+{
 	this->tag = ui->getLineEdit()->text().toStdString();
 	CreateHTML *c = new CreateHTML(config);
 	QString html;
@@ -116,24 +108,11 @@ void MainView::handlePushButton()
 		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("../../src/style.css"));
 	}
 	else if(ui->getRadioFile()->isChecked()){
-		
-	}*/
-	
-	
-	//qDebug() << ui->getLineEdit()->text();
-	
-	//Creation d'un XML test
-	//CreateHTML cHtml;
-	//QString html;
-	//cHtml.CreateXML();
-	//html = cHtml.TransformToHTML();
-	
-	//CreateJson cjson;
-	//cjson.TransformToJson();
-	//ui->getWebView()->setHtml(html);
-	//ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("/home/ubuntu/Documents/SublimeCode/src/style.css"));
-	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/SublimeCode/src/callGraph.html"));
-	
+		c->createXMLSearchByFile(tag);
+		html = c->TransformToHTML("../../myXLMSearchByFile.xml", "../../src/transformSearchByFile.xsl");
+		ui->getWebView()->setHtml(html);
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("../../src/style.css"));
+	}
 }
 
 void MainView::handlePushRadioType()
@@ -147,5 +126,18 @@ void MainView::handlePushRadioType()
 	{
 		ui->gettypeSelector()->setVisible(false);
 		ui->getLineEdit()->setReadOnly(false);
+	}
+	
+	if(ui->getRadioFile()->isChecked()==true){
+		completer = new QCompleter(wordList, this);
+		completer->setCaseSensitivity(Qt::CaseInsensitive);
+		completer->popup()->setStyleSheet("color : black");
+		ui->getLineEdit()->setCompleter(completer);
+		ui->getLineEdit()->setText("/");
+	}
+	else{
+		completer = 0;
+		ui->getLineEdit()->setCompleter(completer);
+		ui->getLineEdit()->setText("");
 	}
 }

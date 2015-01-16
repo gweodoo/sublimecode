@@ -19,6 +19,10 @@
 #ifndef CREATEHTML_H
 #define CREATEHTML_H
 #include <QString>
+#include <QtXml>
+#include <QtCore>
+#include <QDebug>
+#include <QXmlQuery>
 #include "Configuration.h"
 #include "LauncherCTags.h"
 #include "TagsParserImpl.h"
@@ -39,9 +43,9 @@ public:
 	void CreateHTMLbody(const char* file);
 	void CreateHTMLend(const char* file);
 
-	void CreateXML();
 	void createXMLSearchByTags(string tag);
 	void createXMLSearchByType(int type);
+	void createXMLSearchByFile(string filename);
 	QString TransformToHTML(QString fileXML, QString fileXSL);
 
 private:

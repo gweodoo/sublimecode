@@ -26,6 +26,7 @@
 #include "LauncherCTags.h"
 #include "TagsManagerImpl.h"
 #include "Tag.h"
+#include <QCompleter>
 
 class MainView : public QMainWindow
 {
@@ -48,6 +49,7 @@ private:
 	QStringList wordList;
 	std::string pathToAnalyse;
 	std::string relativePathToAnalyse;
+	QCompleter *completer;
 };
 
 #endif // MAINVIEW_H
