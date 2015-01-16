@@ -49,12 +49,14 @@ private:
     QString fileNameSource;
     QString fileNameSourceTest;
     QString fileNameDestination;
+    QString fileNameArchive;
     QString fileNameDestinationTest;
     Configuration *config;
     
 public slots:
      void Rechercher_Sources();
      void Rechercher_Destination();
+     void Rechercher_Archive();
      void Finish();
      bool exists(const char *fname);
 };

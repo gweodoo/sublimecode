@@ -34,6 +34,8 @@
 #include <QtGui/QWidget>
 #include <QtGui/QLabel>
 #include <QtGui/QDesktopWidget>
+#include <QtGui/QGroupBox>
+#include <QtGui/QComboBox>
 
 QT_BEGIN_NAMESPACE
 
@@ -41,30 +43,47 @@ class UI_MainWindow1
 {
 private: 
     QWidget *centralWidget;
+    QWidget *directoryWidget;
+    QWidget *vcsWidget;
+    QWidget *archiveWidget;
+    QGroupBox *sourcesGroupBox;
+    QGroupBox *destinationGroupBox;
+    QTabWidget *tabs;
     QPushButton *Parcourir;
     QPushButton *Parcourir1;
+    QPushButton *parcourirArchive;
     QPushButton *Finish;
     QLineEdit *lineEdit;
     QLineEdit *lineEdit1;
+    QLineEdit *lineEditVcs;
+    QLineEdit *lineEditArchive;
+    QLineEdit * lineEditBranch;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
+    QLabel *labelBranch;
     QLabel *labelParcourir;
     QLabel *labelParcourir1;
     int width, height;
     int screenWidth, screenHeight;
     int x, y;
     QRect rect;
+    QComboBox *comboBoxVcs;
+    QComboBox *comboBoxArchive;
 
 public:
+    static const char * const vcsTypes[];
+    static const char * const archiveTypes[];
     explicit UI_MainWindow1();
     ~UI_MainWindow1();
     void setupUi(QMainWindow *MainWindow);
     void retranslateUi(QMainWindow *MainWindow);
     QLineEdit *getLineEdit();
     QLineEdit *getLineEdit1();
+    QLineEdit *getLineEditArchive();
     QPushButton *getParcourir();
     QPushButton *getParcourir1();
+    QPushButton *getParcourirArchive();
     QPushButton *getFinish();
 };
 

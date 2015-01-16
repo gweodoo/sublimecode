@@ -169,4 +169,3 @@ QComboBox* Ui_MainView::gettypeSelector()
 {
 	return this->typeSelector;
 }
-

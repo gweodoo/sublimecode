@@ -32,17 +32,17 @@ MainView::MainView()
 	ui->getCentralWidget()->show();
 	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
 		
-	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-	QPalette palette;
-	palette.setBrush(QPalette::Background, bkgnd);
-	this->setPalette(palette);
+	//QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+	//bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+	//QPalette palette;
+	//palette.setBrush(QPalette::Background, bkgnd);
+	//this->setPalette(palette);
 	
 	for (int i=0; i<15; i++){
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
 	}
 // 	
-// 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
+ 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 }
 
 MainView::MainView(Configuration *c, std::vector<std::string> fileList)
@@ -76,11 +76,11 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	//completer->set
 	ui->getLineEdit()->setCompleter(completer);
 	
-	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-	QPalette palette;
-	palette.setBrush(QPalette::Background, bkgnd);
-	this->setPalette(palette);
+// 	QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+// 	bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+// 	QPalette palette;
+// 	palette.setBrush(QPalette::Background, bkgnd);
+// 	this->setPalette(palette);
 	
 	if (ui->getRadioType()->isChecked()){
 		ui->gettypeSelector()->setVisible(true);
@@ -98,7 +98,7 @@ MainView::~MainView()
 }
 
 void MainView::handlePushButton()
-{
+{/*
 	this->tag = ui->getLineEdit()->text().toStdString();
 	CreateHTML *c = new CreateHTML(config);
 	QString html;
@@ -117,7 +117,23 @@ void MainView::handlePushButton()
 	}
 	else if(ui->getRadioFile()->isChecked()){
 		
-	}
+	}*/
+	
+	
+	//qDebug() << ui->getLineEdit()->text();
+	
+	//Creation d'un XML test
+	//CreateHTML cHtml;
+	//QString html;
+	//cHtml.CreateXML();
+	//html = cHtml.TransformToHTML();
+	
+	//CreateJson cjson;
+	//cjson.TransformToJson();
+	//ui->getWebView()->setHtml(html);
+	//ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("/home/ubuntu/Documents/SublimeCode/src/style.css"));
+	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/SublimeCode/src/callGraph.html"));
+	
 }
 
 void MainView::handlePushRadioType()
@@ -133,4 +149,3 @@ void MainView::handlePushRadioType()
 		ui->getLineEdit()->setReadOnly(false);
 	}
 }
-

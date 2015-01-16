@@ -29,15 +29,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui = new UI_MainWindow1();
     ui->setupUi(this);
 
-    QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-    QPalette palette;
-    palette.setBrush(QPalette::Background, bkgnd);
-    palette.setColor(QPalette::Text, Qt::black);
-    this->setPalette(palette);
+//     QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
+//     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+//     QPalette palette;
+//     palette.setBrush(QPalette::Background, bkgnd);
+//     this->setPalette(palette);
         
     QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));
     QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
+    QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
     QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
 }
 
@@ -56,6 +56,12 @@ void MainWindow::Rechercher_Destination()
 {
 	fileNameDestination = QFileDialog::getExistingDirectory(this, tr("Choose or Create a Directory"),"/home");
 	ui->getLineEdit1()->setText(fileNameDestination);	
+}
+
+void MainWindow::Rechercher_Archive()
+{
+	fileNameArchive = QFileDialog::getExistingDirectory(this, tr("Choose or Create a Directory"),"/home");
+	ui->getLineEditArchive()->setText(fileNameArchive);	
 }
 
 bool MainWindow::exists(const char *fname)

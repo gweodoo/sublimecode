@@ -25,6 +25,7 @@
 #include <QtCore>
 #include <QDebug>
 #include <QXmlQuery>
+#include <vector>  
 
 CreateHTML::CreateHTML(){
 }
@@ -74,11 +75,6 @@ void CreateHTML::CreateHTMLbegin(const char* file)
 	myfile.close();
 }
 
-void CreateHTML::CreateHTMLbody(const char* file)
-{
-
-}
-
 void CreateHTML::CreateHTMLend(const char* file)
 {
 	ofstream myfile;
@@ -88,6 +84,11 @@ void CreateHTML::CreateHTMLend(const char* file)
 	myfile.close();
 }
 
+
+void CreateHTML::CreateHTMLbody(const char* file)
+{
+
+}
 
 void CreateHTML::CreateXML()
 {

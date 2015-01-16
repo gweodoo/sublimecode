@@ -1,7 +1,7 @@
 
 QWidget
 {
-	color: white;
+	color: black;
 }
 
 QTreeView
@@ -42,6 +42,11 @@ QGroupBox::title
 
 }
 
+#rightWidget
+{
+
+}
+
 QWebView
 {
 }
@@ -54,4 +59,9 @@ QComboBox
 QCompleter
 {
 	color: black;
+}
+
+QFileDialog
+{
+	background: red;
 }
