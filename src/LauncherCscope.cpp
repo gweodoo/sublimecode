@@ -98,37 +98,25 @@ bool LauncherCscope::closeExternalTool()
 vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)
 {
 	FunctionGraph*fc=new FunctionGraph(myConfiguration->getSourcesDir()+string("/lib/media.c"),string("vlc_path2uri"),string("char *mrl = vlc_path2uri( path, NULL );"),342);
-
+	cout <<"end of function definition " <<this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction);
 	if(tagAssociatedToFunction!=NULL)
 	{
 	vector<Tag*> *listOfTagToReturn=new vector<Tag*>();	
 		/**
 		* launch cscope and get the output
 		*/
-	
 		if(command==1)
 		{
 			string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
 			vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
-			//this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction);
-			//cout<<"size of function call list  before parsing :" <<tagAssociatedToFunction->getName()<<" befor parsing is : "<<listOfFunctionCalled->size()<<endl;
-			
 			for(int i=0;i<listOfFunctionCalled->size();i++)
 			{
-				
 				FunctionGraph* functToFind=listOfFunctionCalled->at(i);
 				//cout<<" getiing definition for "<< functToFind->getTagName()<<endl;
 				Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 				if(tag!=NULL)listOfTagToReturn->push_back(tag);
-				//cout<<" i "<<i<<" size of list listOfTagToReturn "<<listOfTagToReturn->size()<<endl;
-				
-				
-				//cout<<"size of global definition for :" <<tagAssociatedToFunction->getName()<<"  after parsing is : "<<listOfGlobalDefinition->size()<<endl;
 			}
-			//cout<<" list listOfTagToReturn "<<listOfTagToReturn->size()<<endl;
 			return listOfTagToReturn;
-			//cout<<"size of function call list  for :" <<tagAssociatedToFunction->getName()<<" after parsing is : "<<listOfTagToReturn->size()<<endl;
-			
 		}
 		if(command=2)
 		{
@@ -158,36 +146,29 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(singleDefinitionLeft->getTagName(),singleDefinitionLeft->getFileName(),singleDefinitionLeft->getLine());
 					if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
 					
-					
-					
 				}
-				
-				
 			}
 		}
-		
 		return listOfTagToReturn;
 	}
 	else return new vector<Tag*>();
 }
 
-bool LauncherCscope::getIsLaunched(){
-	
+bool LauncherCscope::getIsLaunched()
+{
 	return this->isLaunched;
 }
 /**
  * parse the output from a cscope command
  * and return a vector of Function Graph Object (functionName-fileName-call's line- signature)
  */
-std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string output){
-	
-	
+std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string output)
+{
 	vector<FunctionGraph*>* listOfCscopeOutput=new vector<FunctionGraph*>();
 	stringstream outputAsStream(output);
 	string readLine;
-	while(getline(outputAsStream,readLine)){
-	
-		
+	while(getline(outputAsStream,readLine))
+	{
 		stringstream readLineAsStream(readLine);
 		string part;
 		//int count=0;
@@ -197,7 +178,6 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 			getline(readLineAsStream,part,' ');
 			switch(i){
 			
-				
 				case 0:
 					newCscopeOutputLine->setFileName(this->myConfiguration->getSourcesDir()+string("/")+part);
 					break;
@@ -209,19 +189,14 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 					break;
 			}
 		}
-		
 		while(getline(readLineAsStream,part,' '))
 		{
 			newCscopeOutputLine->setSignature(newCscopeOutputLine->getSignature().append(part));
 			newCscopeOutputLine->getSignature().push_back(' ');
 		}
-	
 		 listOfCscopeOutput->push_back(newCscopeOutputLine);
-		
 	}
 	return listOfCscopeOutput;
-	
-	
 }
 /**
  * function which return a tag corresponding to the functionGraph 
@@ -229,81 +204,59 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunction)
 {
 
-	vector<FunctionGraph*>* listOfGlobalDefinition=this->getGlobalDefinitionsFrom(outputFunction->getTagName());
+	vector<FunctionGraph*>* listOfGlobalDefinition=this->getGlobalDefinitionsFrom(outputFunction->getTagName());				
+	if(listOfGlobalDefinition->size()==1)
+	{
+		Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
+		if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
+		
+	}
+	// the function definition is out of cscope 
+	else if(listOfGlobalDefinition->empty())
+	{
+		Tag *FunctionDefinitionTag=new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
+		return (FunctionDefinitionTag);
+	}
+	// we have to find the right definition from the several we have
+	else if(listOfGlobalDefinition->size()>1)
+	{
+		//getting list of type and parameters for each global definition;
+		vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
+		this->removeNotFunctionOutput(listOfGlobalDefinition);
+		// getting rid of the .h and .c/c++ redundances ( the one in .h)
+		this->removeNotMatchingFunctionOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction);
+		this->removeMatchesFromHAndC(listOFTypeForFunction,listOfGlobalDefinition);
+		if(listOfGlobalDefinition->size()==1)
+		{
+			//we can search for the tag directly now 
+			Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
+			if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
+		}
+		else if(listOfGlobalDefinition->empty())
+		{
+			Tag *FunctionDefinitionTag=new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
+			return (FunctionDefinitionTag);
+		}
+		else
+		{
+			Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
+			if(FunctionDefinitionTag!=NULL)return (FunctionDefinitionTag);
+			/**
+			*at this point we have differents function in the case of overloading for exemple 
+			*then we have to identify which function is called thanks to the type of parameters
+			*/
+		}					
+	}
 				
-				
-				//cout<<" list Of Global Definition for " <<outputFunction->getTagName()<<" is : "<< listOfGlobalDefinition->size()<<endl;
-				// we have found the function directly can look for the tag
-				
-				
-				if(listOfGlobalDefinition->size()==1)
-				{
-					Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
-				
-					if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
-					
-				}
-				// the function definition is out of cscope 
-				else if(listOfGlobalDefinition->empty())
-				{
-					Tag *FunctionDefinitionTag=new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
-					return (FunctionDefinitionTag);
-			
-					
-				}
-				// we have to find the right definition from the several we have
-				else if(listOfGlobalDefinition->size()>1)
-					
-					
-				{
-					//cout << " size superior à 1 "<<endl;
-			
-					
-					//getting list of type and parameters for each global definition;
-					vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
-					
-					this->removeNotFunctionOutput(listOfGlobalDefinition);
-					//cout <<" size of global definition before removing argument number and HC is "<<listOfGlobalDefinition->size()<<endl; 
-					// getting rid of the .h and .c/c++ redundances ( the one in .h)
-					this->removeNotMatchingFunctionOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction);
-					this->removeMatchesFromHAndC(listOFTypeForFunction,listOfGlobalDefinition);
-					
-					//cout <<" size of global definition after removing argument number and HC is "<<listOfGlobalDefinition->size()<<endl;
-					
-					
-					
-					if(listOfGlobalDefinition->size()==1)
-					{
-						//we can search for the tag directly now 
-						Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
-						if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
-					}
-					else if(listOfGlobalDefinition->empty())
-					{
-						Tag *FunctionDefinitionTag=new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
-						return (FunctionDefinitionTag);
-					}
-					else{
-						Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
-						if(FunctionDefinitionTag!=NULL)return (FunctionDefinitionTag);
-						/**
-						*at this point we have differents function in the case of overloading for exemple 
-						*then we have to identify which function is called thanks to the type of parameters
-						*/
-					}					
-				}
-				
-return NULL;
+	return NULL;
 }
  
 /**
  * 
  */
-std::string LauncherCscope::launchExternalTool(int command, std::string arg){
-
+std::string LauncherCscope::launchExternalTool(int command, std::string arg)
+{
 	if(!this->isLaunched) this->initExternalTool();
-	
-	
 	FILE * myCommandOutput=NULL;
 	char buffer[256];
 	string result="";
@@ -331,21 +284,17 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg){
 			break;
 		}
 		
-			//vector<CscopeOutput*>* listOfCscopeOutput;
-			//this->listOfLastTagAsked=new vector<Tag*>();
-		
 			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
 			
 			while(!feof(myCommandOutput)){
 			
-				if(fgets(buffer,256,myCommandOutput)!=NULL){
-				
+				if(fgets(buffer,256,myCommandOutput)!=NULL)
+				{
 					result.append(buffer);
 				}
 				
 			}
 			if(myCommandOutput) pclose(myCommandOutput);
-
 		}
 	return result;
 }
@@ -356,12 +305,9 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg){
  */
 std::vector<FunctionGraph*>* LauncherCscope::getGlobalDefinitionsFrom(std::string nameOfFunction)
 {
-
 	vector<FunctionGraph*>* outputglobalDefinition=new vector<FunctionGraph*>();
 	outputglobalDefinition=this->cscopeOutputParser(this->launchExternalTool(0,nameOfFunction));
-	
 	return outputglobalDefinition;
-		
 }
 /**
  * step - 2
@@ -393,7 +339,6 @@ void LauncherCscope::removeNotFunctionOutput(std::vector<FunctionGraph*>* listOf
  */
 std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTypeForFunction(std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {
-
 	vector<vector<string>*>* listOfArgumentAndType=new vector<vector<string>*>();
 	if(listOfGlobalDefinitions!=NULL){
 		for(int i=0;i<listOfGlobalDefinitions->size();i++)
@@ -487,8 +432,6 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
  */
 std::string LauncherCscope::getArgumentType(std::string  argumentAndTypeToParse)
 {
-
-	
 	string NameOfArgument;
 	string stringOfArgumentToParse="";
 	bool rootArgumentFound=false;
@@ -532,7 +475,6 @@ bool LauncherCscope::isValidCaracter(char& caracterToTest)
 /**
  *in the case where we have the same definition for a function ( com from .h and .c  
  */
-
 void LauncherCscope::removeMatchesFromHAndC(std::vector<std::vector<std::string>*>* listOfTypes,std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {
 	/**
@@ -568,11 +510,14 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<std::vector<std::string>
 					{
 						listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+j);
 						listOfTypes->erase(listOfTypes->begin()+j);
+						i--;
 					}
 					if(listOfGlobalDefinitions->at(j)->getFileName().find(".h"))
 					{
 						listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+j);
 						listOfTypes->erase(listOfTypes->begin()+j);
+						j--;
+						
 					}
 					
 				}
@@ -585,7 +530,6 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<std::vector<std::string>
 
 std::string LauncherCscope::removeSpaceFromString(std::string stringToParse)
 {
-	
 	string t ="";
 	if(!stringToParse.empty())
 	{
@@ -611,8 +555,6 @@ std::vector<std::string>* LauncherCscope::getTypeForVariableUsedInFunctionCall(F
 		string output=this->launchExternalTool(-1,variablesNames->at(i));
 		std::vector<FunctionGraph*>* symbolFoundforThisVariableName= this->cscopeOutputParser(output);
 		
-		
-		
 	}*/
 	return variablesNames;
 	
@@ -633,7 +575,6 @@ int LauncherCscope::getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledF
  */
 std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string callExpression)
 {
-
 	bool endreached=false;
 	
 	vector<string>* listOfVariableName=new vector<string>();
@@ -689,7 +630,6 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* ca
  */
 int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction)
 {
-	
 	ifstream stream(tagAssociatedToFunction->getFileName().c_str());
 	int numberOfEndLine=0;
 	if(stream!=0){
@@ -702,7 +642,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 		{
 			
 			getline(stream,currentLine);
-			cout<<" line read is "<<currentLine<<endl;
+			
 		}
 		bool functionNameAlreadyRead=false;
 		bool endOfFunctionFound=false;
@@ -759,7 +699,6 @@ void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,
 				listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
 				i--;
 			}
-				
 		}
 }
 /**
@@ -767,8 +706,6 @@ void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,
  */
 void LauncherCscope::removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {
-		
-	
 	for(int i=0;i<listOfGlobalDefinitions->size();i++)
 	{
 			
@@ -781,7 +718,6 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfG
 			
 		}
 }
-
 /**
  * removes not matching function definition based on file Name et function line
  */
@@ -795,7 +731,6 @@ void LauncherCscope::removeNotConcernedDefinitionBasedOnFileName(std::vector< Fu
 			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 			i--;
 		}
-		
 	}
 }
 /**
@@ -827,5 +762,3 @@ FunctionGraph* LauncherCscope::removeNotConcernedDefinitionBaseInLineNumer(std::
 	}
 	else return NULL;
 }
-
-//void LauncherCscope::removeDouble
