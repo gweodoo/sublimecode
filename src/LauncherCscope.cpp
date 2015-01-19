@@ -108,6 +108,8 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		{
 			string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
 			vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
+			//cout << tagAssociatedToFunction->getName()<<endl;
+			//cout <<"size of function :"<<listOfFunctionCalled->size()<<endl;
 			for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 			{
 				FunctionGraph* functToFind=listOfFunctionCalled->at(i);
@@ -120,10 +122,11 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		if(command==2)
 		{
 			vector<FunctionGraph*>* listOfCallingFunction=this->cscopeOutputParser(this->launchExternalTool(2,tagAssociatedToFunction->getName()));
+			
 			for(unsigned int i=0;i<listOfCallingFunction->size();i++)
 			{
 				vector<FunctionGraph*>* listOfGlobalDefinitions=this->cscopeOutputParser(this->launchExternalTool(0,listOfCallingFunction->at(i)->getTagName()));
-				//cout <<listOfCallingFunction->at(i)->getTagName()<<" calls " <<tagAssociatedToFunction->getName()<<endl;
+				
 				//cout <<"definition size for "<<listOfCallingFunction->at(i)->getTagName()<< "before parsing : "<<listOfGlobalDefinitions->size()<<endl;
 				this->removeMatchesFromHAndC(listOfGlobalDefinitions);
 				//cout <<"definition size for "<<listOfCallingFunction->at(i)->getTagName()<< "after parsing 1 : "<<listOfGlobalDefinitions->size()<<endl;
@@ -349,7 +352,7 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L8 ")+arg;
 			break;
 		}
-		
+			
 			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
 			
 			while(!feof(myCommandOutput)){
@@ -388,7 +391,6 @@ void LauncherCscope::removeNotFunctionOutput(std::vector<FunctionGraph*>* listOf
 		{
 			if(listOfGlobalDefinitions->at(i)->getSignature().find(";")!=std::string::npos||listOfGlobalDefinitions->at(i)->getSignature().find("#define")!=std::string::npos||listOfGlobalDefinitions->at(i)->getSignature().find("assert")!=std::string::npos) 
 			{
-				//cout<<"removing "<<listOfGlobalDefinitions->at(i)->getSignature()<<endl;
 				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 				i--;
 				
@@ -454,11 +456,11 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 						
 						
 						string argumentWithType="";
-						unsigned int  pos=0;
+						unsigned long int  pos=0;
 					
 						pos=stringToParse.find(',',positionPrecedentComma+1);
 						
-						
+						//cout <<stringToParse<< " "<<string::npos<<endl;
 						// if we don't find any comma it means we have reached the end of parameters or have only one parameter
 						if((pos==string::npos)) 
 						{
@@ -648,7 +650,7 @@ std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string
 	
 	int positionEndingbracket=callExpression.find_last_of(")");
 	int positionPrecedentComma=positionOpeningbracket;
-	unsigned int positionFollowingComma=0;
+	unsigned long int positionFollowingComma=0;
 	do
 	{
 			positionFollowingComma=callExpression.find(",",positionPrecedentComma+1);
