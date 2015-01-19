@@ -23,12 +23,12 @@ using namespace std;
 MercurialVcsHandler::MercurialVcsHandler(Configuration *config) : VcsHandler(config) {}
 
 void MercurialVcsHandler::getProject ( std::string address ) {
-	std::string command = "hg clone "+address+" "+config->getDestDir()+"/sources_mercurial";
+	std::string command = "hg clone "+address+" "+config->getDestDir()+"/sources_project";
 	this->address = address;
 	system(command.c_str());
 }
 
 std::vector<std::string> MercurialVcsHandler::getBranchesList() {
-	std::string command = "hg -R "+config->getDestDir()+"/sources_mercurial branches | cut -f1 -d\" \"";
+	std::string command = "hg -R "+config->getDestDir()+"/sources_project branches | cut -f1 -d\" \"";
 	return VcsHandler::executeBranchesGetter(command);
 }

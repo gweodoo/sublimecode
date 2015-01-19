@@ -24,7 +24,7 @@ ZipTarballHandler::ZipTarballHandler(Configuration *config) : TarballHandler(con
 }
 
 void ZipTarballHandler::getProject ( std::string address ) {
-	std::string command = "unzip "+address+" -d "+config->getDestDir()+"/sources_zip";
+	std::string command = "unzip "+address+" -d "+config->getDestDir()+"/sources_project";
 	system(command.c_str());
 }
 

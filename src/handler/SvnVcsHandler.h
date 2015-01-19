@@ -22,7 +22,7 @@
 
 #include "VcsHandler.h"
 
-class SvnVcsHandler :  VcsHandler
+class SvnVcsHandler : public VcsHandler
 {
 public:
 	SvnVcsHandler ( Configuration* config );

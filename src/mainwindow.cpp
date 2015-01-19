@@ -21,6 +21,7 @@
 #include "dialog.h"
 #include "Utils.h"
 #include <QDir>
+#include <qinputdialog.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -28,16 +29,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	
     ui = new UI_MainWindow1();
     ui->setupUi(this);
-
-//     QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-//     bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-//     QPalette palette;
-//     palette.setBrush(QPalette::Background, bkgnd);
-//     this->setPalette(palette);
-        
+   
     QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));
     QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
-    QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
+    QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(Rechercher_Archive()));
     QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
 }
 
@@ -52,16 +47,74 @@ void MainWindow::Rechercher_Sources()
 	ui->getLineEdit()->setText(fileNameSource);
 }
 
+bool MainWindow::removeDir(QString file)
+{
+	string commandFileRemove_1=string("rm -rf ")+file.toStdString();
+	if(system(commandFileRemove_1.c_str())==-1) perror("closing Error");
+	else return true;
+	
+}
+
 void MainWindow::Rechercher_Destination()
 {
+	QMessageBox::StandardButton reply;
+	bool ok;
 	fileNameDestination = QFileDialog::getExistingDirectory(this, tr("Choose or Create a Directory"),"/home");
-	ui->getLineEdit1()->setText(fileNameDestination);	
+	QString fileNameDestinationRoot = fileNameDestination;
+	ui->getLineEdit1()->setText(fileNameDestination);
+
+	if(fileNameDestination=="")
+		fileNameDestination = "SublimeCode_build";
+	else fileNameDestination = fileNameDestination + "/SublimeCode_build";
+	if (QDir().exists(fileNameDestination)){
+		reply = QMessageBox::question(this, "", "The folder SublimeCode_build already exists. Do you want to delete it?",QMessageBox::Yes|QMessageBox::No);
+		if (reply == QMessageBox::Yes)
+		{
+			removeDir(fileNameDestination);
+			QDir().mkdir(fileNameDestination);
+		}
+		else {
+			fileNameDestination = QInputDialog::getText(this, tr("Set the file destination name"), tr("File Name : "), QLineEdit::Normal, "", &ok);
+			if(ok && !fileNameDestination.isEmpty()){
+				fileNameDestination = fileNameDestinationRoot+"/"+fileNameDestination;
+				QDir().mkdir(fileNameDestination);
+			}
+			else if (ok && fileNameDestination.isEmpty()){
+				QMessageBox::warning(this, "", "Folder name cannot be empty");
+				ui->getLineEdit1()->setText("");
+			}
+			else if (!ok){
+				ui->getLineEdit1()->setText("");
+			}
+		}
+	}
+	else {
+		QDir().mkdir(fileNameDestination);
+	}
 }
 
 void MainWindow::Rechercher_Archive()
 {
-	fileNameArchive = QFileDialog::getExistingDirectory(this, tr("Choose or Create a Directory"),"/home");
-	ui->getLineEditArchive()->setText(fileNameArchive);	
+	fileNameArchive = QFileDialog::getOpenFileName(this, "Please select an Archive file","/home", "*.zip *.tar.gz *.tar.bz2");
+	int currentArchive = ui->getComboBoxArchive()->currentIndex();
+	QString ext = fileNameArchive.section('.', -1);
+	QMessageBox qmb;
+
+	if(currentArchive == 0 && (ext =="gz" || ext == "zip"))
+	{
+		qmb.setText("Please provide the correct archive format");
+		qmb.exec();
+	}
+	else if(currentArchive == 1 && (ext =="bz2" || ext == "zip")){
+		qmb.setText("Please provide the correct archive format");
+		qmb.exec();					
+	}
+	else if(currentArchive == 2 && (ext =="bz2" || ext == "gz")){
+		qmb.setText("Please provide the correct archive format");
+		qmb.exec();					
+	}
+	else
+		ui->getLineEditArchive()->setText(fileNameArchive);
 }
 
 bool MainWindow::exists(const char *fname)
@@ -78,49 +131,96 @@ bool MainWindow::exists(const char *fname)
 
 void MainWindow::Finish()
 {
-	fileNameSourceTest = ui->getLineEdit()->text();
+	int currentTab = ui->getQTabWidget()->currentIndex();
 	fileNameDestinationTest = ui->getLineEdit1()->text();
-	if(fileNameDestination=="")
-		fileNameDestination = "Sources";
-	else fileNameDestination = fileNameDestination + "/Sources";
-	if (QDir().exists(fileNameDestination)){
-		QDir().remove(fileNameDestination);
-	}
-	QDir().mkdir(fileNameDestination);
-	
 	QMessageBox qmb;
 	QMessageBox qmb2;
-	if(fileNameSourceTest==""){
-		qmb.setText("Remplir les sources du projet");
-		qmb.exec();
-	}
-	else {
- 		if(exists(fileNameSource.toLatin1().data()) == true)
- 		{
-// 		if(fileNameDestinationTest==""){
-// 			fileNameDestination=fileNameDestination+"/home.html";
-// 		}
-// 		else fileNameDestination=fileNameDestination+"/home.html";
-// 		CreateHTML *c = new CreateHTML();
-// 		c->CreateHTMLfile(fileNameDestination);
-// 	        if(fileNameDestinationTest==""){
-// 			fileNameDestinationTest="Sources/style.css";
-// 		}
-// 		else fileNameDestinationTest=fileNameDestinationTest+"/Sources/style.css";
-// 		if (QFile::exists(fileNameDestinationTest))
-// 		{
-// 			QFile::remove(fileNameDestinationTest);
-// 		}
-// 		QFile::copy("../../src/style.css", fileNameDestinationTest);
-		config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
-		Dialog *w = new Dialog(config);
-		w->show();
-		this->hide();
-		}
-		else {
-			qmb2.setText("Le fichier source n'existe pas");
-			qmb2.exec();
-		}
+	Handler* handler = NULL;
+	Dialog *dialog = NULL;
+
+	switch (currentTab){
+		case 0 : 	
+			fileNameSourceTest = ui->getLineEdit()->text();
+
+			if(fileNameSourceTest==""){
+				qmb.setText("Please provide project sources");
+				qmb.exec();
+			}
+			else {
+				if(exists(fileNameSource.toUtf8().data()) == true)
+					{
+						config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
+						dialog = new Dialog(config);
+						dialog->show();
+						this->hide();
+					}
+				else {
+					qmb2.setText("Source file doesn't exist");
+					qmb2.exec();
+				}
+			}
+			break;
+		case 1 : 
+			fileNameSourceTest = ui->getLineEditVcs()->text();
+			
+			if(fileNameSourceTest==""){
+				qmb.setText("Please provide project sources");
+				qmb.exec();
+			}
+			else {
+				int currentVcs = ui->getComboBoxVcs()->currentIndex();
+				config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
+
+				switch (currentVcs){
+					case 0 : 
+						handler = new CvsVcsHandler(config);
+						break;
+					case 1 : 
+						handler = new GitVcsHandler(config);
+						break;
+					case 2 : 
+						handler = new MercurialVcsHandler(config);
+						break;
+					case 3 : 
+						handler = new SvnVcsHandler(config);
+						break;
+				}
+			}
+			handler->getProject(fileNameSourceTest.toStdString());
+			config->setSourceDir(config->getDestDir()+"/sources_project");
+			dialog = new Dialog(config);
+			dialog->show();
+			this->hide();
+			break;
+		case 2 : 
+			fileNameSourceTest = ui->getLineEditArchive()->text();
+			
+			if(fileNameSourceTest==""){
+				qmb.setText("Please provide project sources");
+				qmb.exec();
+			}
+			else{
+				int currentArchive = ui->getComboBoxArchive()->currentIndex();
+				config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
+			
+				switch(currentArchive){
+					case 0 : 
+						handler = new Tarbz2TarballHandler(config);
+						break;
+					case 1 : 
+						handler = new TargzTarballHandler(config);
+						break;
+					case 2 : 
+						handler = new ZipTarballHandler(config);
+						break;
+				}
+			}
+			handler->getProject(fileNameSourceTest.toStdString());
+			config->setSourceDir(config->getDestDir()+"/sources_project");
+			dialog = new Dialog(config);
+			dialog->show();
+			this->hide();
+			break;	
 	}
 }
 

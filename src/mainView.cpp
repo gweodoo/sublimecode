@@ -29,18 +29,10 @@ MainView::MainView()
     
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
-	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
-		
-	//QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-	//bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-	//QPalette palette;
-	//palette.setBrush(QPalette::Background, bkgnd);
-	//this->setPalette(palette);
 	
 	for (int i=0; i<15; i++){
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
 	}
-// 	
  	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 }
 
@@ -57,10 +49,6 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		relativePathToAnalyse = it.next().toStdString();
 		allfileList.push_back(relativePathToAnalyse.substr(config->getSourcesDir().size(), relativePathToAnalyse.size()));
 	}
-	
-// 	for(vector<string>::iterator it = allfileList.begin(); it != allfileList.end(); it++){
-// 		qDebug() << QString::fromStdString(*it);
-// 	}
 	
 	for (int i=0; i<15; i++){
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
@@ -89,29 +77,52 @@ MainView::~MainView()
 
 }
 
+bool exists(const char *fname)
+{
+    if( access( fname, F_OK ) != -1 ) {
+    // file exists
+	    return true;
+    } else {
+    // file doesn't exist
+	    return false;
+    }
+}
+
 void MainView::handlePushButton()
 {
 	this->tag = ui->getLineEdit()->text().toStdString();
 	CreateHTML *c = new CreateHTML(config);
 	QString html;
+	QString xmlFile;
 	
 	if(ui->getRadioName()->isChecked()){
-		c->createXMLSearchByTags(tag);
-		html = c->TransformToHTML("../../myXLMSearchByTags.xml", "../../src/transformSearchByTags.xsl");
+		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
+		if(exists(xmlFile.toUtf8().data()) == false){
+			c->createXMLSearchByTags(tag);
+		}
+		html = c->TransformToHTML(xmlFile, xslTag);
 		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("../../src/style.css"));
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
 	else if (ui->getRadioType()->isChecked()){
-		c->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
-		html = c->TransformToHTML("../../myXLMSearchByType.xml", "../../src/transformSearchByType.xsl");
+		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
+		if(exists(xmlFile.toUtf8().data()) == false){
+			c->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
+		}
+		html = c->TransformToHTML(xmlFile, xslType);
 		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("../../src/style.css"));
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
 	else if(ui->getRadioFile()->isChecked()){
-		c->createXMLSearchByFile(tag);
-		html = c->TransformToHTML("../../myXLMSearchByFile.xml", "../../src/transformSearchByFile.xsl");
+		QString filename_modified = QString::fromStdString(tag);
+		filename_modified.replace("/","_");
+		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByFile_"+filename_modified+".xml";
+		if(exists(xmlFile.toUtf8().data()) == false){
+			c->createXMLSearchByFile(tag);
+		}
+		html = c->TransformToHTML(xmlFile , xslFile);
 		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile("../../src/style.css"));
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
 }
 

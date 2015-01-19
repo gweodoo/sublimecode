@@ -51,5 +51,11 @@ string Configuration::getRootPath() const {
 	return this->scRootPath;
 }
 
+void Configuration::setSourceDir(std::string newConfiguration)
+{
+	this->sourcesDir = newConfiguration;
+}
+
+
 Configuration::~Configuration() {
 }

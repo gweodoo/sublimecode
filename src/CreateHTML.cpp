@@ -92,7 +92,7 @@ void CreateHTML::CreateHTMLbody(const char* file)
 
 void CreateHTML::createXMLSearchByTags(string tag)
 {	
-	QFile file("../../myXLMSearchByTags.xml");
+	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml"); 
 	QDomDocument document;
 	
 	QDomElement root = document.createElement("SearchByTags");
@@ -151,17 +151,17 @@ void CreateHTML::createXMLSearchByTags(string tag)
 }
 
 void CreateHTML::createXMLSearchByType(int type)
-{	
-	QFile file("../../myXLMSearchByType.xml");
-	QDomDocument document;
-	
-	QDomElement root = document.createElement("SearchByType");
-	document.appendChild(root);
-		
+{
 	this->myTagMan = new TagsManagerImpl(config);
 	this->tpi = new TagsParserImpl(myTagMan);
 	tpi->loadFromFile(config->getDestDir()+"/tags");
 	list = myTagMan->findTagsByType(static_cast<tagType>(type));
+	
+	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[type]+".xml"); 
+	QDomDocument document;
+	
+	QDomElement root = document.createElement("SearchByType");
+	document.appendChild(root);
 
 	for (int i=0; i<list->size(); i++)
 	{
@@ -212,7 +212,9 @@ void CreateHTML::createXMLSearchByType(int type)
 
 void CreateHTML::createXMLSearchByFile(string filename)
 {
-	QFile file("../../myXLMSearchByFile.xml");
+	QString filename_modified = QString::fromStdString(filename);
+	filename_modified.replace("/","_");
+	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByFile_"+filename_modified+".xml"); 
 	QDomDocument document;
 	
 	QDomElement root = document.createElement("SearchByFile");

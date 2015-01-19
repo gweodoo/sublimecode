@@ -22,7 +22,7 @@
 
 #include "VcsHandler.h"
 
-class CvsVcsHandler :  VcsHandler
+class CvsVcsHandler :  public VcsHandler
 {
 public:
     virtual void getProject ( std::string address );

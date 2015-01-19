@@ -21,7 +21,7 @@
 #define GITVCSHANDLER_H
 
 #include "VcsHandler.h"
-class GitVcsHandler :  VcsHandler
+class GitVcsHandler : public VcsHandler
 {
 public:
 	GitVcsHandler(Configuration *config);

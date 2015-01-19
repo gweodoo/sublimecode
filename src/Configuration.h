@@ -35,6 +35,7 @@ public:
     std::string getSourcesDir() const;
     std::string getDestDir() const;
     std::string getRootPath() const;
+    void setSourceDir(std::string newConfiguration);
     ~Configuration();
 };
 

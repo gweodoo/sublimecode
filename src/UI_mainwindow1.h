@@ -81,10 +81,14 @@ public:
     QLineEdit *getLineEdit();
     QLineEdit *getLineEdit1();
     QLineEdit *getLineEditArchive();
+    QLineEdit *getLineEditVcs();
     QPushButton *getParcourir();
     QPushButton *getParcourir1();
     QPushButton *getParcourirArchive();
     QPushButton *getFinish();
+    QTabWidget *getQTabWidget();
+    QComboBox *getComboBoxVcs();
+    QComboBox *getComboBoxArchive();
 };
 
 QT_END_NAMESPACE

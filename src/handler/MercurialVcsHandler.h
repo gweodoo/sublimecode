@@ -22,7 +22,7 @@
 
 #include "VcsHandler.h"
 
-class MercurialVcsHandler :  VcsHandler
+class MercurialVcsHandler : public VcsHandler
 {
 public:
 	MercurialVcsHandler(Configuration *config);

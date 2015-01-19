@@ -50,6 +50,10 @@ private:
 	std::string pathToAnalyse;
 	std::string relativePathToAnalyse;
 	QCompleter *completer;
+	const QString cssFile = "../../src/style.css";
+	const QString xslTag = "../../src/transformSearchByTags.xsl";
+	const QString xslType = "../../src/transformSearchByType.xsl";
+	const QString xslFile = "../../src/transformSearchByFile.xsl";
 };
 
 #endif // MAINVIEW_H

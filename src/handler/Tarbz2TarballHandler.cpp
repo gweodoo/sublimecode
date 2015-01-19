@@ -22,6 +22,6 @@
 Tarbz2TarballHandler::Tarbz2TarballHandler(Configuration *config) : TarballHandler(config) {}
 
 void Tarbz2TarballHandler::getProject ( std::string address ) {
-	std::string command = "mkdir "+config->getDestDir()+"/sources_tbz2 && tar -xjf "+address+" -C "+config->getDestDir()+"/sources_tbz2";
+	std::string command = "mkdir "+config->getDestDir()+"/sources_project && tar -xjf "+address+" -C "+config->getDestDir()+"/sources_project";
 	system(command.c_str());
 }

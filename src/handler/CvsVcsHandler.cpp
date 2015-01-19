@@ -20,7 +20,7 @@
 #include "CvsVcsHandler.h"
 
 void CvsVcsHandler::getProject ( std::string address ) {
-	std::string command = "cvs checkout -d "+ config->getDestDir()+"/sources_cvs "+address;
+	std::string command = "cvs checkout -d "+ config->getDestDir()+"/sources_project "+address;
 	this->address = address;
 	scError("Not implemented");
 	system(command.c_str());

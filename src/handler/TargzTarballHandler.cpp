@@ -22,6 +22,6 @@
 TargzTarballHandler::TargzTarballHandler(Configuration *config) : TarballHandler(config) {}
 
 void TargzTarballHandler::getProject ( std::string address ) {
-	std::string command = "mkdir "+config->getDestDir()+"/sources_tgz && tar -xzf "+address+" -C "+config->getDestDir()+"/sources_tgz";
+	std::string command = "mkdir "+config->getDestDir()+"/sources_project && tar -xzf "+address+" -C "+config->getDestDir()+"/sources_project";
 	system(command.c_str());
 }

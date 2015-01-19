@@ -23,13 +23,13 @@ using namespace std;
 GitVcsHandler::GitVcsHandler(Configuration *config) : VcsHandler(config) {}
 
 void GitVcsHandler::getProject ( std::string address ) {
-	std::string command = "git clone "+address+" "+config->getDestDir()+"/sources_git";
+	std::string command = "git clone "+address+" "+config->getDestDir()+"/sources_project";
 	this->address = address;
 	system(command.c_str());
 }
 
 std::vector<std::string>  GitVcsHandler::getBranchesList() {
-	std::string command = "git --git-dir "+config->getDestDir()+"/sources_git/.git branch --list | rev | cut -f1 -d" " | rev";
+	std::string command = "git --git-dir "+config->getDestDir()+"/sources_project/.git branch --list | rev | cut -f1 -d" " | rev";
 	return VcsHandler::executeBranchesGetter(command);
 
 }

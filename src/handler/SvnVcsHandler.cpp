@@ -24,7 +24,7 @@ SvnVcsHandler::SvnVcsHandler(Configuration *config) : VcsHandler(config) {}
 
 void SvnVcsHandler::getProject ( std::string address ) {
 
-	string workDir = config->getDestDir()+"/sources_svn";
+	string workDir = config->getDestDir()+"/sources_project";
 	//TODO check existing folder
 	std::string command = "svn checkout "+address+"/trunk "+workDir;
 	this->address = address;

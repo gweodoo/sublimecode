@@ -30,6 +30,14 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "UI_mainwindow1.h"
+#include "handler/CvsVcsHandler.h"
+#include "handler/GitVcsHandler.h"
+#include "handler/MercurialVcsHandler.h"
+#include "handler/SvnVcsHandler.h"
+#include "handler/Tarbz2TarballHandler.h"
+#include "handler/TargzTarballHandler.h"
+#include "handler/ZipTarballHandler.h"
+
 
 //namespace Ui {
 //class MainWindow;
@@ -59,6 +67,7 @@ public slots:
      void Rechercher_Archive();
      void Finish();
      bool exists(const char *fname);
+     bool removeDir(QString file);
 };
 
 #endif // MAINWINDOW_H

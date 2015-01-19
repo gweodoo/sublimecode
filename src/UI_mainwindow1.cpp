@@ -19,6 +19,7 @@
 
 #include "UI_mainwindow1.h"
 #include "ui_mainView.h"
+#include <QInputDialog>
 
 UI_MainWindow1::UI_MainWindow1(){}
 UI_MainWindow1::~UI_MainWindow1(){}
@@ -69,7 +70,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->Parcourir = new QPushButton(this->directoryWidget);
         this->Parcourir->setObjectName(QString("Parcourir"));
 	this->Parcourir->setGeometry(QRect(445, 25, 80, 27));
-	this->Parcourir->setText(QString("Parcourir..."));
+	this->Parcourir->setText(QString("Browse..."));
 	
 	this->vcsWidget = new QWidget();
 	this->comboBoxVcs = new QComboBox(this->vcsWidget);
@@ -95,7 +96,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->parcourirArchive = new QPushButton(this->archiveWidget);
         this->parcourirArchive->setObjectName(QString("parcourirArchive"));
 	this->parcourirArchive->setGeometry(QRect(445, 25, 80, 27));
-	this->parcourirArchive->setText(QString("Parcourir..."));
+	this->parcourirArchive->setText(QString("Browse..."));
 	
    	this->tabs = new QTabWidget(this->sourcesGroupBox);
 	this->tabs->setGeometry(QRect(10, 25, 540, 110));
@@ -110,12 +111,12 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
         this->lineEdit1 = new QLineEdit(this->destinationGroupBox);
         this->lineEdit1->setGeometry(QRect(20, 25, 430, 27));
 	this->Parcourir1 = new QPushButton(this->destinationGroupBox);
-	this->Parcourir1->setText(QString("Parcourir..."));
+	this->Parcourir1->setText(QString("Browse..."));
 	this->Parcourir1->setGeometry(QRect(455, 25, 80, 27));
 	
 	this->Finish = new QPushButton(MainWindow);
         this->Finish->setGeometry(QRect(475, 275, 105, 27));
-	this->Finish->setText(QString("Suivant"));
+	this->Finish->setText(QString("Next"));
 	
         retranslateUi(MainWindow);
 	MainWindow->setWindowTitle("Sublime Code");
@@ -126,8 +127,8 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 void UI_MainWindow1::retranslateUi(QMainWindow *MainWindow)
 {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Sources du projet : ", 0));
-	destinationGroupBox->setTitle(QApplication::translate("MainWindow", "Dossier de destination : ", 0));
+	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Project Sources : ", 0));
+	destinationGroupBox->setTitle(QApplication::translate("MainWindow", "Destination Folder : ", 0));
 	
 	for (int i = 0; i < (sizeof(vcsTypes)/sizeof(*vcsTypes)); i++)
 		this->comboBoxVcs->addItem(vcsTypes[i]);
@@ -169,3 +170,24 @@ QPushButton* UI_MainWindow1::getFinish()
 {	
 	return this->Finish;
 }
+
+QTabWidget* UI_MainWindow1::getQTabWidget()
+{
+	return this->tabs;
+}
+
+QLineEdit* UI_MainWindow1::getLineEditVcs()
+{
+	return this->lineEditVcs;
+}
+
+QComboBox* UI_MainWindow1::getComboBoxVcs()
+{
+	return this->comboBoxVcs;
+}
+
+QComboBox* UI_MainWindow1::getComboBoxArchive()
+{
+	return this->comboBoxArchive;
+}
+
