@@ -137,6 +137,7 @@ void MainWindow::Finish()
 	QMessageBox qmb2;
 	Handler* handler = NULL;
 	Dialog *dialog = NULL;
+	QFileInfo fileInfoSource;
 
 	switch (currentTab){
 		case 0 : 	
@@ -149,7 +150,8 @@ void MainWindow::Finish()
 			else {
 				if(exists(fileNameSource.toUtf8().data()) == true)
 					{
-						config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
+						fileInfoSource = fileNameSourceTest;
+						config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());
 						dialog = new Dialog(config);
 						dialog->show();
 						this->hide();
@@ -169,8 +171,8 @@ void MainWindow::Finish()
 			}
 			else {
 				int currentVcs = ui->getComboBoxVcs()->currentIndex();
-				config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
-
+				fileInfoSource = fileNameSourceTest;
+				config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());
 				switch (currentVcs){
 					case 0 : 
 						handler = new CvsVcsHandler(config);
@@ -201,8 +203,8 @@ void MainWindow::Finish()
 			}
 			else{
 				int currentArchive = ui->getComboBoxArchive()->currentIndex();
-				config = new Configuration(fileNameSourceTest.toStdString(), fileNameDestination.toStdString());
-			
+				fileInfoSource = fileNameSourceTest;
+				config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());			
 				switch(currentArchive){
 					case 0 : 
 						handler = new Tarbz2TarballHandler(config);

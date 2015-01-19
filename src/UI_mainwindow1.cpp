@@ -127,8 +127,8 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 void UI_MainWindow1::retranslateUi(QMainWindow *MainWindow)
 {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Project Sources : ", 0));
-	destinationGroupBox->setTitle(QApplication::translate("MainWindow", "Destination Folder : ", 0));
+	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Project Sources", 0));
+	destinationGroupBox->setTitle(QApplication::translate("MainWindow", "Destination Folder", 0));
 	
 	for (int i = 0; i < (sizeof(vcsTypes)/sizeof(*vcsTypes)); i++)
 		this->comboBoxVcs->addItem(vcsTypes[i]);

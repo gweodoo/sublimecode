@@ -28,7 +28,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	leftWidget = new QWidget(centralWidget);
 	leftWidget->setObjectName(QString("leftWidget"));
 	leftWidget->setGeometry(QRect(0, 0, 240, 800));
-	leftWidget->setStyleSheet(QString("border-right: 1px solid gray"));
+	leftWidget->setStyleSheet(QString("border-right: 1px solid gray;"));
 	tagGroupBox = new QGroupBox(leftWidget);
 	tagGroupBox->setObjectName(QString("tagGroupBox"));
 	tagGroupBox->setGeometry(QRect(10, 10, 221, 151));
@@ -92,6 +92,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	MainView->setMenuBar(menuBar);
 	webView = new QWebView(MainView);
 	webView->setGeometry(QRect(240, 30, 980, 700));
+	webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
 	menuBar->addAction(menuFile->menuAction());
 	menuBar->addAction(menuEdit->menuAction());

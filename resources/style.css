@@ -1,0 +1,32 @@
+body
+{
+	background-color: #F5FAF0;
+}
+
+h1{
+	font-size: 20px;
+}
+
+table {
+	font-family: verdana,arial,sans-serif;
+	font-size:16px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #999999;
+	border-collapse: collapse;
+}
+table th {
+	background:#b5cfd2;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #999999;
+}
+table td {
+	background:#dcddc0;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #999999;
+}
+

@@ -29,13 +29,6 @@ Dialog::Dialog(Configuration *config, QWidget *parent) :
     mpath = QString::fromStdString(config->getSourcesDir());
     ui->setupUi(this);
     
-    QPixmap bkgnd("../../resources/Black-lava-twitter-background.png");
-    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
-    QPalette palette;
-    palette.setBrush(QPalette::Background, bkgnd);
-    
-    this->setPalette(palette);
-    
     model = new CFileSystemModel();
     ui->getTreeView()->setModel(model); 
     ui->getTreeView()->setRootIndex(model->index(mpath));

@@ -7,7 +7,7 @@
 		<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
 	</head>
 	<body>
-		<h1>WESHHH XML Transform</h1>
+		<h1>Search By Type</h1>
 		<xsl:for-each select="SearchByType">
 			<table border='2' CELLSPACING='0' CELLPADDING='8' >
 			<thead><TH>Number</TH><TH>Line</TH><TH>Path</TH><TH>Name</TH></thead>

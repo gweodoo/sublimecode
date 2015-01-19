@@ -22,6 +22,7 @@
 #include "CreateHTML.h"
 #include <QDebug>
 #include <QDirIterator>
+#include <QWebFrame>
 
 MainView::MainView()
 {
@@ -44,6 +45,11 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	ui->getCentralWidget()->show();
 	config = new Configuration(c->getSourcesDir(), c->getDestDir());
 	
+	cssFile = QString::fromStdString(config->getRootPath())+"/resources/style.css";
+	xslTag = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByTags.xsl");
+	xslType = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByType.xsl");
+	xslFile = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByFile.xsl");
+	
 	QDirIterator it(QString::fromStdString(c->getSourcesDir()), QDir::Files, QDirIterator::Subdirectories);
 	while (it.hasNext()) {
 		relativePathToAnalyse = it.next().toStdString();
@@ -58,7 +64,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
 		launcher.addPathToAnalyze(*it);
 		pathToAnalyse = *it;
-		wordList.push_back(QString::fromStdString(pathToAnalyse.substr(config->getSourcesDir().size(), pathToAnalyse.size())));
+		wordList.push_back(QString::fromStdString(pathToAnalyse.substr(config->getSourcesDir().size())));
 	}
 	launcher.generateTagsFile();
 	  	
@@ -70,6 +76,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
+	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(handlePushRadioType())); 
 }
 
 MainView::~MainView()
@@ -94,7 +101,7 @@ void MainView::handlePushButton()
 	CreateHTML *c = new CreateHTML(config);
 	QString html;
 	QString xmlFile;
-	
+		
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
