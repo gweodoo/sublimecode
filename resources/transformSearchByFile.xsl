@@ -16,7 +16,10 @@
 				<TR>
 					<TD><xsl:value-of select="Number"/></TD>
 					<TD><xsl:value-of select="Line"/></TD>
-					<TD><xsl:value-of select="Name"/></TD>
+					<TD><a>
+						<xsl:attribute name="href"><xsl:value-of select="Name"/></xsl:attribute>
+						<xsl:value-of select="Name"/>
+					</a></TD>					
 					<TD><xsl:value-of select="Type"/></TD>
 				</TR>
 			</xsl:for-each>

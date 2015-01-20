@@ -40,6 +40,7 @@ public:
 public slots:
 	void handlePushButton();
 	void handlePushRadioType();
+	void slot_linkClicked(const QUrl &url);
 
 private:
 	Ui_MainView * ui;

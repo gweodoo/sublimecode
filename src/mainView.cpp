@@ -76,12 +76,16 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
-	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(handlePushRadioType())); 
+	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
 }
 
 MainView::~MainView()
 {
+}
 
+void MainView::slot_linkClicked(const QUrl& url)
+{
+	qDebug() << url;
 }
 
 bool exists(const char *fname)
