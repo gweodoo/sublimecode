@@ -164,7 +164,8 @@ void MainWindow::Finish()
 			break;
 		case 1 : 
 			fileNameSourceTest = ui->getLineEditVcs()->text();
-			
+			branchNameSource = ui->getLineEditBranch()->text();
+
 			if(fileNameSourceTest==""){
 				qmb.setText("Please provide project sources");
 				qmb.exec();
@@ -175,24 +176,29 @@ void MainWindow::Finish()
 				config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());
 				switch (currentVcs){
 					case 0 : 
-						handler = new CvsVcsHandler(config);
+						handler = new CvsVcsHandler(config,fileNameSourceTest.toStdString(), branchNameSource.toStdString());
 						break;
 					case 1 : 
-						handler = new GitVcsHandler(config);
+						handler = new GitVcsHandler(config, fileNameSourceTest.toStdString(), branchNameSource.toStdString());
 						break;
 					case 2 : 
-						handler = new MercurialVcsHandler(config);
+						handler = new MercurialVcsHandler(config, fileNameSourceTest.toStdString(), branchNameSource.toStdString());
 						break;
 					case 3 : 
-						handler = new SvnVcsHandler(config);
+						handler = new SvnVcsHandler(config, fileNameSourceTest.toStdString(), branchNameSource.toStdString());
 						break;
 				}
 			}
-			handler->getProject(fileNameSourceTest.toStdString());
-			config->setSourceDir(config->getDestDir()+"/sources_project");
-			dialog = new Dialog(config);
-			dialog->show();
-			this->hide();
+			if(handler->getProject()){
+				config->setSourceDir(config->getDestDir()+"/sources_project");
+				dialog = new Dialog(config);
+				dialog->show();
+				this->hide();
+			} else {
+				qmb2.setText("Error during project copy");
+				qmb2.exec();
+			}
+
 			break;
 		case 2 : 
 			fileNameSourceTest = ui->getLineEditArchive()->text();
@@ -207,21 +213,26 @@ void MainWindow::Finish()
 				config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());			
 				switch(currentArchive){
 					case 0 : 
-						handler = new Tarbz2TarballHandler(config);
+						handler = new Tarbz2TarballHandler(config, fileNameSourceTest.toStdString());
 						break;
 					case 1 : 
-						handler = new TargzTarballHandler(config);
+						handler = new TargzTarballHandler(config, fileNameSourceTest.toStdString());
 						break;
 					case 2 : 
-						handler = new ZipTarballHandler(config);
+						handler = new ZipTarballHandler(config, fileNameSourceTest.toStdString());
 						break;
 				}
 			}
-			handler->getProject(fileNameSourceTest.toStdString());
-			config->setSourceDir(config->getDestDir()+"/sources_project");
-			dialog = new Dialog(config);
-			dialog->show();
-			this->hide();
+			if(handler->getProject()) {
+				config->setSourceDir(config->getDestDir()+"/sources_project");
+				dialog = new Dialog(config);
+				dialog->show();
+				this->hide();
+			} else {
+				qmb2.setText("Error during project copy");
+				qmb2.exec();
+			}
+
 			break;	
 	}
 }

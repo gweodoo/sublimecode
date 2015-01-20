@@ -20,15 +20,23 @@
 #include "SvnVcsHandler.h"
 using namespace std;
 
-SvnVcsHandler::SvnVcsHandler(Configuration *config) : VcsHandler(config) {}
+const std::string SvnVcsHandler::DEFAULT_BRANCH = "trunk";
 
-void SvnVcsHandler::getProject ( std::string address ) {
+SvnVcsHandler::SvnVcsHandler( Configuration* config, string address, string branch ) : VcsHandler(config, address,branch ) {}
+
+bool SvnVcsHandler::getProject () {
 
 	string workDir = config->getDestDir()+"/sources_project";
 	//TODO check existing folder
-	std::string command = "svn checkout "+address+"/trunk "+workDir;
-	this->address = address;
-	system(command.c_str());
+	std::string command;
+
+	if(curBranch.empty()) curBranch = DEFAULT_BRANCH;
+
+	command = "svn checkout "+address+"/"+curBranch+" --non-interactive --trust-server-cert "+workDir;
+	int ret = system(command.c_str());
+	assert(ret != -1);
+	return (WEXITSTATUS(ret) == 0);
+
 }
 
 std::vector<std::string>  SvnVcsHandler::getBranchesList() {

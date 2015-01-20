@@ -20,12 +20,19 @@
 #include "MercurialVcsHandler.h"
 using namespace std;
 
-MercurialVcsHandler::MercurialVcsHandler(Configuration *config) : VcsHandler(config) {}
+const std::string MercurialVcsHandler::DEFAULT_BRANCH = "default";
 
-void MercurialVcsHandler::getProject ( std::string address ) {
-	std::string command = "hg clone "+address+" "+config->getDestDir()+"/sources_project";
-	this->address = address;
-	system(command.c_str());
+MercurialVcsHandler::MercurialVcsHandler(Configuration *config, std::string address, std::string branch) : VcsHandler(config, address, branch) {}
+
+bool MercurialVcsHandler::getProject () {
+	std::string command;
+
+	if(curBranch.empty()) curBranch = DEFAULT_BRANCH;
+	command = "hg clone "+address+"#"+curBranch+" "+config->getDestDir()+"/sources_project";
+	int ret = system(command.c_str());
+	assert(ret != -1);
+	return (WEXITSTATUS(ret) == 0);
+
 }
 
 std::vector<std::string> MercurialVcsHandler::getBranchesList() {

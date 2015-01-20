@@ -20,11 +20,14 @@
 #include "ZipTarballHandler.h"
 using namespace std;
 
-ZipTarballHandler::ZipTarballHandler(Configuration *config) : TarballHandler(config) {
+ZipTarballHandler::ZipTarballHandler(Configuration *config, std::string address) : TarballHandler(config, address) {
 }
 
-void ZipTarballHandler::getProject ( std::string address ) {
+bool ZipTarballHandler::getProject () {
 	std::string command = "unzip "+address+" -d "+config->getDestDir()+"/sources_project";
-	system(command.c_str());
+	int ret = system(command.c_str());
+	assert(ret != -1);
+	return (WEXITSTATUS(ret) == 0);
+
 }
 

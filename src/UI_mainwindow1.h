@@ -79,6 +79,7 @@ public:
     void setupUi(QMainWindow *MainWindow);
     void retranslateUi(QMainWindow *MainWindow);
     QLineEdit *getLineEdit();
+    QLineEdit *getLineEditBranch();
     QLineEdit *getLineEdit1();
     QLineEdit *getLineEditArchive();
     QLineEdit *getLineEditVcs();

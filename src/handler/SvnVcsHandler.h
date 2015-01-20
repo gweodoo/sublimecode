@@ -24,9 +24,11 @@
 
 class SvnVcsHandler : public VcsHandler
 {
+private:
+	static const std::string DEFAULT_BRANCH;
 public:
-	SvnVcsHandler ( Configuration* config );
-	virtual void getProject ( std::string address );
+	SvnVcsHandler ( Configuration* config, std::string address, std::string branch);
+	bool getProject ();
 	virtual std::vector<std::string>  getBranchesList();
 };
 

@@ -29,8 +29,8 @@ protected:
 	Configuration *config;
 	std::string address;
 public:
-	Handler(Configuration *config);
-	virtual void getProject(std::string address) = 0;
+	Handler(Configuration *config, std::string address);
+	virtual bool getProject() = 0;
 	virtual std::vector<std::string>  getBranchesList() = 0;
 };
 

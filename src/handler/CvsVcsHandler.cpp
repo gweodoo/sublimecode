@@ -19,14 +19,21 @@
 
 #include "CvsVcsHandler.h"
 
-void CvsVcsHandler::getProject ( std::string address ) {
-	std::string command = "cvs checkout -d "+ config->getDestDir()+"/sources_project "+address;
-	this->address = address;
+const std::string CvsVcsHandler::DEFAULT_BRANCH = "master";
+
+bool CvsVcsHandler::getProject () {
+	std::string command;
+
+	if(curBranch.empty()) curBranch = DEFAULT_BRANCH;
+
+	//command = "cvs -Q checkout -d "+ config->getDestDir()+"/sources_project "+address;
 	scError("Not implemented");
-	system(command.c_str());
+	int ret = system(command.c_str());
+	assert(ret != -1);
+	return (WEXITSTATUS(ret) == 0);
 }
 
-CvsVcsHandler::CvsVcsHandler ( Configuration* config )  : VcsHandler(config) {}
+CvsVcsHandler::CvsVcsHandler ( Configuration* config, std::string address, std::string branch)  : VcsHandler(config, address, branch) {}
 
 std::vector<std::string>  CvsVcsHandler::getBranchesList(){
 	std:: string command = "ls -l";

@@ -19,7 +19,7 @@
 
 #include "TarballHandler.h"
 
-TarballHandler::TarballHandler ( Configuration* config ) : Handler(config) {}
+TarballHandler::TarballHandler ( Configuration* config, std::string address) : Handler(config, address) {}
 
 std::vector< std::string > TarballHandler::getBranchesList() {
 	//NOT USED WITH TARBALL

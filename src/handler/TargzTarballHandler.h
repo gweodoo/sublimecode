@@ -25,8 +25,8 @@
 class TargzTarballHandler :  public TarballHandler
 {
 public:
-	TargzTarballHandler(Configuration *config);
-	virtual void getProject(std::string address);
+	TargzTarballHandler(Configuration *config, std::string address);
+	virtual bool getProject();
 
 };
 

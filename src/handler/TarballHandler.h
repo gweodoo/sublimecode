@@ -26,8 +26,8 @@ class TarballHandler :  public Handler
 protected:
 	std::string executable;
 public:
-	TarballHandler ( Configuration* config );
-	virtual void getProject(std::string address) = 0;
+	TarballHandler ( Configuration* config, std::string address );
+	virtual bool getProject() = 0;
 	virtual std::vector<std::string>  getBranchesList();
 };
 

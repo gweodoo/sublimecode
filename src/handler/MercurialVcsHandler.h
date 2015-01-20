@@ -24,9 +24,11 @@
 
 class MercurialVcsHandler : public VcsHandler
 {
+private:
+	static const std::string DEFAULT_BRANCH;
 public:
-	MercurialVcsHandler(Configuration *config);
-	virtual void getProject ( std::string address );
+	MercurialVcsHandler( Configuration* config, std::string address, std::string branch);
+	virtual bool getProject ();
 	std::vector< std::string > getBranchesList();
 };
 

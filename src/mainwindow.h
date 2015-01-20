@@ -56,6 +56,7 @@ private:
     //Ui::MainWindow *ui;
     QString fileNameSource;
     QString fileNameSourceTest;
+    QString branchNameSource;
     QString fileNameDestination;
     QString fileNameArchive;
     QString fileNameDestinationTest;

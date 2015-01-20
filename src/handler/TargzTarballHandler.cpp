@@ -19,9 +19,12 @@
 
 #include "TargzTarballHandler.h"
 
-TargzTarballHandler::TargzTarballHandler(Configuration *config) : TarballHandler(config) {}
+TargzTarballHandler::TargzTarballHandler( Configuration* config, std::string address ) : TarballHandler(config, address) {}
 
-void TargzTarballHandler::getProject ( std::string address ) {
+bool TargzTarballHandler::getProject () {
 	std::string command = "mkdir "+config->getDestDir()+"/sources_project && tar -xzf "+address+" -C "+config->getDestDir()+"/sources_project";
-	system(command.c_str());
+	int ret = system(command.c_str());
+	assert(ret != -1);
+	return (WEXITSTATUS(ret) == 0);
+
 }

@@ -25,9 +25,10 @@ class VcsHandler : public Handler
 {
 protected:
 	std::vector<std::string> branchlist;
+	std::string curBranch;
 public:
-	VcsHandler(Configuration *config);
-	virtual void getProject(std::string address) = 0;
+	VcsHandler(Configuration *config, std::string address, std::string branch);
+	virtual bool getProject() = 0;
 	virtual std::vector<std::string>  getBranchesList() = 0;
 	std::vector< std::string > executeBranchesGetter(std::string command);
 };

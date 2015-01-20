@@ -20,12 +20,21 @@
 #include "GitVcsHandler.h"
 using namespace std;
 
-GitVcsHandler::GitVcsHandler(Configuration *config) : VcsHandler(config) {}
+const std::string GitVcsHandler::DEFAULT_BRANCH = "master";
 
-void GitVcsHandler::getProject ( std::string address ) {
-	std::string command = "git clone "+address+" "+config->getDestDir()+"/sources_project";
-	this->address = address;
-	system(command.c_str());
+GitVcsHandler::GitVcsHandler(Configuration *config, std::string address, std::string branch) : VcsHandler(config, address, branch) {}
+
+bool GitVcsHandler::getProject () {
+
+	std::string command = "";
+
+	if(curBranch.empty()) curBranch = DEFAULT_BRANCH;
+
+	command = "git clone "+address+" --branch "+curBranch+" "+config->getDestDir()+"/sources_project";
+	int ret = system(command.c_str());
+
+	assert(ret != -1);
+	return (WEXITSTATUS(ret) == 0);
 }
 
 std::vector<std::string>  GitVcsHandler::getBranchesList() {

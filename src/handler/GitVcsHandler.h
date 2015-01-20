@@ -23,9 +23,11 @@
 #include "VcsHandler.h"
 class GitVcsHandler : public VcsHandler
 {
+private:
+	static const std::string DEFAULT_BRANCH;
 public:
-	GitVcsHandler(Configuration *config);
-	virtual void getProject ( std::string address );
+	GitVcsHandler( Configuration* config, std::string address, std::string branch);
+	virtual bool getProject ();
 	virtual std::vector<std::string>  getBranchesList();
 };
 

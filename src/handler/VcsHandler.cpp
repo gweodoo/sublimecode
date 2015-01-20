@@ -20,7 +20,7 @@
 #include "VcsHandler.h"
 using namespace std;
 
-VcsHandler::VcsHandler(Configuration *config) : Handler(config) {}
+VcsHandler::VcsHandler(Configuration *config, std::string address, std::string branch) : Handler(config, address), curBranch(branch) {}
 
 std::vector< std::string > VcsHandler::executeBranchesGetter(std::string command) {
 	FILE * outputFile = popen(command.c_str(), "r");

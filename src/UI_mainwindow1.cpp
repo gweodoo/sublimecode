@@ -141,6 +141,11 @@ QLineEdit* UI_MainWindow1::getLineEdit()
 	return this->lineEdit;
 }
 
+QLineEdit* UI_MainWindow1::getLineEditBranch()
+{
+	return this->lineEditBranch;
+}
+
 QLineEdit* UI_MainWindow1::getLineEdit1()
 {
 	return this->lineEdit1;
