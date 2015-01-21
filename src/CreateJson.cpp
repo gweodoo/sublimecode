@@ -71,8 +71,8 @@ void CreateJson::TransformToJson(Tag * tag, std::string buildType)
 	//"test_media_list"
 	//"libvlc_InternalCreate" 
 	//"vlc_mutex_init"
-	qDebug() << QString::fromStdString(config->getRootPath()) + "resources/callGraph.json";
-	QFile file(QString::fromStdString(config->getRootPath()) + "resources/callGraph.json");
+	qDebug() << QString::fromStdString(config->getDestDir()) + "/callGraph.json";
+	QFile file(QString::fromStdString(config->getDestDir()) + "/callGraph.json");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	

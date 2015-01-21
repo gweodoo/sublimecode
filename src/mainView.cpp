@@ -196,14 +196,13 @@ void MainView::generateCallGraph(QString number, std::string buildType)
 	TagsParserImpl tagParse(&tagMan);
 	tagParse.loadFromFile(config->getDestDir() + "/tags");
 	TagsManager *myTagManager = &tagMan;
-	Graph *myGraph = new GraphCaller(config,myTagManager);
+	Graph *myGraph = new GraphCaller(config, myTagManager);
 
 	CreateJson * cjson = new CreateJson(config, myGraph);
 	cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), buildType);
 	
-
 	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
-	objectTo->setValue(ui->getWebView(), QString::fromStdString("callGraph.json"));
+	objectTo->setValue(ui->getWebView(), QString::fromStdString(config->getDestDir()) + "/callGraph.json");
 	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "resources/callGraph.html"));
 	ui->getWebView()->show();
 }

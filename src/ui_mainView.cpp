@@ -117,7 +117,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	webView = new QWebView(MainView);
 	webView->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
 	webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-	//webView->settings()->setObjectCacheCapacities(0,0,0);
+	webView->settings()->setObjectCacheCapacities(0,0,0);
 
 	menuBar->addAction(menuFile->menuAction());
 	menuBar->addAction(menuEdit->menuAction());
