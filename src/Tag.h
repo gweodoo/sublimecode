@@ -127,6 +127,11 @@ public:
 	 * \return true if set is ok
 	 */
 	virtual bool addInfoByKey(std::string key, std::string value) = 0;
+	/**
+	 * Get the tag hash filename
+	 * \return the filename as a string
+	 */
+	virtual std::string hashFileName() const = 0;
 };
 
 #endif

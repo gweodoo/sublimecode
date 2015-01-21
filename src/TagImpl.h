@@ -43,6 +43,7 @@ public:
 	virtual tagType getType() const;
 	virtual std::string getInfoByKey(std::string key) const;
 	virtual void display() const;
+	virtual std::string hashFileName() const;
 };
 
 #endif // TAGIMPL_H

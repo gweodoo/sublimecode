@@ -34,7 +34,7 @@ public:
 	static const char * const buildTypes[];
 	explicit CreateJson(Configuration *c, Graph* myGraph);
 	~CreateJson();
-	void TransformToJson(Tag * tag, std::string buildType);
+	void TransformToJson(Tag * tag, std::string filepath, std::string buildType);
 	void buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator);
 	void buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator);
 	

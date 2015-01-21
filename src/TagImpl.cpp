@@ -74,3 +74,22 @@ void TagImpl::display() const {
 			cout << "\t\t- " << it->first << " : " << it->second << endl;
 	}
 }
+
+std::string TagImpl::hashFileName() const {
+	long filename = 0;
+	std::stringstream ss;
+	std::string tagToHash;
+	
+	ss << this->name << this->fileName << this->lineNumber;
+	tagToHash = ss.str();
+
+	for (int i = 0; i < tagToHash.length(); i++)
+	{
+		filename = filename + (tagToHash[i] * i);
+	}
+	
+	ss.str("");
+	ss.clear();
+	ss << filename;
+	return ss.str();
+}

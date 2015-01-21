@@ -22,7 +22,6 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QWebFrame>
-#include "Graph.h"
 #include "GraphCaller.h"
 #include "CreateJson.h"
 #include "ObjectTo.h"
@@ -184,17 +183,27 @@ void MainView::handlePushRadioType()
 
 void MainView::generateCallGraph(QString number, std::string buildType)
 {
-	TagsManagerImpl tagMan(config);
-	TagsParserImpl tagParse(&tagMan);
-	tagParse.loadFromFile(config->getDestDir() + "/tags");
-	TagsManager *myTagManager = &tagMan;
-	Graph *myGraph = new GraphCaller(config, myTagManager);
+	std::string filepath;
+	
+	filepath = config->getDestDir() + "/" + buildType + "Graph_" + (cHTML->getList()->at(number.toInt() - 1))->hashFileName() + ".json";
 
-	CreateJson * cjson = new CreateJson(config, myGraph);
-	cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), buildType);
+	
+	QFile file(QString::fromStdString(filepath));
+	
+	if(!file.exists())
+	{
+		TagsManagerImpl tagMan(config);
+		TagsParserImpl tagParse(&tagMan);
+		tagParse.loadFromFile(config->getDestDir() + "/tags");
+		TagsManager *myTagManager = &tagMan;
+		Graph *myGraph = new GraphCaller(config, myTagManager);
+		
+		CreateJson * cjson = new CreateJson(config, myGraph);
+		cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), filepath, buildType);
+	}
 	
 	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
-	objectTo->setValue(ui->getWebView(), QString::fromStdString(config->getDestDir()) + "/callGraph.json");
+	objectTo->setValue(ui->getWebView(), QString::fromStdString(filepath));
 	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "resources/callGraph.html"));
 	ui->getWebView()->show();
 }

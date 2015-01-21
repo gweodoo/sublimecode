@@ -29,7 +29,7 @@
 #include "Tag.h"
 #include "CreateHTML.h"
 #include <QCompleter>
-#include "CreateHTML.h"
+#include "Graph.h"
 
 class MainView : public QMainWindow
 {

@@ -47,7 +47,7 @@ CreateJson::~CreateJson()
 
 }
 
-void CreateJson::TransformToJson(Tag * tag, std::string buildType)
+void CreateJson::TransformToJson(Tag * tag, std::string filepath, std::string buildType)
 {/*
 	TagsManagerImpl *tagMan = new TagsManagerImpl(config);
 	TagsManager*myTagManager = tagMan;
@@ -71,8 +71,8 @@ void CreateJson::TransformToJson(Tag * tag, std::string buildType)
 	//"test_media_list"
 	//"libvlc_InternalCreate" 
 	//"vlc_mutex_init"
-	qDebug() << QString::fromStdString(config->getDestDir()) + "/callGraph.json";
-	QFile file(QString::fromStdString(config->getDestDir()) + "/callGraph.json");
+	qDebug() << QString::fromStdString(filepath);
+	QFile file(QString::fromStdString(filepath));
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	
