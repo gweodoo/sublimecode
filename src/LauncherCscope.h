@@ -24,8 +24,9 @@
 #include "Tag.h"
 #include "TagsManager.h"
 #include "FunctionGraph.h"
-#include "TagIdentifier.h"
+#include "CscopeThreadObject.h"
 
+void* FindFunctionDefinitionInThread(void* listOfCscopeOutput);
 /**
  * class implementing the Launcher interface specificly to cscope
  */
@@ -39,11 +40,12 @@ private :
 	 * myConfiguration - need to know information about where sources are and the working directory
 	 * 
 	 */
-	 TagIdentifier* myTagIdentifier;
+	
 	 TagsManager* myTagManager;
 	 bool isLaunched;
 	 Configuration* myConfiguration;
 	 std::vector<Tag*>*listOfLastTagAsked ;
+	 CscopeThreadObject* MyCscopeThreadObject;
 	 /**
 	  * need internally for parsing cscope output
 	  */
@@ -80,7 +82,9 @@ public :
 	 std::vector<std::string >* launchCommandExternalTool(int command, std::string  fileName);
 	 int launchCommandExternalTool(Tag *tagAssociatedToFunction);
 	 bool getIsLaunched();
-	 
+	 CscopeThreadObject * getCscopeThreadObject();
+	 void setCscopeThreadObject(CscopeThreadObject* threadObj);
 
 };
+
 #endif
