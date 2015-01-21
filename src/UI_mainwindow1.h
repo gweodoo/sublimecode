@@ -65,9 +65,6 @@ private:
     QLabel *labelParcourir;
     QLabel *labelParcourir1;
     int width, height;
-    int screenWidth, screenHeight;
-    int x, y;
-    QRect rect;
     QComboBox *comboBoxVcs;
     QComboBox *comboBoxArchive;
 

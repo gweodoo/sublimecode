@@ -26,15 +26,21 @@
 #include <QFile>
 #include "Tag.h"
 #include "Graph.h"
+#include "Configuration.h"
 
 class CreateJson {
 	
 public:
-	explicit CreateJson();
+	static const char * const buildTypes[];
+	explicit CreateJson(Configuration *c, Graph* myGraph);
 	~CreateJson();
-	void TransformToJson(Tag * tag);
-	void buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Graph * myGraph, int nbIterator);
-	void buildItem(Tag* tag, QTextStream * out, Graph * myGraph, int nbIterator);
+	void TransformToJson(Tag * tag, std::string buildType);
+	void buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator);
+	void buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator);
+	
+private:
+	Configuration *config;
+	Graph* myGraph;
 };
 
 #endif // CREATEJSON_H

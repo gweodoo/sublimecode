@@ -26,6 +26,7 @@
 #include "LauncherCTags.h"
 #include "TagsManagerImpl.h"
 #include "Tag.h"
+#include "CreateHTML.h"
 #include <QCompleter>
 
 class MainView : public QMainWindow
@@ -41,6 +42,7 @@ public slots:
 	void handlePushButton();
 	void handlePushRadioType();
 	void slot_linkClicked(const QUrl &url);
+	void generateCallGraph(QString number, std::string buildType);
 
 private:
 	Ui_MainView * ui;
@@ -55,6 +57,7 @@ private:
 	QString xslTag;
 	QString xslType;
 	QString xslFile;
+	CreateHTML *cHTML;
 };
 
 #endif // MAINVIEW_H

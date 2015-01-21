@@ -40,7 +40,8 @@ QGroupBox::title
 
 #leftWidget
 {
-
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
 }
 
 #rightWidget
@@ -50,6 +51,7 @@ QGroupBox::title
 
 QWebView
 {
+	
 }
 
 QComboBox

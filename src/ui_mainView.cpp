@@ -19,70 +19,93 @@
 
 #include "ui_mainView.h"
 
+#define RSZW(percent) (this->width*percent/100)
+#define RSZH(percent) (this->height*percent/100)
+
 void Ui_MainView::setupUi(QMainWindow *MainView)
 {
+	QRect rect = QApplication::desktop()->screenGeometry();
+
+        MainView->setFixedSize(rect.width()*0.8, rect.height()*0.8);
+	
+	this->width = MainView->width();
+	this->height = MainView->height();
+	
+	MainView->move((rect.width() - this->width) /2, (rect.height() - this->height) /2);
+	
 	if (MainView->objectName().isEmpty())
 		MainView->setObjectName(QString("MainView"));
 	centralWidget = new QWidget(MainView);
 	centralWidget->setObjectName(QString("centralWidget"));
+	
 	leftWidget = new QWidget(centralWidget);
 	leftWidget->setObjectName(QString("leftWidget"));
-	leftWidget->setGeometry(QRect(0, 0, 240, 800));
-	leftWidget->setStyleSheet(QString("border-right: 1px solid gray;"));
+	leftWidget->setGeometry(QRect(0, 0, RSZW(28), RSZH(100)));
+	
 	tagGroupBox = new QGroupBox(leftWidget);
 	tagGroupBox->setObjectName(QString("tagGroupBox"));
-	tagGroupBox->setGeometry(QRect(10, 10, 221, 151));
-	radio1 = new QRadioButton(tagGroupBox);
-	radio1->setObjectName(QString("radio1"));
-	radio1->setGeometry(QRect(10, 55, 99, 27));
-	radio1->setText(": By Name");
-	radio2 = new QRadioButton(tagGroupBox);
-	radio2->setObjectName(QString("radio2"));
-	radio2->setGeometry(QRect(10, 75, 99, 27));
-	radio2->setText(": By Type");
-	typeSelector = new QComboBox(tagGroupBox);
-	typeSelector->setObjectName("typeSelector");
-	typeSelector->setGeometry(QRect(100, 75, 109, 27));
-	typeSelector->setVisible(false);
-	radio3 = new QRadioButton(tagGroupBox);
-	radio3->setObjectName(QString("radio3"));
-	radio3->setGeometry(QRect(10, 95, 99, 27));
-	radio3->setText(": By File");
-	radio1->setChecked(true);
-	pushButton = new QPushButton(tagGroupBox);
-	pushButton->setObjectName(QString("pushButton"));
-	pushButton->setGeometry(QRect(60, 120, 99, 27));
+	tagGroupBox->setGeometry(QRect(RSZW(2), RSZH(3), RSZW(24), RSZH(26)));
+	
 	lineEdit = new QLineEdit(tagGroupBox);
 	lineEdit->setObjectName(QString("lineEdit"));
-	lineEdit->setGeometry(QRect(10, 30, 201, 27));
+	lineEdit->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
+	
+	radio1 = new QRadioButton(tagGroupBox);
+	radio1->setObjectName(QString("radio1"));
+	radio1->setGeometry(QRect(RSZW(2), RSZH(8), RSZW(8), RSZH(4)));
+	radio1->setText(": By Name");
+	radio1->setChecked(true);
+	
+	radio2 = new QRadioButton(tagGroupBox);
+	radio2->setObjectName(QString("radio2"));
+	radio2->setGeometry(QRect(RSZW(2), RSZH(12), RSZW(8), RSZH(4)));
+	radio2->setText(": By Type");
+	
+	radio3 = new QRadioButton(tagGroupBox);
+	radio3->setObjectName(QString("radio3"));
+	radio3->setGeometry(QRect(RSZW(2), RSZH(16), RSZW(8), RSZH(4)));
+	radio3->setText(": By File");
+	
+	pushButton = new QPushButton(tagGroupBox);
+	pushButton->setObjectName(QString("pushButton"));
+	pushButton->setGeometry(QRect(RSZW(2), RSZH(20), RSZW(20), RSZH(4)));
+	
+	typeSelector = new QComboBox(tagGroupBox);
+	typeSelector->setObjectName("typeSelector");
+	typeSelector->setGeometry(QRect(RSZW(11), RSZH(12), RSZW(11), RSZH(4)));
+	typeSelector->setVisible(false);
+
 	otherGroupBox = new QGroupBox(leftWidget);
 	otherGroupBox->setObjectName(QString("otherGroupBox"));
-	otherGroupBox->setGeometry(QRect(10, 170, 221, 71));
+	otherGroupBox->setGeometry(QRect(RSZW(2), RSZH(32), RSZW(24), RSZH(10)));
 	callGraphButton = new QPushButton(otherGroupBox);
 	callGraphButton->setObjectName(QString("callGraphButton"));
-	callGraphButton->setGeometry(QRect(10, 30, 201, 31));
+	callGraphButton->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
+	
 	StatsGroupBox = new QGroupBox(leftWidget);
 	StatsGroupBox->setObjectName(QString("StatsGroupBox"));
-	StatsGroupBox->setGeometry(QRect(10, 250, 221, 151));
+	StatsGroupBox->setGeometry(QRect(RSZW(2), RSZH(46), RSZW(24), RSZH(20)));
 	stats1Button = new QPushButton(StatsGroupBox);
 	stats1Button->setObjectName(QString("stats1Button"));
-	stats1Button->setGeometry(QRect(10, 30, 201, 31));
+	stats1Button->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
 	stats2Button = new QPushButton(StatsGroupBox);
 	stats2Button->setObjectName(QString("stats2Button"));
-	stats2Button->setGeometry(QRect(10, 70, 201, 31));
+	stats2Button->setGeometry(QRect(RSZW(2), RSZH(9), RSZW(20), RSZH(4)));
 	stats3Button = new QPushButton(StatsGroupBox);
 	stats3Button->setObjectName(QString("stats3Button"));
-	stats3Button->setGeometry(QRect(10, 110, 201, 31));
+	stats3Button->setGeometry(QRect(RSZW(2), RSZH(14), RSZW(20), RSZH(4)));
+	
 	tagGroupBox->raise();
 	otherGroupBox->raise();
 	StatsGroupBox->raise();
+	
 	rightWidget = new QWidget(centralWidget);
 	rightWidget->setObjectName(QString("rightWidget"));
-	rightWidget->setGeometry(QRect(240, 0, 960, 800));
+	rightWidget->setGeometry(QRect(RSZW(28), 0, RSZW(72), RSZH(100)));
 	MainView->setCentralWidget(centralWidget);
 	menuBar = new QMenuBar(MainView);
 	menuBar->setObjectName(QString("menuBar"));
-	menuBar->setGeometry(QRect(0, 0, 1000, 25));
+	menuBar->setGeometry(QRect(0, 0, RSZW(100), RSZH(3)));
 	menuFile = new QMenu(menuBar);
 	menuFile->setObjectName(QString("menuFile"));
 	menuEdit = new QMenu(menuBar);
@@ -90,27 +113,18 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	menuView = new QMenu(menuBar);
 	menuView->setObjectName(QString("menuView"));
 	MainView->setMenuBar(menuBar);
+	
 	webView = new QWebView(MainView);
-	webView->setGeometry(QRect(240, 30, 980, 700));
+	webView->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
 	webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	//webView->settings()->setObjectCacheCapacities(0,0,0);
 
 	menuBar->addAction(menuFile->menuAction());
 	menuBar->addAction(menuEdit->menuAction());
 	menuBar->addAction(menuView->menuAction());
-
-	MainView->setWindowTitle("Sublime Code");
-	
-	this->width = MainView->width();
-	this->height = MainView->height();
-	
-	this->rect = QApplication::desktop()->screenGeometry();
- 
-	this->screenWidth = this->rect.width();
-	this->screenHeight = this->rect.height();
-
-        MainView->resize(screenWidth, screenHeight);
        
 	retranslateUi(MainView);
+	MainView->setWindowTitle("Sublime Code");
 
 	QMetaObject::connectSlotsByName(MainView);
 }
@@ -169,4 +183,9 @@ QRadioButton* Ui_MainView::getRadioFile()
 QComboBox* Ui_MainView::gettypeSelector()
 {
 	return this->typeSelector;
+}
+
+QPushButton * Ui_MainView::getCallGraphButton()
+{
+	return this->callGraphButton;
 }

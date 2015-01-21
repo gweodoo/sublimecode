@@ -40,9 +40,6 @@ private:
 	QPushButton *selectAll;
 	QPushButton *deselectAll;
 	int width, height;
-	int screenWidth, screenHeight;
-	int x, y;
-	QRect rect;
 
 public:
 	void setupUi(QDialog *Dialog);

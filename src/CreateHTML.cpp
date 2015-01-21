@@ -282,3 +282,8 @@ QString CreateHTML::TransformToHTML(QString fileXML, QString fileXSL)
 	query.evaluateTo(&out);
 	return out;
 }
+
+std::vector<Tag *>* CreateHTML::getList()
+{
+	return this->list;
+}

@@ -16,47 +16,33 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/ 
-#ifndef CREATEHTML_H
-#define CREATEHTML_H
-#include <QString>
-#include <QtXml>
-#include <QtCore>
-#include <QDebug>
-#include <QXmlQuery>
-#include "Configuration.h"
-#include "LauncherCTags.h"
-#include "TagsParserImpl.h"
-#include "TagsManagerImpl.h"
 
-using namespace std;
+#ifndef OBJECTTO_H
+#define OBJECTTO_H
 
-class CreateHTML {
+#include <QObject>
+#include <QWebFrame>
+#include <QWebView>
+#include <QWebPage>
 
+class ObjectTo : public QObject
+{
+    Q_OBJECT
 public:
-	explicit CreateHTML();
-	~CreateHTML();
-        CreateHTML(Configuration *c);
-	void CreateHTMLfile(QString file);
-	void CreateHTMLbase(const char* file);
-
-	void CreateHTMLbegin(const char* file);
-	void CreateHTMLbody(const char* file);
-	void CreateHTMLend(const char* file);
-
-	void createXMLSearchByTags(string tag);
-	void createXMLSearchByType(int type);
-	void createXMLSearchByFile(string filename);
-	QString TransformToHTML(QString fileXML, QString fileXSL);
-	
-	std::vector<Tag *>* getList();
-
+    ObjectTo(QObject *parent);
+    void setValue(QWebView *view, QString objectValue);
+    
+public slots:
+    QString getValue();
+    
+private slots:
+    void attachObject();
+    
 private:
-	Configuration *config;
-	TagsParserImpl *tpi;
-	TagsManagerImpl *myTagMan;
-	std::vector<Tag *>* list;
-	std::ostringstream ostr;
-	std::string fileNameSubString;
+    QWebFrame *frame;
+    QString objectValue;
 };
 
-#endif
+#endif // OBJECTTO_H
+
+

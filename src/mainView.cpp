@@ -23,6 +23,10 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QWebFrame>
+#include "Graph.h"
+#include "GraphCaller.h"
+#include "CreateJson.h"
+#include "ObjectTo.h"
 
 MainView::MainView()
 {
@@ -35,6 +39,7 @@ MainView::MainView()
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
 	}
  	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
+	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/SublimeCode/src/callGraph.html"));
 }
 
 MainView::MainView(Configuration *c, std::vector<std::string> fileList)
@@ -43,7 +48,10 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
-	config = new Configuration(c->getSourcesDir(), c->getDestDir());
+	//config = new Configuration(c->getSourcesDir(), c->getDestDir());//
+	config = c;
+	
+	cHTML = new CreateHTML(config);
 	
 	cssFile = QString::fromStdString(config->getRootPath())+"/resources/style.css";
 	xslTag = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByTags.xsl");
@@ -77,6 +85,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
+	QObject::connect(ui->getCallGraphButton(), SIGNAL(clicked(bool)), this, SLOT(generateCallGraph())); 
 }
 
 MainView::~MainView()
@@ -86,6 +95,23 @@ MainView::~MainView()
 void MainView::slot_linkClicked(const QUrl& url)
 {
 	qDebug() << url;
+	
+	QString delimiter("///");
+	QStringList elements = url.toString().split(delimiter);
+
+	if (elements.at(0) == "CalledGraph")
+	{
+		generateCallGraph(elements.at(1), "Called");
+	}
+	else
+	{
+		if (elements.at(0) == "CallingGraph")
+		{
+			generateCallGraph(elements.at(1), "Calling");
+		}
+	}
+
+	
 }
 
 bool exists(const char *fname)
@@ -102,25 +128,24 @@ bool exists(const char *fname)
 void MainView::handlePushButton()
 {
 	this->tag = ui->getLineEdit()->text().toStdString();
-	CreateHTML *c = new CreateHTML(config);
 	QString html;
 	QString xmlFile;
 		
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
-			c->createXMLSearchByTags(tag);
+			cHTML->createXMLSearchByTags(tag);
 		}
-		html = c->TransformToHTML(xmlFile, xslTag);
+		html = cHTML->TransformToHTML(xmlFile, xslTag);
 		ui->getWebView()->setHtml(html);
 		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
 	else if (ui->getRadioType()->isChecked()){
 		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
-			c->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
+			cHTML->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
 		}
-		html = c->TransformToHTML(xmlFile, xslType);
+		html = cHTML->TransformToHTML(xmlFile, xslType);
 		ui->getWebView()->setHtml(html);
 		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
@@ -129,12 +154,13 @@ void MainView::handlePushButton()
 		filename_modified.replace("/","_");
 		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByFile_"+filename_modified+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
-			c->createXMLSearchByFile(tag);
+			cHTML->createXMLSearchByFile(tag);
 		}
-		html = c->TransformToHTML(xmlFile , xslFile);
+		html = cHTML->TransformToHTML(xmlFile , xslFile);
 		ui->getWebView()->setHtml(html);
 		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
+	//ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
 }
 
 void MainView::handlePushRadioType()
@@ -162,4 +188,22 @@ void MainView::handlePushRadioType()
 		ui->getLineEdit()->setCompleter(completer);
 		ui->getLineEdit()->setText("");
 	}
+}
+
+void MainView::generateCallGraph(QString number, std::string buildType)
+{
+	TagsManagerImpl tagMan(config);
+	TagsParserImpl tagParse(&tagMan);
+	tagParse.loadFromFile(config->getDestDir() + "/tags");
+	TagsManager *myTagManager = &tagMan;
+	Graph *myGraph = new GraphCaller(config,myTagManager);
+
+	CreateJson * cjson = new CreateJson(config, myGraph);
+	cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), buildType);
+	
+
+	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
+	objectTo->setValue(ui->getWebView(), QString::fromStdString("callGraph.json"));
+	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "resources/callGraph.html"));
+	ui->getWebView()->show();
 }

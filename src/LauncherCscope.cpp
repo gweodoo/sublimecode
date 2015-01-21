@@ -108,7 +108,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		{
 			string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
 			vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
-			//cout << tagAssociatedToFunction->getName()<<endl;
+			cout <<"size of function :"<<listOfFunctionCalled->size()<<endl;
 			//cout <<"size of function :"<<listOfFunctionCalled->size()<<endl;
 			for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 			{
@@ -269,8 +269,9 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
  */
 Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunction)
 {
-
+	
 	vector<FunctionGraph*>* listOfGlobalDefinition=this->getGlobalDefinitionsFrom(outputFunction->getTagName());				
+	
 	if(listOfGlobalDefinition->size()==1)
 	{
 		Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
@@ -459,7 +460,7 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 						unsigned long int  pos=0;
 					
 						pos=stringToParse.find(',',positionPrecedentComma+1);
-						
+				
 						//cout <<stringToParse<< " "<<string::npos<<endl;
 						// if we don't find any comma it means we have reached the end of parameters or have only one parameter
 						if((pos==string::npos)) 

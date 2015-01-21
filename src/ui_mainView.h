@@ -52,6 +52,7 @@ public:
 	QRadioButton *getRadioType();
 	QRadioButton *getRadioFile();
 	QComboBox *gettypeSelector();
+	QPushButton *getCallGraphButton();
     
 private:
 	QComboBox *typeSelector;
@@ -74,9 +75,6 @@ private:
 	QWebView *webView;
 	QRadioButton *radio1, *radio2, *radio3;
 	int width, height;
-	int screenWidth, screenHeight;
-	int x, y;
-	QRect rect;
 };
 
 QT_END_NAMESPACE

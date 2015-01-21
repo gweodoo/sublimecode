@@ -18,41 +18,42 @@
 /***************************************************************************/ 
 #include "ui_dialog.h"
 
+#define RSZW(percent) (this->width*percent/100)
+#define RSZH(percent) (this->height*percent/100)
+
 void Ui_Dialog::setupUi(QDialog *Dialog)
     {
-        if (Dialog->objectName().isEmpty())
-            Dialog->setObjectName(QString("Dialog"));
-	Dialog->resize(600,500);
-        treeView = new QTreeView(Dialog);
-        treeView->setObjectName(QString("treeView"));
-        treeView->setGeometry(QRect(10, 10, 581, 400));
-        pushButton = new QPushButton(Dialog);
-        pushButton->setObjectName(QString("pushButton"));
-	pushButton->setText("Finish");
-        pushButton->setGeometry(QRect(500, 430, 91, 27));
-        selectAll = new QPushButton(Dialog);
-        selectAll->setObjectName(QString("selectAll"));
-	selectAll->setText("Select All");
-        selectAll->setGeometry(QRect(10, 430, 91, 27));
-	deselectAll = new QPushButton(Dialog);
-        deselectAll->setObjectName(QString("deselectAll"));
-	deselectAll->setText("Deselect All");
-        deselectAll->setGeometry(QRect(100, 430, 91, 27));
-        retranslateUi(Dialog);
+	QRect rect = QApplication::desktop()->screenGeometry();
+
+        Dialog->setFixedSize(rect.width()*0.5, rect.height()*0.5);
 	
 	this->width = Dialog->width();
 	this->height = Dialog->height();
 	
-	this->rect = QApplication::desktop()->screenGeometry();
- 
-	this->screenWidth = this->rect.width();
-	this->screenHeight = this->rect.height();
- 
-	this->x = (this->screenWidth - this->width) /2;
-	this->y = (this->screenHeight - this->height) /2;
+	Dialog->move((rect.width() - this->width) /2, (rect.height() - this->height) /2);
+	
+        if (Dialog->objectName().isEmpty())
+            Dialog->setObjectName(QString("Dialog"));
+        treeView = new QTreeView(Dialog);
+        treeView->setObjectName(QString("treeView"));
+        treeView->setGeometry(QRect(RSZW(3), RSZH(4), RSZW(94), RSZH(84)));
 
-	Dialog->move ( this->x, this->y );
-        //Dialog->resize(screenWidth/2, screenHeight/2);
+        selectAll = new QPushButton(Dialog);
+        selectAll->setObjectName(QString("selectAll"));
+	selectAll->setText("Select All");
+        selectAll->setGeometry(QRect(RSZW(3), RSZH(91), RSZW(16), RSZH(6)));
+	
+	deselectAll = new QPushButton(Dialog);
+        deselectAll->setObjectName(QString("deselectAll"));
+	deselectAll->setText("Deselect All");
+        deselectAll->setGeometry(QRect(RSZW(22), RSZH(91), RSZW(16), RSZH(6)));
+	
+	pushButton = new QPushButton(Dialog);
+        pushButton->setObjectName(QString("pushButton"));
+	pushButton->setText("Finish");
+        pushButton->setGeometry(QRect(RSZW(81), RSZH(91), RSZW(16), RSZH(6)));
+	
+        retranslateUi(Dialog);
 
         QMetaObject::connectSlotsByName(Dialog);
     } // setupUi

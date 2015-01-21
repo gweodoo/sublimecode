@@ -32,9 +32,14 @@
 #include <string>
 
 using namespace std;
-CreateJson::CreateJson()
+
+const char * const CreateJson::buildTypes[] = {"Called", "Calling"};
+
+CreateJson::CreateJson(Configuration *c, Graph* myGraph)
 {
-	
+	//config = new Configuration(c->getSourcesDir(), c->getDestDir());
+	this->config = c;
+	this->myGraph = myGraph;
 }
 
 CreateJson::~CreateJson()
@@ -42,55 +47,64 @@ CreateJson::~CreateJson()
 
 }
 
-void CreateJson::TransformToJson(Tag * tag)
-{
-	Configuration * myConf = new Configuration("/home/ubuntu/Téléchargements/vlc-2.1.5","/home/ubuntu/Téléchargements/");
-	TagsManagerImpl *tagMan = new TagsManagerImpl(myConf);
+void CreateJson::TransformToJson(Tag * tag, std::string buildType)
+{/*
+	TagsManagerImpl *tagMan = new TagsManagerImpl(config);
 	TagsManager*myTagManager = tagMan;
-	Graph* myGraph = new GraphCaller(myConf,myTagManager);
-	/*
+	Graph* myGraph = new GraphCaller(config,myTagManager);
+*/
+	
+/*
+	TagsParserImpl tagParse(tagMan);
+	tagParse.loadFromFile(config->getDestDir() + "/tags");
+	qDebug() << QString::fromStdString(config->getDestDir()) + "/tags";
+	
+		
 	//Gerener le fichier
-	LauncherCTags launcher(myConf);
-	launcher.addPathToAnalyze("/home/ubuntu/Téléchargements/vlc-2.1.5");
+	LauncherCTags launcher(config);
+	launcher.addPathToAnalyze(config->getSourcesDir());
 	launcher.generateTagsFile();
 	*/
-
-	TagsParserImpl tagParse(tagMan);
-	tagParse.loadFromFile("/home/ubuntu/Téléchargements/tags");
-	
-	Tag * testTag=new TagImpl("test_media_list",myConf->getSourcesDir()+string("/test/libvlc/media_list.c"),26,TYPE_FUNCTION);	
+	//Tag * testTag=new TagImpl("test_media_list",myConf->getSourcesDir()+string("/test/libvlc/media_list.c"),26,TYPE_FUNCTION);	
 	
 	//"libvlc_InternalInit"
 	//"test_media_list"
 	//"libvlc_InternalCreate" 
 	//"vlc_mutex_init"
-	
-	QFile file("callGraph2.json");
+	qDebug() << QString::fromStdString(config->getRootPath()) + "resources/callGraph.json";
+	QFile file(QString::fromStdString(config->getRootPath()) + "resources/callGraph.json");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	
-	buildItem(testTag, &out, myGraph, 0);
+	buildItem(tag, &out, myGraph, buildType, 0);
 	
 	file.close();
 }
 
-void CreateJson::buildItem(Tag* tag, QTextStream * out, Graph * myGraph, int nbIterator)
+void CreateJson::buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator)
 {
+
 	qDebug() << nbIterator << " : 0    " << QString::fromStdString(tag->getName()) << "    " << QString::fromStdString(tag->getFileName());
 	
-	vector<Tag*>* listOfFunctionCalled = myGraph->getFunctionsCalledBy(tag);
-
-	qDebug() << listOfFunctionCalled->size();
+	vector<Tag*>* listOfFunctions;
+	
+	if (buildType == buildTypes[0])
+		listOfFunctions = myGraph->getFunctionsCalledBy(tag);
+	else if (buildType == buildTypes[1])
+		listOfFunctions = myGraph->getFunctionsCallingThis(tag);
+	
+	qDebug() << listOfFunctions->size();
+	
 	
 	*out << "\n{";
 	*out << "\"name\": \"" << QString::fromStdString(tag->getName()) << "\"," ;
 	*out << "\"info\": \"" << QString::fromStdString(tag->getName()) << "\"," ;
 	*out << "\"children\": [";
-	buildItem(listOfFunctionCalled, out, myGraph, nbIterator + 1);
+	buildItem(listOfFunctions, out, myGraph, buildType, nbIterator + 1);
 	*out << "]}";
 }
 
-void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Graph * myGraph, int nbIterator)
+void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator)
 {
 	qDebug() << tagVector->size();
 	
@@ -117,12 +131,17 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Gra
 				
 				//if (nbIterator < (wantedIterator -1))
 				//{
-					vector<Tag*>* listOfFunctionCalled = myGraph->getFunctionsCalledBy(*it);
+					vector<Tag*>* listOfFunctions;
 					
-					if (!listOfFunctionCalled->empty())
+					if (buildType == buildTypes[0]) 
+						listOfFunctions = myGraph->getFunctionsCalledBy(*it);
+					else if (buildType == buildTypes[1])
+						listOfFunctions = myGraph->getFunctionsCallingThis(*it);
+					
+					if (!listOfFunctions->empty())
 					{
 						*out << ",\"children\": [";
-						buildItem(listOfFunctionCalled, out, myGraph, nbIterator + 1);
+						buildItem(listOfFunctions, out, myGraph, buildType, nbIterator + 1);
 						*out << "]";
 					}
 				//}
