@@ -16,52 +16,28 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef CLOCLANGUAGEITEM_H
+#define CLOCLANGUAGEITEM_H
 
-#include "ClocLanguageItem.h"
-using namespace std;
+#include "../Utils.h"
 
-ClocLanguageItem::ClocLanguageItem(){
-	this->name = "";
-	this->nbFiles = 0;
-	this->nbBlankLines = 0;
-	this->nbCommentLines = 0;
-	this->nbCodeLines = 0;
-}
+class StatsLanguageItem {
+private:
+	std::string name;
+	size_t nbFiles;
+	size_t nbBlankLines;
+	size_t nbCommentLines;
+	size_t nbCodeLines;
 
-void ClocLanguageItem::fillFromString(std::string chain){
-	stringstream flux(chain);
-	string cur;
-	vector<string> vec;
-	while(getline(flux, cur, ',')){
-		vec.push_back(cur);
-	}
-	nbFiles = atoi(vec[0].c_str());
-	name = vec[1].c_str();
-	nbBlankLines = atoi(vec[2].c_str());
-	nbCommentLines = atoi(vec[3].c_str());
-	nbCodeLines = atoi(vec[4].c_str());
-}
-std::string ClocLanguageItem::getName() const{
-	return name;
-}
-size_t ClocLanguageItem::getNbFiles() const{
-	return nbFiles;
-}
-size_t ClocLanguageItem::getNbBlankLines() const{
-	return nbBlankLines;
-}
-size_t ClocLanguageItem::getNbCommentLines() const{
-	return nbCommentLines;
-}
-size_t ClocLanguageItem::getNbCodeLines() const{
-	return nbCodeLines;
-}
+public:
+	StatsLanguageItem();
+	void fillFromString(std::string chain);
+	std::string getName() const;
+	size_t getNbFiles() const;
+	size_t getNbBlankLines() const;
+	size_t getNbCommentLines() const;
+	size_t getNbCodeLines() const;
+	void display() const;
+};
 
-void ClocLanguageItem::display() const {
-	cout << "LANGUAGE = " << name << endl
-	<< "NB FILES = " << nbFiles<< endl
-	<< "NB BLANK = " << nbBlankLines<< endl
-	<< "NB COMME = " << nbCommentLines<< endl
-	<< "NB CODE  = " << nbCodeLines<< endl;
-
-}
+#endif // CLOCLANGUAGEITEM_H

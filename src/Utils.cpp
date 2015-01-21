@@ -20,16 +20,19 @@
 #include "Utils.h"
 using namespace std;
 
-void checkCommandExistency(std::string command, bool required){
+bool checkCommandExistency(std::string command, bool required){
 	std::string starter = "which "+command+" > /dev/null 2>&1";
 	int ret = system(starter.c_str());
 	if(WEXITSTATUS(ret) != 0) {
 		if(required){
 			scError("Command " << command << " is required");
+			return false;
 		} else {
 			scWarning("Command " << command << " wasn't found");
 		}
+		return false;
 	}
+	return true;
 }
 
 void checkNeededExecutable(){
@@ -40,9 +43,15 @@ void checkNeededExecutable(){
 	checkCommandExistency("hg");
 	checkCommandExistency("cvs");
 	checkCommandExistency("svn");
+}
 
-	checkCommandExistency("edze");
-
-
-
+map< string, int > splitOn ( string chain, char split ) {
+	stringstream flux(chain);
+	map<string, int> splitLine;
+	string cur;
+	int i = 0;
+	while(getline(flux, cur, split)){
+		splitLine[cur] = i++;
+	}
+	return splitLine;
 }

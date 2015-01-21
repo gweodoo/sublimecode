@@ -16,19 +16,52 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
-#ifndef CLOCPARSER_H
-#define CLOCPARSER_H
-#include "../Utils.h"
-#include "ClocLanguageItem.h"
 
-class ClocParser {
-private:
-	std::vector<ClocLanguageItem*> tabLanguages;
-public:
-	void runWith(std::string path);
-	void display() const;
-	std::map<std::string, float> getRatioComments_Code() const;
-	std::map<std::string, float> getRatioCode_Total() const;
-};
+#include "StatsLanguageItem.h"
+using namespace std;
 
-#endif // CLOCPARSER_H
+StatsLanguageItem::StatsLanguageItem(){
+	this->name = "";
+	this->nbFiles = 0;
+	this->nbBlankLines = 0;
+	this->nbCommentLines = 0;
+	this->nbCodeLines = 0;
+}
+
+void StatsLanguageItem::fillFromString(std::string chain){
+	stringstream flux(chain);
+	string cur;
+	vector<string> vec;
+	while(getline(flux, cur, ',')){
+		vec.push_back(cur);
+	}
+	nbFiles = atoi(vec[0].c_str());
+	name = vec[1].c_str();
+	nbBlankLines = atoi(vec[2].c_str());
+	nbCommentLines = atoi(vec[3].c_str());
+	nbCodeLines = atoi(vec[4].c_str());
+}
+std::string StatsLanguageItem::getName() const{
+	return name;
+}
+size_t StatsLanguageItem::getNbFiles() const{
+	return nbFiles;
+}
+size_t StatsLanguageItem::getNbBlankLines() const{
+	return nbBlankLines;
+}
+size_t StatsLanguageItem::getNbCommentLines() const{
+	return nbCommentLines;
+}
+size_t StatsLanguageItem::getNbCodeLines() const{
+	return nbCodeLines;
+}
+
+void StatsLanguageItem::display() const {
+	cout << "LANGUAGE = " << name << endl
+	<< "NB FILES = " << nbFiles<< endl
+	<< "NB BLANK = " << nbBlankLines<< endl
+	<< "NB COMME = " << nbCommentLines<< endl
+	<< "NB CODE  = " << nbCodeLines<< endl;
+
+}

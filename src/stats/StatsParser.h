@@ -16,39 +16,29 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef CLOCPARSER_H
+#define CLOCPARSER_H
 
-#ifndef UTILS_H
-#define UTILS_H
+#include "../Utils.h"
+#include "StatsFileItem.h"
+#include "StatsLanguageItem.h"
+#include "../TagsManagerImpl.h"
 
-/******* COMMON *******/
-#include<cstdlib>
-#include<unistd.h>
-#include<iostream>
-#include<iomanip>
-#include<fstream>
-#include<map>
-#include<vector>
-#include<typeinfo>
-#include<cassert>
-#include<functional>
-#include<string>
-#include<sstream>
-#include <cerrno>
-#include <cstring>
-/**** MACROS *****/
-#ifdef NDEBUG
-#define scDebug(u)
-#define scError(u) {std::cerr << "ERROR: " << u << std::endl; exit(1);} while(0)
-#define scWarning(u) {std::cerr << "WARNING: "<< u <<std::endl; exit(1);} while(0)
+class StatsParser {
+private:
+	std::vector<StatsLanguageItem*> tabLanguages;
+	std::vector<StatsFileItem*> tabFiles;
+	TagsManager* tagMan;
+	Configuration *config;
 
-#else
-#define scDebug(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)
-#define scError(u) {std::cerr << "ERROR: " << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
-#define scWarning(u) {std::cerr << "WARNING: " << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
+	StatsLanguageItem const * findLanguage(std::string name) const;
+public:
+	StatsParser( Configuration* config, TagsManager* tagMan );
+	void loadFrom(std::string path);
+	void display() const;
+	vector< pair< string, int > > getMostImplementedFilesPerLanguage( string language ) const;
+	std::vector<std::pair<std::string, float> > getMostUsedLanguages() const;
+	vector< pair< string, int > > getNbTagsPerFile() const;
+};
 
-#endif
-
-void checkNeededExecutable();
-bool checkCommandExistency(std::string command, bool required = false);
-std::map<std::string, int> splitOn(std::string chain, char split);
-#endif
+#endif // CLOCPARSER_H

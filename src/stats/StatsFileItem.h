@@ -16,39 +16,28 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
+#ifndef CLOCFILEITEM_H
+#define CLOCFILEITEM_H
 
-#ifndef UTILS_H
-#define UTILS_H
+#include "../Utils.h"
 
-/******* COMMON *******/
-#include<cstdlib>
-#include<unistd.h>
-#include<iostream>
-#include<iomanip>
-#include<fstream>
-#include<map>
-#include<vector>
-#include<typeinfo>
-#include<cassert>
-#include<functional>
-#include<string>
-#include<sstream>
-#include <cerrno>
-#include <cstring>
-/**** MACROS *****/
-#ifdef NDEBUG
-#define scDebug(u)
-#define scError(u) {std::cerr << "ERROR: " << u << std::endl; exit(1);} while(0)
-#define scWarning(u) {std::cerr << "WARNING: "<< u <<std::endl; exit(1);} while(0)
+class StatsFileItem {
+private:
+	std::string filename;
+	std::string languageName;
+	size_t nbBlankLines;
+	size_t nbCommentLines;
+	size_t nbCodeLines;
 
-#else
-#define scDebug(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)
-#define scError(u) {std::cerr << "ERROR: " << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
-#define scWarning(u) {std::cerr << "WARNING: " << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
+public:
+	StatsFileItem();
+	void fillFromString(std::string chain);
+	std::string getFileName() const;
+	std::string getLanguageName() const;
+	size_t getNbBlankLines() const;
+	size_t getNbCommentLines() const;
+	size_t getNbCodeLines() const;
+	void display() const;
+};
 
-#endif
-
-void checkNeededExecutable();
-bool checkCommandExistency(std::string command, bool required = false);
-std::map<std::string, int> splitOn(std::string chain, char split);
-#endif
+#endif // CLOCFILEITEM_H
