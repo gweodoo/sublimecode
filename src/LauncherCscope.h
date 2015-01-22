@@ -64,7 +64,7 @@ private :
 	void removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions);
 	void removeFromListFunctionNotBelonginToStackCall( int lineStart,int lineStop,std::vector<FunctionGraph*>* listOfFunctionCalled,Tag * functionAssociatedToTag);
 	bool isValidCaracter(char& caracterToTest);
-	Tag * getTagFromFunctionGraphOutput(FunctionGraph* outputFunction);
+
 	int  getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
 	 void removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions,std::string fileName);
 	 FunctionGraph* removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction);
@@ -84,6 +84,7 @@ public :
 	 bool getIsLaunched();
 	 CscopeThreadObject * getCscopeThreadObject();
 	 void setCscopeThreadObject(CscopeThreadObject* threadObj);
+	 	Tag * getTagFromFunctionGraphOutput(FunctionGraph* outputFunction);
 
 };
 
