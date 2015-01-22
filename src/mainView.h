@@ -59,6 +59,8 @@ private:
 	QString xslTag;
 	QString xslType;
 	QString xslFile;
+	QString xslHighlight;
+	CreateHTML* cHTML;
 	std::vector<Tag *>* list;
 	QWebView *webViewSearch;
 	Runner * runner;

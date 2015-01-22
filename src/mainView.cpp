@@ -185,13 +185,13 @@ void MainView::generateGraph(QString number, std::string buildType)
 		if (buildType == "Called" || buildType == "Calling")
 		{
 			
-			cjson = new createJson(config, runner->getGraphCaller());
+			cjson = new CreateJson(config, runner->getGraphCaller());
 			cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), filepath, buildType);
 		}
 		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		{
 			cjson = new CreateJson(config);
-			cjson->TransformToJson(config->getSourcesDir() + this->tag, filepath, includeParser, buildType);
+			cjson->TransformToJson(config->getSourcesDir() + this->tag, filepath, runner->getIncludeParser(), buildType);
 		}
 	}
 	
