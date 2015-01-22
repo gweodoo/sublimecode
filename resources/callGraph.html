@@ -88,6 +88,7 @@ function update(source) {
 
 	// Compute the new height
 	var levelWidth = [1];
+	var addMarginLeft = 0;
 	var childCount = function(level, n) {
 		if(n.children && n.children.length > 0) {
 			if(levelWidth.length <= level + 1) // 
@@ -99,7 +100,8 @@ function update(source) {
 		}
 		
 		if (level == 0) {
-			marginLeft = (n.name.length * 9);
+			marginLeft = (n.name.length * 8);
+			if (widthLinkMin < marginLeft) { addMarginLeft = (marginLeft - widthLinkMin); }
 			svg.attr("transform", "translate(" + marginLeft + "," + margin.top + ")");
 		}
 	};
@@ -117,7 +119,7 @@ function update(source) {
 	
 	document.getElementById("svgtree").setAttribute("height", newHeight + heightChar);
 	document.getElementById("svgtree")
-		.setAttribute("width", width + ((maxlength(nodes) - widthLinkMin) * widthChar) + margin.right + margin.left);
+		.setAttribute("width", width + addMarginLeft + ((maxlength(nodes) - widthLinkMin) * widthChar) + margin.right + margin.left);
 
 	// Update the nodes
 	var node = svg.selectAll("g.node")

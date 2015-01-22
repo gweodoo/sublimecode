@@ -8,6 +8,14 @@
 	</head>
 	<body>
 		<h1>Search By File</h1>
+		<a>
+			<xsl:attribute name="href">IncludedGraph</xsl:attribute>
+			<button>IncludedGraph</button>
+		</a>
+		<a>
+			<xsl:attribute name="href">InclusionGraph</xsl:attribute>
+			<button>InclusionGraph</button>
+		</a>
 		<xsl:for-each select="SearchByFile">
 			<table border='2' CELLSPACING='0' CELLPADDING='8' >
 			<thead><TH>Number</TH><TH>Line</TH><TH>Name</TH><TH>Type</TH></thead>

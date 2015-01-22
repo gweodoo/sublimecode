@@ -1,21 +1,21 @@
-/*
- * <one line to give the program's name and a brief idea of what it does.>
- * Copyright (C) 2015  <copyright holder> <email>
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- */
+/***************************************************************************/
+/*                                                                         */
+/* This file is part of Sublime Code.                                      */
+/*                                                                         */
+/* Sublime Code is free software: you can redistribute it and/or modify    */
+/* it under the terms of the GNU General Public License as published by    */
+/* the Free Software Foundation, either version 3 of the License, or       */
+/* (at your option) any later version.                                     */
+/*                                                                         */
+/* Sublime Code is distributed in the hope that it will be useful,         */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of          */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           */
+/* GNU General Public License for more details.                            */
+/*                                                                         */
+/* You should have received a copy of the GNU General Public License       */
+/* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
+/*                                                                         */
+/***************************************************************************/
 
 #include "CreateJson.h"
 #include <QDebug>
@@ -33,7 +33,7 @@
 
 using namespace std;
 
-const char * const CreateJson::buildTypes[] = {"Called", "Calling"};
+const char * const CreateJson::buildTypes[] = {"Called", "Calling", "IncludedGraph", "InclusionGraph"};
 
 CreateJson::CreateJson(Configuration *c, Graph* myGraph)
 {
@@ -41,6 +41,12 @@ CreateJson::CreateJson(Configuration *c, Graph* myGraph)
 	this->config = c;
 	this->myGraph = myGraph;
 }
+
+CreateJson::CreateJson(Configuration *c)
+{
+	this->config = c;
+}
+
 
 CreateJson::~CreateJson()
 {
@@ -81,12 +87,79 @@ void CreateJson::TransformToJson(Tag * tag, std::string filepath, std::string bu
 	file.close();
 }
 
+void CreateJson::TransformToJson(std::string myPath, std::string filepath, IncludeParser * includeParser, std::string buildType)
+{
+	qDebug() << QString::fromStdString(filepath);
+	QFile file(QString::fromStdString(filepath));
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&file);
+	
+	std::map<std::string, bool> myMap;
+	myMap.insert(std::pair<string, bool>(myPath, true));
+	
+	buildItem(&myMap, &out, includeParser, buildType, 0);
+	
+	file.close();
+}
+
+void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream * out, IncludeParser * includeParser, std::string buildType, int nbIterator)
+{
+	qDebug() << mapOfFiles->size();
+	
+	std::map<std::string, bool> myMap;
+	std::string nameValue;
+
+	int wantedIterator = 3;
+	
+	if (nbIterator < wantedIterator)
+	{
+		int i = 0;
+		
+		for(std::map<std::string, bool>::iterator it = mapOfFiles->begin(); it != mapOfFiles->end(); it++)
+		{
+			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it).first);
+			
+			*out << "\n{";
+			nameValue = (*it).first;
+			*out << "\"name\": \"" << QString::fromStdString(nameValue.erase(0, this->config->getSourcesDir().length())) << "\"";
+			
+			if ((*it).second)
+			{
+				if (buildType == buildTypes[2])
+					myMap = includeParser->lookForIncludedGraph((*it).first);
+				if (buildType == buildTypes[3])
+					myMap = includeParser->lookForInclusionGraph((*it).first);
+				
+				std::cout << myMap.size() << (*it).first << endl;
+				if (!myMap.empty())
+				{
+					*out << ",\"children\": [";
+					buildItem(&myMap, out, includeParser, buildType, nbIterator + 1);
+					*out << "]";
+				}
+			}
+			else 
+			{
+				*out << ",\"checked\": \"false\"";
+			}
+			
+			*out << "}";
+			
+			if (i < mapOfFiles->size()-1)
+			{
+				*out << ",";
+			}
+			i++;
+		}
+	}
+}
+
 void CreateJson::buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator)
 {
 
 	qDebug() << nbIterator << " : 0    " << QString::fromStdString(tag->getName()) << "    " << QString::fromStdString(tag->getFileName());
 	
-	vector<Tag*>* listOfFunctions;
+	vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
 	
 	if (buildType == buildTypes[0])
 		listOfFunctions = myGraph->getFunctionsCalledBy(tag);
@@ -94,7 +167,6 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::st
 		listOfFunctions = myGraph->getFunctionsCallingThis(tag);
 	
 	qDebug() << listOfFunctions->size();
-	
 	
 	*out << "\n{";
 	*out << "\"name\": \"" << QString::fromStdString(tag->getName()) << "\"," ;
@@ -131,7 +203,7 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Gra
 				
 				//if (nbIterator < (wantedIterator -1))
 				//{
-					vector<Tag*>* listOfFunctions;
+					vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
 					
 					if (buildType == buildTypes[0]) 
 						listOfFunctions = myGraph->getFunctionsCalledBy(*it);

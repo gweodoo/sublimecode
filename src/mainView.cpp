@@ -59,9 +59,11 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	}
 	
 	LauncherCTags launcher(config);
+	includeParser = new IncludeParser(config);
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
 		launcher.addPathToAnalyze(*it);
-		wordList.push_back(QString::fromStdString(QString::fromUtf8((*it).c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
+		includeParser->addPathToAnalyze(*it);
+		wordList.push_back(QString::fromStdString((*it).substr(config->getSourcesDir().size())));
 	}
 	launcher.generateTagsFile();
 	  	
@@ -76,7 +78,6 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
-	QObject::connect(ui->getCallGraphButton(), SIGNAL(clicked(bool)), this, SLOT(generateCallGraph())); 
 	QObject::connect(ui->getTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int))); 
 	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click())); 
 }
@@ -97,15 +98,15 @@ void MainView::slot_linkClicked(const QUrl& url)
 	QStringList elements = url.toString().split(delimiter);
 
 	if (elements.at(0) == "CalledGraph")
-	{
-		generateCallGraph(elements.at(1), "Called");
-	}
-	else if (elements.at(0) == "CallingGraph"){
-		generateCallGraph(elements.at(1), "Calling");
-	}
-	else if(elements.at(0) == "Path"){
+		generateGraph(elements.at(1), "Called");
+	else if (elements.at(0) == "CallingGraph")
+		generateGraph(elements.at(1), "Calling");
+	else if (elements.at(0) == "IncludedGraph")
+		generateGraph("0", elements.at(0).toStdString());
+	else if (elements.at(0) == "InclusionGraph")
+		generateGraph("0", elements.at(0).toStdString());
+	else if(elements.at(0) == "Path")
 		generateHighlightFunction(elements.at(1));
-	}
 }
 
 bool exists(const char *fname)
@@ -181,25 +182,36 @@ void MainView::handlePushRadioType()
 	}
 }
 
-void MainView::generateCallGraph(QString number, std::string buildType)
+void MainView::generateGraph(QString number, std::string buildType)
 {
+	CreateJson * cjson;
 	std::string filepath;
 	
-	filepath = config->getDestDir() + "/" + buildType + "Graph_" + (cHTML->getList()->at(number.toInt() - 1))->hashFileName() + ".json";
-
+	if (buildType == "Called" || buildType == "Calling")
+		filepath = config->getDestDir() + "/" + buildType + "Graph_" + (cHTML->getList()->at(number.toInt() - 1))->hashFileName() + ".json";
+	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
+		filepath = config->getDestDir() + "/" + buildType + "_" + "numeroHashedInclude" + ".json";
 	
 	QFile file(QString::fromStdString(filepath));
 	
 	if(!file.exists())
 	{
-		TagsManagerImpl tagMan(config);
-		TagsParserImpl tagParse(&tagMan);
-		tagParse.loadFromFile(config->getDestDir() + "/tags");
-		TagsManager *myTagManager = &tagMan;
-		Graph *myGraph = new GraphCaller(config, myTagManager);
-		
-		CreateJson * cjson = new CreateJson(config, myGraph);
-		cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), filepath, buildType);
+		if (buildType == "Called" || buildType == "Calling")
+		{
+			TagsManagerImpl tagMan(config);
+			TagsParserImpl tagParse(&tagMan);
+			tagParse.loadFromFile(config->getDestDir() + "/tags");
+			TagsManager *myTagManager = &tagMan;
+			Graph *myGraph = new GraphCaller(config, myTagManager);
+			
+			cjson = new CreateJson(config, myGraph);
+			cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), filepath, buildType);
+		}
+		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
+		{
+			cjson = new CreateJson(config);
+			cjson->TransformToJson(config->getSourcesDir() + this->tag, filepath, includeParser, buildType);
+		}
 	}
 	
 	ObjectTo *objectTo = new ObjectTo(ui->getWebView());

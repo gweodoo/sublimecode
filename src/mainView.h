@@ -30,6 +30,7 @@
 #include "CreateHTML.h"
 #include <QCompleter>
 #include "Graph.h"
+#include "inclusiongraph/IncludeParser.h"
 
 class MainView : public QMainWindow
 {
@@ -44,7 +45,7 @@ public slots:
 	void handlePushButton();
 	void handlePushRadioType();
 	void slot_linkClicked(const QUrl &url);
-	void generateCallGraph(QString number, std::string buildType);
+	void generateGraph(QString number, std::string buildType);
 	void generateHighlightFunction(QString number);
 	void closeTab(int index);
 
@@ -63,6 +64,7 @@ private:
 	QString xslFile;
 	QString xslHighlight;
 	CreateHTML *cHTML;
+	IncludeParser *includeParser;
 	TagsParserImpl *tpi;
 	TagsManagerImpl *myTagMan;
 	std::vector<Tag *>* list;

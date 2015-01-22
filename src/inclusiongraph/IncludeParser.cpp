@@ -157,7 +157,7 @@ string IncludeParser::runCommand(std::string startCommand, std::string endComman
 		chainStr = "";
 		chainSize = 0;
 		while(chainSize < 100000 && i < listPaths.size()){
-			cout << chainStr << endl;
+			//cout << chainStr << endl;
 			chainStr += listPaths.at(i) + " ";
 			chainSize +=listPaths.at(i).size();
 			i++;
