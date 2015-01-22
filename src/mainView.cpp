@@ -61,10 +61,8 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	
 	LauncherCTags launcher(config);
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
-		QString convrt = QString::fromStdString(*it);
-		string converti = convrt.toUtf8().data();
-		launcher.addPathToAnalyze(converti);
-		wordList.push_back(QString::fromStdString(QString::fromUtf8(converti.c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
+		launcher.addPathToAnalyze(*it);
+		wordList.push_back(QString::fromStdString(QString::fromUtf8((*it).c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
 	}
 	launcher.generateTagsFile();
 	  	
@@ -73,18 +71,25 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	}
 	
 	cHTML = new CreateHTML(config);
-	
+
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
 	QObject::connect(ui->getCallGraphButton(), SIGNAL(clicked(bool)), this, SLOT(generateCallGraph())); 
-
+	QObject::connect(ui->getTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int))); 
+	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click())); 
 }
 
 MainView::~MainView()
 {
+}
+
+void MainView::closeTab(int index)
+{
+	if (index !=0)
+		ui->getTabWidget()->removeTab(index);
 }
 
 void MainView::slot_linkClicked(const QUrl& url)
@@ -120,24 +125,21 @@ void MainView::handlePushButton()
 	this->tag = ui->getLineEdit()->text().toStdString();
 	QString html;
 	QString xmlFile;
+	QWebView *webViewSearch = new QWebView();
 		
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
 			cHTML->createXMLSearchByTags(tag);
 		}
-		html = cHTML->TransformToHTML(xmlFile, xslTag);
-		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+ 		html = cHTML->TransformToHTML(xmlFile, xslTag);
 	}
 	else if (ui->getRadioType()->isChecked()){
 		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
 			cHTML->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
 		}
-		html = cHTML->TransformToHTML(xmlFile, xslType);
-		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+ 		html = cHTML->TransformToHTML(xmlFile, xslType);
 	}
 	else if(ui->getRadioFile()->isChecked()){
 		QString filename_modified = QString::fromStdString(tag);
@@ -147,9 +149,10 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByFile(tag);
 		}
 		html = cHTML->TransformToHTML(xmlFile , xslFile);
-		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
+	
+	ui->getWebView()->setHtml(html);
+	ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 }
 
 void MainView::handlePushRadioType()
@@ -205,15 +208,17 @@ void MainView::generateHighlightFunction(QString number)
 	this->myTagMan = new TagsManagerImpl(config);
 	this->tpi = new TagsParserImpl(myTagMan);
 	tpi->loadFromFile(config->getDestDir()+"/tags");
+	
+	QWebView *webViewHighlight = new QWebView();
 		
 	QString ext = QString::fromStdString(cHTML->getList()->at(number.toInt() - 1)->getFileName()).section('.',-1);
 	
 	if(ext!="js"){
-	
 		cHTML->createListHighlightFunction(cHTML->getList()->at(number.toInt() - 1), myTagMan);
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
-		ui->getWebView()->setHtml(html);
-		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+		ui->getTabWidget()->addTab(webViewHighlight, "Highlight");
+		webViewHighlight->setHtml(html);
+		webViewHighlight->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
 	else {
 		QMessageBox::information(this, "Warning", "Unsupported file format");

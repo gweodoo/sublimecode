@@ -46,6 +46,7 @@ public slots:
 	void slot_linkClicked(const QUrl &url);
 	void generateCallGraph(QString number, std::string buildType);
 	void generateHighlightFunction(QString number);
+	void closeTab(int index);
 
 private:
 	Ui_MainView * ui;
@@ -65,6 +66,7 @@ private:
 	TagsParserImpl *tpi;
 	TagsManagerImpl *myTagMan;
 	std::vector<Tag *>* list;
+	QWebView *webViewSearch;
 };
 
 #endif // MAINVIEW_H

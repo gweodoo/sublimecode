@@ -53,7 +53,9 @@ void Dialog::Finish()
 	QFileInfo fileInfo = model->filePath(value);
 	if(fileInfo.isFile()){
 	absolutePath = fileInfo.absolutePath().toStdString() + "/" + value.data().toString().toStdString();
-	fileList.push_back(absolutePath);
+	QString convrt = QString::fromStdString(absolutePath);
+	string converti = convrt.toUtf8().data();
+	fileList.push_back(converti);
 	}
    }
    

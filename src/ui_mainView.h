@@ -36,6 +36,7 @@
 #include <QtGui/QDesktopWidget>
 #include <QRadioButton>
 #include <QComboBox>
+#include <QShortcut>
 
 QT_BEGIN_NAMESPACE
 
@@ -53,6 +54,8 @@ public:
 	QRadioButton *getRadioFile();
 	QComboBox *gettypeSelector();
 	QPushButton *getCallGraphButton();
+	QTabWidget *getTabWidget();
+	QShortcut *getShortcutEnter();
     
 private:
 	QComboBox *typeSelector;
@@ -74,6 +77,8 @@ private:
 	QMenu *menuView;
 	QWebView *webView;
 	QRadioButton *radio1, *radio2, *radio3;
+	QTabWidget *tabWidget;
+	QShortcut *enterShortcut;
 	int width, height;
 };
 

@@ -118,6 +118,13 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	webView->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
 	webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 	webView->settings()->setObjectCacheCapacities(0,0,0);
+	
+	tabWidget = new QTabWidget(MainView);
+	tabWidget->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
+	tabWidget->addTab(webView, "tabWidget");
+	tabWidget->setTabsClosable(true);
+
+	enterShortcut = new QShortcut(QKeySequence("Return"), tagGroupBox);
 
 	menuBar->addAction(menuFile->menuAction());
 	menuBar->addAction(menuEdit->menuAction());
@@ -189,3 +196,14 @@ QPushButton * Ui_MainView::getCallGraphButton()
 {
 	return this->callGraphButton;
 }
+
+QTabWidget* Ui_MainView::getTabWidget()
+{
+	return this->tabWidget;
+}
+
+QShortcut* Ui_MainView::getShortcutEnter()
+{
+	return this->enterShortcut;
+}
+
