@@ -63,7 +63,7 @@ void CreateHTML::createXMLSearchByTags(string tag)
 		
 		QDomText txt1 = document.createTextNode(QString::number(i+1));
 		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
-		QDomText txt3 = document.createTextNode(QString::fromStdString(QString::fromUtf8(converti.c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
+		QDomText txt3 = document.createTextNode(QString::fromStdString(converti.substr(config->getSourcesDir().size())));
 		QDomText txt4 = document.createTextNode(QString::fromStdString(tabTypeNames[list->at(i)->getType()]));
 
 		element1.appendChild(txt1);
@@ -120,7 +120,7 @@ void CreateHTML::createXMLSearchByType(int type)
 		
 		QDomText txt1 = document.createTextNode(QString::number(i+1));
 		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
-		QDomText txt3 = document.createTextNode(QString::fromStdString(QString::fromUtf8(converti.c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
+		QDomText txt3 = document.createTextNode(QString::fromStdString(converti.substr(config->getSourcesDir().size())));
 		QDomText txt4 = document.createTextNode(QString::fromStdString(list->at(i)->getName()));
 
 		element1.appendChild(txt1);
