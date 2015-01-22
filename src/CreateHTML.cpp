@@ -27,11 +27,9 @@
 #include <QXmlQuery>
 #include <vector>  
 
-CreateHTML::CreateHTML(){
-}
 CreateHTML::~CreateHTML(){}
 
-CreateHTML::CreateHTML(Configuration* c, Runner *runner) : runner(runner) , config(c) {}
+CreateHTML::CreateHTML(Configuration* c, Runner *runner) : config(c), runner(runner) {}
 void CreateHTML::createXMLSearchByTags(string tag)
 {	
 	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml"); 
@@ -42,7 +40,7 @@ void CreateHTML::createXMLSearchByTags(string tag)
 
 	list = runner->getTagsByName(tag);
 
-	for (int i=0; i<list->size(); i++)
+	for (size_t i=0; i<list->size(); i++)
 	{
 		QDomElement element = document.createElement("Tags");
 		
@@ -99,7 +97,7 @@ void CreateHTML::createXMLSearchByType(int type)
 	QDomElement root = document.createElement("SearchByType");
 	document.appendChild(root);
 
-	for (int i=0; i<list->size(); i++)
+	for (size_t i=0; i<list->size(); i++)
 	{
 		QDomElement element = document.createElement("Type");
 		
@@ -160,7 +158,7 @@ void CreateHTML::createXMLSearchByFile(string filename)
 	
 	list = runner->getTagsByFile(str_config+filename);
 		
-	for (int i=0; i<list->size(); i++)
+	for (size_t i=0; i<list->size(); i++)
 	{
 		QDomElement element = document.createElement("File");
 		
@@ -208,7 +206,7 @@ void CreateHTML::createXMLSearchByFile(string filename)
 int CreateHTML::getTotalLine(std::string content)
 {
 	int lines_count = 1;
-	for(int i=0; i<content.length(); i++){
+	for(size_t i=0; i<content.length(); i++){
 		if(content.at(i) == '\n'){
 			lines_count++;
 		}

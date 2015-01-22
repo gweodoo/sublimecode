@@ -129,9 +129,9 @@ void UI_MainWindow1::retranslateUi(QMainWindow *MainWindow)
 	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Code source : ", 0));
 	destinationGroupBox->setTitle(QApplication::translate("MainWindow", "Destination directory : ", 0));
 	
-	for (int i = 0; i < (sizeof(vcsTypes)/sizeof(*vcsTypes)); i++)
+	for (size_t i = 0; i < (sizeof(vcsTypes)/sizeof(*vcsTypes)); i++)
 		this->comboBoxVcs->addItem(vcsTypes[i]);
-	for (int i = 0; i < (sizeof(archiveTypes)/sizeof(*archiveTypes)); i++)
+	for (size_t i = 0; i < (sizeof(archiveTypes)/sizeof(*archiveTypes)); i++)
 		this->comboBoxArchive->addItem(archiveTypes[i]);
 } // retranslateUi
 

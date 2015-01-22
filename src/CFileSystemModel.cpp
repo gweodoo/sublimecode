@@ -78,6 +78,8 @@ bool CFileSystemModel::recursiveCheck(const QModelIndex &index, const QVariant &
             setData(child, value, Qt::CheckStateRole);
         }
     }
+
+    return true;
 }
 
 void CFileSystemModel::checkAllBoxes(QString mpath)

@@ -50,7 +50,10 @@ void MainWindow::Rechercher_Sources()
 bool MainWindow::removeDir(QString file)
 {
 	string commandFileRemove_1=string("rm -rf ")+file.toStdString();
-	if(system(commandFileRemove_1.c_str())==-1) perror("closing Error");
+	if(system(commandFileRemove_1.c_str())==-1) {
+		perror("closing Error");
+		return false;
+	}
 	else return true;
 	
 }

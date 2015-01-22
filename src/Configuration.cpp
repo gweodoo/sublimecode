@@ -20,7 +20,8 @@
 #include "Configuration.h"
 using namespace std;
 
-Configuration::Configuration(){};
+Configuration::Configuration(){}
+
 Configuration::Configuration(std::string sources, std::string dest) {
 
 	this->sourcesDir=sources;

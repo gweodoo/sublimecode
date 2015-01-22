@@ -24,7 +24,6 @@
 #include <QDebug>
 #include <QXmlQuery>
 #include "Configuration.h"
-#include "LauncherCTags.h"
 #include "Runner.h"
 
 using namespace std;
@@ -32,7 +31,6 @@ using namespace std;
 class CreateHTML {
 
 public:
-	explicit CreateHTML();
 	~CreateHTML();
         CreateHTML(Configuration *c, Runner *runner);
 	
