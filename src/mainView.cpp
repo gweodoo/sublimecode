@@ -26,20 +26,6 @@
 #include "CreateJson.h"
 #include "ObjectTo.h"
 
-MainView::MainView()
-{
-	ui = new Ui_MainView();
-    
-	ui->setupUi(this);
-	ui->getCentralWidget()->show();
-	
-	for (int i=0; i<15; i++){
-		ui->gettypeSelector()->addItem(tabTypeNames[i]);
-	}
- 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
-	ui->getWebView()->load(QUrl("/home/ubuntu/Documents/SublimeCode/src/callGraph.html"));
-}
-
 MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 {
 	ui = new Ui_MainView();
@@ -47,7 +33,8 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
 	config = c;
-	
+	runner = new Runner(config);
+
 	cssFile = QString::fromStdString(config->getRootPath())+"/resources/style.css";
 	xslTag = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByTags.xsl");
 	xslType = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByType.xsl");
@@ -58,19 +45,17 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
 	}
 	
-	LauncherCTags launcher(config);
-	includeParser = new IncludeParser(config);
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
-		launcher.addPathToAnalyze(*it);
-		includeParser->addPathToAnalyze(*it);
 		wordList.push_back(QString::fromStdString((*it).substr(config->getSourcesDir().size())));
 	}
-	launcher.generateTagsFile();
-	  	
+
 	if (ui->getRadioType()->isChecked()){
 		ui->gettypeSelector()->setVisible(true);
 	}
-	
+
+	runner->setListFiles(fileList);
+	runner->generateContents();
+
 	cHTML = new CreateHTML(config);
 
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
@@ -198,13 +183,8 @@ void MainView::generateGraph(QString number, std::string buildType)
 	{
 		if (buildType == "Called" || buildType == "Calling")
 		{
-			TagsManagerImpl tagMan(config);
-			TagsParserImpl tagParse(&tagMan);
-			tagParse.loadFromFile(config->getDestDir() + "/tags");
-			TagsManager *myTagManager = &tagMan;
-			Graph *myGraph = new GraphCaller(config, myTagManager);
 			
-			cjson = new CreateJson(config, myGraph);
+			cjson = new createJson(config, runner->getGraphCaller());
 			cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), filepath, buildType);
 		}
 		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
@@ -226,16 +206,13 @@ void MainView::generateHighlightFunction(QString number)
 	QString html;
 	std::string filename;
 	xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMHighlightFunction.xml";
-	this->myTagMan = new TagsManagerImpl(config);
-	this->tpi = new TagsParserImpl(myTagMan);
-	tpi->loadFromFile(config->getDestDir()+"/tags");
 	
 	QWebView *webViewHighlight = new QWebView();
 		
 	QString ext = QString::fromStdString(cHTML->getList()->at(number.toInt() - 1)->getFileName()).section('.',-1);
 	
 	if(ext!="js"){
-		cHTML->createListHighlightFunction(cHTML->getList()->at(number.toInt() - 1), myTagMan);
+		cHTML->createListHighlightFunction(cHTML->getList()->at(number.toInt() - 1), runner->getTagsManager());
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
 		ui->getTabWidget()->addTab(webViewHighlight, "Highlight");
 		webViewHighlight->setHtml(html);

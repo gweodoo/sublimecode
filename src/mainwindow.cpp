@@ -195,7 +195,7 @@ void MainWindow::Finish()
 				dialog->show();
 				this->hide();
 			} else {
-				qmb2.setText("Error during project copy");
+				qmb2.setText("An error occured during extraction.\n Please, try again.");
 				qmb2.exec();
 			}
 
@@ -229,7 +229,7 @@ void MainWindow::Finish()
 				dialog->show();
 				this->hide();
 			} else {
-				qmb2.setText("Error during project copy");
+				qmb2.setText("An error occured during extraction.\n Please, try again.");
 				qmb2.exec();
 			}
 

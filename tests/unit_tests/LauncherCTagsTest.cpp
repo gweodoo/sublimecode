@@ -24,16 +24,16 @@ using namespace std;
 
 int main(void) {
 	Configuration config("..", ".");
-	LauncherCTags launcher(&config), launcher2(&config);
+	//LauncherCTags launcher(&config), launcher2(&config);
 
-	assert(launcher.addPathToAnalyze("my/super/path"));
-
-	assert(launcher.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags my/super/path ");
-	assert(launcher.generateTagsFile());
-
-	assert(launcher2.addPathToAnalyze("../../src/"));
-	assert(launcher2.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags ../../src/ ");
-	assert(launcher2.generateTagsFile());
+// 	assert(launcher.addPathToAnalyze("my/super/path"));
+//
+// 	assert(launcher.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags my/super/path ");
+// 	assert(launcher.generateTagsFile());
+//
+// 	assert(launcher2.addPathToAnalyze("../../src/"));
+// 	assert(launcher2.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags ../../src/ ");
+// 	assert(launcher2.generateTagsFile());
 
 
 	return 0;

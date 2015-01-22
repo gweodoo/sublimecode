@@ -27,7 +27,7 @@ class LauncherCTags
 private:
 	std::string pathExecutable;
 	std::string options;
-	std::vector<std::string>* listPaths;
+	std::vector<std::string> listPaths;
 	std::string filePath;
 	Configuration* config;
 
@@ -35,7 +35,7 @@ private:
 	static const std::string GLOBAL_OPTIONS;
 
 public:
-	LauncherCTags(Configuration* config, std::vector<std::string>* listPaths = NULL, std::string exe = "ctags", std::string opts = GLOBAL_OPTIONS);
+	LauncherCTags(Configuration* config, std::vector<std::string> listPaths, std::string exe = "ctags", std::string opts = GLOBAL_OPTIONS);
 	bool generateTagsFile();
 	bool addPathToAnalyze(std::string filename);
 	void display() const;

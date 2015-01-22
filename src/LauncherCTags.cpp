@@ -24,33 +24,33 @@ using namespace std;
 const std::string LauncherCTags::DEF_EXEC = "ctags";
 const std::string LauncherCTags::GLOBAL_OPTIONS = "-Rn --c-kinds=+cdefgmnstuvx";
 
-LauncherCTags::LauncherCTags (Configuration *config, std::vector<std::string>* listPaths, string exe, string opts ) {
+LauncherCTags::LauncherCTags (Configuration *config, std::vector<std::string> listPaths, string exe, string opts ) {
 	this->pathExecutable = exe;
 	this->listPaths = listPaths;
 	this->config = config;
 	if(opts != GLOBAL_OPTIONS)
 		this->options = opts;
 
-	if(listPaths == NULL)
-		this->listPaths = new vector<string>;
 }
 
 bool LauncherCTags::generateTagsFile() {
-	std::string command = pathExecutable + options + " " + GLOBAL_OPTIONS + " -f " + config->getDestDir() + "/tags " + listPaths->front();
+	std::string command = pathExecutable + options + " " + GLOBAL_OPTIONS + " -f " + config->getDestDir() + "/tags " + listPaths.front();
 	std::string chainStr = "";
 	int chainSize = 0;
 	int ret =0,i = 1;
 
 	system(command.c_str());
-	while(i < listPaths->size()){
+	cout << command << endl;
+	while(i < listPaths.size()){
 		chainStr = "";
 		chainSize = 0;
-		while(chainSize < 100000 && i < listPaths->size()){
-			chainStr += listPaths->at(i) + " ";
-			chainSize +=listPaths->at(i).size();
+		while(chainSize < 100000 && i < listPaths.size()){
+			chainStr += listPaths.at(i) + " ";
+			chainSize +=listPaths.at(i).size();
 			i++;
 		}
 		command = pathExecutable + options + " -a " + GLOBAL_OPTIONS + " -f " + config->getDestDir() + "/tags " + chainStr;
+		cout << command << endl;
 		system(command.c_str());
 	}
 	return true;
@@ -58,7 +58,7 @@ bool LauncherCTags::generateTagsFile() {
 }
 
 bool LauncherCTags::addPathToAnalyze ( string path ) {
-	listPaths->push_back(path);
+	listPaths.push_back(path);
 	return true;
 }
 
@@ -66,9 +66,9 @@ void LauncherCTags::display() const {
 	cout << "LAUNCHER CTAGS ------>" << endl
 	<< "Executable : " << pathExecutable << endl
 	<< "Extra opts : " << options << endl;
-	if(!listPaths->empty())
+	if(!listPaths.empty())
 		cout << "Paths to analyze :" << endl;
-		for(vector<string>::iterator it = listPaths->begin(); it != listPaths->end(); it++)
+		for(vector<string>::const_iterator it = listPaths.begin(); it != listPaths.end(); it++)
 			cout << "\t- " << *it <<endl;
 	cout << "--------------------->" << endl;
 
@@ -79,7 +79,7 @@ std::string LauncherCTags::constructCommand() const {
 	std::string path = " -f " + config->getDestDir() + "/tags " ;
 	std::string list = "";
 
-	for(vector<string>::iterator it = listPaths->begin(); it != listPaths->end(); it++)
+	for(vector<string>::const_iterator it = listPaths.begin(); it != listPaths.end(); it++)
 		list += (*it) + " ";
 
 	command += path + list;

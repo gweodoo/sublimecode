@@ -29,15 +29,13 @@
 #include "Tag.h"
 #include "CreateHTML.h"
 #include <QCompleter>
-#include "Graph.h"
-#include "inclusiongraph/IncludeParser.h"
+#include "Runner.h"
 
 class MainView : public QMainWindow
 {
     Q_OBJECT
 
 public:
-	explicit MainView();
 	MainView(Configuration *c, std::vector<std::string> fileList);
 	~MainView();
 	
@@ -62,13 +60,9 @@ private:
 	QString xslTag;
 	QString xslType;
 	QString xslFile;
-	QString xslHighlight;
-	CreateHTML *cHTML;
-	IncludeParser *includeParser;
-	TagsParserImpl *tpi;
-	TagsManagerImpl *myTagMan;
 	std::vector<Tag *>* list;
 	QWebView *webViewSearch;
+	Runner * runner;
 };
 
 #endif // MAINVIEW_H
