@@ -27,6 +27,8 @@
 #include "LauncherCTags.h"
 #include "TagsParserImpl.h"
 #include "TagsManagerImpl.h"
+#include "Graph.h"
+#include "GraphCaller.h"
 
 using namespace std;
 
@@ -42,11 +44,15 @@ public:
 	void CreateHTMLbegin(const char* file);
 	void CreateHTMLbody(const char* file);
 	void CreateHTMLend(const char* file);
-
+	
+	int getTotalLine(std::string ifs);
 	void createXMLSearchByTags(string tag);
 	void createXMLSearchByType(int type);
 	void createXMLSearchByFile(string filename);
+	void createListHighlightFunction(Tag* tag, TagsManagerImpl *myTagman);
+	void createXMLHighlightFunction(std::vector<std::string> beforeFunction, std::vector<std::string> inFunction,std::vector<std::string> afterFunction);
 	QString TransformToHTML(QString fileXML, QString fileXSL);
+	std::string stringFromVector(vector< string > vector);
 	
 	std::vector<Tag *>* getList();
 
@@ -54,9 +60,13 @@ private:
 	Configuration *config;
 	TagsParserImpl *tpi;
 	TagsManagerImpl *myTagMan;
+	Graph *graph;
 	std::vector<Tag *>* list;
 	std::ostringstream ostr;
 	std::string fileNameSubString;
+	std::vector<std::string> beforeFunction;
+	std::vector<std::string> inFunction;
+	std::vector<std::string> afterFunction;
 };
 
 #endif

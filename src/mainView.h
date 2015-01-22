@@ -22,12 +22,14 @@
 #include <QMainWindow>
 #include "ui_mainView.h"
 #include <QString>
+#include <QMessageBox>
 #include "Configuration.h"
 #include "LauncherCTags.h"
 #include "TagsManagerImpl.h"
 #include "Tag.h"
 #include "CreateHTML.h"
 #include <QCompleter>
+#include "CreateHTML.h"
 
 class MainView : public QMainWindow
 {
@@ -43,6 +45,7 @@ public slots:
 	void handlePushRadioType();
 	void slot_linkClicked(const QUrl &url);
 	void generateCallGraph(QString number, std::string buildType);
+	void generateHighlightFunction(QString number);
 
 private:
 	Ui_MainView * ui;
@@ -57,7 +60,11 @@ private:
 	QString xslTag;
 	QString xslType;
 	QString xslFile;
+	QString xslHighlight;
 	CreateHTML *cHTML;
+	TagsParserImpl *tpi;
+	TagsManagerImpl *myTagMan;
+	std::vector<Tag *>* list;
 };
 
 #endif // MAINVIEW_H

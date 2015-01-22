@@ -19,7 +19,6 @@
 
 #include "mainView.h"
 #include "ui_mainView.h"
-#include "CreateHTML.h"
 #include <QDebug>
 #include <QDirIterator>
 #include <QWebFrame>
@@ -48,21 +47,13 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
-	//config = new Configuration(c->getSourcesDir(), c->getDestDir());//
 	config = c;
-	
-	cHTML = new CreateHTML(config);
 	
 	cssFile = QString::fromStdString(config->getRootPath())+"/resources/style.css";
 	xslTag = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByTags.xsl");
 	xslType = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByType.xsl");
 	xslFile = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByFile.xsl");
-	
-	QDirIterator it(QString::fromStdString(c->getSourcesDir()), QDir::Files, QDirIterator::Subdirectories);
-	while (it.hasNext()) {
-		relativePathToAnalyse = it.next().toStdString();
-		allfileList.push_back(relativePathToAnalyse.substr(config->getSourcesDir().size(), relativePathToAnalyse.size()));
-	}
+	xslHighlight = QString::fromStdString(config->getRootPath()+"/resources/transformHighlightFunction.xsl");
 	
 	for (int i=0; i<15; i++){
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
@@ -70,15 +61,18 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	
 	LauncherCTags launcher(config);
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
-		launcher.addPathToAnalyze(*it);
-		pathToAnalyse = *it;
-		wordList.push_back(QString::fromStdString(pathToAnalyse.substr(config->getSourcesDir().size())));
+		QString convrt = QString::fromStdString(*it);
+		string converti = convrt.toUtf8().data();
+		launcher.addPathToAnalyze(converti);
+		wordList.push_back(QString::fromStdString(QString::fromUtf8(converti.c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
 	}
 	launcher.generateTagsFile();
 	  	
 	if (ui->getRadioType()->isChecked()){
 		ui->gettypeSelector()->setVisible(true);
 	}
+	
+	cHTML = new CreateHTML(config);
 	
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
@@ -94,9 +88,7 @@ MainView::~MainView()
 }
 
 void MainView::slot_linkClicked(const QUrl& url)
-{
-	qDebug() << url;
-	
+{	
 	QString delimiter("///");
 	QStringList elements = url.toString().split(delimiter);
 
@@ -104,15 +96,12 @@ void MainView::slot_linkClicked(const QUrl& url)
 	{
 		generateCallGraph(elements.at(1), "Called");
 	}
-	else
-	{
-		if (elements.at(0) == "CallingGraph")
-		{
-			generateCallGraph(elements.at(1), "Calling");
-		}
+	else if (elements.at(0) == "CallingGraph"){
+		generateCallGraph(elements.at(1), "Calling");
 	}
-
-	
+	else if(elements.at(0) == "Path"){
+		generateHighlightFunction(elements.at(1));
+	}
 }
 
 bool exists(const char *fname)
@@ -161,7 +150,6 @@ void MainView::handlePushButton()
 		ui->getWebView()->setHtml(html);
 		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 	}
-	//ui->getWebView()->load(QUrl("/home/ubuntu/Documents/home.html"));
 }
 
 void MainView::handlePushRadioType()
@@ -207,3 +195,28 @@ void MainView::generateCallGraph(QString number, std::string buildType)
 	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "resources/callGraph.html"));
 	ui->getWebView()->show();
 }
+
+void MainView::generateHighlightFunction(QString number)
+{
+	QString xmlFile;
+	QString html;
+	std::string filename;
+	xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMHighlightFunction.xml";
+	this->myTagMan = new TagsManagerImpl(config);
+	this->tpi = new TagsParserImpl(myTagMan);
+	tpi->loadFromFile(config->getDestDir()+"/tags");
+		
+	QString ext = QString::fromStdString(cHTML->getList()->at(number.toInt() - 1)->getFileName()).section('.',-1);
+	
+	if(ext!="js"){
+	
+		cHTML->createListHighlightFunction(cHTML->getList()->at(number.toInt() - 1), myTagMan);
+		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
+		ui->getWebView()->setHtml(html);
+		ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+	}
+	else {
+		QMessageBox::information(this, "Warning", "Unsupported file format");
+	}
+}
+

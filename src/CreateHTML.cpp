@@ -34,6 +34,9 @@ CreateHTML::~CreateHTML(){}
 CreateHTML::CreateHTML(Configuration* c)
 {
 	config = new Configuration(c->getSourcesDir(), c->getDestDir());
+	this->myTagMan = new TagsManagerImpl(config);
+	this->tpi = new TagsParserImpl(myTagMan);
+	tpi->loadFromFile(config->getDestDir()+"/tags");
 }
 
 void CreateHTML::CreateHTMLfile(QString file)
@@ -84,11 +87,36 @@ void CreateHTML::CreateHTMLend(const char* file)
 	myfile.close();
 }
 
-
 void CreateHTML::CreateHTMLbody(const char* file)
 {
 
 }
+
+
+QString removeAccents(QString s) {
+	QString diacriticLetters_;
+	QStringList noDiacriticLetters_;
+	
+	if (diacriticLetters_.isEmpty()) {
+		diacriticLetters_ = QString::fromUtf8("ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ");
+		noDiacriticLetters_ << "S"<<"OE"<<"Z"<<"s"<<"oe"<<"z"<<"Y"<<"Y"<<"u"<<"A"<<"A"<<"A"<<"A"<<"A"<<"A"<<"AE"<<"C"<<"E"<<"E"<<"E"<<"E"<<"I"<<"I"<<"I"<<"I"<<"D"<<"N"<<"O"<<"O"<<"O"<<"O"<<"O"<<"O"<<"U"<<"U"<<"U"<<"U"<<"Y"<<"s"<<"a"<<"a"<<"a"<<"a"<<"a"<<"a"<<"ae"<<"c"<<"e"<<"e"<<"e"<<"e"<<"i"<<"i"<<"i"<<"i"<<"o"<<"n"<<"o"<<"o"<<"o"<<"o"<<"o"<<"o"<<"u"<<"u"<<"u"<<"u"<<"y"<<"y";
+	}
+
+	QString output = "";
+	for (int i = 0; i < s.length(); i++) {
+		QChar c = s[i];
+		int dIndex = diacriticLetters_.indexOf(c);
+		if (dIndex < 0) {
+			output.append(c);
+		}	 
+		else {
+			QString replacement = noDiacriticLetters_[dIndex];
+			output.append(replacement);
+		}
+    }
+    return output;
+}
+
 
 void CreateHTML::createXMLSearchByTags(string tag)
 {	
@@ -98,9 +126,6 @@ void CreateHTML::createXMLSearchByTags(string tag)
 	QDomElement root = document.createElement("SearchByTags");
 	document.appendChild(root);
 	
-	this->myTagMan = new TagsManagerImpl(config);
-	this->tpi = new TagsParserImpl(myTagMan);
-	tpi->loadFromFile(config->getDestDir()+"/tags");
 	list = myTagMan->getTagsByName(tag);
 
 	for (int i=0; i<list->size(); i++)
@@ -122,11 +147,11 @@ void CreateHTML::createXMLSearchByTags(string tag)
 		ostr.str("");
 		ostr.clear();
 		
-		fileNameSubString = list->at(i)->getFileName().substr(config->getSourcesDir().size(), list->at(i)->getFileName().size());
+		string converti = list->at(i)->getFileName();
 		
 		QDomText txt1 = document.createTextNode(QString::number(i+1));
 		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
-		QDomText txt3 = document.createTextNode(QString::fromStdString(fileNameSubString));
+		QDomText txt3 = document.createTextNode(QString::fromStdString(QString::fromUtf8(converti.c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
 		QDomText txt4 = document.createTextNode(QString::fromStdString(tabTypeNames[list->at(i)->getType()]));
 
 		element1.appendChild(txt1);
@@ -152,9 +177,9 @@ void CreateHTML::createXMLSearchByTags(string tag)
 
 void CreateHTML::createXMLSearchByType(int type)
 {
-	this->myTagMan = new TagsManagerImpl(config);
-	this->tpi = new TagsParserImpl(myTagMan);
-	tpi->loadFromFile(config->getDestDir()+"/tags");
+// 	this->myTagMan = new TagsManagerImpl(config);
+// 	this->tpi = new TagsParserImpl(myTagMan);
+// 	tpi->loadFromFile(config->getDestDir()+"/tags");
 	list = myTagMan->findTagsByType(static_cast<tagType>(type));
 	
 	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[type]+".xml"); 
@@ -182,11 +207,11 @@ void CreateHTML::createXMLSearchByType(int type)
 		ostr.str("");
 		ostr.clear();
 		
-		fileNameSubString = list->at(i)->getFileName().substr(config->getSourcesDir().size(), list->at(i)->getFileName().size());
+		string converti = list->at(i)->getFileName();
 		
 		QDomText txt1 = document.createTextNode(QString::number(i+1));
 		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
-		QDomText txt3 = document.createTextNode(QString::fromStdString(fileNameSubString));
+		QDomText txt3 = document.createTextNode(QString::fromStdString(QString::fromUtf8(converti.c_str(),-1).toStdString().substr(config->getSourcesDir().size())));
 		QDomText txt4 = document.createTextNode(QString::fromStdString(list->at(i)->getName()));
 
 		element1.appendChild(txt1);
@@ -220,11 +245,13 @@ void CreateHTML::createXMLSearchByFile(string filename)
 	QDomElement root = document.createElement("SearchByFile");
 	document.appendChild(root);
 	
-	this->myTagMan = new TagsManagerImpl(config);
-	this->tpi = new TagsParserImpl(myTagMan);
-	tpi->loadFromFile(config->getDestDir()+"/tags");
-	list = myTagMan->getTagsByFile(config->getSourcesDir()+filename);
+	std::string str_config(QString::fromStdString(config->getSourcesDir()).toUtf8().data());
 	
+// 	this->myTagMan = new TagsManagerImpl(config);
+// 	this->tpi = new TagsParserImpl(myTagMan);
+// 	tpi->loadFromFile(config->getDestDir()+"/tags");
+	list = myTagMan->getTagsByFile(str_config+filename);
+		
 	for (int i=0; i<list->size(); i++)
 	{
 		QDomElement element = document.createElement("File");
@@ -243,9 +270,7 @@ void CreateHTML::createXMLSearchByFile(string filename)
 		std::string lineNumberString = ostr.str();
 		ostr.str("");
 		ostr.clear();
-		
-		fileNameSubString = list->at(i)->getFileName().substr(config->getSourcesDir().size(), list->at(i)->getFileName().size());
-		
+				
 		QDomText txt1 = document.createTextNode(QString::number(i+1));
 		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
 		QDomText txt3 = document.createTextNode(QString::fromStdString(list->at(i)->getName()));
@@ -272,6 +297,106 @@ void CreateHTML::createXMLSearchByFile(string filename)
 	}
 }
 
+int CreateHTML::getTotalLine(std::string content)
+{
+	int lines_count = 1;
+	for(int i=0; i<content.length(); i++){
+		if(content.at(i) == '\n'){
+			lines_count++;
+		}
+	}
+	return lines_count;
+}
+
+void CreateHTML::createListHighlightFunction(Tag* tag, TagsManagerImpl* myTagman)
+{
+	beforeFunction.clear();
+	inFunction.clear();
+	afterFunction.clear();
+	
+	TagsManager *tagman = myTagman;
+	this->graph = new GraphCaller(config,myTagman);
+	
+	std::string line;
+	int lines_count = 1;
+		
+	std::ifstream ifs1(tag->getFileName().c_str());
+	std::string content((std::istreambuf_iterator<char>(ifs1)),(std::istreambuf_iterator<char>()));
+	
+	int TotalLine = getTotalLine(content);
+	int BeginLineFunction = tag->getLineNumber();
+	int EndLineFunction = tag->getLineNumber() + this->graph->getFunctionLength(tag);
+	
+	std::ifstream ifs(tag->getFileName().c_str());
+	
+	while(std::getline(ifs, line)){
+		if(lines_count>0 && lines_count<BeginLineFunction){
+			beforeFunction.push_back(line+"\n");
+		}
+		else if (lines_count>=BeginLineFunction && lines_count<=EndLineFunction){
+			inFunction.push_back(line+"\n");
+		}
+		else if(lines_count>EndLineFunction && lines_count<=TotalLine){
+			afterFunction.push_back(line+"\n");
+		}
+		lines_count++;
+	}
+	createXMLHighlightFunction(beforeFunction, inFunction, afterFunction);
+}
+
+string CreateHTML::stringFromVector(vector< string > vector)
+{
+	std::ostringstream oss;
+
+	if (!vector.empty())
+	{
+		std::copy(vector.begin(), vector.end()-1,std::ostream_iterator<string>(oss, ""));
+		oss << vector.back();
+	}
+
+	return oss.str();
+}
+
+void CreateHTML::createXMLHighlightFunction(vector< string > beforeFunction, vector< string > inFunction, vector< string > afterFunction)
+{	
+	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMHighlightFunction.xml"); 
+	QDomDocument document;
+	
+	QDomElement root = document.createElement("HighlightFunction");
+	document.appendChild(root);
+	
+	QDomElement element = document.createElement("Highlight");
+
+	QDomElement element1 = document.createElement("BeforeFunction");
+	QDomElement element2 = document.createElement("InFunction");
+	QDomElement element3 = document.createElement("AfterFunction");
+	
+	element.appendChild(element1);
+	element.appendChild(element2);
+	element.appendChild(element3);
+	
+	QDomText txt1 = document.createTextNode(QString::fromStdString(stringFromVector(beforeFunction)));
+	QDomText txt2 = document.createTextNode(QString::fromStdString(stringFromVector(inFunction)));
+	QDomText txt3 = document.createTextNode(QString::fromStdString(stringFromVector(afterFunction)));
+
+	element1.appendChild(txt1);
+	element2.appendChild(txt2);
+	element3.appendChild(txt3);
+	
+	root.appendChild(element);
+	
+	if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		qDebug() << "Open file failed";
+	}
+	else
+	{	
+		QTextStream stream(&file);
+		stream << document.toString();
+		file.close();
+		qDebug() << "Done";
+	}
+}
 
 QString CreateHTML::TransformToHTML(QString fileXML, QString fileXSL)
 {

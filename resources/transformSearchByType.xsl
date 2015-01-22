@@ -17,9 +17,9 @@
 					<TD><xsl:value-of select="Number"/></TD>
 					<TD><xsl:value-of select="Line"/></TD>
 					<TD><a>
-						<xsl:attribute name="href"><xsl:value-of select="Path"/></xsl:attribute>
+						<xsl:attribute name="href">Path///<xsl:value-of select="Number"/></xsl:attribute>
 						<xsl:value-of select="Path"/>
-					</a></TD>					
+					</a></TD>
 					<TD><xsl:value-of select="Name"/></TD>
 				</TR>
 			</xsl:for-each>

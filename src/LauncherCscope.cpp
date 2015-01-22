@@ -257,7 +257,7 @@ int LauncherCscope::launchCommandExternalTool(Tag * tagAssociatedToFunction)
 
 int endOfFunctionDefinition=0;
 endOfFunctionDefinition=this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction);
-if(endOfFunctionDefinition>0) endOfFunctionDefinition=endOfFunctionDefinition=tagAssociatedToFunction->getLineNumber();
+if(endOfFunctionDefinition>0) endOfFunctionDefinition=endOfFunctionDefinition-tagAssociatedToFunction->getLineNumber();
 
 return endOfFunctionDefinition;
 
