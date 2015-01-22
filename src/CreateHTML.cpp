@@ -31,76 +31,16 @@ CreateHTML::CreateHTML(){
 }
 CreateHTML::~CreateHTML(){}
 
-CreateHTML::CreateHTML(Configuration* c)
-{
-	config = new Configuration(c->getSourcesDir(), c->getDestDir());
-	this->myTagMan = new TagsManagerImpl(config);
-	this->tpi = new TagsParserImpl(myTagMan);
-	tpi->loadFromFile(config->getDestDir()+"/tags");
-}
-
-void CreateHTML::CreateHTMLfile(QString file)
-{
-	const char* fileChar;
-	QByteArray ba = file.toLatin1();
-	fileChar = ba.data();
-	ofstream outfile (fileChar);
-	CreateHTMLbase(fileChar);
-}
-
-void CreateHTML::CreateHTMLbase(const char* file)
-{
-	ofstream myfile;
-	myfile.open(file);
-	myfile << "<!DOCTYPE html>" << endl;
-	myfile << "<html>" << endl;
-	myfile << "<head>" << endl;
-	myfile << "<title>Page Title</title>" << endl;
-	myfile << "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" << endl;
-	myfile << "</head>" << endl;
-	myfile << "<body>" << endl;
-	myfile << "<p>AAAAAAAAAAAAAAAAAAAAAAAAAAA</p>" << endl;
-	myfile << "</body>" << endl;
-	myfile << "</html>" << endl;
-	myfile.close();
-}
-
-void CreateHTML::CreateHTMLbegin(const char* file)
-{
-	ofstream myfile;
-	myfile.open(file);
-	myfile << "<!DOCTYPE html>" << endl;
-	myfile << "<html>" << endl;
-	myfile << "<head>" << endl;
-	myfile << "<title>Page Title</title>" << endl;
-	myfile << "</head>" << endl;
-	myfile << "<body>" << endl;
-	myfile.close();
-}
-
-void CreateHTML::CreateHTMLend(const char* file)
-{
-	ofstream myfile;
-	myfile.open(file);
-	myfile << "</body>" << endl;
-	myfile << "</html>" << endl;
-	myfile.close();
-}
-
-void CreateHTML::CreateHTMLbody(const char* file)
-{
-
-}
-
+CreateHTML::CreateHTML(Configuration* c, Runner *runner) : runner(runner) , config(c) {}
 void CreateHTML::createXMLSearchByTags(string tag)
 {	
 	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml"); 
 	QDomDocument document;
-	
+
 	QDomElement root = document.createElement("SearchByTags");
 	document.appendChild(root);
-	
-	list = myTagMan->getTagsByName(tag);
+
+	list = runner->getTagsByName(tag);
 
 	for (int i=0; i<list->size(); i++)
 	{
@@ -151,10 +91,7 @@ void CreateHTML::createXMLSearchByTags(string tag)
 
 void CreateHTML::createXMLSearchByType(int type)
 {
-// 	this->myTagMan = new TagsManagerImpl(config);
-// 	this->tpi = new TagsParserImpl(myTagMan);
-// 	tpi->loadFromFile(config->getDestDir()+"/tags");
-	list = myTagMan->findTagsByType(static_cast<tagType>(type));
+	list = runner->findTagsByType(static_cast<tagType>(type));
 	
 	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[type]+".xml"); 
 	QDomDocument document;
@@ -221,10 +158,7 @@ void CreateHTML::createXMLSearchByFile(string filename)
 	
 	std::string str_config(QString::fromStdString(config->getSourcesDir()).toUtf8().data());
 	
-// 	this->myTagMan = new TagsManagerImpl(config);
-// 	this->tpi = new TagsParserImpl(myTagMan);
-// 	tpi->loadFromFile(config->getDestDir()+"/tags");
-	list = myTagMan->getTagsByFile(str_config+filename);
+	list = runner->getTagsByFile(str_config+filename);
 		
 	for (int i=0; i<list->size(); i++)
 	{
@@ -282,14 +216,11 @@ int CreateHTML::getTotalLine(std::string content)
 	return lines_count;
 }
 
-void CreateHTML::createListHighlightFunction(Tag* tag, TagsManagerImpl* myTagman)
+void CreateHTML::createListHighlightFunction(Tag* tag)
 {
 	beforeFunction.clear();
 	inFunction.clear();
 	afterFunction.clear();
-	
-	TagsManager *tagman = myTagman;
-	this->graph = new GraphCaller(config,myTagman);
 	
 	std::string line;
 	int lines_count = 1;
@@ -299,7 +230,7 @@ void CreateHTML::createListHighlightFunction(Tag* tag, TagsManagerImpl* myTagman
 	
 	int TotalLine = getTotalLine(content);
 	int BeginLineFunction = tag->getLineNumber();
-	int EndLineFunction = tag->getLineNumber() + this->graph->getFunctionLength(tag);
+	int EndLineFunction = tag->getLineNumber() + runner->getFunctionLength(tag);
 	
 	std::ifstream ifs(tag->getFileName().c_str());
 	

@@ -56,7 +56,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	runner->setListFiles(fileList);
 	runner->generateContents();
 
-	cHTML = new CreateHTML(config);
+	cHTML = new CreateHTML(config, runner);
 
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
@@ -111,10 +111,11 @@ void MainView::handlePushButton()
 	QString html;
 	QString xmlFile;
 	QWebView *webViewSearch = new QWebView();
-		
+
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
+
 			cHTML->createXMLSearchByTags(tag);
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslTag);
@@ -212,7 +213,7 @@ void MainView::generateHighlightFunction(QString number)
 	QString ext = QString::fromStdString(cHTML->getList()->at(number.toInt() - 1)->getFileName()).section('.',-1);
 	
 	if(ext!="js"){
-		cHTML->createListHighlightFunction(cHTML->getList()->at(number.toInt() - 1), runner->getTagsManager());
+		cHTML->createListHighlightFunction(cHTML->getList()->at(number.toInt() - 1));
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
 		ui->getTabWidget()->addTab(webViewHighlight, "Highlight");
 		webViewHighlight->setHtml(html);

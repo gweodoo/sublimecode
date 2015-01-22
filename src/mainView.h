@@ -30,7 +30,6 @@
 #include "CreateHTML.h"
 #include <QCompleter>
 #include "Runner.h"
-
 class MainView : public QMainWindow
 {
     Q_OBJECT

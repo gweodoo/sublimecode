@@ -25,10 +25,7 @@
 #include <QXmlQuery>
 #include "Configuration.h"
 #include "LauncherCTags.h"
-#include "TagsParserImpl.h"
-#include "TagsManagerImpl.h"
-#include "Graph.h"
-#include "GraphCaller.h"
+#include "Runner.h"
 
 using namespace std;
 
@@ -37,19 +34,13 @@ class CreateHTML {
 public:
 	explicit CreateHTML();
 	~CreateHTML();
-        CreateHTML(Configuration *c);
-	void CreateHTMLfile(QString file);
-	void CreateHTMLbase(const char* file);
-
-	void CreateHTMLbegin(const char* file);
-	void CreateHTMLbody(const char* file);
-	void CreateHTMLend(const char* file);
+        CreateHTML(Configuration *c, Runner *runner);
 	
 	int getTotalLine(std::string ifs);
 	void createXMLSearchByTags(string tag);
 	void createXMLSearchByType(int type);
 	void createXMLSearchByFile(string filename);
-	void createListHighlightFunction(Tag* tag, TagsManagerImpl *myTagman);
+	void createListHighlightFunction( Tag* tag );
 	void createXMLHighlightFunction(std::vector<std::string> beforeFunction, std::vector<std::string> inFunction,std::vector<std::string> afterFunction);
 	QString TransformToHTML(QString fileXML, QString fileXSL);
 	std::string stringFromVector(vector< string > vector);
@@ -58,9 +49,7 @@ public:
 
 private:
 	Configuration *config;
-	TagsParserImpl *tpi;
-	TagsManagerImpl *myTagMan;
-	Graph *graph;
+	Runner *runner;
 	std::vector<Tag *>* list;
 	std::ostringstream ostr;
 	std::string fileNameSubString;

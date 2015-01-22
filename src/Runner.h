@@ -56,6 +56,9 @@ public:
 	std::map<std::string, bool> getFilesIncludingThisFile(std::string path);
 	std::map<std::string, bool> getFilesIncludedByThisFile(std::string path);
 
+	/* Launcher CScope */
+	int getFunctionLength(Tag * cur);
+
 	/* TAG MANAGER */
 	Tag* findSpecificTag ( std::string name, std::string filename, size_t line );
 	std::vector<Tag*>* findTagsByType(tagType type);

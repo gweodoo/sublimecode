@@ -34,7 +34,6 @@ void Runner::generateContents() {
 	launcher.generateTagsFile();
 
 	parser.loadFromFile(config->getDestDir()+"/tags");
-	system ("ls -l /home/Documents/testings/SublimeCode_build/");
 	this->graphResolver = new GraphCaller(config, tagMan);
 	this->includeResolver = new IncludeParser(config);
 }
@@ -71,7 +70,7 @@ std::vector< Tag* >* Runner::getTagsByFile ( string filename ) {
 	return this->tagMan->getTagsByFile(filename);
 }
 std::vector< Tag* >* Runner::getTagsByName ( string name ) {
-	return getTagsByName(name);
+	return this->tagMan->getTagsByName(name);
 }
 
 vector< string >* Runner::getTagNamesByType ( tagType type ) {
@@ -88,4 +87,8 @@ IncludeParser* Runner::getIncludeParser() const {
 
 TagsManagerImpl* Runner::getTagsManager() const {
 	return tagMan;
+}
+
+int Runner::getFunctionLength ( Tag* cur ) {
+	return this->graphResolver->getFunctionLength(cur);
 }
