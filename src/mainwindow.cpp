@@ -154,7 +154,9 @@ void MainWindow::Finish()
 				if(exists(fileNameSource.toUtf8().data()) == true)
 					{
 						fileInfoSource = fileNameSourceTest;
-						config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());
+ 						const char *convert = fileInfoSource.canonicalFilePath().toUtf8().constData();
+ 						std::string str(convert);
+						config = new Configuration(str, fileNameDestination.toStdString());
 						dialog = new Dialog(config);
 						dialog->show();
 						this->hide();

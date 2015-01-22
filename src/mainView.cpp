@@ -46,10 +46,15 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	}
 	
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
-		wordList.push_back(QString::fromStdString(QString::fromUtf8((*it).c_str(),-1).toStdString().substr(config->getSourcesDir().size())));	
-		
+		cout << *it << endl;
+		cout << config->getSourcesDir().size() << endl;
+		wordList.push_back(QString::fromStdString((*it).substr(config->getSourcesDir().size())));	
 	}
 
+	for (int i=0; i<wordList.size(); i++){
+		qDebug() << wordList.at(i);
+	} 
+	
 	if (ui->getRadioType()->isChecked()){
 		ui->gettypeSelector()->setVisible(true);
 	}

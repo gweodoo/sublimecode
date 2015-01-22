@@ -153,11 +153,9 @@ void CreateHTML::createXMLSearchByFile(string filename)
 	
 	QDomElement root = document.createElement("SearchByFile");
 	document.appendChild(root);
-	
-	std::string str_config(QString::fromStdString(config->getSourcesDir()).toUtf8().data());
-	
-	list = runner->getTagsByFile(str_config+filename);
-		
+
+	list = runner->getTagsByFile(config->getSourcesDir()+filename);
+
 	for (size_t i=0; i<list->size(); i++)
 	{
 		QDomElement element = document.createElement("File");

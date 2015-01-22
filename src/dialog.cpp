@@ -26,9 +26,9 @@ Dialog::Dialog(Configuration *config, QWidget *parent) :
 {
     ui = new Ui_Dialog();
     this->config = config;
-    mpath = QString::fromStdString(config->getSourcesDir());
+    mpath = QString::fromUtf8(config->getSourcesDir().c_str());
+
     ui->setupUi(this);
-    
     model = new CFileSystemModel();
     ui->getTreeView()->setModel(model); 
     ui->getTreeView()->setRootIndex(model->index(mpath));
