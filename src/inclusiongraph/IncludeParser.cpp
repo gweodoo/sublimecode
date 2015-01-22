@@ -104,7 +104,7 @@ string IncludeParser::getInclusionResult ( string path ) const {
 	const short MAX = 1024;
 	char buf[MAX];
 
-	command =  "egrep -o \"^ *# *include *(\\\"|<).*\\.h(\\\"|>)\" "+path;
+	command =  "egrep -o \"^ *# *include *(\\\"|<).*\\..*(\\\"|>)\" "+path;
 	FILE * fd = popen(command.c_str(), "r");
 	while(!feof(fd)){
 		if(fgets(buf,MAX,fd)!=NULL){
@@ -117,9 +117,13 @@ string IncludeParser::getInclusionResult ( string path ) const {
 string IncludeParser::getIncludedResult ( string path ) const {
 
 	string startCommand = "", endCommand = " -iregex \".*\\.\\(h\\|hpp\\|c\\|C\\|cpp\\|cxx\\|CPP\\)\"`", command="";
+	size_t pos = 0;
+	path = findBasename(path);
+	pos = path.find(".");
+	if(pos < path.size())
+		path.replace(pos, 1, "\\.");
 
-	path = findBasename(path); path = path.substr(0, path.size() - 2);
-	startCommand =  "egrep -o \"^ *# *include *(\\\"|<).*/?"+path+"\\.h(\\\"|>)\" -R `find ";
+	startCommand =  "egrep -o \"^ *# *include *(\\\"|<).*/?"+path+"(\\\"|>)\" -R `find ";
 
 
 	return runCommand(startCommand, endCommand);
