@@ -24,7 +24,7 @@ using namespace std;
 
 const string IncludeParser::tabInclusivePaths[] = {"include/", "lib/"};
 
-IncludeParser::IncludeParser(Configuration *config) : config(config) {}
+IncludeParser::IncludeParser(Configuration *config, std::vector<std::string> list) : config(config), listPaths(list) {}
 
 std::map< std::string, bool > IncludeParser::lookForIncludedGraph ( std::string path ) const {
 	std::string result = "", cur = "";
@@ -33,11 +33,13 @@ std::map< std::string, bool > IncludeParser::lookForIncludedGraph ( std::string 
 	result = getIncludedResult(path);
 
 	stringstream flux(result);
+// 	cout << "RESULT = " << result << endl;
 	while(getline(flux, cur, '\n')){
 		pos = cur.find(":");
 		string file = cur.substr(0, pos);
 		string include = cur.substr(pos+1);
 		size_t start = include.find("<"), end = 0;
+// 		cout << file << " " << include << endl;
 		if(start <= include.size()){
 			end = include.find(">");
 			include = include.substr(start+1, end - (start+1));
@@ -164,6 +166,7 @@ string IncludeParser::runCommand(std::string startCommand, std::string endComman
 		}
 
 		command = startCommand + chainStr + endCommand;
+// 		cout << "COMMAND = " << command << endl;
 		FILE * fd = popen(command.c_str(), "r");
 		while(!feof(fd)){
 			if(fgets(buf,MAX,fd)!=NULL){

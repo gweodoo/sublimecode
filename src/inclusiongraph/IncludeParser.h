@@ -42,7 +42,7 @@ private:
 	std::string findBasename(std::string name) const;
 
 public:
-	IncludeParser(Configuration *config);
+	IncludeParser(Configuration *config, std::vector<std::string> list);
 	std::map<std::string, bool> lookForIncludedGraph(std::string path) const;
 	std::map<std::string, bool> lookForInclusionGraph(std::string path) const;
 

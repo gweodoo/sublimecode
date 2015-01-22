@@ -35,7 +35,7 @@ void Runner::generateContents() {
 
 	parser.loadFromFile(config->getDestDir()+"/tags");
 	this->graphResolver = new GraphCaller(config, tagMan);
-	this->includeResolver = new IncludeParser(config);
+	this->includeResolver = new IncludeParser(config, listFiles);
 }
 
 void Runner::setListFiles ( vector< string > list ) {
