@@ -53,11 +53,12 @@ bool LauncherCscope::initExternalTool(){
 	
 	bool returnParam=false;
 	if(this->isLaunched==true){
-	
+	cout<<" cscope is already initialized "<<endl;
 		returnParam=true;
 	}
 	else
 	{
+		cout<<"cscope is not already LAUNCHED"<<endl;
 		string commandCscopeConstruct=string("cd ") +(string)this->myConfiguration->getSourcesDir() +string(" && cscope -bqkRu ");
 		string commandFileMove_1=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.in.out ")+(string)this->myConfiguration->getDestDir();
 		string commandFileMove_2=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.out ")+(string)this->myConfiguration->getDestDir();
@@ -84,6 +85,7 @@ bool LauncherCscope::initExternalTool(){
 		
 			perror("Moving file Cscope");
 		}
+		this->isLaunched=true;
 		
 		returnParam=true;
 	}
@@ -126,11 +128,10 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 			vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
 			this->removeNotConcernedDefinitionBasedOnFileName(listOfFunctionCalled,tagAssociatedToFunction->getFileName());
 			
-				
 				for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 				{
+			
 					FunctionGraph* functToFind=listOfFunctionCalled->at(i);
-					//cout<<" getiing definition for "<< functToFind->getTagName()<<endl;
 					Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 					if(tag!=NULL)listOfTagToReturn->push_back(tag);
 				}
@@ -277,6 +278,8 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 			switch(i){
 			
 				case 0:
+					//cout<<"part"<<part<<endl;
+					
 					newCscopeOutputLine->setFileName(this->myConfiguration->getSourcesDir()+string("/")+part);
 					break;
 				case 1:
@@ -414,6 +417,7 @@ std::vector<FunctionGraph*>* LauncherCscope::getGlobalDefinitionsFrom(std::strin
 {
 	vector<FunctionGraph*>* outputglobalDefinition=new vector<FunctionGraph*>();
 	outputglobalDefinition=this->cscopeOutputParser(this->launchExternalTool(0,nameOfFunction));
+	
 	return outputglobalDefinition;
 }
 
@@ -666,7 +670,6 @@ std::string LauncherCscope::removeSpaceFromString(std::string stringToParse)
 std::vector<std::string>* LauncherCscope::getTypeForVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind)
 {
 	std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(calledFunctionToFind->getSignature());
-	//TODO some traitement
 	return variablesNames;
 	
 }
@@ -734,6 +737,7 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* ca
 		if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument)
 		{
 			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
+			i--;
 		}
 	}
 	
@@ -835,15 +839,11 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfG
 {
 	for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 	{
-			
 		if(listOfGlobalDefinitions->at(i)->getFileName().find(".h")!=string::npos) {
 			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
-			
 			i--;
-			
 		}
-			
-		}
+	}
 }
 /**
  * removes not matching function definition based on file Name et function line
@@ -855,8 +855,7 @@ void LauncherCscope::removeNotConcernedDefinitionBasedOnFileName(std::vector< Fu
 	
 	for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 	{
-		//cout<<"definition file : "<<listOfGlobalDefinitions->at(i)->getFileName() << " fileName of tag Associated "<<fileName<<endl;
-		//cout<<"result : "<<listOfGlobalDefinitions->at(i)->getFileName().find(fileName)<<endl;
+		
 		if((listOfGlobalDefinitions->at(i)->getFileName().find(fileName)==string::npos))
 		{
 			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
@@ -876,7 +875,7 @@ FunctionGraph* LauncherCscope::removeNotConcernedDefinitionBaseInLineNumer(std::
 {
 
 	FunctionGraph* funcToReturn=NULL;
-	cout<< "size of global definition " << listOfGlobalDefinitions->size()<<endl;
+	
 	if(listOfGlobalDefinitions!=NULL)
 	{
 		int max=0;
