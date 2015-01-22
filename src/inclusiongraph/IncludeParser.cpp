@@ -106,6 +106,7 @@ string IncludeParser::getInclusionResult ( string path ) const {
 
 	command =  "egrep -o \"^ *# *include *(\\\"|<).*\\..*(\\\"|>)\" "+path;
 	FILE * fd = popen(command.c_str(), "r");
+	assert(fd != NULL);
 	while(!feof(fd)){
 		if(fgets(buf,MAX,fd)!=NULL){
 			result.append(buf);
@@ -120,13 +121,14 @@ string IncludeParser::getIncludedResult ( string path ) const {
 	size_t pos = 0;
 	path = findBasename(path);
 	pos = path.find(".");
+	string extension = path.substr(pos+1);
+	if(extension != "h" && extension != "H" && extension != "hpp" && extension != "HPP") return "";
 	if(pos < path.size())
 		path.replace(pos, 1, "\\.");
 
-	startCommand =  "egrep -o \"^ *# *include *(\\\"|<).*/?"+path+"(\\\"|>)\" -R `find ";
+	startCommand =  "egrep -o \"^ *# *include *(\\\"|<).*/?"+path+"(\\\"|>)\" -R ";
 
-
-	return runCommand(startCommand, endCommand);
+	return runCommand(startCommand);
 }
 
 void IncludeParser::addPathToAnalyze ( string path ) {
@@ -153,7 +155,7 @@ string IncludeParser::findBasename(std::string name) const {
 	}
 }
 
-string IncludeParser::runCommand(std::string startCommand, std::string endCommand) const {
+string IncludeParser::runCommand(std::string startCommand) const {
 	string chainStr = "", command = "", result = "";
 	size_t chainSize = 0, i =0;
 	const short MAX = 1024;
@@ -168,10 +170,9 @@ string IncludeParser::runCommand(std::string startCommand, std::string endComman
 			chainSize +=listPaths.at(i).size();
 			i++;
 		}
-
-		command = startCommand + chainStr + endCommand;
-// 		cout << "COMMAND = " << command << endl;
+		command = startCommand + config->getSourcesDir();
 		FILE * fd = popen(command.c_str(), "r");
+		assert(fd != NULL);
 		while(!feof(fd)){
 			if(fgets(buf,MAX,fd)!=NULL){
 				result.append(buf);

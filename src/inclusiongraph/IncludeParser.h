@@ -33,7 +33,7 @@ private:
 	static const std::string tabInclusivePaths[];
 
 	std::string getIncludedResult(std::string path) const;
-	std::string runCommand(std::string startCommand, std::string endCommand) const;
+	std::string runCommand( std::string startCommand ) const;
 
 	std::string getInclusionResult(std::string path) const;
 	std::string findIncludeInProject(std::string filename) const;
