@@ -71,6 +71,7 @@ private :
 	std::vector<FunctionGraph*>* egrepOutputParser(std::string output,std::string fileName);
 	bool isLanguageKey(std::string nameOfSymbolFound);
 	
+	
 public :
 	
 	 LauncherCscope(Configuration* myconfiguration,TagsManager* myTagManager);

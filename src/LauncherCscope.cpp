@@ -29,6 +29,7 @@
 #include <pthread.h>
 #include <ctime>
 #include<sys/time.h>
+#include<vector>
 
 
 
@@ -124,16 +125,20 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		*/
 		if(command==1)
 		{
+			
+			
 			/**
 			 * checking if c/c++
 			 */
 			unsigned  int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
+			
 			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
 			
 			unsigned  int isC=fileNameWithoutPath.find(".c");
-			unsigned  int isCpp=fileNameWithoutPath.substr(isC).find("pp");
 			
-			if(isCpp!=string::npos)
+			if(isC!=string::npos){
+					unsigned  int isCpp=fileNameWithoutPath.substr(isC).find("pp");
+					if(isCpp!=string::npos)
 			{
 				
 				/**
@@ -179,17 +184,21 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					}
 					
 					
+					
 				}
 				
 			}else if(isC!=string::npos)
 			{
+				
 				/**
 				 * C special treatement
 				 */
 				string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
 				vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
+				
 				this->removeNotConcernedDefinitionBasedOnFileName(listOfFunctionCalled,tagAssociatedToFunction->getFileName());
 			
+				
 				for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 				{
 			
@@ -197,7 +206,13 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 					if(tag!=NULL)listOfTagToReturn->push_back(tag);
 				}
+				
 			}
+			else{}
+			}
+			
+		
+			
 			
 		}
 		if(command==2)
@@ -427,6 +442,8 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 	else if(listOfGlobalDefinition->size()>1)
 	{
 		//getting list of type and parameters for each global definition;
+		//cout<< " function graph for which we are looking for a definition "<<outputFunction->getTagName()<< "  call of this function "<<outputFunction->getSignature()<<endl; 
+		//for(int p=0;p<listOfGlobalDefinition->size();p++) cout << "definition : " <<listOfGlobalDefinition->at(p)->getTagName()<< " signature : "<<listOfGlobalDefinition->at(p)->getSignature()<<endl;
 		vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
 		this->removeNotFunctionOutput(listOfGlobalDefinition);
 		// getting rid of the .h and .c/c++ redundances ( the one in .h)
@@ -848,10 +865,10 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* ca
 	unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFind);
 	for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 	{
-		cout<<"number of variable found"<<numberOfArgument <<"number we have "<<listOfTypesforGlobalDefinitions->at(i)->size()<<endl;
-			cout<<" the call "<< calledFunctionToFind->getSignature()<<"matche: "<<endl;
-			for(int p=0;p<listOfTypesforGlobalDefinitions->at(i)->size();p++) cout<<"argument "<<listOfTypesforGlobalDefinitions->at(i)->at(p)<<" ";
-			cout<<endl;
+		//cout<<"number of variable found"<<numberOfArgument <<"number we have "<<listOfTypesforGlobalDefinitions->at(i)->size()<<endl;
+		//	cout<<" the call "<< calledFunctionToFind->getSignature()<<"matche: "<<endl;
+		//	for(int p=0;p<listOfTypesforGlobalDefinitions->at(i)->size();p++) cout<<"argument "<<listOfTypesforGlobalDefinitions->at(i)->at(p)<<" ";
+		//	cout<<endl;
 		
 		
 		if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument)
@@ -1028,7 +1045,8 @@ bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 	||nameOfSymbolFound.compare("find")==0||nameOfSymbolFound.compare("erase")==0||nameOfSymbolFound.compare("compare")==0
 		||nameOfSymbolFound.compare("stream")==0||nameOfSymbolFound.compare("isstream")==0||nameOfSymbolFound.compare("find_first_of")==0
 	||nameOfSymbolFound.compare("size")==0||nameOfSymbolFound.compare("length")==0||nameOfSymbolFound.compare("string")==0
-	||nameOfSymbolFound.compare("switch")==0) isLanguageKey=true;
+	||nameOfSymbolFound.compare("switch")==0||nameOfSymbolFound.compare("exec")==0||nameOfSymbolFound.compare("printf")==0||nameOfSymbolFound.compare("system")==0
+	
+	) isLanguageKey=true;
 	return isLanguageKey;
 }
-
