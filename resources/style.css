@@ -15,12 +15,14 @@ table {
 	border-spacing: 0;
 	border : 1px solid #CFCFCF;
 	border-radius: 5px;
+	text-align: center;
 }
 
 table th {
 	border: 1px solid #999999;
 	background: #E0E0DF;
 	padding: 8px;
+	min-width: 60px;
 }
 
 table td {

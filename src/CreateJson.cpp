@@ -144,6 +144,7 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 			else 
 			{
 				*out << "\"name\": \"" << QString::fromStdString(nameValue) << "\"";
+				*out << ",\"info\": \"Unresolved\"";
 				*out << ",\"checked\": \"false\"";
 			}
 			
