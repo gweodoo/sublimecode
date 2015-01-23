@@ -112,32 +112,38 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 	if (nbIterator < wantedIterator)
 	{
 		int i = 0;
-		
+		qDebug() << nbIterator << " : " << i ;
 		for(std::map<std::string, bool>::iterator it = mapOfFiles->begin(); it != mapOfFiles->end(); it++)
 		{
 			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it).first);
 			
 			*out << "\n{";
 			nameValue = (*it).first;
-			*out << "\"name\": \"" << QString::fromStdString(nameValue.erase(0, this->config->getSourcesDir().length())) << "\"";
 			
 			if ((*it).second)
 			{
+				*out << "\"name\": \"" << QString::fromStdString(nameValue.erase(0, this->config->getSourcesDir().length())) << "\"";
+			
 				if (buildType == buildTypes[2])
 					myMap = includeParser->lookForIncludedGraph((*it).first);
-				if (buildType == buildTypes[3])
+				else if (buildType == buildTypes[3])
 					myMap = includeParser->lookForInclusionGraph((*it).first);
 				
-				std::cout << myMap.size() << (*it).first << endl;
 				if (!myMap.empty())
 				{
 					*out << ",\"children\": [";
 					buildItem(&myMap, out, includeParser, buildType, nbIterator + 1);
 					*out << "]";
 				}
+				else 
+				{
+					if (nbIterator == 0)
+						*out << ",\"children\": []";
+				}
 			}
 			else 
 			{
+				*out << "\"name\": \"" << QString::fromStdString(nameValue) << "\"";
 				*out << ",\"checked\": \"false\"";
 			}
 			

@@ -53,7 +53,6 @@ public:
 	QRadioButton *getRadioType();
 	QRadioButton *getRadioFile();
 	QComboBox *gettypeSelector();
-	QPushButton *getCallGraphButton();
 	QTabWidget *getTabWidget();
 	QShortcut *getShortcutEnter();
     
@@ -64,12 +63,6 @@ private:
 	QGroupBox *tagGroupBox;
 	QPushButton *pushButton;
 	QLineEdit *lineEdit;
-	QGroupBox *otherGroupBox;
-	QPushButton *callGraphButton;
-	QGroupBox *StatsGroupBox;
-	QPushButton *stats1Button;
-	QPushButton *stats2Button;
-	QPushButton *stats3Button;
 	QWidget *rightWidget;
 	QMenuBar *menuBar;
 	QMenu *menuFile;

@@ -2,6 +2,8 @@
 <meta charset="utf-8">
 <style>
 
+body{width:100%;}
+
 .node circle {
 	cursor: pointer;
 	fill: #FFFFFF;
@@ -36,12 +38,12 @@
 <script src="callGraph.js"></script>
 <script>
 
-var margin = {top: 20, right: 20, bottom: 20, left: 180},
-	width = 790 - margin.right - margin.left,
+var margin = {top: 20, right: 30, bottom: 20, left: 180},
+	width = 600 - margin.right - margin.left,
 	//height = 750 - margin.top - margin.bottom,
 	heightChar = 25,
-	widthChar = 6.8,
-	widthLinkMin = 44;
+	widthChar = 7,
+	widthLinkMin = 40;
 
 var i = 0,
 	duration = 450,
@@ -89,8 +91,10 @@ function update(source) {
 	// Compute the new height
 	var levelWidth = [1];
 	var addMarginLeft = 0;
+	var nblevel = 0;
 	var childCount = function(level, n) {
 		if(n.children && n.children.length > 0) {
+			nblevel = nblevel + 1;
 			if(levelWidth.length <= level + 1) // 
 			levelWidth.push(0);
 			levelWidth[level+1] += n.children.length;
@@ -98,14 +102,13 @@ function update(source) {
 				childCount(level + 1, d);
 			});
 		}
-		
-		if (level == 0) {
-			marginLeft = (n.name.length * 8);
-			if (widthLinkMin < marginLeft) { addMarginLeft = (marginLeft - widthLinkMin); }
-			svg.attr("transform", "translate(" + marginLeft + "," + margin.top + ")");
-		}
 	};
-	childCount(0, root);  
+	childCount(0, root); 
+	
+	marginLeft = (root.name.length * widthChar) + margin.right;
+
+	svg.attr("transform", "translate(" + marginLeft + "," + margin.top + ")");
+		
 	var newHeight = d3.max(levelWidth) * heightChar;
 	tree = tree.size([newHeight, width]);
 
@@ -119,8 +122,8 @@ function update(source) {
 	
 	document.getElementById("svgtree").setAttribute("height", newHeight + heightChar);
 	document.getElementById("svgtree")
-		.setAttribute("width", width + addMarginLeft + ((maxlength(nodes) - widthLinkMin) * widthChar) + margin.right + margin.left);
-
+		.setAttribute("width", width + marginLeft + ((maxlength(nodes) - widthLinkMin) * widthChar * nblevel) + margin.right + margin.left);
+	
 	// Update the nodes
 	var node = svg.selectAll("g.node")
 		.data(nodes, function(d) { return d.id || (d.id = ++i); });
@@ -155,8 +158,9 @@ function update(source) {
 		.attr("r", 4.5)
 		//.style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 		.style("fill", function(d) {
-			if (d._children) { if (d._children.length > 0) return "lightsteelblue"; return "#eef"; }
-				else return "#fff";
+				if (d.checked) return "#fdd"
+					else if (d._children) { if (d._children.length > 0) return "lightsteelblue"; return "#eef"; }
+						else return "#fff";
 			});
 
 	nodeUpdate.select("text")

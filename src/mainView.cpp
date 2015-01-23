@@ -177,7 +177,8 @@ void MainView::generateGraph(QString number, std::string buildType)
 	if (buildType == "Called" || buildType == "Calling")
 		filepath = config->getDestDir() + "/" + buildType + "Graph_" + (cHTML->getList()->at(number.toInt() - 1))->hashFileName() + ".json";
 	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
-		filepath = config->getDestDir() + "/" + buildType + "_" + "numeroHashedInclude" + ".json";
+		filepath = config->getDestDir() + "/" + buildType + "_" 
+		+ (QString::fromStdString(this->tag).replace("/","_")).toStdString() + ".json";
 	
 	cout << filepath << endl;
 	QFile file(QString::fromUtf8(filepath.c_str()));

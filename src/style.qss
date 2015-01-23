@@ -16,35 +16,15 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
-QWidget
-{
-	color: black;
-}
 
-QTreeView
+QWidget, QTreeView, QMessageBox, QPushButton, QLineEdit, QComboBox, QCompleter
 {
-	color: black;
+	color: #3B3B3B;
 }
-
-QMessageBox 
-{
-	color : black;
-}
-
-QPushButton
-{
-	color: black;
-}
-
-QLineEdit
-{
-	color: black;
-}
-
 
 QGroupBox 
 {
-	background-color : #e1e1e1;
+	background-color : #F6F7F5;
 	border: 2px solid gray;
 	border-radius: 5px;
 	margin-top: 0.5em;
@@ -52,8 +32,8 @@ QGroupBox
 
 QGroupBox::title 
 {
-    subcontrol-origin: margin;
-    left: 10px;
+	subcontrol-origin: margin;
+	left: 10px;
 }
 
 #leftWidget
@@ -62,27 +42,7 @@ QGroupBox::title
 	border-right: 1px solid gray;
 }
 
-#rightWidget
-{
-
-}
-
 QWebView
 {
-	
-}
-
-QComboBox
-{
-	color: black;
-}
-
-QCompleter
-{
-	color: black;
-}
-
-QFileDialog
-{
-	background: red;
+	background-color: #F5FAF0;
 }

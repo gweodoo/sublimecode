@@ -74,30 +74,8 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	typeSelector->setObjectName("typeSelector");
 	typeSelector->setGeometry(QRect(RSZW(11), RSZH(12), RSZW(11), RSZH(4)));
 	typeSelector->setVisible(false);
-
-	otherGroupBox = new QGroupBox(leftWidget);
-	otherGroupBox->setObjectName(QString("otherGroupBox"));
-	otherGroupBox->setGeometry(QRect(RSZW(2), RSZH(32), RSZW(24), RSZH(10)));
-	callGraphButton = new QPushButton(otherGroupBox);
-	callGraphButton->setObjectName(QString("callGraphButton"));
-	callGraphButton->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
-	
-	StatsGroupBox = new QGroupBox(leftWidget);
-	StatsGroupBox->setObjectName(QString("StatsGroupBox"));
-	StatsGroupBox->setGeometry(QRect(RSZW(2), RSZH(46), RSZW(24), RSZH(20)));
-	stats1Button = new QPushButton(StatsGroupBox);
-	stats1Button->setObjectName(QString("stats1Button"));
-	stats1Button->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
-	stats2Button = new QPushButton(StatsGroupBox);
-	stats2Button->setObjectName(QString("stats2Button"));
-	stats2Button->setGeometry(QRect(RSZW(2), RSZH(9), RSZW(20), RSZH(4)));
-	stats3Button = new QPushButton(StatsGroupBox);
-	stats3Button->setObjectName(QString("stats3Button"));
-	stats3Button->setGeometry(QRect(RSZW(2), RSZH(14), RSZW(20), RSZH(4)));
 	
 	tagGroupBox->raise();
-	otherGroupBox->raise();
-	StatsGroupBox->raise();
 	
 	rightWidget = new QWidget(centralWidget);
 	rightWidget->setObjectName(QString("rightWidget"));
@@ -117,6 +95,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	webView = new QWebView(MainView);
 	webView->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
 	webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	webView->page()->view()->resize(200,200);
 	webView->settings()->setObjectCacheCapacities(0,0,0);
 	
 	tabWidget = new QTabWidget(MainView);
@@ -141,12 +120,6 @@ void Ui_MainView::retranslateUi(QMainWindow *MainView)
 	MainView->setWindowTitle(QApplication::translate("MainView", "MainView", 0));
 	tagGroupBox->setTitle(QApplication::translate("MainView", "TAG", 0));
 	pushButton->setText(QApplication::translate("MainView", "Search", 0));
-	otherGroupBox->setTitle(QApplication::translate("MainView", "GRAPHS", 0));
-	callGraphButton->setText(QApplication::translate("MainView", "Call Graph", 0));
-	StatsGroupBox->setTitle(QApplication::translate("MainView", "STATS", 0));
-	stats1Button->setText(QApplication::translate("MainView", "Stats1", 0));
-	stats2Button->setText(QApplication::translate("MainView", "Stats2", 0));
-	stats3Button->setText(QApplication::translate("MainView", "Stats3", 0));
 	menuFile->setTitle(QApplication::translate("MainView", "File", 0));
 	menuEdit->setTitle(QApplication::translate("MainView", "Edit", 0));
 	menuView->setTitle(QApplication::translate("MainView", "View", 0));
@@ -190,11 +163,6 @@ QRadioButton* Ui_MainView::getRadioFile()
 QComboBox* Ui_MainView::gettypeSelector()
 {
 	return this->typeSelector;
-}
-
-QPushButton * Ui_MainView::getCallGraphButton()
-{
-	return this->callGraphButton;
 }
 
 QTabWidget* Ui_MainView::getTabWidget()

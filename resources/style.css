@@ -1,36 +1,66 @@
-body
-{
+
+body {
 	background-color: #F5FAF0;
 }
 
-h1{
+h1 {
 	font-size: 20px;
+	margin-bottom: 10px;
 }
 
 table {
+	color: #666666;
 	font-family: verdana,arial,sans-serif;
-	font-size:16px;
-	color:#333333;
-	border-width: 1px;
-	border-color: #999999;
-	border-collapse: collapse;
+	font-size: 14px;
+	border-spacing: 0;
+	border : 1px solid #CFCFCF;
+	border-radius: 5px;
 }
+
 table th {
-	background:#b5cfd2;
-	border-width: 1px;
+	border: 1px solid #999999;
+	background: #E0E0DF;
 	padding: 8px;
-	border-style: solid;
-	border-color: #999999;
 }
+
 table td {
-	background:#dcddc0;
-	border-width: 1px;
+	border: 1px solid #999999;
 	padding: 8px;
-	border-style: solid;
-	border-color: #999999;
+	min-width: 50px;
 }
 
-b{
-	color : green;
+table tr:nth-child(odd) {
+	background: #F4F5F3;
 }
 
+table tr:nth-child(even) {
+	background: #E8EBE6;
+}
+
+table tr:hover {
+	background: #C7CAD9;
+	color: #333333;
+}
+
+table a {
+	color: #4756A8;
+}
+
+table a:hover {
+	color: #212C69;
+}
+
+b {
+	color: green;
+}
+
+button.includeButtons {
+	background: #F4F5F3;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+button.includeButtons:hover {
+	background: #E0E0DF;
+	cursor: hand;
+}
