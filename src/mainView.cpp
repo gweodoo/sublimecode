@@ -35,11 +35,11 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	config = c;
 	runner = new Runner(config);
 
-	cssFile = QString::fromStdString(config->getRootPath())+"/resources/style.css";
-	xslTag = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByTags.xsl");
-	xslType = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByType.xsl");
-	xslFile = QString::fromStdString(config->getRootPath()+"/resources/transformSearchByFile.xsl");
-	xslHighlight = QString::fromStdString(config->getRootPath()+"/resources/transformHighlightFunction.xsl");
+	cssFile = QString::fromStdString(config->getRootPath())+"/style.css";
+	xslTag = QString::fromStdString(config->getRootPath()+"/transformSearchByTags.xsl");
+	xslType = QString::fromStdString(config->getRootPath()+"/transformSearchByType.xsl");
+	xslFile = QString::fromStdString(config->getRootPath()+"/transformSearchByFile.xsl");
+	xslHighlight = QString::fromStdString(config->getRootPath()+"/transformHighlightFunction.xsl");
 	
 	for (int i=0; i<15; i++){
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
@@ -197,7 +197,7 @@ void MainView::generateGraph(QString number, std::string buildType)
 	
 	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
 	objectTo->setValue(ui->getWebView(), QString::fromStdString(filepath));
-	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "resources/callGraph.html"));
+	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"));
 	ui->getWebView()->show();
 }
 

@@ -21,9 +21,10 @@ file(GLOB_RECURSE SRC */*.cpp *.cpp)
 file(GLOB_RECURSE HDR *.h)
 file(GLOB_RECURSE UI *.ui)
 file(GLOB_RECURSE RES *.qrc)
+file(GLOB_RECURSE RESOURCES ${CMAKE_SOURCE_DIR}/resources/*)
 
 set(QT_USE_QTWEBKIT TRUE)
-file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${RESOURCES} DESTINATION ${CMAKE_BINARY_DIR}/share/sublimecode/)
 INCLUDE(${QT_USE_FILE})
 
 QT4_WRAP_CPP(HDR_MOC ${HDR})
@@ -37,6 +38,5 @@ TARGET_LINK_LIBRARIES(sublimeCode ${QT_LIBRARIES} Qt4::QtGui Qt4::QtXml)
 
 #########################################
 #installing
-file(GLOB_RECURSE RESOURCES ${CMAKE_SOURCE_DIR}/resources/*)
 INSTALL(TARGETS sublimeCode RUNTIME	DESTINATION bin)
 INSTALL(FILES ${RESOURCES} DESTINATION share/sublimecode)

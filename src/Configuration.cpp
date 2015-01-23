@@ -35,7 +35,7 @@ Configuration::Configuration(std::string sources, std::string dest) {
 	if(ret == MAX || ret == -1){
 		scError("An error occured !");
 	}
-	this->scRootPath = string(buf).substr(0, ret - 15);
+	this->scRootPath = string(buf).substr(0, ret - 15)+"/share/sublimecode";
 }
 
 std::string Configuration::getSourcesDir() const
