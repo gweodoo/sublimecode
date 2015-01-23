@@ -166,7 +166,18 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					 */
 					cout<<"dealing with object method Style "<<endl;
 					string output =this->launchExternalTool(3,tagAssociatedToFunction->getFileName());
-					this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
+					vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
+					//now we get the list of function called as if it was given by cscope
+					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction);
+					//now we have only the ouput matching to the tag associated function
+					for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
+					{
+				
+						FunctionGraph* functToFind=listOfFunctionCalled->at(i);
+						Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
+						if(tag!=NULL)listOfTagToReturn->push_back(tag);
+					}
+					
 					
 				}
 				
@@ -381,8 +392,11 @@ std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string outpu
 		newCscopeOutputLine->setTagName(newCscopeOutputLine->getSignature().substr(0,positionOfFirstBracket));
 		//setting the fileName
 		newCscopeOutputLine->setFileName(fileName);
-		cout<<"new tag is "<<newCscopeOutputLine->getTagName() <<" "<<newCscopeOutputLine->getSignature()<<" "<<newCscopeOutputLine->getLine()<<endl;
-		 listOfCscopeOutput->push_back(newCscopeOutputLine);
+		
+		if(this->isLanguageKey(newCscopeOutputLine->getTagName()))free(newCscopeOutputLine);
+		else listOfCscopeOutput->push_back(newCscopeOutputLine);
+		
+		
 	}
 	return listOfCscopeOutput;
 }
@@ -479,13 +493,13 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L3 ")+arg;
 			break;
 			case 3:
-				commandToExecute=string("  egrep \"[a-zA-Z0-9]* *\\(.*\\)\" -on  ")+arg +string("| awk -F: '{print $1\" \"$2}' ");
+				commandToExecute=string("  egrep \"[a-zA-Z0-9_]* *\\(.*\\)\" -on  ")+arg +string("| awk -F: '{print $1\" \"$2}' ");
 				break;
 			case 7:
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L8 ")+arg;
 			break;
 		}
-		cout<<"command is "<<commandToExecute<<endl;
+		
 			
 			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
 			
@@ -768,7 +782,7 @@ std::vector<std::string>* LauncherCscope::getTypeForVariableUsedInFunctionCall(F
 	int positionOfFunctionName=calledFunctionToFind->getSignature().find(calledFunctionToFind->getTagName());
 	
 	string callExpressionwithOnlyFunctionNameAndParameters=calledFunctionToFind->getSignature().substr(positionOfFunctionName);
-	cout<<"signature :"<<calledFunctionToFind->getSignature()<<" parsed "<<callExpressionwithOnlyFunctionNameAndParameters<<endl;
+	
 	std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(callExpressionwithOnlyFunctionNameAndParameters);
 	return variablesNames;
 	
@@ -929,9 +943,9 @@ void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,
 {
 		for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 		{
-			
-			if((listOfFunctionCalled->at(i)->getLine()>>lineStop)||(listOfFunctionCalled->at(i)->getLine()<<lineStart)||(listOfFunctionCalled->at(i)->getFileName().compare(functionAssociatedToTag->getFileName())))
-			{
+		
+			if((listOfFunctionCalled->at(i)->getLine()>=lineStop)||(listOfFunctionCalled->at(i)->getLine()<=lineStart))//||(listOfFunctionCalled->at(i)->getFileName().compare(functionAssociatedToTag->getFileName())!=0))
+			{	
 				listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
 				i--;
 			}
@@ -1005,5 +1019,16 @@ CscopeThreadObject* LauncherCscope::getCscopeThreadObject()
 {
 	return this->MyCscopeThreadObject;
 }
-
+bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
+{
+	bool isLanguageKey=false;
+	if(nameOfSymbolFound.compare("for")==0||nameOfSymbolFound.compare("if")==0||nameOfSymbolFound.compare("at")==0||nameOfSymbolFound.compare("while")==0||nameOfSymbolFound.compare("else")==0
+		||nameOfSymbolFound.compare("find_last_of")==0||nameOfSymbolFound.compare("push_back")==0||nameOfSymbolFound.compare("")==0
+	||nameOfSymbolFound.compare("find_last_of")==0||nameOfSymbolFound.compare("pop_back")==0||nameOfSymbolFound.compare("substr")==0
+	||nameOfSymbolFound.compare("find")==0||nameOfSymbolFound.compare("erase")==0||nameOfSymbolFound.compare("compare")==0
+		||nameOfSymbolFound.compare("stream")==0||nameOfSymbolFound.compare("isstream")==0||nameOfSymbolFound.compare("find_first_of")==0
+	||nameOfSymbolFound.compare("size")==0||nameOfSymbolFound.compare("length")==0||nameOfSymbolFound.compare("string")==0
+	||nameOfSymbolFound.compare("switch")==0) isLanguageKey=true;
+	return isLanguageKey;
+}
 
