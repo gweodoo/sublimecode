@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QWebFrame>
+#include <QWebHistory>
 #include "GraphCaller.h"
 #include "CreateJson.h"
 #include "ObjectTo.h"
@@ -64,7 +65,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
 	QObject::connect(ui->getTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int))); 
-	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click())); 
+	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click()));
 }
 
 MainView::~MainView()
@@ -113,7 +114,7 @@ void MainView::handlePushButton()
 	QWebView *webViewSearch = new QWebView();
 
 	if(ui->getRadioName()->isChecked()){
-		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
+		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
 
 			cHTML->createXMLSearchByTags(tag);
@@ -121,7 +122,7 @@ void MainView::handlePushButton()
  		html = cHTML->TransformToHTML(xmlFile, xslTag);
 	}
 	else if (ui->getRadioType()->isChecked()){
-		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
+		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
 			cHTML->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
 		}
@@ -130,7 +131,7 @@ void MainView::handlePushButton()
 	else if(ui->getRadioFile()->isChecked()){
 		QString filename_modified = QString::fromStdString(tag);
 		filename_modified.replace("/","_");
-		xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMSearchByFile_"+filename_modified+".xml";
+		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByFile_"+filename_modified+".xml";
 		if(exists(xmlFile.toUtf8().data()) == false){
 			cHTML->createXMLSearchByFile(tag);
 		}
@@ -178,13 +179,13 @@ void MainView::generateGraph(QString number, std::string buildType)
 	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		filepath = config->getDestDir() + "/" + buildType + "_" + "numeroHashedInclude" + ".json";
 	
-	QFile file(QString::fromStdString(filepath));
-	
+	cout << filepath << endl;
+	QFile file(QString::fromUtf8(filepath.c_str()));
+
 	if(!file.exists())
 	{
 		if (buildType == "Called" || buildType == "Calling")
 		{
-			
 			cjson = new CreateJson(config, runner->getGraphCaller());
 			cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), filepath, buildType);
 		}
@@ -196,7 +197,7 @@ void MainView::generateGraph(QString number, std::string buildType)
 	}
 	
 	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
-	objectTo->setValue(ui->getWebView(), QString::fromStdString(filepath));
+	objectTo->setValue(ui->getWebView(), QString::fromUtf8(filepath.c_str()));
 	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"));
 	ui->getWebView()->show();
 }
@@ -206,7 +207,7 @@ void MainView::generateHighlightFunction(QString number)
 	QString xmlFile;
 	QString html;
 	std::string filename;
-	xmlFile = QString::fromStdString(config->getDestDir())+"/myXLMHighlightFunction.xml";
+	xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMHighlightFunction.xml";
 	
 	QWebView *webViewHighlight = new QWebView();
 		
@@ -218,6 +219,8 @@ void MainView::generateHighlightFunction(QString number)
 		ui->getTabWidget()->addTab(webViewHighlight, "Highlight");
 		webViewHighlight->setHtml(html);
 		webViewHighlight->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+		qDebug() << ui->getTabWidget()->count() << endl;
+		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
 	}
 	else {
 		QMessageBox::information(this, "Warning", "Unsupported file format");

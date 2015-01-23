@@ -207,3 +207,4 @@ QShortcut* Ui_MainView::getShortcutEnter()
 	return this->enterShortcut;
 }
 
+

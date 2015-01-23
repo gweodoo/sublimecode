@@ -49,7 +49,9 @@ void MainWindow::Rechercher_Sources()
 
 bool MainWindow::removeDir(QString file)
 {
-	string commandFileRemove_1=string("rm -rf ")+file.toStdString();
+	const char *convert_dest = file.toUtf8().constData();
+	std::string str_dest(convert_dest);
+	string commandFileRemove_1=string("rm -rf ")+str_dest;
 	if(system(commandFileRemove_1.c_str())==-1) {
 		perror("closing Error");
 		return false;
@@ -136,11 +138,17 @@ void MainWindow::Finish()
 {
 	int currentTab = ui->getQTabWidget()->currentIndex();
 	fileNameDestinationTest = ui->getLineEdit1()->text();
+
 	QMessageBox qmb;
 	QMessageBox qmb2;
 	Handler* handler = NULL;
 	Dialog *dialog = NULL;
 	QFileInfo fileInfoSource;
+	QFileInfo fileInfoDestination;
+	fileInfoDestination = fileNameDestination;
+	
+	const char *convert_dest = fileInfoDestination.canonicalFilePath().toUtf8().constData();
+	std::string str_dest(convert_dest);
 
 	switch (currentTab){
 		case 0 : 	
@@ -154,9 +162,9 @@ void MainWindow::Finish()
 				if(exists(fileNameSource.toUtf8().data()) == true)
 					{
 						fileInfoSource = fileNameSourceTest;
- 						const char *convert = fileInfoSource.canonicalFilePath().toUtf8().constData();
- 						std::string str(convert);
-						config = new Configuration(str, fileNameDestination.toStdString());
+ 						const char *convert_source = fileInfoSource.canonicalFilePath().toUtf8().constData();
+ 						std::string str_source(convert_source);
+						config = new Configuration(str_source, str_dest);
 						dialog = new Dialog(config);
 						dialog->show();
 						this->hide();
@@ -178,7 +186,9 @@ void MainWindow::Finish()
 			else {
 				int currentVcs = ui->getComboBoxVcs()->currentIndex();
 				fileInfoSource = fileNameSourceTest;
-				config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());
+				const char *convert_source = fileInfoSource.canonicalFilePath().toUtf8().constData();
+				std::string str_source(convert_source);
+				config = new Configuration(str_source, str_dest);
 				switch (currentVcs){
 					case 0 : 
 						handler = new CvsVcsHandler(config,fileNameSourceTest.toStdString(), branchNameSource.toStdString());
@@ -215,16 +225,19 @@ void MainWindow::Finish()
 			else{
 				int currentArchive = ui->getComboBoxArchive()->currentIndex();
 				fileInfoSource = fileNameSourceTest;
-				config = new Configuration(fileInfoSource.canonicalFilePath().toStdString(), fileNameDestination.toStdString());			
+				const char *convert_source = fileInfoSource.canonicalFilePath().toUtf8().constData();
+				std::string str_source(convert_source);
+				config = new Configuration(str_source, str_dest);
+				cout << str_source << endl;
 				switch(currentArchive){
 					case 0 : 
-						handler = new Tarbz2TarballHandler(config, fileNameSourceTest.toStdString());
+						handler = new Tarbz2TarballHandler(config, str_source);
 						break;
 					case 1 : 
-						handler = new TargzTarballHandler(config, fileNameSourceTest.toStdString());
+						handler = new TargzTarballHandler(config, str_source);
 						break;
 					case 2 : 
-						handler = new ZipTarballHandler(config, fileNameSourceTest.toStdString());
+						handler = new ZipTarballHandler(config, str_source);
 						break;
 				}
 			}

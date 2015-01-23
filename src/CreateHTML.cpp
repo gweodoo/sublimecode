@@ -32,7 +32,8 @@ CreateHTML::~CreateHTML(){}
 CreateHTML::CreateHTML(Configuration* c, Runner *runner) : config(c), runner(runner) {}
 void CreateHTML::createXMLSearchByTags(string tag)
 {	
-	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml"); 
+	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml"); 
+	qDebug() << file.fileName();
 	QDomDocument document;
 
 	QDomElement root = document.createElement("SearchByTags");
@@ -91,7 +92,7 @@ void CreateHTML::createXMLSearchByType(int type)
 {
 	list = runner->findTagsByType(static_cast<tagType>(type));
 	
-	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByType_"+tabTypeNames[type]+".xml"); 
+	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByType_"+tabTypeNames[type]+".xml"); 
 	QDomDocument document;
 	
 	QDomElement root = document.createElement("SearchByType");
@@ -148,7 +149,7 @@ void CreateHTML::createXMLSearchByFile(string filename)
 {
 	QString filename_modified = QString::fromStdString(filename);
 	filename_modified.replace("/","_");
-	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMSearchByFile_"+filename_modified+".xml"); 
+	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByFile_"+filename_modified+".xml"); 
 	QDomDocument document;
 	
 	QDomElement root = document.createElement("SearchByFile");
@@ -260,7 +261,7 @@ string CreateHTML::stringFromVector(vector< string > vector)
 
 void CreateHTML::createXMLHighlightFunction(vector< string > beforeFunction, vector< string > inFunction, vector< string > afterFunction)
 {	
-	QFile file(QString::fromStdString(config->getDestDir())+"/myXLMHighlightFunction.xml"); 
+	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMHighlightFunction.xml"); 
 	QDomDocument document;
 	
 	QDomElement root = document.createElement("HighlightFunction");

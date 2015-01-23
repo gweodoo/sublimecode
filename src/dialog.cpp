@@ -58,7 +58,6 @@ void Dialog::Finish()
 	fileList.push_back(converti);
 	}
    }
-   
    MainView *w = new MainView(this->config, fileList);
    w->show();
    this->hide();
