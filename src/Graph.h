@@ -31,7 +31,7 @@ public :
 	virtual int getFunctionLength(Tag * tagAssociatedToFunction)=0;
 	virtual std::vector<std::string>* getFilesIncludedBy(std::string fileName)=0;
 	virtual int getCountFunctionApparition(Tag * tagAssociatedToFunction)=0;
-	virtual int getCountFunctionLength(Tag * tagAssociatedToFunction)=0;
+	
 	virtual int getCountFunctionCalled(Tag * tagAssociatedToFunction)=0;
 	virtual int getCountFunctionCalling(Tag * tagAssociatedToFunction)=0;
 };

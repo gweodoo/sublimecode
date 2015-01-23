@@ -68,7 +68,7 @@ private :
 	int  getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
 	 void removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions,std::string fileName);
 	 FunctionGraph* removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction);
-	
+	std::vector<FunctionGraph*>* egrepOutputParser(std::string output,std::string fileName);
 	
 	
 public :

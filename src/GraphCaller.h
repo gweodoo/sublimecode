@@ -52,7 +52,7 @@ public:
 	std::vector<std::string>* getFilesIncludedBy(std::string name);
 	
 	int getCountFunctionApparition(Tag* name);
-	int getCountFunctionLength(Tag* name);
+	
 	int getCountFunctionCalled(Tag* name);
 	int getCountFunctionCalling(Tag* name);
 	

@@ -53,12 +53,12 @@ bool LauncherCscope::initExternalTool(){
 	
 	bool returnParam=false;
 	if(this->isLaunched==true){
-	cout<<" cscope is already initialized "<<endl;
+	
 		returnParam=true;
 	}
 	else
 	{
-		cout<<"cscope is not already LAUNCHED"<<endl;
+		
 		string commandCscopeConstruct=string("cd ") +(string)this->myConfiguration->getSourcesDir() +string(" && cscope -bqkRu ");
 		string commandFileMove_1=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.in.out ")+(string)this->myConfiguration->getDestDir();
 		string commandFileMove_2=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.out ")+(string)this->myConfiguration->getDestDir();
@@ -124,9 +124,60 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		*/
 		if(command==1)
 		{
-			string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
-			vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
-			this->removeNotConcernedDefinitionBasedOnFileName(listOfFunctionCalled,tagAssociatedToFunction->getFileName());
+			/**
+			 * checking if c/c++
+			 */
+			unsigned  int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
+			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
+			
+			unsigned  int isC=fileNameWithoutPath.find(".c");
+			unsigned  int isCpp=fileNameWithoutPath.substr(isC).find("pp");
+			
+			if(isCpp!=string::npos)
+			{
+				
+				/**
+				 *Cpp special treatement 
+				 * checking is its a class method or not
+				 */
+				string isClassMethod=tagAssociatedToFunction->getInfoByKey("class");
+				if(isClassMethod.empty())
+				{
+					cout<<"dealing with non object method Style "<<endl;
+					/**
+					 * we can deal with it like in C it's not an object method
+					 */
+					string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
+					vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
+					this->removeNotConcernedDefinitionBasedOnFileName(listOfFunctionCalled,tagAssociatedToFunction->getFileName());
+				
+					for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
+					{
+				
+						FunctionGraph* functToFind=listOfFunctionCalled->at(i);
+						Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
+						if(tag!=NULL)listOfTagToReturn->push_back(tag);
+					}
+				}
+				else
+				{
+					/**
+					 * we have to deal it for the C++ style object method
+					 */
+					cout<<"dealing with object method Style "<<endl;
+					string output =this->launchExternalTool(3,tagAssociatedToFunction->getFileName());
+					this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
+					
+				}
+				
+			}else if(isC!=string::npos)
+			{
+				/**
+				 * C special treatement
+				 */
+				string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
+				vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
+				this->removeNotConcernedDefinitionBasedOnFileName(listOfFunctionCalled,tagAssociatedToFunction->getFileName());
 			
 				for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 				{
@@ -135,6 +186,8 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 					if(tag!=NULL)listOfTagToReturn->push_back(tag);
 				}
+			}
+			
 		}
 		if(command==2)
 		{
@@ -148,6 +201,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					this->removeMatchesFromHAndC(listOfGlobalDefinitions);
 					this->removeNotFunctionOutput(listOfGlobalDefinitions);
 					this->removeNotConcernedDefinitionBasedOnFileName(listOfGlobalDefinitions,listOfCallingFunction->at(i)->getFileName());
+					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfGlobalDefinitions,tagAssociatedToFunction);
 					if(listOfGlobalDefinitions->empty())
 					{
 						Tag *FunctionDefinitionTag=new TagImpl(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
@@ -224,7 +278,7 @@ vector<std::string >* LauncherCscope::launchCommandExternalTool(int command, std
 	vector<std::string> *listOfFileToReturn;
 	if(!fileName.empty())
 	{
-		listOfFileToReturn=new vector<std::string>();	
+		listOfFileToReturn=new vector<std::string>();
 		if(command==7)
 		{
 			/** launch the command with cscope
@@ -300,6 +354,39 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 	return listOfCscopeOutput;
 }
 /**
+ * 
+ */
+std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string output,std::string fileName)
+{
+	
+	vector<FunctionGraph*>* listOfCscopeOutput=new vector<FunctionGraph*>();
+	stringstream outputAsStream(output);
+	string readLine;
+	while(getline(outputAsStream,readLine))
+	{
+		stringstream readLineAsStream(readLine);
+		string part;
+		FunctionGraph* newCscopeOutputLine=new FunctionGraph();
+		//setting the line number
+		getline(readLineAsStream,part,' ');
+		newCscopeOutputLine->setLine(atoi(part.c_str()));
+		//setting the signature ( function call here )
+		while(getline(readLineAsStream,part,' '))
+		{
+			newCscopeOutputLine->setSignature(newCscopeOutputLine->getSignature().append(part));
+			newCscopeOutputLine->getSignature().push_back(' ');
+		}
+		//setting the name of the function
+		unsigned int positionOfFirstBracket=newCscopeOutputLine->getSignature().find_first_of("(");
+		newCscopeOutputLine->setTagName(newCscopeOutputLine->getSignature().substr(0,positionOfFirstBracket));
+		//setting the fileName
+		newCscopeOutputLine->setFileName(fileName);
+		cout<<"new tag is "<<newCscopeOutputLine->getTagName() <<" "<<newCscopeOutputLine->getSignature()<<" "<<newCscopeOutputLine->getLine()<<endl;
+		 listOfCscopeOutput->push_back(newCscopeOutputLine);
+	}
+	return listOfCscopeOutput;
+}
+/**
  * function which returns a tag corresponding to the functionGraph 
  * @param[in] outputFunction corresponds to a line from cscope output , on which one we do tasks
  * @return the tag matching the cscope output line
@@ -345,6 +432,11 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		}
 		else
 		{
+			
+			for(int p=0;p<listOfGlobalDefinition->size();p++)
+			{
+			
+			}
 			Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
 			if(FunctionDefinitionTag!=NULL)return (FunctionDefinitionTag);
 			/**
@@ -386,10 +478,14 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 			case 2:
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L3 ")+arg;
 			break;
+			case 3:
+				commandToExecute=string("  egrep \"[a-zA-Z0-9]* *\\(.*\\)\" -on  ")+arg +string("| awk -F: '{print $1\" \"$2}' ");
+				break;
 			case 7:
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L8 ")+arg;
 			break;
 		}
+		cout<<"command is "<<commandToExecute<<endl;
 			
 			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
 			
@@ -669,7 +765,11 @@ std::string LauncherCscope::removeSpaceFromString(std::string stringToParse)
  */
 std::vector<std::string>* LauncherCscope::getTypeForVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind)
 {
-	std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(calledFunctionToFind->getSignature());
+	int positionOfFunctionName=calledFunctionToFind->getSignature().find(calledFunctionToFind->getTagName());
+	
+	string callExpressionwithOnlyFunctionNameAndParameters=calledFunctionToFind->getSignature().substr(positionOfFunctionName);
+	cout<<"signature :"<<calledFunctionToFind->getSignature()<<" parsed "<<callExpressionwithOnlyFunctionNameAndParameters<<endl;
+	std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(callExpressionwithOnlyFunctionNameAndParameters);
 	return variablesNames;
 	
 }
@@ -734,8 +834,15 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* ca
 	unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFind);
 	for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 	{
+		cout<<"number of variable found"<<numberOfArgument <<"number we have "<<listOfTypesforGlobalDefinitions->at(i)->size()<<endl;
+			cout<<" the call "<< calledFunctionToFind->getSignature()<<"matche: "<<endl;
+			for(int p=0;p<listOfTypesforGlobalDefinitions->at(i)->size();p++) cout<<"argument "<<listOfTypesforGlobalDefinitions->at(i)->at(p)<<" ";
+			cout<<endl;
+		
+		
 		if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument)
 		{
+			
 			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 			i--;
 		}

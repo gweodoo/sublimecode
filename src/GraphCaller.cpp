@@ -28,6 +28,7 @@ GraphCaller::GraphCaller( Configuration* myConf,TagsManager*myTagManager)
 	if(myConf!=NULL){
 		Launcher* myLauncher=new LauncherCscope(myConf,myTagManager);
 		this->myLauncher=myLauncher;
+		this->myLauncher->initExternalTool();
 	}
 }	
 
@@ -65,11 +66,7 @@ int GraphCaller::getCountFunctionCalling(Tag * tagAssociatedToFunction)
 {
 	return (this->myLauncher->launchCommandExternalTool(2,tagAssociatedToFunction))->size();
 }
-int GraphCaller::getCountFunctionLength(Tag * tagAssociatedToFunction)
-{
-this->myLauncher->launchCommandExternalTool(4,tagAssociatedToFunction);
-return 0;
-}
+
 Launcher* GraphCaller::getLauncher()
 {
 return this->myLauncher;
