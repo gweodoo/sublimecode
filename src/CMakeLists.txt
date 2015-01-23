@@ -34,3 +34,9 @@ add_definitions("${SC_EXTRA_FLAGS}")
 add_executable(sublimeCode ${SRC} ${HDR_MOC} ${UI_HDR} ${RES_RCC})
 
 TARGET_LINK_LIBRARIES(sublimeCode ${QT_LIBRARIES} Qt4::QtGui Qt4::QtXml)
+
+#########################################
+#installing
+file(GLOB_RECURSE RESOURCES ${CMAKE_SOURCE_DIR}/resources/*)
+INSTALL(TARGETS sublimeCode RUNTIME	DESTINATION bin)
+INSTALL(FILES ${RESOURCES} DESTINATION share/sublimecode)

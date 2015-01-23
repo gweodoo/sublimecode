@@ -1,0 +1,7 @@
+.gitignore            export-ignore
+#.gitattributes        export-ignore
+#tests                 export-ignore
+#lib                   export-ignore
+#resources/sh.header   export-ignore
+#resources/src.header  export-ignore
+
