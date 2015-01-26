@@ -25,24 +25,13 @@ bool checkCommandExistency(std::string command, bool required){
 	int ret = system(starter.c_str());
 	if(WEXITSTATUS(ret) != 0) {
 		if(required){
-			scError("Command " << command << " is required");
-			return false;
+			scWarning("Command " << command << " wasn't found and is required");
 		} else {
 			scWarning("Command " << command << " wasn't found");
 		}
 		return false;
 	}
 	return true;
-}
-
-void checkNeededExecutable(){
-	checkCommandExistency("ctags", true);
-	checkCommandExistency("cscope", true);
-
-	checkCommandExistency("git");
-	checkCommandExistency("hg");
-	checkCommandExistency("cvs");
-	checkCommandExistency("svn");
 }
 
 map< string, int > splitOn ( string chain, char split ) {

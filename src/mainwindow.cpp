@@ -26,14 +26,17 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-	
-    ui = new UI_MainWindow1();
-    ui->setupUi(this);
+	if(! (checkCommandExistency("ctags", true) && checkCommandExistency("cscope", true) && checkCommandExistency("cloc", true))){
+		QMessageBox::critical(this, "Dependency issue", "Some dependencies aren't resolved.\n Check for dependency:\n\t- CTags\n\t- CScope\n\t- Cloc\n\nAdd then to your PATH environment");
+		exit(1);
+	}
+	ui = new UI_MainWindow1();
+	ui->setupUi(this);
    
-    QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));
-    QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
-    QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(Rechercher_Archive()));
-    QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
+	QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));
+	QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
+	QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(Rechercher_Archive()));
+	QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
 }
 
 MainWindow::~MainWindow()
