@@ -16,7 +16,7 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
-
+#include<algorithm>
 #include "LauncherCscope.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -26,7 +26,6 @@
 #include <list>
 #include "FunctionGraph.h"
 #include "TagImpl.h"
-#include <pthread.h>
 #include <ctime>
 #include<sys/time.h>
 #include<vector>
@@ -236,8 +235,11 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					
 					if(listOfGlobalDefinitions->empty())
 					{
-						Tag *FunctionDefinitionTag=new TagImpl(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
+						
+						this->myTagManager->addTag(new TagImpl(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+						Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"),0);
 						if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
+						
 					}
 					if(listOfGlobalDefinitions->size()==1)
 					{
@@ -253,8 +255,12 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 						{
 						Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(singleDefinitionLeft->getTagName(),singleDefinitionLeft->getFileName(),singleDefinitionLeft->getLine());
 						if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
-						else listOfTagToReturn->push_back(new TagImpl(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"),0,TYPE_FUNCTION));
-							
+						else {
+							this->myTagManager->addTag(new TagImpl(singleDefinitionLeft->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+							Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"),0);
+							if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
+						
+						}
 						}
 					}
 				}
@@ -262,6 +268,8 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		}
 		
 	}
+	sort(listOfTagToReturn->begin(),listOfTagToReturn->end());
+	listOfTagToReturn->erase(unique(listOfTagToReturn->begin(),listOfTagToReturn->end()),listOfTagToReturn->end());
 	return listOfTagToReturn;
 }
 /**
@@ -389,9 +397,9 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 	// the function definition is out of cscope 
 	else if(listOfGlobalDefinition->empty())
 	{
-		Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("output"),0);
-		if(FunctionDefinitionTag!=NULL) return (FunctionDefinitionTag);
-		else return new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
+		this->myTagManager->addTag(new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+			Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("OutOfscope"),0);
+			if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
 		
 	}
 	// we have to find the right definition from the several we have
@@ -411,9 +419,10 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		}
 		else if(listOfGlobalDefinition->empty())
 		{
-			Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("output"),0);
-			if(FunctionDefinitionTag!=NULL) return (FunctionDefinitionTag);
-			else return new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
+	
+			this->myTagManager->addTag(new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+			Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("OutOfscope"),0);
+			if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
 		}
 		else
 		{
