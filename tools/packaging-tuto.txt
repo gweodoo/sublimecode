@@ -1,5 +1,4 @@
-* UBUNTU *
-== INIT ==
+====== UBUNTU =======
 1. apt-get install build-essential dh-make bzr-builddeb
 2. git archive --format=tar --prefix=sublimecode-1.0/ HEAD | gzip > sublimecode-1.0.tar.gz
 3. check ignored files (.gitattributes...)
@@ -10,11 +9,14 @@
 8. check : lesspipe sublimecode-1.0-1_amd64.deb and remove errors and warnings
 9. push on launchpad (dput .... ppa:....)
 
-
-
-* FEDORA *
+====== FEDORA =======
 1. yum install rpmdevtools
 2. git archive --format=tar --prefix=sublimecode-1.0/ HEAD | gzip > sublimecode-1.0.tar.gz
 3. check ignored files (.gitattributes...)
-4.
+4. by default, generation in ~/rpmbuild/{BUILD,BUILDROOT,SOURCES,SPECS,SRPMS}
+	- decompress fedora.tar.gz into ~
+5. cd ~/rpmbuild/SPECS
+6. rpmbuild -ba sublimecode.spec
+7. rpm -ivh ../RPMS/sublimecode-1.0-0.fc20.x86-64.rpm #install it
+8. rpm -qa | grep -i sublimecode # check installation
 
