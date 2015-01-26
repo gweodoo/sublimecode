@@ -59,7 +59,7 @@ private :
 	std::vector<std::string>* getTypeForVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
 	std::vector<std::string>* getVariablesNamesInFunctionCall(std::string callExpression);
 	
-	void removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* calledFunctionToFind, std::vector< FunctionGraph* >* listOfGlobalDefinitions, std::vector< std::vector< std::string >* >* listOfTypesforGlobalDefinitions);
+	void removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind, std::vector< FunctionGraph* >* listOfGlobalDefinitions, std::vector< std::vector< std::string >* >* listOfTypesforGlobalDefinitions, int arg);
 	void removeMatchesFromHAndC(std::vector<std::vector<std::string>*>* listOfTypes,std::vector<FunctionGraph*>* listOfGlobalDefinitions);
 	void removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions);
 	void removeFromListFunctionNotBelonginToStackCall( int lineStart,int lineStop,std::vector<FunctionGraph*>* listOfFunctionCalled,Tag * functionAssociatedToTag);
@@ -70,6 +70,7 @@ private :
 	 FunctionGraph* removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction);
 	std::vector<FunctionGraph*>* egrepOutputParser(std::string output,std::string fileName);
 	bool isLanguageKey(std::string nameOfSymbolFound);
+	 unsigned int getNumberOfVariableUsedInFunctionDefinition(Tag* calledFunctionToFindCasted);
 	
 	
 public :
@@ -80,7 +81,7 @@ public :
 	 int getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction);
 	 
 	 std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction);
-	 std::vector<std::string >* launchCommandExternalTool(int command, std::string  fileName);
+	
 	 int launchCommandExternalTool(Tag *tagAssociatedToFunction);
 	 bool getIsLaunched();
 	 CscopeThreadObject * getCscopeThreadObject();

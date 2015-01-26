@@ -125,8 +125,6 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		*/
 		if(command==1)
 		{
-			
-			
 			/**
 			 * checking if c/c++
 			 */
@@ -219,6 +217,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		{
 			vector<FunctionGraph*>* listOfCallingFunction=this->cscopeOutputParser(this->launchExternalTool(2,tagAssociatedToFunction->getName()));
 			
+			this->removeNotMatchingFunctionOnArgumentNumber(tagAssociatedToFunction,listOfCallingFunction,NULL,2);
 			for(unsigned int i=0;i<listOfCallingFunction->size();i++)
 			{
 				if(!listOfCallingFunction->at(i)->getTagName().empty())
@@ -228,6 +227,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					this->removeNotFunctionOutput(listOfGlobalDefinitions);
 					this->removeNotConcernedDefinitionBasedOnFileName(listOfGlobalDefinitions,listOfCallingFunction->at(i)->getFileName());
 					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfGlobalDefinitions,tagAssociatedToFunction);
+					
 					if(listOfGlobalDefinitions->empty())
 					{
 						Tag *FunctionDefinitionTag=new TagImpl(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
@@ -254,26 +254,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				}
 			}
 		}
-		if(command==7)
-		{
-			vector<FunctionGraph*>* listOfFilesIncludedBy=this->cscopeOutputParser(this->launchExternalTool(7,tagAssociatedToFunction->getName()));
-			for(unsigned int i=0;i<listOfFilesIncludedBy->size();i++)
-			{
-				FunctionGraph* functToFind=listOfFilesIncludedBy->at(i);
-				
-				Tag* tag=this->myTagManager->findSpecificTag(functToFind->getTagName(),functToFind->getFileName(),functToFind->getLine());
-				if(tag!=NULL)
-				{
-					listOfTagToReturn->push_back(tag);
-				}
-				else
-				{
-					tag=this->myTagManager->findSpecificTag(functToFind->getTagName(),string("OutOfscope"),0);
-					if(tag==NULL) tag=new TagImpl(functToFind->getTagName(),string("OutOfscope"), 0, TYPE_FILE);
-					listOfTagToReturn->push_back(tag);
-				} 
-			}
-		}
+		
 	}
 	return listOfTagToReturn;
 }
@@ -292,37 +273,6 @@ int LauncherCscope::launchCommandExternalTool(Tag * tagAssociatedToFunction)
 return endOfFunctionDefinition;
 
 	
-}
-/**
- * search and return the list of file included by a file
- * @param[in] command the number corresponding to the executed command
- * @param[in] fileName the file on which the search is done
- * @return list of file to return as a vector of string
- */
-vector<std::string >* LauncherCscope::launchCommandExternalTool(int command, std::string  fileName)
-{
-	vector<std::string> *listOfFileToReturn;
-	if(!fileName.empty())
-	{
-		listOfFileToReturn=new vector<std::string>();
-		if(command==7)
-		{
-			/** launch the command with cscope
-			* get the output and parse it with cscopeOutputParser
-			* fullfil the vector of string
-			*/
-			vector<FunctionGraph*>* listOfFilesIncludedBy=this->cscopeOutputParser(this->launchExternalTool(7,fileName));
-			if(listOfFilesIncludedBy!=NULL)
-			{
-				for(unsigned int i=0;i<listOfFilesIncludedBy->size();i++)
-				{
-					FunctionGraph* functToFind=listOfFilesIncludedBy->at(i);
-					listOfFileToReturn->push_back(functToFind->getTagName());
-				}
-			}
-		} 
-	}
-	return listOfFileToReturn;	
 }
 
 /**
@@ -447,7 +397,7 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
 		this->removeNotFunctionOutput(listOfGlobalDefinition);
 		// getting rid of the .h and .c/c++ redundances ( the one in .h)
-		this->removeNotMatchingFunctionOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction);
+		this->removeNotMatchingFunctionOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction,1);
 		this->removeMatchesFromHAndC(listOFTypeForFunction,listOfGlobalDefinition);
 		if(listOfGlobalDefinition->size()==1)
 		{
@@ -859,24 +809,43 @@ std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string
  * @param[in] calledFunctionToFind cscope's output's line to compare with
  * @param[in] listOfGlobalDefinitions the list of cscope's ouput to sort 
  */
-void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(FunctionGraph* calledFunctionToFind,vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions)
+void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind,vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions,int arg)
 {
-	
-	unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFind);
-	for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
+	if(arg==1)
 	{
-		//cout<<"number of variable found"<<numberOfArgument <<"number we have "<<listOfTypesforGlobalDefinitions->at(i)->size()<<endl;
-		//	cout<<" the call "<< calledFunctionToFind->getSignature()<<"matche: "<<endl;
-		//	for(int p=0;p<listOfTypesforGlobalDefinitions->at(i)->size();p++) cout<<"argument "<<listOfTypesforGlobalDefinitions->at(i)->at(p)<<" ";
-		//	cout<<endl;
-		
-		
-		if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument)
+		FunctionGraph*calledFunctionToFindCasted=(FunctionGraph*)calledFunctionToFind;
+		unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFindCasted);
+		for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 		{
-			
-			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
-			i--;
+	
+			if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument)
+			{
+				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
+				i--;
+			}
 		}
+		
+	}
+	if(arg==2)
+	{
+		Tag*calledFunctionToFindCasted=(Tag*)calledFunctionToFind;
+		// getting the number of argument of the tag defintion
+		unsigned int numberOfArgument=this-> getNumberOfVariableUsedInFunctionDefinition(calledFunctionToFindCasted);
+		//now comparing with the list of function calling
+		// here the argument is listOfglabDefinitions but its in fact list Of the function call 
+		for(int i=0;i<listOfGlobalDefinitions->size();i++)
+		{
+			string call=listOfGlobalDefinitions->at(i)->getSignature().substr(listOfGlobalDefinitions->at(i)->getSignature().find(calledFunctionToFindCasted->getName()));
+			vector<string>* variablesNames=this->getVariablesNamesInFunctionCall(call);
+			if((variablesNames->size())!=numberOfArgument)
+			{
+				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
+				i--;
+			}
+		}
+		
+		
+		
 	}
 	
 }
@@ -961,7 +930,7 @@ void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,
 		for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 		{
 		
-			if((listOfFunctionCalled->at(i)->getLine()>=lineStop)||(listOfFunctionCalled->at(i)->getLine()<=lineStart))//||(listOfFunctionCalled->at(i)->getFileName().compare(functionAssociatedToTag->getFileName())!=0))
+			if((listOfFunctionCalled->at(i)->getLine()>=lineStop)||(listOfFunctionCalled->at(i)->getLine()<=lineStart)||(listOfFunctionCalled->at(i)->getFileName().compare(functionAssociatedToTag->getFileName())!=0))
 			{	
 				listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
 				i--;
@@ -1049,4 +1018,83 @@ bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 	
 	) isLanguageKey=true;
 	return isLanguageKey;
+}
+unsigned int LauncherCscope::getNumberOfVariableUsedInFunctionDefinition(Tag* calledFunctionToFindCasted)
+{
+ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
+	int numberOfVariable=0;
+	string listOfArgument="";
+	if(stream!=0){
+		string currentLine;
+		int numberOfLine=0;
+		int niveauBraceBracket=0;
+		int functionInitialPos=0;
+		bool firstBraceBracketAlreyFound=false;
+		/**
+		 * skip the n-first line beforde function definition
+		 */
+		for(unsigned int i=1;i<calledFunctionToFindCasted->getLineNumber();i++) 
+		{
+			getline(stream,currentLine);
+		}
+		bool functionNameAlreadyRead=false;
+		
+		bool signatureclosingBraceBracketFound=false;
+		
+		/**
+		 * looking for brace brackets
+		 * case division in order to find the first brace bracket
+		 */
+		do
+		{
+			getline(stream,currentLine);
+			cout<<"current Line in the do "<<currentLine<<endl;
+		///*	if(currentLine.find("/*")==string::npos||currentLine.find("//")==string::npos||currentLine.find("*")==string::npos
+		//		||currentLine.find("*/")==string::npos)
+		//	{
+		//		
+				unsigned long int namePosition=currentLine.find(calledFunctionToFindCasted->getName());
+				if(namePosition!=string::npos)
+				{
+					functionNameAlreadyRead=true;
+					currentLine=currentLine.substr(namePosition);
+					
+				}
+				if(functionNameAlreadyRead==true)
+				{
+					if(currentLine.find_first_of("{")!=string::npos)
+					{
+						for(unsigned int p=functionInitialPos;p<currentLine.length();p++)
+						{
+							if(currentLine.at(p)=='{')
+							{
+								firstBraceBracketAlreyFound=true;
+								listOfArgument.append(currentLine.substr(0,p));
+								break;
+							}
+						}	
+					}
+					else{
+						listOfArgument.append(currentLine);
+					}
+				}
+
+				
+			//}
+		
+			
+		}while(firstBraceBracketAlreyFound==false);
+	
+		
+		
+	}
+	int positionOfFunctionName=listOfArgument.find(calledFunctionToFindCasted->getName());
+	
+	string callExpressionwithOnlyFunctionNameAndParameters=listOfArgument;
+		cout<<"callExpressionwithOnlyFunctionNameAndParameters"<<callExpressionwithOnlyFunctionNameAndParameters<<endl;
+std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(callExpressionwithOnlyFunctionNameAndParameters);
+	numberOfVariable=variablesNames->size();
+
+	return numberOfVariable;
+	
 }

@@ -31,7 +31,7 @@ public :
 	virtual bool initExternalTool()=0;
 	virtual bool closeExternalTool()=0;
 	virtual std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)=0;
-	virtual std::vector<std::string >* launchCommandExternalTool(int command, std::string fileName)=0;
+	
 	virtual int launchCommandExternalTool(Tag *tagAssociatedToFunction)=0;
 };
 
