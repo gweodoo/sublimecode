@@ -146,7 +146,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				string isClassMethod=tagAssociatedToFunction->getInfoByKey("class");
 				if(isClassMethod.empty())
 				{
-					cout<<"dealing with non object method Style "<<endl;
+					
 					/**
 					 * we can deal with it like in C it's not an object method
 					 */
@@ -167,7 +167,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					/**
 					 * we have to deal it for the C++ style object method
 					 */
-					cout<<"dealing with object method Style "<<endl;
+					
 					string output =this->launchExternalTool(3,tagAssociatedToFunction->getFileName());
 					vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
 					//now we get the list of function called as if it was given by cscope
@@ -308,7 +308,6 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 			switch(i){
 			
 				case 0:
-					//cout<<"part"<<part<<endl;
 					
 					newCscopeOutputLine->setFileName(this->myConfiguration->getSourcesDir()+string("/")+part);
 					break;
@@ -391,9 +390,7 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 	// we have to find the right definition from the several we have
 	else if(listOfGlobalDefinition->size()>1)
 	{
-		//getting list of type and parameters for each global definition;
-		//cout<< " function graph for which we are looking for a definition "<<outputFunction->getTagName()<< "  call of this function "<<outputFunction->getSignature()<<endl; 
-		//for(int p=0;p<listOfGlobalDefinition->size();p++) cout << "definition : " <<listOfGlobalDefinition->at(p)->getTagName()<< " signature : "<<listOfGlobalDefinition->at(p)->getSignature()<<endl;
+		
 		vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
 		this->removeNotFunctionOutput(listOfGlobalDefinition);
 		// getting rid of the .h and .c/c++ redundances ( the one in .h)
@@ -1038,7 +1035,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 			getline(stream,currentLine);
 		}
 		bool functionNameAlreadyRead=false;
-		
+		bool cursorIsInComment=false;
 		bool signatureclosingBraceBracketFound=false;
 		
 		/**
@@ -1048,11 +1045,17 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 		do
 		{
 			getline(stream,currentLine);
-			cout<<"current Line in the do "<<currentLine<<endl;
-		///*	if(currentLine.find("/*")==string::npos||currentLine.find("//")==string::npos||currentLine.find("*")==string::npos
-		//		||currentLine.find("*/")==string::npos)
-		//	{
-		//		
+			
+			if(currentLine.find("/*")!=string::npos)
+			{
+				cursorIsInComment=true;
+			}
+			if(currentLine.find("*/")!=string::npos)
+			{
+				cursorIsInComment=false;
+			}
+			
+			if(!cursorIsInComment||currentLine.find("//")==string::npos){
 				unsigned long int namePosition=currentLine.find(calledFunctionToFindCasted->getName());
 				if(namePosition!=string::npos)
 				{
@@ -1080,7 +1083,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 				}
 
 				
-			//}
+			}
 		
 			
 		}while(firstBraceBracketAlreyFound==false);
@@ -1091,8 +1094,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 	int positionOfFunctionName=listOfArgument.find(calledFunctionToFindCasted->getName());
 	
 	string callExpressionwithOnlyFunctionNameAndParameters=listOfArgument;
-		cout<<"callExpressionwithOnlyFunctionNameAndParameters"<<callExpressionwithOnlyFunctionNameAndParameters<<endl;
-std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(callExpressionwithOnlyFunctionNameAndParameters);
+	std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(callExpressionwithOnlyFunctionNameAndParameters);
 	numberOfVariable=variablesNames->size();
 
 	return numberOfVariable;
