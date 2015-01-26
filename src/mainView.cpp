@@ -63,26 +63,26 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
-	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
+	//QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
 	QObject::connect(ui->getTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int))); 
 	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click()));
-	//QObject::connect(pageActuelle()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
+	QObject::connect(ui->getTabWidget(), SIGNAL(currentChanged(int)), this, SLOT(changeTab(int)));
 }
-
-QWebView *MainView::pageActuelle()
-{
-	return ui->getTabWidget()->currentWidget()->findChild<QWebView *>();
-}
-
 
 MainView::~MainView()
 {
 }
 
+void MainView::changeTab(int index){
+	//cout << index << endl;
+}
+
 void MainView::closeTab(int index)
 {
-	if (index !=0)
+	if (index !=0){
 		ui->getTabWidget()->removeTab(index);
+		researchList.erase(researchList.begin() + index - 1);
+	}
 }
 
 void MainView::slot_linkClicked(const QUrl& url)
@@ -98,17 +98,16 @@ void MainView::slot_linkClicked(const QUrl& url)
 		generateGraph("0", elements.at(0).toStdString());
 	else if (elements.at(0) == "InclusionGraph")
 		generateGraph("0", elements.at(0).toStdString());
-	else if(elements.at(0) == "Path")
+	else if(elements.at(0) == "Path"){
 		generateHighlightFunction(elements.at(1));
+	}
 }
 
 bool exists(const char *fname)
 {
     if( access( fname, F_OK ) != -1 ) {
-    // file exists
 	    return true;
     } else {
-    // file doesn't exist
 	    return false;
     }
 }
@@ -118,10 +117,7 @@ void MainView::handlePushButton()
 	this->tag = ui->getLineEdit()->text().toStdString();
 	QString html;
 	QString xmlFile;
-	webViewSearch = new QWebView();
-	//webViewSearch->setObjectName("caca");
-	//pageActuelle()->page();
-	
+		
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
 		cHTML->generateTagByTag(tag);
@@ -148,15 +144,11 @@ void MainView::handlePushButton()
 		}
 		html = cHTML->TransformToHTML(xmlFile , xslFile);
 	}
-	
-// 	ui->getTabWidget()->addTab(webViewSearch, "Search");
-// 	webViewSearch->setHtml(html);
-// 	webViewSearch->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
-// 	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
-	
-	ui->getWebView()->setHtml(html);
-	ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+
+	researchList.push_back(cHTML->getList());
+	createNewSearchTab(html);
 }
+
 
 void MainView::handlePushRadioType()
 {
@@ -190,13 +182,14 @@ void MainView::generateGraph(QString number, std::string buildType)
 	CreateJson * cjson;
 	std::string filepath;
 	
+	researchList.push_back(cHTML->getList());
+	
 	if (buildType == "Called" || buildType == "Calling")
-		filepath = config->getDestDir() + "/" + buildType + "Graph_" + (cHTML->getList()->at(number.toInt() - 1))->hashFileName() + ".json";
+		filepath = config->getDestDir() + "/" + buildType + "Graph_" + (researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1))->hashFileName() + ".json";
 	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		filepath = config->getDestDir() + "/" + buildType + "_" 
 		+ (QString::fromStdString(this->tag).replace("/","_")).toStdString() + ".json";
 	
-	cout << filepath << endl;
 	QFile file(QString::fromUtf8(filepath.c_str()));
 
 	if(!file.exists())
@@ -204,7 +197,7 @@ void MainView::generateGraph(QString number, std::string buildType)
 		if (buildType == "Called" || buildType == "Calling")
 		{
 			cjson = new CreateJson(config, runner->getGraphCaller());
-			cjson->TransformToJson(cHTML->getList()->at(number.toInt() - 1), filepath, buildType);
+			cjson->TransformToJson(researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1), filepath, buildType);
 		}
 		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		{
@@ -212,11 +205,7 @@ void MainView::generateGraph(QString number, std::string buildType)
 			cjson->TransformToJson(config->getSourcesDir() + this->tag, filepath, runner->getIncludeParser(), buildType);
 		}
 	}
-	
-	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
-	objectTo->setValue(ui->getWebView(), QString::fromUtf8(filepath.c_str()));
-	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"));
-	ui->getWebView()->show();
+	createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath);
 }
 
 void MainView::generateHighlightFunction(QString number)
@@ -225,21 +214,53 @@ void MainView::generateHighlightFunction(QString number)
 	QString html;
 	std::string filename;
 	xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMHighlightFunction.xml";
-	
-	QWebView *webViewHighlight = new QWebView();
+
+	researchList.push_back(cHTML->getList());
+	QString ext = QString::fromStdString(researchList.at(ui->getTabWidget()->currentIndex())->at(number.toInt() - 1)->getFileName()).section('.',-1);
 		
-	QString ext = QString::fromStdString(cHTML->getList()->at(number.toInt() - 1)->getFileName()).section('.',-1);
-	
 	if(ext!="js"){
-		cHTML->createListHighlightFunction(cHTML->getList()->at(number.toInt() - 1));
+		cHTML->createListHighlightFunction(researchList.at(ui->getTabWidget()->currentIndex())->at(number.toInt() - 1));
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
-		ui->getTabWidget()->addTab(webViewHighlight, "Highlight");
-		webViewHighlight->setHtml(html);
-		webViewHighlight->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
-		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+		createNewHighlightTab(html);
 	}
 	else {
 		QMessageBox::information(this, "Warning", "Unsupported file format");
 	}
 }
+
+void MainView::createNewSearchTab(QString html)
+{
+	ui->getTabWidget()->addTab(new QWebView, "Search");
+	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+ 	QWebView *webView = qobject_cast<QWebView *>(w);
+	webView->setHtml(html);
+	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+	QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
+	qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+}
+
+
+void MainView::createNewHighlightTab(QString html)
+{
+	ui->getTabWidget()->addTab(new QWebView, "Highlight");
+	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+ 	QWebView *webView = qobject_cast<QWebView *>(w);
+	webView->setHtml(html);
+	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+}
+
+void MainView::createNewGraphTab(QUrl html, string filepath)
+{
+	ui->getTabWidget()->addTab(new QWebView, "Graph");
+	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+	QWebView *webView = qobject_cast<QWebView *>(w);
+	ObjectTo *objectTo = new ObjectTo(webView);
+	objectTo->setValue(webView, QString::fromUtf8(filepath.c_str()));
+	webView->setUrl(html);
+	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+}
+
 

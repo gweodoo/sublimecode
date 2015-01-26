@@ -37,7 +37,6 @@ class MainView : public QMainWindow
 public:
 	MainView(Configuration *c, std::vector<std::string> fileList);
 	~MainView();
-	QWebView *pageActuelle();
 	
 public slots:
 	void handlePushButton();
@@ -46,11 +45,16 @@ public slots:
 	void generateGraph(QString number, std::string buildType);
 	void generateHighlightFunction(QString number);
 	void closeTab(int index);
+	void changeTab(int index);
+	void createNewSearchTab(QString html);
+	void createNewHighlightTab(QString html);
+	void createNewGraphTab(QUrl html, string filename);
 
 private:
 	Ui_MainView * ui;
 	Configuration *config;
 	std::vector<std::string> allfileList;
+	std::vector<std::vector<Tag *>*> researchList;
 	std::string tag;
 	QStringList wordList;
 	std::string pathToAnalyse;
