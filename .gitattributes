@@ -1,4 +1,5 @@
-#.gitignore            export-ignore
+.gitignore            export-ignore
 .gitattributes        export-ignore
-tools/debian_src.tar.gz binary
+tools/ubuntu_src.tar.gz binary
+tools/fedora_src.tar.gz binary
 tools                 export-ignore

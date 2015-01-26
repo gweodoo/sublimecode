@@ -49,10 +49,10 @@ print_variable_content("CMAKE_PREFIX_PATH")
 
 ##########################################
 # Externals libs
-FIND_PACKAGE(CTags REQUIRED)
-FIND_PACKAGE(CScope REQUIRED)
+#FIND_PACKAGE(CTags REQUIRED) #checked by packages
+#FIND_PACKAGE(CScope REQUIRED) # checked by package
 FIND_PACKAGE(Qt4 REQUIRED QtGui QtXml QtXmlPatterns)
-FIND_PACKAGE(Cloc)
+#FIND_PACKAGE(Cloc) # checked by package
 FIND_PACKAGE(Doxygen)
 
 #########################################
