@@ -39,10 +39,12 @@ public:
 	void createXMLSearchByType(int type);
 	void createXMLSearchByFile(string filename);
 	void createListHighlightFunction( Tag* tag );
+	void generateTagByFile(string filename);
+	void generateTagByType(int type);
+	void generateTagByTag(string tag);
 	void createXMLHighlightFunction(std::vector<std::string> beforeFunction, std::vector<std::string> inFunction,std::vector<std::string> afterFunction);
 	QString TransformToHTML(QString fileXML, QString fileXSL);
 	std::string stringFromVector(vector< string > vector);
-	
 	std::vector<Tag *>* getList();
 
 private:

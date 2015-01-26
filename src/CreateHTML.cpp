@@ -30,16 +30,29 @@
 CreateHTML::~CreateHTML(){}
 
 CreateHTML::CreateHTML(Configuration* c, Runner *runner) : config(c), runner(runner) {}
+
+void CreateHTML::generateTagByFile(string filename)
+{
+	list = runner->getTagsByFile(config->getSourcesDir()+filename);
+}
+
+void CreateHTML::generateTagByTag(string tag)
+{
+	list = runner->getTagsByName(tag);
+}
+
+void CreateHTML::generateTagByType(int type)
+{
+	list = runner->findTagsByType(static_cast<tagType>(type));
+}
+
 void CreateHTML::createXMLSearchByTags(string tag)
 {	
 	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml"); 
-	qDebug() << file.fileName();
 	QDomDocument document;
 
 	QDomElement root = document.createElement("SearchByTags");
 	document.appendChild(root);
-
-	list = runner->getTagsByName(tag);
 
 	for (size_t i=0; i<list->size(); i++)
 	{
@@ -89,9 +102,7 @@ void CreateHTML::createXMLSearchByTags(string tag)
 }
 
 void CreateHTML::createXMLSearchByType(int type)
-{
-	list = runner->findTagsByType(static_cast<tagType>(type));
-	
+{	
 	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByType_"+tabTypeNames[type]+".xml"); 
 	QDomDocument document;
 	
@@ -154,8 +165,6 @@ void CreateHTML::createXMLSearchByFile(string filename)
 	
 	QDomElement root = document.createElement("SearchByFile");
 	document.appendChild(root);
-
-	list = runner->getTagsByFile(config->getSourcesDir()+filename);
 
 	for (size_t i=0; i<list->size(); i++)
 	{

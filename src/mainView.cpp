@@ -66,7 +66,14 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
 	QObject::connect(ui->getTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int))); 
 	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click()));
+	//QObject::connect(pageActuelle()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
 }
+
+QWebView *MainView::pageActuelle()
+{
+	return ui->getTabWidget()->currentWidget()->findChild<QWebView *>();
+}
+
 
 MainView::~MainView()
 {
@@ -111,18 +118,21 @@ void MainView::handlePushButton()
 	this->tag = ui->getLineEdit()->text().toStdString();
 	QString html;
 	QString xmlFile;
-	QWebView *webViewSearch = new QWebView();
-
+	webViewSearch = new QWebView();
+	//webViewSearch->setObjectName("caca");
+	//pageActuelle()->page();
+	
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
+		cHTML->generateTagByTag(tag);
 		if(exists(xmlFile.toUtf8().data()) == false){
-
 			cHTML->createXMLSearchByTags(tag);
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslTag);
 	}
 	else if (ui->getRadioType()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
+		cHTML->generateTagByType(ui->gettypeSelector()->currentIndex());
 		if(exists(xmlFile.toUtf8().data()) == false){
 			cHTML->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
 		}
@@ -132,11 +142,17 @@ void MainView::handlePushButton()
 		QString filename_modified = QString::fromStdString(tag);
 		filename_modified.replace("/","_");
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByFile_"+filename_modified+".xml";
+		cHTML->generateTagByFile(tag);
 		if(exists(xmlFile.toUtf8().data()) == false){
 			cHTML->createXMLSearchByFile(tag);
 		}
 		html = cHTML->TransformToHTML(xmlFile , xslFile);
 	}
+	
+// 	ui->getTabWidget()->addTab(webViewSearch, "Search");
+// 	webViewSearch->setHtml(html);
+// 	webViewSearch->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+// 	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
 	
 	ui->getWebView()->setHtml(html);
 	ui->getWebView()->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
@@ -220,7 +236,6 @@ void MainView::generateHighlightFunction(QString number)
 		ui->getTabWidget()->addTab(webViewHighlight, "Highlight");
 		webViewHighlight->setHtml(html);
 		webViewHighlight->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
-		qDebug() << ui->getTabWidget()->count() << endl;
 		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
 	}
 	else {

@@ -203,7 +203,9 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Gra
 			{
 				stringstream ss;
 				ss << (*it)->getLineNumber();
-				*out << ",\"info\": \" In the file " << QString::fromStdString((*it)->getFileName()) << " at line "
+				string filename = (*it)->getFileName();
+				*out << ",\"info\": \" In the file " << QString::fromUtf8(filename.c_str()) << " at line "
+// 				*out << ",\"info\": \" In the file " << QString::fromStdString((*it)->getFileName()) << " at line "
 				<< QString::fromStdString(ss.str())<< "\"";
 				
 				//if (nbIterator < (wantedIterator -1))

@@ -100,7 +100,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	
 	tabWidget = new QTabWidget(MainView);
 	tabWidget->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
-	tabWidget->addTab(webView, "tabWidget");
+	tabWidget->addTab(webView, "Home");
 	tabWidget->setTabsClosable(true);
 
 	enterShortcut = new QShortcut(QKeySequence("Return"), tagGroupBox);

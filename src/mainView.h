@@ -37,6 +37,7 @@ class MainView : public QMainWindow
 public:
 	MainView(Configuration *c, std::vector<std::string> fileList);
 	~MainView();
+	QWebView *pageActuelle();
 	
 public slots:
 	void handlePushButton();
