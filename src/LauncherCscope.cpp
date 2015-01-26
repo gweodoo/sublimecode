@@ -40,7 +40,7 @@ LauncherCscope::LauncherCscope(Configuration* myconfiguration,TagsManager*myTagM
 	this->myTagManager=myTagManager;
 	this->myConfiguration=myconfiguration;
 	this->isLaunched=false;
-	this->MyCscopeThreadObject=new CscopeThreadObject();
+
 	
 }
 
@@ -115,7 +115,9 @@ bool LauncherCscope::closeExternalTool()
 
 vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)
 {
-	vector<Tag*> *listOfTagToReturn;
+	vector<Tag*> *listOfTagToReturn=NULL;
+	
+	
 	if(tagAssociatedToFunction!=NULL)
 	{
 	listOfTagToReturn=new vector<Tag*>();	
@@ -124,17 +126,18 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		*/
 		if(command==1)
 		{
+			vector<FunctionGraph*>* listOfFunctionCalled=NULL;
 			/**
 			 * checking if c/c++
 			 */
-			unsigned  int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
+			unsigned  long int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
 			
 			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
 			
-			unsigned  int isC=fileNameWithoutPath.find(".c");
+			unsigned long  int isC=fileNameWithoutPath.find(".c");
 			
 			if(isC!=string::npos){
-					unsigned  int isCpp=fileNameWithoutPath.substr(isC).find("pp");
+					unsigned  long int isCpp=fileNameWithoutPath.substr(isC).find("pp");
 					if(isCpp!=string::npos)
 			{
 				
@@ -150,7 +153,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					 * we can deal with it like in C it's not an object method
 					 */
 					string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
-					vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
+					listOfFunctionCalled=this->cscopeOutputParser(output);
 					this->removeNotConcernedDefinitionBasedOnFileName(listOfFunctionCalled,tagAssociatedToFunction->getFileName());
 				
 					for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
@@ -214,13 +217,14 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 			else{}
 			}
 			
-		
+			delete listOfFunctionCalled;
 			
 			
 		}
 		if(command==2)
 		{
-			vector<FunctionGraph*>* listOfCallingFunction=this->cscopeOutputParser(this->launchExternalTool(2,tagAssociatedToFunction->getName()));
+			vector<FunctionGraph*>* listOfCallingFunction=NULL;
+			listOfCallingFunction=this->cscopeOutputParser(this->launchExternalTool(2,tagAssociatedToFunction->getName()));
 			
 			this->removeNotMatchingFunctionOnArgumentNumber(tagAssociatedToFunction,listOfCallingFunction,NULL,2);
 			for(unsigned int i=0;i<listOfCallingFunction->size();i++)
@@ -263,8 +267,10 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 						}
 						}
 					}
+					delete listOfGlobalDefinitions;
 				}
 			}
+			delete listOfCallingFunction;
 		}
 		
 	}
@@ -399,7 +405,10 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 	{
 		this->myTagManager->addTag(new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
 			Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("OutOfscope"),0);
-			if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
+			if(FunctionDefinitionTag!=NULL){
+				delete listOfGlobalDefinition;
+				return(FunctionDefinitionTag);
+			}
 		
 	}
 	// we have to find the right definition from the several we have
@@ -415,28 +424,42 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		{
 			//we can search for the tag directly now 
 			Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
-			if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
+			if(FunctionDefinitionTag!=NULL){
+				delete listOfGlobalDefinition;
+				return(FunctionDefinitionTag);
+			}
 		}
 		else if(listOfGlobalDefinition->empty())
 		{
 	
 			this->myTagManager->addTag(new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
 			Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("OutOfscope"),0);
-			if(FunctionDefinitionTag!=NULL)return(FunctionDefinitionTag);
+			if(FunctionDefinitionTag!=NULL){
+				delete listOfGlobalDefinition;
+				return(FunctionDefinitionTag);
+			}
+				
 		}
 		else
 		{
 			
 			
 			Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
-			if(FunctionDefinitionTag!=NULL)return (FunctionDefinitionTag);
+			if(FunctionDefinitionTag!=NULL)
+			{
+				delete listOfGlobalDefinition;
+				return (FunctionDefinitionTag);
+			}
 			/**
 			*at this point we have differents function in the case of overloading for exemple 
 			*then we have to identify which function is called thanks to the type of parameters
 			*/
-		}					
+		}
+		delete listOFTypeForFunction;
+		
 	}
-				
+		
+	delete listOfGlobalDefinition;
 	return NULL;
 }
  
@@ -522,6 +545,7 @@ void LauncherCscope::removeNotFunctionOutput(std::vector<FunctionGraph*>* listOf
 		{
 			if(listOfGlobalDefinitions->at(i)->getSignature().find(";")!=std::string::npos||listOfGlobalDefinitions->at(i)->getSignature().find("#define")!=std::string::npos||listOfGlobalDefinitions->at(i)->getSignature().find("assert")!=std::string::npos) 
 			{
+				delete listOfGlobalDefinitions->at(i);
 				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 				i--;
 				
@@ -713,17 +737,24 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<std::vector<std::string>
 					// check the one who comme from .h
 					if(listOfGlobalDefinitions->at(i)->getFileName().find(".h"))
 					{
+						delete listOfGlobalDefinitions->at(j);
+						delete listOfTypes->at(j);
 						listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+j);
 						listOfTypes->erase(listOfTypes->begin()+j);
 						i--;
 					}
 					if(listOfGlobalDefinitions->at(j)->getFileName().find(".h"))
 					{
+						delete listOfGlobalDefinitions->at(j);
+						delete listOfTypes->at(j);
 						listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+j);
 						listOfTypes->erase(listOfTypes->begin()+j);
 						j--;
 					}
 				}
+				
+				delete listOfTypeForFirstMatch;
+				delete listOfTypeForSecondMatch;
 			}
 		}
 	}
@@ -774,6 +805,7 @@ int LauncherCscope::getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledF
 	int number=0;	
 	std::vector<std::string>* variablesNames=this->getTypeForVariableUsedInFunctionCall(calledFunctionToFind);
 	if(variablesNames!=NULL) number=variablesNames->size();
+	delete variablesNames;
 	return number;
 	
 }
@@ -830,6 +862,7 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 	
 			if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument)
 			{
+				delete listOfGlobalDefinitions->at(i);
 				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 				i--;
 			}
@@ -849,6 +882,7 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 			vector<string>* variablesNames=this->getVariablesNamesInFunctionCall(call);
 			if((variablesNames->size())!=numberOfArgument)
 			{
+				delete  listOfGlobalDefinitions->at(i);
 				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 				i--;
 			}
@@ -1025,7 +1059,7 @@ bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 		||nameOfSymbolFound.compare("stream")==0||nameOfSymbolFound.compare("isstream")==0||nameOfSymbolFound.compare("find_first_of")==0
 	||nameOfSymbolFound.compare("size")==0||nameOfSymbolFound.compare("length")==0||nameOfSymbolFound.compare("string")==0
 	||nameOfSymbolFound.compare("switch")==0||nameOfSymbolFound.compare("exec")==0||nameOfSymbolFound.compare("printf")==0||nameOfSymbolFound.compare("system")==0
-	||nameOfSymbolFound.compare("defined")==0
+	||nameOfSymbolFound.compare("defined")==0||nameOfSymbolFound.compare("#define")==0
 	) isLanguageKey=true;
 	return isLanguageKey;
 }
@@ -1109,7 +1143,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 	string callExpressionwithOnlyFunctionNameAndParameters=listOfArgument;
 	std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(callExpressionwithOnlyFunctionNameAndParameters);
 	numberOfVariable=variablesNames->size();
-
+	delete variablesNames;
 	return numberOfVariable;
 	
 }
