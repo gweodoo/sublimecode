@@ -1,7 +1,4 @@
-.gitignore            export-ignore
+#.gitignore            export-ignore
+.gitattributes        export-ignore
 tools/debian_src.tar.gz binary
-#.gitattributes        export-ignore
-#tests                 export-ignore
-#resources/sh.header   export-ignore
-#resources/src.header  export-ignore
-
+tools                 export-ignore

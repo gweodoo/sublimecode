@@ -1,10 +1,20 @@
 * UBUNTU *
 == INIT ==
 1. apt-get install build-essential dh-make bzr-builddeb
-2. bzr dh-make sublimecode 1.0 sublimecode-1.0.tar.gz
-3. cd into debian/
-4. remove *ex and *EX files
+2. git archive --format=tar --prefix=sublimecode-1.0/ HEAD | gzip > sublimecode-1.0.tar.gz
+3. check ignored files (.gitattributes...)
+4. bzr dh-make sublimecode 1.0 sublimecode-1.0.tar.gz
+5  rm debian/
+6. untar debian.tar.gz into sublimecode/
+7. in sublimeCode folder : bzr builddeb -- -us -uc
+8. check : lesspipe sublimecode-1.0-1_amd64.deb and remove errors and warnings
+9. push on launchpad (dput .... ppa:....)
 
-== BUILD ==
-0. git archive --format=tar --prefix=sublimecode-1.0/ HEAD | gzip > sublimecode-1.0.tar.gz
-0,5. check ignored files
+
+
+* FEDORA *
+1. yum install rpmdevtools
+2. git archive --format=tar --prefix=sublimecode-1.0/ HEAD | gzip > sublimecode-1.0.tar.gz
+3. check ignored files (.gitattributes...)
+4.
+

@@ -58,7 +58,6 @@ FIND_PACKAGE(Doxygen)
 #########################################
 # Sub loadings
 ADD_SUBDIRECTORY(src)
-ADD_SUBDIRECTORY(lib)
 
 #Loading doc if enabled and doxygen found
 IF(SC_ENABLE_DOC AND DOXYGEN_FOUND)
