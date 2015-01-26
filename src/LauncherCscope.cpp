@@ -193,7 +193,13 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				 */
 				string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
 				vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
-				
+				for(int p=0;p<listOfFunctionCalled->size();p++)
+				{
+					if(this->isLanguageKey(listOfFunctionCalled->at(p)->getTagName()))
+					{
+						listOfFunctionCalled->erase(listOfFunctionCalled->begin()+p);
+					}
+				}
 				this->removeNotConcernedDefinitionBasedOnFileName(listOfFunctionCalled,tagAssociatedToFunction->getFileName());
 			
 				
@@ -373,6 +379,7 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 {
 
 	vector<FunctionGraph*>* listOfGlobalDefinition=this->getGlobalDefinitionsFrom(outputFunction->getTagName());
+	
 	if(listOfGlobalDefinition->size()==1)
 	{
 		Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
@@ -411,10 +418,7 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		else
 		{
 			
-			for(int p=0;p<listOfGlobalDefinition->size();p++)
-			{
 			
-			}
 			Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
 			if(FunctionDefinitionTag!=NULL)return (FunctionDefinitionTag);
 			/**
@@ -1012,7 +1016,7 @@ bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 		||nameOfSymbolFound.compare("stream")==0||nameOfSymbolFound.compare("isstream")==0||nameOfSymbolFound.compare("find_first_of")==0
 	||nameOfSymbolFound.compare("size")==0||nameOfSymbolFound.compare("length")==0||nameOfSymbolFound.compare("string")==0
 	||nameOfSymbolFound.compare("switch")==0||nameOfSymbolFound.compare("exec")==0||nameOfSymbolFound.compare("printf")==0||nameOfSymbolFound.compare("system")==0
-	
+	||nameOfSymbolFound.compare("defined")==0
 	) isLanguageKey=true;
 	return isLanguageKey;
 }
