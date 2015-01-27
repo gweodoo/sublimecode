@@ -85,6 +85,16 @@ void CreateHTML::createXMLSearchByTags(string tag)
 		element3.appendChild(txt3);
 		element4.appendChild(txt4);
 		
+		const map<string,string> m = list->at(i)->getAllInfo();
+		string chain = "";
+		QDomElement curElem = document.createElement("Extras");
+		element.appendChild(curElem);
+		
+		for(map<string,string>::const_iterator it = m.begin(); it!= m.end(); it++){
+			chain += it->first +" : " + it->second + "\n";
+		}
+		curElem.appendChild(document.createTextNode(QString::fromStdString(chain)));
+
 		root.appendChild(element);
 	}
 	

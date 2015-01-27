@@ -98,6 +98,12 @@ public:
 	virtual std::string getInfoByKey(std::string key) const = 0;
 	/// display the tag content in terminal
 	virtual void display() const = 0;
+	/**
+	 * get the whole additional info map, for displaying (const)
+	 * \return the map
+	 */
+	virtual const std::map<std::string,std::string>& getAllInfo() const = 0;
+
 
 	/****** NON-CONST ******/
 	/**

@@ -10,7 +10,7 @@
 		<h1>Search By Tags</h1>
 		<xsl:for-each select="SearchByTags">
 			<table border='2' CELLSPACING='0' CELLPADDING='8' >
-			<thead><TH>Number</TH><TH>Line</TH><TH>Path</TH><TH>Type</TH><TH></TH><TH></TH></thead>
+			<thead><TH>Number</TH><TH>Line</TH><TH>Path</TH><TH>Type</TH><TH>Extras</TH><TH></TH><TH></TH></thead>
 			<tbody>
 			<xsl:for-each select="Tags">
 				<TR>
@@ -21,6 +21,7 @@
 						<xsl:value-of select="Path"/>
 					</a></TD>
 					<TD><xsl:value-of select="Type"/></TD>
+					<TD><xsl:value-of select="Extras"/></TD>
 					<TD><a>
 						<xsl:attribute name="href">CalledGraph///<xsl:value-of select="Number"/></xsl:attribute>
 						<button>CalledGraph</button>

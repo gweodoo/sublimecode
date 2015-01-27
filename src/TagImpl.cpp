@@ -94,6 +94,10 @@ std::string TagImpl::hashFileName() const {
 	return ss.str();
 }
 
+const std::map<std::string,std::string>& TagImpl::getAllInfo() const {
+	return const_cast<const map<string,string>&>(additionalInfo);
+}
+
 TagImpl::~TagImpl() {
 }
 

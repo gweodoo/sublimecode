@@ -42,6 +42,7 @@ public:
 	virtual size_t getLineNumber() const;
 	virtual tagType getType() const;
 	virtual std::string getInfoByKey(std::string key) const;
+	virtual const std::map<std::string,std::string>& getAllInfo() const;
 	virtual void display() const;
 	virtual std::string hashFileName() const;
 	virtual ~TagImpl();
