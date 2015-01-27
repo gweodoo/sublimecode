@@ -21,6 +21,7 @@
 #define RSZW(percent) (this->width*percent/100)
 #define RSZH(percent) (this->height*percent/100)
 
+
 void Ui_Dialog::setupUi(QDialog *Dialog)
     {
 	QRect rect = QApplication::desktop()->screenGeometry();
@@ -57,6 +58,13 @@ void Ui_Dialog::setupUi(QDialog *Dialog)
 
         QMetaObject::connectSlotsByName(Dialog);
     } // setupUi
+
+Ui_Dialog::~Ui_Dialog() {
+	delete treeView;
+	delete pushButton;
+	delete selectAll;
+	delete deselectAll;
+    }
 
 void Ui_Dialog::retranslateUi(QDialog *Dialog)
     {

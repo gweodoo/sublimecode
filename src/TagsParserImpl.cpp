@@ -32,19 +32,20 @@ void TagsParserImpl::loadFromFile ( std::string inputFile ) {
 		scError("File " << inputFile << " not Found !");
 
 	string cur;
-	std::string part;
-	string name, filename;
-	size_t line= 0;
 	tagType type;
 
-	while(getline(fileFd, cur, '\n')){
+	while(std::getline(fileFd, cur, '\n')){
 
 		if(cur[0] == '!') continue;
 		stringstream ss(cur);
-
-		while(getline(ss, part, '\t')){
+		string part;
+		string name, filename;
+		size_t line= 0;
+	
+		while(std::getline(ss, part, '\t')){
 			tab.push_back(part);
 		}
+
 		name = tab[0]; tab.erase(tab.begin());
 		filename = tab[0]; tab.erase(tab.begin());
 

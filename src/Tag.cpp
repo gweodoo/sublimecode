@@ -21,3 +21,5 @@
 
 const char* tabTypeNames[] = {"CLASS", "DEFINE", "ENUMERATOR", "FUNCTION", "FILE", "ENUM", "MEMBER", "PROTO", "STRUCT", "TYPEDEF", "UNION", "VAR", "ID","NAMESPACE",  "UNKNOWN"};
 const std::string OUT_OF_SCOPE_TAG = "OUT_OF_SCOPE";
+
+Tag::~Tag() {}

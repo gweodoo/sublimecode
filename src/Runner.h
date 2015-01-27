@@ -70,6 +70,8 @@ public:
 	GraphCaller *  getGraphCaller() const;
 	IncludeParser * getIncludeParser() const;
 	TagsManagerImpl * getTagsManager() const;
+
+	~Runner();
 };
 
 #endif // RUNNER_H

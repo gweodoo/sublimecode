@@ -43,6 +43,7 @@ QT_BEGIN_NAMESPACE
 class Ui_MainView
 {
 public:
+	~Ui_MainView();
 	void setupUi(QMainWindow *MainView);
 	void retranslateUi(QMainWindow *MainView);
 	QWidget *getCentralWidget();

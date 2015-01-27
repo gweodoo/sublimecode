@@ -23,6 +23,12 @@ Runner::Runner(Configuration *config) : config(config) {
 	initEnvironment();
 }
 
+Runner::~Runner() {
+	delete this->tagMan;
+	delete this->graphResolver;
+	delete this->includeResolver;
+}
+
 void Runner::initEnvironment() {
 	this->tagMan = new TagsManagerImpl(config);
 }

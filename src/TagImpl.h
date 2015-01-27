@@ -44,6 +44,7 @@ public:
 	virtual std::string getInfoByKey(std::string key) const;
 	virtual void display() const;
 	virtual std::string hashFileName() const;
+	virtual ~TagImpl();
 };
 
 #endif // TAGIMPL_H

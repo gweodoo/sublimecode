@@ -69,6 +69,7 @@ public slots:
      void Finish();
      bool exists(const char *fname);
      bool removeDir(QString file);
+     void closeEvent(QCloseEvent* e);
 };
 
 #endif // MAINWINDOW_H

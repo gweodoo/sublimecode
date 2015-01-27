@@ -30,6 +30,7 @@ public:
 	MercurialVcsHandler( Configuration* config, std::string address, std::string branch);
 	virtual bool getProject ();
 	std::vector< std::string > getBranchesList();
+    virtual ~MercurialVcsHandler();
 };
 
 #endif // MERCURIALVCSHANDLER_H

@@ -28,3 +28,7 @@ bool TargzTarballHandler::getProject () {
 	return (WEXITSTATUS(ret) == 0);
 
 }
+
+TargzTarballHandler::~TargzTarballHandler() {
+
+    }

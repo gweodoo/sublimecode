@@ -175,4 +175,10 @@ QShortcut* Ui_MainView::getShortcutEnter()
 	return this->enterShortcut;
 }
 
+Ui_MainView::~Ui_MainView() {
+	delete menuBar;
+	delete webView;
+	delete tabWidget;
+	delete centralWidget;
+    }
 

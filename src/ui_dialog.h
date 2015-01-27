@@ -42,6 +42,7 @@ private:
 	int width, height;
 
 public:
+	~Ui_Dialog();
 	void setupUi(QDialog *Dialog);
 	void retranslateUi(QDialog *Dialog);
 	QTreeView *getTreeView();

@@ -28,3 +28,8 @@ bool Tarbz2TarballHandler::getProject () {
 	return (WEXITSTATUS(ret) == 0);
 
 }
+
+Tarbz2TarballHandler::~Tarbz2TarballHandler() {
+
+    }
+

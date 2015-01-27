@@ -29,6 +29,7 @@ public:
 	TarballHandler ( Configuration* config, std::string address );
 	virtual bool getProject() = 0;
 	virtual std::vector<std::string>  getBranchesList();
+    virtual ~TarballHandler();
 };
 
 #endif // TARBALLHANDLER_H

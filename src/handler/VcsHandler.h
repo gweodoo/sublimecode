@@ -31,6 +31,7 @@ public:
 	virtual bool getProject() = 0;
 	virtual std::vector<std::string>  getBranchesList() = 0;
 	std::vector< std::string > executeBranchesGetter(std::string command);
+    virtual ~VcsHandler();
 };
 
 #endif // VCSHANDLER_H

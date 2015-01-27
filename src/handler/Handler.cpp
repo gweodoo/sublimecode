@@ -20,3 +20,5 @@
 #include "Handler.h"
 
 Handler::Handler(Configuration *config, std::string address) : config(config), address(address) {}
+
+Handler::~Handler() {}

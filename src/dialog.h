@@ -53,6 +53,7 @@ public slots:
 	void DeSelectAll();
 	void updateCheckAllComboBox(QString mpath);
 	void updateunCheckAllComboBox(QString mpath);
+	void closeEvent(QCloseEvent* e);
 };
 
 #endif // DIALOG_H

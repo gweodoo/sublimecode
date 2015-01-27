@@ -32,6 +32,7 @@ public:
 	Handler(Configuration *config, std::string address);
 	virtual bool getProject() = 0;
 	virtual std::vector<std::string>  getBranchesList() = 0;
+	virtual ~Handler();
 };
 
 #endif // HANDLER_H

@@ -39,6 +39,7 @@ public:
 	vector< pair< string, int > > getMostImplementedFilesPerLanguage( string language ) const;
 	std::vector<std::pair<std::string, float> > getMostUsedLanguages() const;
 	vector< pair< string, int > > getNbTagsPerFile() const;
+	~StatsParser();
 };
 
 #endif // CLOCPARSER_H

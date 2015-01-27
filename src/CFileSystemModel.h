@@ -33,6 +33,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     void checkAllBoxes(QString mpath);
     void uncheckAllBoxes(QString mpath);
+    virtual ~CFileSystemModel();
 private:
     bool recursiveCheck(const QModelIndex &index, const QVariant &value);
 };

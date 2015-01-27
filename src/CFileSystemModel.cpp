@@ -110,5 +110,8 @@ void CFileSystemModel::uncheckAllBoxes(QString mpath)
     }
 }
 
+CFileSystemModel::~CFileSystemModel() {
+}
+
 
 

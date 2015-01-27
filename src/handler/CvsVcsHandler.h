@@ -30,6 +30,7 @@ public:
     virtual bool getProject ();
     CvsVcsHandler ( Configuration* config, std::string address, std::string branch );
     virtual std::vector<std::string> getBranchesList();
+    virtual ~CvsVcsHandler();
 };
 
 #endif // CVSVCSHANDLER_H

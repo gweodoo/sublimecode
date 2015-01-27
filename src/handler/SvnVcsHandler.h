@@ -30,6 +30,7 @@ public:
 	SvnVcsHandler ( Configuration* config, std::string address, std::string branch);
 	bool getProject ();
 	virtual std::vector<std::string>  getBranchesList();
+    virtual ~SvnVcsHandler();
 };
 
 #endif // SVNVCSHANDLER_H

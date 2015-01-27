@@ -24,7 +24,7 @@
 #include <qinputdialog.h>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(parent), ui(NULL)
 {
 	if(! (checkCommandExistency("ctags", true) && checkCommandExistency("cscope", true) && checkCommandExistency("cloc", true))){
 		QMessageBox::critical(this, "Dependency issue", "Some dependencies aren't resolved.\n Check for dependency:\n\t- CTags\n\t- CScope\n\t- Cloc\n\nAdd then to your PATH environment");
@@ -39,10 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+MainWindow::~MainWindow() {}
 
 void MainWindow::Rechercher_Sources()
 {
@@ -216,7 +213,7 @@ void MainWindow::Finish()
 				qmb2.setText("An error occured during extraction.\n Please, try again.");
 				qmb2.exec();
 			}
-
+			delete handler;
 			break;
 		case 2 : 
 			fileNameSourceTest = ui->getLineEditArchive()->text();
@@ -253,9 +250,13 @@ void MainWindow::Finish()
 				qmb2.setText("An error occured during extraction.\n Please, try again.");
 				qmb2.exec();
 			}
-
+			delete handler;
 			break;	
 	}
 }
 
 
+void MainWindow::closeEvent(QCloseEvent* e){
+	delete ui;
+	QMainWindow::closeEvent(e);
+}

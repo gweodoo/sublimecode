@@ -105,4 +105,13 @@ vector< string >* TagsManagerImpl::getTagNamesByType ( tagType type ) {
 	return list;
 }
 
+TagsManagerImpl::~TagsManagerImpl() {
+	for(vector<map<string, Tag*>*>::iterator it = hashtable.begin(); it != hashtable.end(); it++){
+		for(map<string, Tag*>::iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
+			delete itmap->second;
+			(*it)->erase(itmap);
+		}
+		delete *it;
+	}
+}
 

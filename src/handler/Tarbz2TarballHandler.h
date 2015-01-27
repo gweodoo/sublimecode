@@ -27,6 +27,7 @@ class Tarbz2TarballHandler :  public TarballHandler
 public:
 	Tarbz2TarballHandler(Configuration *config, std::string address);
 	virtual bool getProject();
+    virtual ~Tarbz2TarballHandler();
 };
 
 #endif // TARBZ2TARBALLHANDLER_H

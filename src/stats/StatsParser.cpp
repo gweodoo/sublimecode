@@ -135,3 +135,14 @@ vector< pair< string, int > > StatsParser::getNbTagsPerFile() const {
 	return vec;
 }
 
+StatsParser::~StatsParser() {
+	for(vector<StatsLanguageItem*>::const_iterator it = tabLanguages.begin(); it != tabLanguages.end(); it++){
+		delete (*it);
+	}
+
+	for(vector<StatsFileItem*>::const_iterator it = tabFiles.begin(); it != tabFiles.end(); it++){
+		delete (*it);
+	}
+
+}
+

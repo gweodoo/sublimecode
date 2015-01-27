@@ -93,3 +93,7 @@ std::string TagImpl::hashFileName() const {
 	ss << filename;
 	return ss.str();
 }
+
+TagImpl::~TagImpl() {
+}
+

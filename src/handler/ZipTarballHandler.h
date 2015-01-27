@@ -28,6 +28,7 @@ class ZipTarballHandler :  public TarballHandler
 public:
 	ZipTarballHandler(Configuration *config, std::string address);
 	bool getProject();
+    virtual ~ZipTarballHandler();
 };
 
 #endif // ZIPTARBALLHANDLER_H

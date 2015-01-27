@@ -29,6 +29,7 @@ public:
 	GitVcsHandler( Configuration* config, std::string address, std::string branch);
 	virtual bool getProject ();
 	virtual std::vector<std::string>  getBranchesList();
+    virtual ~GitVcsHandler();
 };
 
 #endif // GITVCSHANDLER_H

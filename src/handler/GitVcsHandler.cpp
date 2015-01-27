@@ -42,3 +42,8 @@ std::vector<std::string>  GitVcsHandler::getBranchesList() {
 	return VcsHandler::executeBranchesGetter(command);
 
 }
+
+GitVcsHandler::~GitVcsHandler() {
+
+    }
+

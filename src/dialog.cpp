@@ -83,4 +83,12 @@ void Dialog::updateunCheckAllComboBox(QString mpath)
 	model->uncheckAllBoxes(mpath);
 }
 
+void Dialog::closeEvent ( QCloseEvent* e ) {
+    QDialog::closeEvent ( e );
+
+	delete ui;
+	delete model;
+}
+
+
 

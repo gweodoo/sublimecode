@@ -47,7 +47,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	}
 	
 	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
-		wordList.push_back(QString::fromStdString((*it).substr(config->getSourcesDir().size())));	
+		wordList.push_back(QString::fromStdString((*it).substr(config->getSourcesDir().size())));
 	}
 	
 	if (ui->getRadioType()->isChecked()){
@@ -69,8 +69,21 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getTabWidget(), SIGNAL(currentChanged(int)), this, SLOT(changeTab(int)));
 }
 
-MainView::~MainView()
+void MainView::closeEvent(QCloseEvent* e){
+	QMainWindow::closeEvent(e);
+	delete runner;
+	delete config;
+	delete cHTML;
+	delete ui;
+// 	delete cjson;
+}
+
+MainView::~MainView() {
+}
+
+QWebView *MainView::pageActuelle()
 {
+	return ui->getTabWidget()->currentWidget()->findChild<QWebView *>();
 }
 
 void MainView::changeTab(int index){
@@ -262,5 +275,4 @@ void MainView::createNewGraphTab(QUrl html, string filepath)
 	webView->setUrl(html);
 	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 }
-
 

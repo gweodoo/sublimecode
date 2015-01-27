@@ -46,10 +46,11 @@ public slots:
 	void generateHighlightFunction(QString number);
 	void closeTab(int index);
 	void changeTab(int index);
+	QWebView *pageActuelle();
+	void closeEvent(QCloseEvent* e);
 	void createNewSearchTab(QString html);
 	void createNewHighlightTab(QString html);
 	void createNewGraphTab(QUrl html, string filename);
-
 private:
 	Ui_MainView * ui;
 	Configuration *config;

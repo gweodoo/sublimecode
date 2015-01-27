@@ -44,3 +44,7 @@ std::vector<std::string>  SvnVcsHandler::getBranchesList() {
 	return VcsHandler::executeBranchesGetter(command);
 }
 
+SvnVcsHandler::~SvnVcsHandler() {
+
+    }
+

@@ -132,6 +132,7 @@ public:
 	 * \return the filename as a string
 	 */
 	virtual std::string hashFileName() const = 0;
+	virtual ~Tag();
 };
 
 #endif

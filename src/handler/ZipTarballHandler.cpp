@@ -31,3 +31,7 @@ bool ZipTarballHandler::getProject () {
 
 }
 
+ZipTarballHandler::~ZipTarballHandler() {
+
+    }
+

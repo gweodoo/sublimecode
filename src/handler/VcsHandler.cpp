@@ -37,3 +37,8 @@ std::vector< std::string > VcsHandler::executeBranchesGetter(std::string command
 	return branchlist;
 }
 
+VcsHandler::~VcsHandler() {
+
+    }
+
+

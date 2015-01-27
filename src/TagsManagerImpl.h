@@ -40,6 +40,7 @@ public:
 	virtual std::vector<Tag*>* getTagsByName(std::string name);
 	virtual std::vector<Tag*>* getTagsByFile(std::string filename);
 	virtual std::vector<std::string>* getTagNamesByType(tagType type);
+	virtual ~TagsManagerImpl();
 };
 
 #endif // TAGSMANAGERIMPL_H

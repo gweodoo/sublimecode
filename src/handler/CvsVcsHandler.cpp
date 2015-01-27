@@ -42,3 +42,7 @@ std::vector<std::string>  CvsVcsHandler::getBranchesList(){
 	return VcsHandler::executeBranchesGetter(command);
 }
 
+CvsVcsHandler::~CvsVcsHandler() {
+
+    }
+

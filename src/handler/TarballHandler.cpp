@@ -25,3 +25,7 @@ std::vector< std::string > TarballHandler::getBranchesList() {
 	//NOT USED WITH TARBALL
 	return *(new std::vector<std::string>());
 }
+
+TarballHandler::~TarballHandler() {
+
+    }

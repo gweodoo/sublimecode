@@ -24,8 +24,40 @@
 #define RSZW(percent) (this->width*percent/100)
 #define RSZH(percent) (this->height*percent/100)
 
-UI_MainWindow1::UI_MainWindow1(){}
-UI_MainWindow1::~UI_MainWindow1(){}
+UI_MainWindow1::UI_MainWindow1(){
+	centralWidget = NULL;
+	directoryWidget = NULL;
+	vcsWidget = NULL;
+	archiveWidget = NULL;
+	sourcesGroupBox = NULL;
+	destinationGroupBox = NULL;
+	tabs = NULL;
+	Parcourir = NULL;
+	Parcourir1 = NULL;
+	parcourirArchive = NULL;
+	Finish= NULL;
+	lineEdit= NULL;
+	lineEdit1= NULL;
+	lineEditVcs= NULL;
+	lineEditArchive= NULL;
+	lineEditBranch= NULL;
+	menuBar= NULL;
+	mainToolBar= NULL;
+	statusBar= NULL;
+	labelBranch= NULL;
+	comboBoxVcs= NULL;
+	comboBoxArchive= NULL;
+}
+UI_MainWindow1::~UI_MainWindow1(){
+	if(Finish != NULL) delete Finish;
+	if(destinationGroupBox != NULL) delete destinationGroupBox;
+	if(sourcesGroupBox != NULL) delete sourcesGroupBox;
+	if(statusBar != NULL) delete statusBar;
+	if(centralWidget != NULL) delete centralWidget;
+	if(mainToolBar != NULL) delete mainToolBar;
+	if(menuBar != NULL) delete menuBar;
+
+}
 
 const char * const UI_MainWindow1::vcsTypes[] = {"Cvs", "Git", "Mercurial", "Svn"};
 const char * const UI_MainWindow1::archiveTypes[] = {"Tarbz2", "Targz", "Zip"};
@@ -126,7 +158,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 void UI_MainWindow1::retranslateUi(QMainWindow *MainWindow)
 {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Code source : ", 0));
+	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Sources project : ", 0));
 	destinationGroupBox->setTitle(QApplication::translate("MainWindow", "Destination directory : ", 0));
 	
 	for (size_t i = 0; i < (sizeof(vcsTypes)/sizeof(*vcsTypes)); i++)
