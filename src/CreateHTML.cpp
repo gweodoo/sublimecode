@@ -93,6 +93,8 @@ void CreateHTML::createXMLSearchByTags(string tag)
 		for(map<string,string>::const_iterator it = m.begin(); it!= m.end(); it++){
 			chain += it->first +" : " + it->second + "\n";
 		}
+
+		if(m.size() == 0) chain = "None";
 		curElem.appendChild(document.createTextNode(QString::fromStdString(chain)));
 
 		root.appendChild(element);

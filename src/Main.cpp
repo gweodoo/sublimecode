@@ -46,27 +46,38 @@
  
 using namespace std;
 
+/**
+ *  ======= MAIN =========
+ * Start the whole application.
+ * It is possible to call QApplication.exit(APPLICATION_REBOOT) to restart the application from scratch
+ * \param[in] argc number of arguments given to sublimeCode
+ * \param[in] argv arguments array with options
+ */
 int main(int argc, char **argv){
 
-	QPointer<QApplication> app;
+	QApplication app(argc, argv);
 	int ret = 0;
-	do{
-		if(app) delete app;
-		app = new QApplication(argc, argv);
 
-		//Affichage vue
-		QFile file(":/style.qss");
+	//view loading
+	QFile file(":/style.qss");
 
-		if(file.open(QIODevice::ReadOnly | QIODevice::Text))
-		{
-			app->setStyleSheet(file.readAll());
-			file.close();
-		}
+	if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		app.setStyleSheet(file.readAll());
+		file.close();
+	}
 
-		MainWindow w;
-		w.show();
-		ret = app->exec();
-	}while(ret == APPLICATION_REBOOT);
+	//starting starting window
+	MainWindow w;
+	w.show();
+	ret = app.exec();
 
+	if(ret == APPLICATION_REBOOT){
+		QStringList args = app.arguments();
+		args.removeFirst();
+		QProcess::startDetached(app.applicationFilePath(), args);
+		app.quit();
+		ret = 0;
+	}
 	return ret;
 }

@@ -219,7 +219,7 @@ void MainView::generateGraph(QString number, std::string buildType)
 	{
 		if (buildType == "Called" || buildType == "Calling")
 		{
-			cjson = new CreateJson(config, runner->getGraphCaller());
+			cjson = new CreateJson(config, runner->getGraph());
 			cjson->TransformToJson(researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1), filepath, buildType);
 		}
 		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")

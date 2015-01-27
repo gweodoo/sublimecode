@@ -29,6 +29,7 @@ public :
 	virtual std::vector<Tag*>*  getFunctionsCalledBy(Tag * tagAssociatedToFunction)=0;
 	virtual std::vector<Tag*>* getFunctionsCallingThis(Tag * tagAssociatedToFunction)=0;
 	virtual int getFunctionLength(Tag * tagAssociatedToFunction)=0;
+	virtual ~Graph(){};
 	
 };
 

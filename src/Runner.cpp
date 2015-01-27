@@ -83,7 +83,7 @@ vector< string >* Runner::getTagNamesByType ( tagType type ) {
 	return this->tagMan->getTagNamesByType(type);
 }
 
-GraphCaller* Runner::getGraphCaller() const {
+Graph* Runner::getGraph() const {
 	return graphResolver;
 }
 

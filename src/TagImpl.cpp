@@ -83,7 +83,7 @@ std::string TagImpl::hashFileName() const {
 	ss << this->name << this->fileName << this->lineNumber;
 	tagToHash = ss.str();
 
-	for (int i = 0; i < tagToHash.length(); i++)
+	for (size_t i = 0; i < tagToHash.length(); i++)
 	{
 		filename = filename + (tagToHash[i] * i);
 	}

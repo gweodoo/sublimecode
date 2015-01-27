@@ -48,8 +48,22 @@
 
 #endif
 
+/// Global macro to restart application
 #define APPLICATION_REBOOT 12345789
 
+/**
+ * check if a given command as string is in path
+ * \param[in] command the command name to check
+ * \param[in] required true if command is required to execute sublimeCode, false otherwise
+ * \return true if command is found, false otherwise. If false, printing on standard output
+ */
 bool checkCommandExistency(std::string command, bool required = false);
+
+/**
+ * Split a given chain according to a pattern
+ * \param[in] chain the chain to split
+ * \param[in] split the pattern
+ * \return the list of pieces split by the function, as a map (name of the field, n-th field)
+ */
 std::map<std::string, int> splitOn(std::string chain, char split);
 #endif
