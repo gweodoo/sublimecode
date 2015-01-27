@@ -34,12 +34,9 @@ LauncherCTags::LauncherCTags (Configuration *config, std::vector<std::string> li
 }
 
 bool LauncherCTags::generateTagsFile() {
-	std::string command = pathExecutable + options + " " + GLOBAL_OPTIONS + " -f " + config->getDestDir() + "/tags " + listPaths.front();
-	std::string chainStr = "";
+	std::string command = "", chainStr = "";
 	int chainSize = 0;
-	size_t i = 1;
-
-	system(command.c_str());
+	size_t i = 0;
 	while(i < listPaths.size()){
 		chainStr = "";
 		chainSize = 0;

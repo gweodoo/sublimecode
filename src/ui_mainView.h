@@ -49,6 +49,7 @@ public:
 	QWidget *getCentralWidget();
 	QWebView *getWebView();
 	QPushButton * getPushButton();
+	QPushButton * getResetButton();
 	QLineEdit * getLineEdit();
 	QRadioButton *getRadioName();
 	QRadioButton *getRadioType();
@@ -63,6 +64,7 @@ private:
 	QWidget *leftWidget;
 	QGroupBox *tagGroupBox;
 	QPushButton *pushButton;
+	QPushButton *resetButton;
 	QLineEdit *lineEdit;
 	QWidget *rightWidget;
 	QMenuBar *menuBar;

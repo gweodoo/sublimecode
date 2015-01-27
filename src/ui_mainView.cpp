@@ -42,6 +42,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	leftWidget->setObjectName(QString("leftWidget"));
 	leftWidget->setGeometry(QRect(0, 0, RSZW(28), RSZH(100)));
 	
+
 	tagGroupBox = new QGroupBox(leftWidget);
 	tagGroupBox->setObjectName(QString("tagGroupBox"));
 	tagGroupBox->setGeometry(QRect(RSZW(2), RSZH(3), RSZW(24), RSZH(26)));
@@ -66,6 +67,10 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	radio3->setGeometry(QRect(RSZW(2), RSZH(16), RSZW(8), RSZH(4)));
 	radio3->setText(": By File");
 	
+	resetButton = new QPushButton(leftWidget);
+	resetButton->setObjectName(QString("resetButton"));
+	resetButton->setGeometry(QRect(RSZW(2), RSZH(50), RSZW(20), RSZH(4)));
+
 	pushButton = new QPushButton(tagGroupBox);
 	pushButton->setObjectName(QString("pushButton"));
 	pushButton->setGeometry(QRect(RSZW(2), RSZH(20), RSZW(20), RSZH(4)));
@@ -120,6 +125,7 @@ void Ui_MainView::retranslateUi(QMainWindow *MainView)
 	MainView->setWindowTitle(QApplication::translate("MainView", "MainView", 0));
 	tagGroupBox->setTitle(QApplication::translate("MainView", "TAG", 0));
 	pushButton->setText(QApplication::translate("MainView", "Search", 0));
+	resetButton->setText(QApplication::translate("MainView", "Open", 0));
 	menuFile->setTitle(QApplication::translate("MainView", "File", 0));
 	menuEdit->setTitle(QApplication::translate("MainView", "Edit", 0));
 	menuView->setTitle(QApplication::translate("MainView", "View", 0));
@@ -173,6 +179,10 @@ QTabWidget* Ui_MainView::getTabWidget()
 QShortcut* Ui_MainView::getShortcutEnter()
 {
 	return this->enterShortcut;
+}
+
+QPushButton* Ui_MainView::getResetButton() {
+	return this->resetButton;
 }
 
 Ui_MainView::~Ui_MainView() {

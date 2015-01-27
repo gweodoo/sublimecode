@@ -59,6 +59,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 
 	cHTML = new CreateHTML(config, runner);
 
+	QObject::connect(ui->getResetButton(), SIGNAL(clicked()), this, SLOT(handleResetButton()));
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
@@ -123,6 +124,15 @@ bool exists(const char *fname)
     } else {
 	    return false;
     }
+}
+
+void MainView::handleResetButton(){
+	int reply = QMessageBox::question(this, "Open new project", "Would you close current opened project ?",QMessageBox::Yes|QMessageBox::No);
+
+	if(reply){
+		QApplication::exit(APPLICATION_REBOOT);
+	}
+
 }
 
 void MainView::handlePushButton()

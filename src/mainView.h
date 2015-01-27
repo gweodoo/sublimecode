@@ -40,6 +40,7 @@ public:
 	
 public slots:
 	void handlePushButton();
+	void handleResetButton();
 	void handlePushRadioType();
 	void slot_linkClicked(const QUrl &url);
 	void generateGraph(QString number, std::string buildType);

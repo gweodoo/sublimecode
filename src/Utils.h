@@ -48,6 +48,8 @@
 
 #endif
 
+#define APPLICATION_REBOOT 12345789
+
 bool checkCommandExistency(std::string command, bool required = false);
 std::map<std::string, int> splitOn(std::string chain, char split);
 #endif
