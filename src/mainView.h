@@ -52,6 +52,7 @@ public slots:
 	void createNewSearchTab(QString html);
 	void createNewHighlightTab(QString html);
 	void createNewGraphTab(QUrl html, string filename);
+	void createHTMLFile(QString filename, QString html);
 	QString readFile (const QString& filename);
 	void onCjsonChanged();
 	void onRunnerChanged();
