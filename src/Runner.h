@@ -34,7 +34,7 @@
 #include "GraphCaller.h"
 #include "LauncherCTags.h"
 
-#include "TagsParserImpl.h"
+#include "tags/TagsParser.h"
 #include "tags/TagsManager.h"
 
 /**

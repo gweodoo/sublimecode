@@ -17,14 +17,14 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "TagsParserImpl.h"
+#include "TagsParser.h"
 using namespace std;
 
-TagsParserImpl::TagsParserImpl(TagsManager* man) {
+TagsParser::TagsParser(TagsManager* man) {
 	myTagMan = man;
 }
 
-void TagsParserImpl::loadFromFile ( std::string inputFile ) {
+void TagsParser::loadFromFile ( std::string inputFile ) {
 	assert(inputFile != "");
 	std::vector<string> tab;
 	ifstream fileFd(inputFile.c_str());
@@ -41,7 +41,7 @@ void TagsParserImpl::loadFromFile ( std::string inputFile ) {
 		string part;
 		string name, filename;
 		size_t line= 0;
-	
+
 		while(std::getline(ss, part, '\t')){
 			tab.push_back(part);
 		}
@@ -64,7 +64,7 @@ void TagsParserImpl::loadFromFile ( std::string inputFile ) {
 
 }
 
-tagType TagsParserImpl::identifyTypeFromFile ( string type ) {
+tagType TagsParser::identifyTypeFromFile ( string type ) {
 	switch(type[0]){
 		case 'c': return TYPE_CLASS;
 		case 'd': return TYPE_DEFINE;
@@ -83,4 +83,3 @@ tagType TagsParserImpl::identifyTypeFromFile ( string type ) {
 		default: return TYPE_UNKNOWN;
 	}
 }
-

@@ -24,8 +24,7 @@
 
 class TagsParserImpl :  public TagsParser
 {
-private:
-	TagsManager* myTagMan;
+
 public:
 	TagsParserImpl(TagsManager* man);
 	virtual void loadFromFile ( std::string inputFile );

@@ -35,7 +35,7 @@ void Runner::initEnvironment() {
 
 void Runner::generateContents() {
 	LauncherCTags launcher(config, listFiles);
-	TagsParserImpl parser(tagMan);
+	TagsParser parser(tagMan);
 
 	launcher.generateTagsFile();
 
