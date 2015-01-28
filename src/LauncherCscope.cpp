@@ -59,7 +59,7 @@ bool LauncherCscope::initExternalTool(){
 	else
 	{
 		
-		string commandCscopeConstruct=string("cd ") +(string)this->myConfiguration->getSourcesDir() +string(" && cscope -bqkRu ");
+		string commandCscopeConstruct=string("cd ") +(string)this->myConfiguration->getSourcesDir() +string(" && cscope -bqRu ");
 		string commandFileMove_1=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.in.out ")+(string)this->myConfiguration->getDestDir();
 		string commandFileMove_2=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.out ")+(string)this->myConfiguration->getDestDir();
 		string commandFileMove_3=string("mv ")+(string)this->myConfiguration->getSourcesDir()+string("/cscope.po.out ")+(string)this->myConfiguration->getDestDir();
@@ -130,7 +130,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 			/**
 			 * checking if c/c++
 			 */
-		//	cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
+			//cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
 			unsigned  long int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
 			
 			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
@@ -167,7 +167,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				}
 				else
 				{
-			//		cout<<" CPP & object style "<<endl;
+					cout<<" CPP & object style "<<endl;
 					/**
 					 * we have to deal it for the C++ style object method
 					 */
