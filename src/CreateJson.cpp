@@ -89,9 +89,9 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 				*out << "\"name\": \"" << QString::fromStdString(nameValue.erase(0, this->config->getSourcesDir().length())) << "\"";
 			
 				if (buildType == buildTypes[2])
-					myMap = runner->getIncludeParser()->lookForIncludedGraph((*it).first);
+					myMap = runner->getFilesIncludedByThisFile((*it).first);
 				else if (buildType == buildTypes[3])
-					myMap = runner->getIncludeParser()->lookForInclusionGraph((*it).first);
+					myMap = runner->getFilesIncludingThisFile((*it).first);
 				
 				if (!myMap.empty())
 				{
