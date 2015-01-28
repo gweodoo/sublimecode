@@ -26,17 +26,9 @@
 #include <QFile>
 #include <QIODevice>
 #include <QStyle>
-
-#include "TagsManagerImpl.h"
-#include "TagImpl.h"
-#include "TagsParserImpl.h"
-#include "LauncherCscope.h"
-#include "LauncherCTags.h"
-
 #include <QApplication>
 
 #include "TagsManagerImpl.h"
-#include "TagImpl.h"
 #include "TagsParserImpl.h"
 #include "LauncherCscope.h"
 #include "LauncherCTags.h"

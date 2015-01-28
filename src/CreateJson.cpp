@@ -25,7 +25,6 @@
 #include "TagsManagerImpl.h"
 #include "Graph.h"
 #include "GraphCaller.h"
-#include "TagImpl.h"
 #include <unistd.h>
 #include "TagsParserImpl.h"
 #include "LauncherCTags.h"

@@ -17,52 +17,55 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "TagImpl.h"
+#include "Tag.h"
 using namespace std;
 
-TagImpl::TagImpl(std::string name, std::string fileName, size_t line, tagType type) {
+const char* tabTypeNames[] = {"CLASS", "DEFINE", "ENUMERATOR", "FUNCTION", "FILE", "ENUM", "MEMBER", "PROTO", "STRUCT", "TYPEDEF", "UNION", "VAR", "ID","NAMESPACE",  "UNKNOWN"};
+const std::string OUT_OF_SCOPE_TAG = "OUT_OF_SCOPE";
+
+Tag::Tag(std::string name, std::string fileName, size_t line, tagType type) {
 	this->name = name;
 	this->fileName = fileName;
 	this->lineNumber = line;
 	this->type = type;
 }
 
-void TagImpl::setName(std::string name){
+void Tag::setName(std::string name){
 	this->name = name;
 }
-void TagImpl::setFileName(std::string fileName){
+void Tag::setFileName(std::string fileName){
 	this->fileName = fileName;
 }
-void TagImpl::setLineNumber(size_t line){
+void Tag::setLineNumber(size_t line){
 	this->lineNumber = line;
 }
-void TagImpl::setType(tagType type){
+void Tag::setType(tagType type){
 	this->type = type;
 }
-std::string TagImpl::getName() const{
+std::string Tag::getName() const{
 	return name;
 }
-std::string TagImpl::getFileName() const{
+std::string Tag::getFileName() const{
 	return fileName;
 }
-size_t TagImpl::getLineNumber() const{
+size_t Tag::getLineNumber() const{
 	return lineNumber;
 }
-tagType TagImpl::getType() const{
+tagType Tag::getType() const{
 	return type;
 }
-std::string TagImpl::getInfoByKey(std::string key)const{
+std::string Tag::getInfoByKey(std::string key)const{
 	map<std::string, string>::const_iterator it = additionalInfo.find(key);
 	if(it != additionalInfo.end())
 		return it->second;
 	return "";
 }
-bool TagImpl::addInfoByKey ( std::string key, string value ) {
+bool Tag::addInfoByKey ( std::string key, string value ) {
 	additionalInfo[key] = value;
 	return true;
 }
 
-void TagImpl::display() const {
+void Tag::display() const {
 	cout
 	<< "\tName = " << name<< endl
 	<< "\tFileName = " << fileName<< endl
@@ -75,11 +78,11 @@ void TagImpl::display() const {
 	}
 }
 
-std::string TagImpl::hashFileName() const {
+std::string Tag::hashFileName() const {
 	long filename = 0;
 	std::stringstream ss;
 	std::string tagToHash;
-	
+
 	ss << this->name << this->fileName << this->lineNumber;
 	tagToHash = ss.str();
 
@@ -87,17 +90,16 @@ std::string TagImpl::hashFileName() const {
 	{
 		filename = filename + (tagToHash[i] * i);
 	}
-	
+
 	ss.str("");
 	ss.clear();
 	ss << filename;
 	return ss.str();
 }
 
-const std::map<std::string,std::string>& TagImpl::getAllInfo() const {
+const std::map<std::string,std::string>& Tag::getAllInfo() const {
 	return const_cast<const map<string,string>&>(additionalInfo);
 }
 
-TagImpl::~TagImpl() {
+Tag::~Tag() {
 }
-

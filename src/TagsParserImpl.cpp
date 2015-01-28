@@ -51,7 +51,7 @@ void TagsParserImpl::loadFromFile ( std::string inputFile ) {
 
 		line = atoi(tab[0].substr(0,tab[0].size() - 2).c_str()); tab.erase(tab.begin());
 		type = identifyTypeFromFile(tab[0]); tab.erase(tab.begin());
-		Tag* curTag = new TagImpl(name, filename, line, type);
+		Tag* curTag = new Tag(name, filename, line, type);
 		for(vector<string>::iterator it = tab.begin(); it != tab.end(); it++){
 			int splitter = (*it).find(":");
 			string key = (*it).substr(0, splitter);

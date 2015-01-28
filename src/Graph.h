@@ -19,7 +19,8 @@
 
 #ifndef GRAPH_H
 #define GRAPH_H
-#include "Tag.h"
+#include "tags/Tag.h"
+
 /**
  * calling/called graph for methods abstract interface
  */

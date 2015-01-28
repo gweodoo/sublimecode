@@ -19,7 +19,7 @@
 #ifndef TAGSMANAGER_H
 #define TAGSMANAGER_H
 
-#include "Tag.h"
+#include "tags/Tag.h"
 
 /**
  * A tag manager gathers all loaded tags from the project and store them in a organized structure.

@@ -24,7 +24,7 @@
 #include <QDebug>
 #include <QVariant>
 #include <QFile>
-#include "Tag.h"
+#include "tags/Tag.h"
 #include "Graph.h"
 #include "Configuration.h"
 #include "inclusiongraph/IncludeParser.h"

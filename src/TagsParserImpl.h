@@ -20,7 +20,6 @@
 #define TAGSPARSERIMPL_H
 
 #include "TagsParser.h"
-#include "TagImpl.h"
 #include "TagsManagerImpl.h"
 
 class TagsParserImpl :  public TagsParser

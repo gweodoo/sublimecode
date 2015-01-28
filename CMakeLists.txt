@@ -25,7 +25,7 @@ PROJECT(SublimeCode)
 # - SV_ENABLE_TESTS : activate test suite
 # - SC_ENABLE_FOC : activate doxygen generation from source code
 set(SC_VERSION "1.0")
-set(SC_ENABLE_TESTS yes CACHE BOOL "Var to enable tests")
+set(SC_ENABLE_TESTS no CACHE BOOL "Var to enable tests")
 set(SC_ENABLE_DOC no CACHE BOOL "var to enable doc")
 set(SC_EXTRA_FLAGS "-Wall -ansi -pedantic -Wextra")
 #CMake Vars

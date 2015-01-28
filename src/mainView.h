@@ -26,7 +26,7 @@
 #include "Configuration.h"
 #include "LauncherCTags.h"
 #include "TagsManagerImpl.h"
-#include "Tag.h"
+#include "tags/Tag.h"
 #include "CreateHTML.h"
 #include <QCompleter>
 #include "Runner.h"

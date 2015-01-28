@@ -25,7 +25,7 @@
 #include<string>
 #include <list>
 #include "FunctionGraph.h"
-#include "TagImpl.h"
+#include "tags/Tag.h"
 #include <ctime>
 #include<sys/time.h>
 #include<vector>
@@ -250,7 +250,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					if(listOfGlobalDefinitions->empty())
 					{
 						
-						this->myTagManager->addTag(new TagImpl(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+						this->myTagManager->addTag(new Tag(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
 						Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"),0);
 						if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
 						
@@ -259,7 +259,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					{
 							//we can search for the tag directly now 
 							Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinitions->at(0)->getTagName(),listOfGlobalDefinitions->at(0)->getFileName(),listOfGlobalDefinitions->at(0)->getLine());
-							if(FunctionDefinitionTag==NULL) FunctionDefinitionTag=new TagImpl(listOfCallingFunction->at(0)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
+							if(FunctionDefinitionTag==NULL) FunctionDefinitionTag=new Tag(listOfCallingFunction->at(0)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
 							if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
 					}
 					if(listOfGlobalDefinitions->size()>1)
@@ -270,7 +270,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 						Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(singleDefinitionLeft->getTagName(),singleDefinitionLeft->getFileName(),singleDefinitionLeft->getLine());
 						if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
 						else {
-							this->myTagManager->addTag(new TagImpl(singleDefinitionLeft->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+							this->myTagManager->addTag(new Tag(singleDefinitionLeft->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
 							Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfCallingFunction->at(i)->getTagName(),string("OutOfscope"),0);
 							if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
 						
@@ -414,7 +414,7 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 	// the function definition is out of cscope 
 	else if(listOfGlobalDefinition->empty())
 	{
-		this->myTagManager->addTag(new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+		this->myTagManager->addTag(new Tag(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
 			Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("OutOfscope"),0);
 			if(FunctionDefinitionTag!=NULL){
 				delete listOfGlobalDefinition;
@@ -447,7 +447,7 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		else if(listOfGlobalDefinition->empty())
 		{
 	
-			this->myTagManager->addTag(new TagImpl(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
+			this->myTagManager->addTag(new Tag(outputFunction->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION));
 			Tag *FunctionDefinitionTag=this->myTagManager->findSpecificTag(outputFunction->getTagName(),string("OutOfscope"),0);
 			if(FunctionDefinitionTag!=NULL){
 				delete listOfGlobalDefinition;

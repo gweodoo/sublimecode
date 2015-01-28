@@ -21,7 +21,7 @@
 #define LAUNCHERCSCOPE_H
 #include "Configuration.h"
 #include"Launcher.h"
-#include "Tag.h"
+#include "tags/Tag.h"
 #include "TagsManager.h"
 #include "FunctionGraph.h"
 
