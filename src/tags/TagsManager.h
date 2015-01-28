@@ -31,9 +31,13 @@
 class TagsManager
 {
 private:
-	Configuration* config;
-	std::vector<std::map<std::string, Tag*>* > hashtable;
+	Configuration* config;                                /// current global configuration as pointer
+	std::vector<std::map<std::string, Tag*>* > hashtable; /// vector of map, containing tags (one map  = one tag type)
 public:
+	/**
+	 * main constructor
+	 * \param[in] config default configuration
+	 */
 	TagsManager(Configuration *config);
 	/**
 	 * Add a tag in the tag manager
@@ -103,6 +107,7 @@ public:
 	 * \return a pointer tag pointer vector, containing tag information for given type)
 	 */
 	std::vector<std::string>* getTagNamesByType(tagType type);
+	/// default destructor
 	~TagsManager();
 };
 

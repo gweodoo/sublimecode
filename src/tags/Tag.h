@@ -65,11 +65,11 @@ extern const char* tabTypeNames[];  ///< Contains assiocated names to each type,
  */
 class Tag {
 private:
-	std::string name;
-	std::string fileName;
-	size_t lineNumber;
-	tagType type;
-	std::map<std::string, std::string> additionalInfo;
+	std::string name;                                  ///tag name
+	std::string fileName;                              ///tag file name (where the tag is defined)
+	size_t lineNumber;                                 /// line number in file name
+	tagType type;                                      /// tag type (FUNCTION, CLASS...) @see tagType
+	std::map<std::string, std::string> additionalInfo; /// optional information list about the tag
 public:
 	static const short NB_TAGS_TYPES = 15;     ///< represents max number of possible tags
 	static const std::string OUT_OF_SCOPE_TAG; ///< defines the global chain to identify "out of scope" tag (not in the project tree, like printf, malloc,...)
@@ -106,14 +106,20 @@ public:
 	void display() const;
 	/**
 	 * get the whole additional info map, for displaying (const)
-	 * \return the map
+	 * \return the info map as const reference
 	 */
 	const std::map<std::string,std::string>& getAllInfo() const;
 
 
 	/****** NON-CONST ******/
+	/**
+	 * Main constructor for a tag. At least, need a tag name.
+	 * \param[in] name the tag name
+	 * \param[in] fileName tag file name (default = "OutOfScope")
+	 * \param[in] line the line number associated to the tag
+	 * \param[in] type the tag type
+	 */
 	explicit Tag(std::string name, std::string fileName = OUT_OF_SCOPE_TAG, size_t line = 0, tagType type = TYPE_UNKNOWN);
-	explicit Tag(std::string name);
 	/**
 	 * set tag name (should be deprecated, and replaced by constructor)
 	 * \param[in] name the name used to set

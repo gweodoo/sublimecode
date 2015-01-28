@@ -29,8 +29,12 @@
  */
 class TagsParser {
 private:
-	TagsManager* myTagMan;
+	TagsManager* myTagMan; /// a pointer to the used tagsManager (in order to fill it)
 public:
+	/**
+	 * Main constructor
+	 * \param[in] man the tagsManager associated, as a pointer
+	 */
 	TagsParser(TagsManager* man);
 	/**
 	 * this function opens the file and load, line by line, all its contents
