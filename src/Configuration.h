@@ -22,21 +22,49 @@
 
 #include "Utils.h"
 
-class Configuration
-{
+/**
+ * Global configuration is shared through the application. It contains main user
+ * informations : sources project path, destination path where artefacts will be
+ * stored, and root_path (installation path) in order to find sublimeCode resources
+ * (XSL, JS...)
+ */
+class Configuration {
 private:
-    std::string sourcesDir;
-    std::string destDir;
-    std::string scRootPath;
-
+	std::string sourcesDir; ///global position for sources path, given by user
+	std::string destDir;    ///global position for sublimeCode build folder
+	std::string scRootPath; ///sublimeCode resources folder
 public:
-    Configuration();
-    Configuration(std::string sources, std::string dest);
-    std::string getSourcesDir() const;
-    std::string getDestDir() const;
-    std::string getRootPath() const;
-    void setSourceDir(std::string newConfiguration);
-    ~Configuration();
+	/// default constructor (\deprecated)
+	explicit Configuration();
+	/**
+	 * Main constructor
+	 * \param[in] sources the sources path
+	 * \param[in] dest the build path
+	 */
+	Configuration(std::string sources, std::string dest);
+	/**
+	 * sources path getter
+	 * \return a string containing the path
+	 */
+	std::string getSourcesDir() const;
+	/**
+	 * build path getter
+	 * \return the build path as a string
+	 */
+	std::string getDestDir() const;
+	/**
+	 * root path getter
+	 * \return resources folder as a string
+	 */
+	std::string getRootPath() const;
+	/**
+	 * Sometimes sources project path can change. This method allows to update
+	 * sources path
+	 * \param[in] newConfiguration new source path
+	 */
+	void setSourceDir(std::string newConfiguration);
+	/// default destructor
+	~Configuration();
 };
 
 #endif // CONFIGURATION_H
