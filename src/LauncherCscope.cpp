@@ -130,7 +130,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 			/**
 			 * checking if c/c++
 			 */
-			cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
+		//	cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
 			unsigned  long int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
 			
 			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
@@ -149,7 +149,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				string isClassMethod=tagAssociatedToFunction->getInfoByKey("class");
 				if(isClassMethod.empty())
 				{
-					cout<<" CPP but not object style "<<endl;
+			//		cout<<" CPP but not object style "<<endl;
 					/**
 					 * we can deal with it like in C it's not an object method
 					 */
@@ -167,7 +167,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				}
 				else
 				{
-					cout<<" CPP & object style "<<endl;
+			//		cout<<" CPP & object style "<<endl;
 					/**
 					 * we have to deal it for the C++ style object method
 					 */
@@ -176,17 +176,17 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
 					//now we get the list of function called as if it was given by cscope
 					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction);
-					cout<<" tagAssociated "<< tagAssociatedToFunction->getName()<<endl;
+			//		cout<<" tagAssociated "<< tagAssociatedToFunction->getName()<<endl;
 					for(int i=0;i<listOfFunctionCalled->size();i++)
 					{
-							cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
+			//				cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
 					
 					}
 					//now we have only the ouput matching to the tag associated function
 					for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 					{
 				
-							cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
+			//				cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
 						FunctionGraph* functToFind=listOfFunctionCalled->at(i);
 						Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 						if(tag!=NULL)listOfTagToReturn->push_back(tag);
@@ -198,7 +198,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				
 			}else if(isC!=string::npos)
 			{
-				cout<<" C not object style "<<endl;
+			//	cout<<" C not object style "<<endl;
 				
 				/**
 				 * C special treatement
@@ -402,7 +402,7 @@ std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string outpu
 Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunction)
 {
 
-	cout <<"looking for definition "<<outputFunction->getTagName() <<"sign "<<outputFunction->getSignature()<<endl;
+//	cout <<"looking for definition "<<outputFunction->getTagName() <<"sign "<<outputFunction->getSignature()<<endl;
 	vector<FunctionGraph*>* listOfGlobalDefinition=this->getGlobalDefinitionsFrom(outputFunction->getTagName());
 	
 	if(listOfGlobalDefinition->size()==1)
@@ -428,12 +428,12 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		
 	
 		vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
-		cout<<" I ----------------I"<<endl;
+		//cout<<" I ----------------I size of global definition "<<listOfGlobalDefinition->size()<< " size of global type "<<listOFTypeForFunction->size()<<endl;
 		this->removeNotFunctionOutput(listOfGlobalDefinition);
-		cout<<" II ----------------II"<<endl;
+		//cout<<" II ----------------II size of global definition "<<listOfGlobalDefinition->size()<< " size of global type "<<listOFTypeForFunction->size()<<endl;
 		// getting rid of the .h and .c/c++ redundances ( the one in .h)
 		listOfGlobalDefinition=this->getFunctionNotMacthingOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction,1);
-		cout<<" III ----------------III"<<endl;
+		//cout<<" III ----------------III size of global definition "<<listOfGlobalDefinition->size()<< " size of global type "<<listOFTypeForFunction->size()<<endl;
 		this->removeMatchesFromHAndC(listOFTypeForFunction,listOfGlobalDefinition);
 		if(listOfGlobalDefinition->size()==1)
 		{
@@ -901,12 +901,15 @@ std::vector<FunctionGraph*>* LauncherCscope::getFunctionNotMacthingOnArgumentNum
 	if(arg==1)
 	{
 		FunctionGraph*calledFunctionToFindCasted=(FunctionGraph*)calledFunctionToFind;
-		cout<<"getting numberOfVariablesUsedInFunctionCall "<< calledFunctionToFindCasted->getTagName() <<" sginatture "<<calledFunctionToFindCasted->getSignature()<<endl;
 		unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFindCasted);
-		cout<<"getting number of argument "<< numberOfArgument <<endl;
 		for(int i=0;i<listOfTypesforGlobalDefinitions->size();i++){
 		
-			if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument) newListOfGlobalDefinition->push_back(listOfGlobalDefinitions->at(i));
+			if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument) {
+				
+				if(listOfGlobalDefinitions->size()>i) newListOfGlobalDefinition->push_back(listOfGlobalDefinitions->at(i));
+			
+				
+			}
 		}
 		
 	}
@@ -945,7 +948,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 		{
 			
 				getline(stream,currentLine);
-				cout<<"ccurent line "<<currentLine<<endl;
+				
 		
 			if(numberOfLine==0)
 			{
