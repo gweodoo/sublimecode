@@ -27,14 +27,6 @@
 #include <QIODevice>
 #include <QStyle>
 #include <QApplication>
-
-#include "TagsManagerImpl.h"
-#include "TagsParserImpl.h"
-#include "LauncherCscope.h"
-#include "LauncherCTags.h"
-
-#include "Graph.h"
-#include "GraphCaller.h"
  
 using namespace std;
 

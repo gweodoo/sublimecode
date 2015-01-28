@@ -22,7 +22,7 @@
 #include "../Utils.h"
 #include "StatsFileItem.h"
 #include "StatsLanguageItem.h"
-#include "../TagsManagerImpl.h"
+#include "../tags/TagsManager.h"
 
 class StatsParser {
 private:
@@ -36,9 +36,9 @@ public:
 	StatsParser( Configuration* config, TagsManager* tagMan );
 	void loadFrom(std::string path);
 	void display() const;
-	vector< pair< string, int > > getMostImplementedFilesPerLanguage( string language ) const;
+	std::vector<std::pair<std::string, int > > getMostImplementedFilesPerLanguage( std::string language ) const;
 	std::vector<std::pair<std::string, float> > getMostUsedLanguages() const;
-	vector< pair< string, int > > getNbTagsPerFile() const;
+	std::vector<std::pair<std::string, int > > getNbTagsPerFile() const;
 	~StatsParser();
 };
 

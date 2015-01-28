@@ -30,7 +30,7 @@ Runner::~Runner() {
 }
 
 void Runner::initEnvironment() {
-	this->tagMan = new TagsManagerImpl(config);
+	this->tagMan = new TagsManager(config);
 }
 
 void Runner::generateContents() {
@@ -44,15 +44,15 @@ void Runner::generateContents() {
 	this->includeResolver = new IncludeParser(config, listFiles);
 }
 
-void Runner::setListFiles ( vector< string > list ) {
+void Runner::setListFiles ( std::vector< std::string > list ) {
 	listFiles = list;
 }
 
-map< string, bool > Runner::getFilesIncludedByThisFile ( string path ) {
+std::map< std::string, bool > Runner::getFilesIncludedByThisFile ( std::string path ) {
 	return this->includeResolver->lookForInclusionGraph(path);
 }
 
-map< string, bool > Runner::getFilesIncludingThisFile ( string path ) {
+std::map< std::string, bool > Runner::getFilesIncludingThisFile ( std::string path ) {
 	return this->includeResolver->lookForIncludedGraph(path);
 }
 
@@ -64,7 +64,7 @@ std::vector< Tag* >* Runner::getFunctionsCallingThisTag ( Tag* cur ) {
 	return this->graphResolver->getFunctionsCallingThis(cur);
 }
 
-Tag* Runner::findSpecificTag ( string name, string filename, size_t line ) {
+Tag* Runner::findSpecificTag ( std::string name, std::string filename, size_t line ) {
 	return this->tagMan->findSpecificTag(name, filename, line);
 }
 
@@ -72,14 +72,14 @@ std::vector< Tag* >* Runner::findTagsByType ( tagType type ) {
 	return this->tagMan->findTagsByType(type);
 }
 
-std::vector< Tag* >* Runner::getTagsByFile ( string filename ) {
+std::vector< Tag* >* Runner::getTagsByFile ( std::string filename ) {
 	return this->tagMan->getTagsByFile(filename);
 }
-std::vector< Tag* >* Runner::getTagsByName ( string name ) {
+std::vector< Tag* >* Runner::getTagsByName ( std::string name ) {
 	return this->tagMan->getTagsByName(name);
 }
 
-vector< string >* Runner::getTagNamesByType ( tagType type ) {
+std::vector< std::string >* Runner::getTagNamesByType ( tagType type ) {
 	return this->tagMan->getTagNamesByType(type);
 }
 
@@ -91,7 +91,7 @@ IncludeParser* Runner::getIncludeParser() const {
 	return includeResolver;
 }
 
-TagsManagerImpl* Runner::getTagsManager() const {
+TagsManager* Runner::getTagsManager() const {
 	return tagMan;
 }
 

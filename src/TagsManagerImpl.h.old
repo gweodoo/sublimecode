@@ -26,9 +26,7 @@ using namespace std;
 
 class TagsManagerImpl :  public TagsManager
 {
-private:
-	Configuration* config;
-	std::vector<std::map<std::string, Tag*>* > hashtable;
+
 public:
 	TagsManagerImpl(Configuration *config);
 	virtual Tag* findSpecificTag ( std::string name, std::string filename, size_t line );

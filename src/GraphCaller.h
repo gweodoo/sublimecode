@@ -23,7 +23,7 @@
 #include "Launcher.h"
 #include "LauncherCscope.h"
 #include "Configuration.h"
-#include "TagsManager.h"
+#include "tags/TagsManager.h"
 #include "tags/Tag.h"
 /**
  * Object Implementing the Graph interface specific to Cscope

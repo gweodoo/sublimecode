@@ -22,7 +22,7 @@
 #include "Configuration.h"
 #include"Launcher.h"
 #include "tags/Tag.h"
-#include "TagsManager.h"
+#include "tags/TagsManager.h"
 #include "FunctionGraph.h"
 
 void* FindFunctionDefinitionInThread(void* listOfCscopeOutput);

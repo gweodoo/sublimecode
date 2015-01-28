@@ -19,7 +19,8 @@
 #ifndef TAGSMANAGER_H
 #define TAGSMANAGER_H
 
-#include "tags/Tag.h"
+#include "Tag.h"
+#include "../Configuration.h"
 
 /**
  * A tag manager gathers all loaded tags from the project and store them in a organized structure.
@@ -29,19 +30,23 @@
  */
 class TagsManager
 {
+private:
+	Configuration* config;
+	std::vector<std::map<std::string, Tag*>* > hashtable;
 public:
+	TagsManager(Configuration *config);
 	/**
 	 * Add a tag in the tag manager
 	 * \param[in] nw the new tag to push
 	 * \return true if successes, false otherwise
 	 */
-	virtual bool addTag(Tag* nw) = 0;
+	bool addTag(Tag* nw);
 	/**
 	 * remove a tag in the tag manager
 	 * \param[in] nw the new tag to delete
 	 * \return true if successes, false otherwise
 	 */
-	virtual bool delTag(Tag* old) = 0;
+	bool delTag(Tag* old);
 	/**
 	 * a specific tag is unique thanks to his name, the file name and the line number it is defined.
 	 * This method looks for the unique tag matching with given information.
@@ -50,13 +55,13 @@ public:
 	 * \param[in] line the line
 	 * \return a tag pointer if successes, <b>NULL</b> otherwise
 	 */
-	virtual Tag* findSpecificTag( std::string name, std::string filename, size_t line ) = 0;
+	Tag* findSpecificTag( std::string name, std::string filename, size_t line );
 	/**
 	 * get all tags according to specific tag, i.e. returns one vector from tag manager
 	 * \param[in] type the type to look for
 	 * \return a vector pointer, empty or not, according to tag type
 	 */
-	virtual  std::vector<Tag*>*  findTagsByType(tagType type) = 0;
+	 std::vector<Tag*>*  findTagsByType(tagType type);
 	/**
 	 * help tagsManager to sort its tag with an unique key. This function generate, from data a tag,
 	 * a unique hash as a string : name:filename:line
@@ -74,30 +79,31 @@ public:
 	/**
 	 * display tagsManager contents to standard output
 	 */
-	virtual void display() const = 0;
+	void display() const;
 	/**
 	 * check if tagsManager is empty
 	 * \return true if empty, false otherwise
 	 */
-	virtual bool isEmpty() const = 0;
+	bool isEmpty() const;
 	/**
 	 * look for tags, according tag name. The name is not a unique key, so multiple matches can occur.
 	 * \param[in] name the tag name to find.
 	 * \return a pointer Tag pointer vector, containing tag information for given name
 	 */
-	virtual std::vector<Tag*>* getTagsByName(std::string name) = 0;
+	std::vector<Tag*>* getTagsByName(std::string name);
 	/**
 	 * looks for tags, according to file inclusion. List all tags gathered in the same given filename
 	 * \param[in] filename the path where extract tags
 	 * \return a pointer tag pointer vector, containing tag information for given file
 	 */
-	virtual std::vector<Tag*>* getTagsByFile(std::string filename) = 0;
+	std::vector<Tag*>* getTagsByFile(std::string filename);
 	/**
 	 * list tags for a given type (FUNCTION, CLASS,...)
 	 * \param[in] type the given type as a enum (@see Tag.h)
 	 * \return a pointer tag pointer vector, containing tag information for given type)
 	 */
-	virtual std::vector<std::string>* getTagNamesByType(tagType type) = 0;
+	std::vector<std::string>* getTagNamesByType(tagType type);
+	~TagsManager();
 };
 
 #endif // TAGSMANAGER_H

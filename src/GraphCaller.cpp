@@ -19,7 +19,7 @@
 
 #include "FunctionGraph.h"
 #include "GraphCaller.h"
-#include "TagsManager.h"
+#include "tags/TagsManager.h"
 
 GraphCaller::GraphCaller( Configuration* myConf,TagsManager*myTagManager)
 

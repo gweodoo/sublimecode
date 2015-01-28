@@ -17,16 +17,17 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "TagsManagerImpl.h"
+#include "TagsManager.h"
+using namespace std;
 
-TagsManagerImpl::TagsManagerImpl(Configuration *config) {
+TagsManager::TagsManager(Configuration *config) {
 	this->config = config;
 	for(int i=0; i < Tag::NB_TAGS_TYPES; i++){
 		hashtable.push_back(new map<string, Tag*>);
 	}
 }
 
-Tag* TagsManagerImpl::findSpecificTag ( std::string name, std::string filename, size_t line ) {
+Tag* TagsManager::findSpecificTag ( std::string name, std::string filename, size_t line ) {
 	//scDebug("name:"<<name <<" fileName :"<<filename << " line : "<<line);
 	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
 		map<string,Tag*>::iterator itmap = (*it)->find(hashTag(name, filename, line));
@@ -36,7 +37,7 @@ Tag* TagsManagerImpl::findSpecificTag ( std::string name, std::string filename, 
 	return NULL;
 }
 
-std::vector<Tag*>* TagsManagerImpl::findTagsByType ( tagType type ) {
+std::vector<Tag*>* TagsManager::findTagsByType ( tagType type ) {
 	std::vector<Tag*>* vec = new std::vector<Tag*>;
 	for(map<string, Tag*>::const_iterator it = hashtable[type]->begin(); it != hashtable[type]->end(); it++){
 		vec->push_back(it->second);
@@ -44,17 +45,17 @@ std::vector<Tag*>* TagsManagerImpl::findTagsByType ( tagType type ) {
 	return vec;
 }
 
-bool TagsManagerImpl::delTag ( Tag* old ) {
+bool TagsManager::delTag ( Tag* old ) {
 	hashtable[static_cast<short>(old->getType())]->erase(hashTag(old));
 	return true;
 }
 
-bool TagsManagerImpl::addTag ( Tag* nw ) {
+bool TagsManager::addTag ( Tag* nw ) {
 	hashtable[static_cast<short>(nw->getType())]->insert(std::pair<string, Tag*>(hashTag(nw),nw));
 	return true;
 }
 
-void TagsManagerImpl::display() const {
+void TagsManager::display() const {
 	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
 		cout << " -------------- " << tabTypeNames[it - hashtable.begin()] << " -------------- " << endl;
 		for(map<string, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
@@ -64,7 +65,7 @@ void TagsManagerImpl::display() const {
 	}
 }
 
-bool TagsManagerImpl::isEmpty() const {
+bool TagsManager::isEmpty() const {
 	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
 		if(!(*it)->empty())
 			return false;
@@ -72,7 +73,7 @@ bool TagsManagerImpl::isEmpty() const {
 	return true;
 }
 
-std::vector< Tag* >* TagsManagerImpl::getTagsByName ( string name ) {
+std::vector< Tag* >* TagsManager::getTagsByName ( string name ) {
 	std::vector<Tag *>* list = new vector<Tag*>;
 	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
 		for(map<string, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
@@ -84,7 +85,7 @@ std::vector< Tag* >* TagsManagerImpl::getTagsByName ( string name ) {
 	return list;
 }
 
-std::vector< Tag* >* TagsManagerImpl::getTagsByFile ( string filename ) {
+std::vector< Tag* >* TagsManager::getTagsByFile ( string filename ) {
 	std::vector<Tag *>* list = new vector<Tag*>;
 	for(vector<map<string, Tag*>*>::const_iterator it = hashtable.begin(); it != hashtable.end(); it++){
 		for(map<string, Tag*>::const_iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
@@ -96,7 +97,7 @@ std::vector< Tag* >* TagsManagerImpl::getTagsByFile ( string filename ) {
 	return list;
 }
 
-vector< string >* TagsManagerImpl::getTagNamesByType ( tagType type ) {
+vector< string >* TagsManager::getTagNamesByType ( tagType type ) {
 	vector<Tag*>* vec = findTagsByType(type);
 	vector<string>* list = new vector<string>;
 	for(vector<Tag*>::iterator it = vec->begin(); it != vec->end(); it++)
@@ -105,7 +106,7 @@ vector< string >* TagsManagerImpl::getTagNamesByType ( tagType type ) {
 	return list;
 }
 
-TagsManagerImpl::~TagsManagerImpl() {
+TagsManager::~TagsManager() {
 	for(vector<map<string, Tag*>*>::iterator it = hashtable.begin(); it != hashtable.end(); it++){
 		for(map<string, Tag*>::iterator itmap = (*it)->begin(); itmap != (*it)->end(); itmap++){
 			delete itmap->second;
@@ -115,3 +116,12 @@ TagsManagerImpl::~TagsManagerImpl() {
 	}
 }
 
+std::string TagsManager::hashTag(Tag* tag) const{
+	return hashTag(tag->getName(), tag->getFileName(), tag->getLineNumber());
+}
+
+std::string TagsManager::hashTag(std::string name, std::string filename, size_t line) const{
+	stringstream ss;
+	ss << filename << ":" << line << ":" << name;
+	return ss.str();
+}

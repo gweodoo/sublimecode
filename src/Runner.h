@@ -35,7 +35,7 @@
 #include "LauncherCTags.h"
 
 #include "TagsParserImpl.h"
-#include "TagsManagerImpl.h"
+#include "tags/TagsManager.h"
 
 /**
  * a runner is the main object representing model interaction. The application need to go through
@@ -48,7 +48,7 @@ private:
 	Graph* graphResolver;               /// the model object which generate function callgraph system
 	IncludeParser * includeResolver;    /// object model which generate file callgraph system
 	Configuration * config;             /// current global configuration for the application
-	TagsManagerImpl * tagMan;           /// the tagsManager shared by the whole model
+	TagsManager * tagMan;           /// the tagsManager shared by the whole model
 	std::vector<std::string> listFiles; /// list of selected files (@see Dialog.h) by user
 public:
 	/**
@@ -157,7 +157,7 @@ public:
 	 * \deprecated
 	 * \return a TagsManager pointer
 	 */
-	TagsManagerImpl * getTagsManager() const;
+	TagsManager* getTagsManager() const;
 	/// global destructor
 	~Runner();
 };

@@ -19,13 +19,3 @@
 
 #include "TagsManager.h"
 using namespace std;
-
-std::string TagsManager::hashTag(Tag* tag) const{
-	return hashTag(tag->getName(), tag->getFileName(), tag->getLineNumber());
-}
-
-std::string TagsManager::hashTag(std::string name, std::string filename, size_t line) const{
-	stringstream ss;
-	ss << filename << ":" << line << ":" << name;
-	return ss.str();
-}

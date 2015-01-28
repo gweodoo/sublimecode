@@ -22,7 +22,7 @@
 #include <QVariant>
 #include <QFile>
 #include "Configuration.h"
-#include "TagsManagerImpl.h"
+#include "tags/TagsManager.h"
 #include "Graph.h"
 #include "GraphCaller.h"
 #include <unistd.h>

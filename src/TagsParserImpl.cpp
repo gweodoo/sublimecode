@@ -20,7 +20,7 @@
 #include "TagsParserImpl.h"
 using namespace std;
 
-TagsParserImpl::TagsParserImpl(TagsManagerImpl* man) {
+TagsParserImpl::TagsParserImpl(TagsManager* man) {
 	myTagMan = man;
 }
 
