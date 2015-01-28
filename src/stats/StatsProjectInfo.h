@@ -29,12 +29,13 @@ private:
 	Configuration *config;
 	std::vector<std::string> filesTree;
 	std::map<std::string ,std::string> mapProjectInfo;
+
+	std::string listOfAuthors(std::string filename);
 public:
 	StatsProjectInfo(Configuration *config);
 	void addFilesList(std::vector<std::string> filesList);
 	void analyzeSourcesTree();
 	std::map<std::string,std::string> getProjectInfo() const;
-
 };
 
 #endif // FILESYSTEMPARSER_H

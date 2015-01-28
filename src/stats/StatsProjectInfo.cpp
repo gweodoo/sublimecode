@@ -31,7 +31,8 @@ void StatsProjectInfo::addFilesList ( std::vector< std::string > filesList ) {
 }
 
 void StatsProjectInfo::analyzeSourcesTree() {
-	string authors = "No authors found", type = "Cannot be termined";
+	string authors = "No authors found", type = "Cannot be termined", file = "";
+	stringstream buf;
 	for(std::vector<string>::iterator it = filesTree.begin(); it != filesTree.end(); it++){
 		if((*it) == "/Makefile.in" || (*it) == "/Makefile.am" || (*it) == "/configure.ac"){
 			//AUTOTOOLS PROJECT
@@ -55,12 +56,16 @@ void StatsProjectInfo::analyzeSourcesTree() {
 			break;
 		}
 	}
-
-	if(find(filesTree.begin(), filesTree.end(), "/AUTHORS") != filesTree.end())
-		authors = "Somes authors";
+	vector<string>::iterator t = find(filesTree.begin(), filesTree.end(), "/AUTHORS");
+	if(t != filesTree.end())
+		file = *t;
 
 	mapProjectInfo.insert(std::pair<string, string>("Project type", type));
-	mapProjectInfo.insert(std::pair<string, string>("Authors", authors));
+
+	mapProjectInfo.insert(std::pair<string, string>("Authors", listOfAuthors(file)));
+
+	buf.clear();buf << filesTree.size();
+	mapProjectInfo.insert(std::pair<string, string>("Number of files", buf.str()));
 
 	for(std::map<std::string, std::string>::iterator it = mapProjectInfo.begin(); it != mapProjectInfo.end(); it++)
 		cout << it->first << " : " << it->second << endl;
@@ -68,5 +73,17 @@ void StatsProjectInfo::analyzeSourcesTree() {
 
 map< string, string > StatsProjectInfo::getProjectInfo() const {
 	return mapProjectInfo;
+}
+
+std::string StatsProjectInfo::listOfAuthors(std::string filename){
+	ifstream file(filename.c_str());
+	std::string cur = "", result = "";
+
+	while(std::getline(file, cur, '\n')){
+		result += cur;
+	}
+
+	return result;
+
 }
 
