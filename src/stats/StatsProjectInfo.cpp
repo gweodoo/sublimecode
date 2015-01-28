@@ -65,3 +65,8 @@ void StatsProjectInfo::analyzeSourcesTree() {
 	for(std::map<std::string, std::string>::iterator it = mapProjectInfo.begin(); it != mapProjectInfo.end(); it++)
 		cout << it->first << " : " << it->second << endl;
 }
+
+map< string, string > StatsProjectInfo::getProjectInfo() const {
+	return mapProjectInfo;
+}
+

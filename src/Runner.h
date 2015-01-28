@@ -28,7 +28,6 @@
 #include "handler/TargzTarballHandler.h"
 #include "handler/ZipTarballHandler.h"
 
-#include "stats/StatsParser.h"
 #include "inclusiongraph/IncludeParser.h"
 
 #include "GraphCaller.h"
@@ -36,6 +35,8 @@
 #include "tags/LauncherCTags.h"
 #include "tags/TagsParser.h"
 #include "tags/TagsManager.h"
+#include "stats/StatsParser.h"
+#include "stats/StatsProjectInfo.h"
 
 #include <QThread>
 
@@ -52,13 +53,18 @@ private:
 	Graph* graphResolver;               /// the model object which generate function callgraph system
 	IncludeParser * includeResolver;    /// object model which generate file callgraph system
 	Configuration * config;             /// current global configuration for the application
-	TagsManager * tagMan;           /// the tagsManager shared by the whole model
+	TagsManager * tagMan;               /// the tagsManager shared by the whole model
+	StatsParser * statsResolver;        /// Stats generator for the home page
+	StatsProjectInfo * projectInfo;     /// projects mains stats for home page
 	std::vector<std::string> listFiles; /// list of selected files (@see Dialog.h) by user
 public:
 	explicit Runner(QObject *parent = 0);
 	void initEnvironment(Configuration *config, std::vector< std::string > list);
 	void run();
-
+	std::vector<std::pair<std::string, int > > getStatsPerLanguage( std::string language ) const;
+	std::vector<std::pair<std::string, float> > getStatsAboutLanguages() const;
+	std::vector<std::pair<std::string, int > > getStatsPerFile() const;
+	std::map< std::string, std::string > getProjectInfos() const;
 	/**
 	 * EXECUTE MODEL : From The IncludeParser, generate childs for given file path.
 	 * THIS FUNCTION FINDS FILES INCLUDED IN THIS FILE (i.e. #include "*" in path)

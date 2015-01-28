@@ -29,6 +29,8 @@ Runner::~Runner() {
 	delete this->tagMan;
 	delete this->graphResolver;
 	delete this->includeResolver;
+	delete this->statsResolver;
+	delete this->projectInfo;
 }
 
 void Runner::initEnvironment(Configuration *config, std::vector< std::string > list) {
@@ -45,7 +47,11 @@ void Runner::run() {
 	parser.loadFromFile(config->getDestDir()+"/tags");
 	this->graphResolver = new GraphCaller(config, tagMan);
 	this->includeResolver = new IncludeParser(config, listFiles);
-	
+	this->statsResolver = new StatsParser(config, tagMan);
+	this->projectInfo = new StatsProjectInfo(config);
+	this->projectInfo->addFilesList(listFiles);
+	this->projectInfo->analyzeSourcesTree();
+
 	emit runnerChanged();
 }
 
@@ -99,3 +105,20 @@ TagsManager* Runner::getTagsManager() const {
 int Runner::getFunctionLength ( Tag* cur ) {
 	return this->graphResolver->getFunctionLength(cur);
 }
+
+std::vector< std::pair< std::string, float > > Runner::getStatsAboutLanguages() const {
+	return this->statsResolver->getMostUsedLanguages();
+}
+
+std::vector< std::pair< std::string, int > > Runner::getStatsPerFile() const {
+	return this->statsResolver->getNbTagsPerFile();
+}
+std::vector< std::pair< std::string, int > > Runner::getStatsPerLanguage ( std::string language ) const {
+	return this->statsResolver->getMostImplementedFilesPerLanguage(language);
+}
+
+std::map< std::string, std::string > Runner::getProjectInfos() const {
+	return this->projectInfo->getProjectInfo();
+}
+
+

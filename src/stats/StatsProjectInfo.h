@@ -33,6 +33,7 @@ public:
 	StatsProjectInfo(Configuration *config);
 	void addFilesList(std::vector<std::string> filesList);
 	void analyzeSourcesTree();
+	std::map<std::string,std::string> getProjectInfo() const;
 
 };
 
