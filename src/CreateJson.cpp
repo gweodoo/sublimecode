@@ -88,6 +88,7 @@ void CreateJson::TransformToJson(Tag * tag, std::string filepath, std::string bu
 
 void CreateJson::TransformToJson(std::string myPath, std::string filepath, IncludeParser * includeParser, std::string buildType)
 {
+	cout << myPath << endl;
 	QFile file(QString::fromUtf8(filepath.c_str()));
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);

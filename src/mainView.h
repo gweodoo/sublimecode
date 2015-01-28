@@ -52,6 +52,7 @@ public slots:
 	void createNewSearchTab(QString html);
 	void createNewHighlightTab(QString html);
 	void createNewGraphTab(QUrl html, string filename);
+	QString readFile (const QString& filename);
 private:
 	Ui_MainView * ui;
 	Configuration *config;
@@ -63,6 +64,7 @@ private:
 	std::string relativePathToAnalyse;
 	QCompleter *completer;
 	QString cssFile;
+	QString cssHighlightFile;
 	QString xslTag;
 	QString xslType;
 	QString xslFile;

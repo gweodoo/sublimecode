@@ -37,6 +37,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	runner = new Runner(config);
 
 	cssFile = QString::fromStdString(config->getRootPath())+"/style.css";
+	cssHighlightFile = QString::fromStdString(config->getRootPath())+"/default.css";
 	xslTag = QString::fromStdString(config->getRootPath()+"/transformSearchByTags.xsl");
 	xslType = QString::fromStdString(config->getRootPath()+"/transformSearchByType.xsl");
 	xslFile = QString::fromStdString(config->getRootPath()+"/transformSearchByFile.xsl");
@@ -221,6 +222,7 @@ void MainView::generateGraph(QString number, std::string buildType)
 		{
 			cjson = new CreateJson(config, runner->getGraph());
 			cjson->TransformToJson(researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1), filepath, buildType);
+			
 		}
 		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		{
@@ -270,8 +272,33 @@ void MainView::createNewHighlightTab(QString html)
 	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
 	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
  	QWebView *webView = qobject_cast<QWebView *>(w);
-	webView->setHtml(html);
-	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+	webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+	QFile file(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html");
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&file);
+	out << html;
+	file.close();
+	webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
+	//webView->load(QUrl("file:///home/alexandre/Documents/SublimeCode/build/share/sublimecode/highlightFuction.html"));
+	//webView->setHtml(html);
+	//qDebug() << html;
+	//webView->load(QUrl("file:///home/alexandre/Documents/SublimeCode/resources/test.html"));
+// 	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssHighlightFile));
+// 	webView->page()->mainFrame()->evaluateJavaScript(readFile(QString::fromStdString(config->getRootPath())+"/highlight.pack.js"));
+// 	webView->page()->mainFrame()->evaluateJavaScript("hljs.initHighlightingOnLoad()");
+// 	qDebug() << webView->page()->mainFrame()->evaluateJavaScript("hljs.initHighlightingOnLoad()").toString();
+}
+
+QString MainView::readFile (const QString& filename)
+{
+    QFile file(filename);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream stream(&file);
+	qDebug() << stream.readAll();
+        return stream.readAll();
+    }
+    return "";
 }
 
 void MainView::createNewGraphTab(QUrl html, string filepath)
