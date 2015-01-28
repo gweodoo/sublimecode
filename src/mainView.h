@@ -47,7 +47,6 @@ public slots:
 	void generateGraph(QString number, std::string buildType);
 	void generateHighlightFunction(QString number);
 	void closeTab(int index);
-	void changeTab(int index);
 	QWebView *pageActuelle();
 	void closeEvent(QCloseEvent* e);
 	void createNewSearchTab(QString html);

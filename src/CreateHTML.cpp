@@ -50,54 +50,60 @@ void CreateHTML::createXMLSearchByTags(string tag)
 {	
 	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml"); 
 	QDomDocument document;
-
+	
 	QDomElement root = document.createElement("SearchByTags");
 	document.appendChild(root);
+	
+	if(!list->empty()){
+		if(list->at(0)->getFileName() != "OutOfscope"){
+			for (size_t i=0; i<list->size(); i++)
+			{
+				QDomElement element = document.createElement("Tags");
+				
+				QDomElement element1 = document.createElement("Number");
+				QDomElement element2 = document.createElement("Line");
+				QDomElement element3 = document.createElement("Path");
+				QDomElement element4 = document.createElement("Type");
 
-	for (size_t i=0; i<list->size(); i++)
-	{
-		QDomElement element = document.createElement("Tags");
-		
-		QDomElement element1 = document.createElement("Number");
-		QDomElement element2 = document.createElement("Line");
-	        QDomElement element3 = document.createElement("Path");
-	        QDomElement element4 = document.createElement("Type");
+				element.appendChild(element1);
+				element.appendChild(element2);
+				element.appendChild(element3);
+				element.appendChild(element4);
+				
+				ostr << list->at(i)->getLineNumber();
+				std::string lineNumberString = ostr.str();
+				ostr.str("");
+				ostr.clear();
+				
+				string converti = list->at(i)->getFileName();
+				
+				QDomText txt1 = document.createTextNode(QString::number(i+1));
+				QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
+				QDomText txt3 = document.createTextNode(QString::fromStdString(converti.substr(config->getSourcesDir().size())));
+				QDomText txt4 = document.createTextNode(QString::fromStdString(tabTypeNames[list->at(i)->getType()]));
 
-		element.appendChild(element1);
-		element.appendChild(element2);
-		element.appendChild(element3);
-		element.appendChild(element4);
-		
-		ostr << list->at(i)->getLineNumber();
-		std::string lineNumberString = ostr.str();
-		ostr.str("");
-		ostr.clear();
-		
-		string converti = list->at(i)->getFileName();
-		
-		QDomText txt1 = document.createTextNode(QString::number(i+1));
-		QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
-		QDomText txt3 = document.createTextNode(QString::fromStdString(converti.substr(config->getSourcesDir().size())));
-		QDomText txt4 = document.createTextNode(QString::fromStdString(tabTypeNames[list->at(i)->getType()]));
+				element1.appendChild(txt1);
+				element2.appendChild(txt2);
+				element3.appendChild(txt3);
+				element4.appendChild(txt4);
+				
+				const map<string,string> m = list->at(i)->getAllInfo();
+				string chain = "";
+				QDomElement curElem = document.createElement("Extras");
+				element.appendChild(curElem);
+				
+				for(map<string,string>::const_iterator it = m.begin(); it!= m.end(); it++){
+					chain += it->first +" : " + it->second + "\n";
+				}
 
-		element1.appendChild(txt1);
-		element2.appendChild(txt2);
-		element3.appendChild(txt3);
-		element4.appendChild(txt4);
-		
-		const map<string,string> m = list->at(i)->getAllInfo();
-		string chain = "";
-		QDomElement curElem = document.createElement("Extras");
-		element.appendChild(curElem);
-		
-		for(map<string,string>::const_iterator it = m.begin(); it!= m.end(); it++){
-			chain += it->first +" : " + it->second + "\n";
+				if(m.size() == 0) chain = "None";
+				curElem.appendChild(document.createTextNode(QString::fromStdString(chain)));
+
+				root.appendChild(element);
+			}
+			
 		}
-
-		if(m.size() == 0) chain = "None";
-		curElem.appendChild(document.createTextNode(QString::fromStdString(chain)));
-
-		root.appendChild(element);
+		
 	}
 	
 	if(!file.open(QIODevice::WriteOnly | QIODevice::Text))

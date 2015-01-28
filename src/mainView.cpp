@@ -69,7 +69,6 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioName(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
 	QObject::connect(ui->getRadioFile(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
-	//QObject::connect(ui->getWebView()->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl))); 
 	QObject::connect(ui->getTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int))); 
 	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click()));
 	QObject::connect(ui->getTabWidget(), SIGNAL(currentChanged(int)), this, SLOT(changeTab(int)));
@@ -90,10 +89,6 @@ MainView::~MainView() {
 QWebView *MainView::pageActuelle()
 {
 	return ui->getTabWidget()->currentWidget()->findChild<QWebView *>();
-}
-
-void MainView::changeTab(int index){
-	//cout << index << endl;
 }
 
 void MainView::onCjsonChanged()
@@ -159,7 +154,6 @@ void MainView::handleResetButton(){
 	if(reply){
 		QApplication::exit(APPLICATION_REBOOT);
 	}
-
 }
 
 void MainView::handlePushButton()
@@ -195,7 +189,6 @@ void MainView::handlePushButton()
 		}
 		html = cHTML->TransformToHTML(xmlFile , xslFile);
 	}
-
 	researchList.push_back(cHTML->getList());
 	createNewSearchTab(html);
 }
@@ -300,20 +293,17 @@ void MainView::createNewHighlightTab(QString html)
 	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
  	QWebView *webView = qobject_cast<QWebView *>(w);
 	webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
-	QFile file(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html");
+	createHTMLFile(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html", html);
+	webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
+}
+
+void MainView::createHTMLFile(QString filename, QString html)
+{
+	QFile file(filename);
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	out << html;
 	file.close();
-	webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
-	//webView->load(QUrl("file:///home/alexandre/Documents/SublimeCode/build/share/sublimecode/highlightFuction.html"));
-	//webView->setHtml(html);
-	//qDebug() << html;
-	//webView->load(QUrl("file:///home/alexandre/Documents/SublimeCode/resources/test.html"));
-// 	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssHighlightFile));
-// 	webView->page()->mainFrame()->evaluateJavaScript(readFile(QString::fromStdString(config->getRootPath())+"/highlight.pack.js"));
-// 	webView->page()->mainFrame()->evaluateJavaScript("hljs.initHighlightingOnLoad()");
-// 	qDebug() << webView->page()->mainFrame()->evaluateJavaScript("hljs.initHighlightingOnLoad()").toString();
 }
 
 QString MainView::readFile (const QString& filename)
