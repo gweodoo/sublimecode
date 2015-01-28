@@ -22,23 +22,41 @@
 
 #include "../Configuration.h"
 
+/**
+ * LauncherCTags represents module which generate "tags" file from ctags command
+ */
 class LauncherCTags
 {
 private:
-	std::string pathExecutable;
-	std::string options;
-	std::vector<std::string> listPaths;
-	std::string filePath;
-	Configuration* config;
+	std::string pathExecutable;         ///path to ctags program
+	std::string options;                /// user specific options
+	std::vector<std::string> listPaths; /// list of files to analyze
+	Configuration* config;              ///current configuration
 
-	static const std::string DEF_EXEC;
-	static const std::string GLOBAL_OPTIONS;
+	static const std::string DEF_EXEC;       ///constant defining default ctags path
+	static const std::string GLOBAL_OPTIONS; ///constant defining default ctags options
 
 public:
-	LauncherCTags(Configuration* config, std::vector<std::string> listPaths, std::string exe = "ctags", std::string opts = GLOBAL_OPTIONS);
+	/**
+	 * main constructor
+	 * \param[in] config current configuration as pointer
+	 * \param[in] listPaths list of files to analyze
+	 * \param[in] exe path to ctags (default = DEF_EXEC)
+	 * \param[in] opts opts to ctags (default = GLOBAL_OPTIONS)
+	 */
+	LauncherCTags(Configuration* config, std::vector<std::string> listPaths, std::string exe = DEF_EXEC, std::string opts = GLOBAL_OPTIONS);
+	/**
+	 * Generate tags file from specified list of files
+	 * \return True if succeeded
+	 * \return False otherwise
+	 */
 	bool generateTagsFile();
-	bool addPathToAnalyze(std::string filename);
+	/// main object displayer
 	void display() const;
+	/**
+	 * Construct specific command, from information stored in the object
+	 * \return a string as the command to execute (system() call)
+	 */
 	std::string constructCommand() const;
 };
 

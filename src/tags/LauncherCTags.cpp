@@ -52,11 +52,6 @@ bool LauncherCTags::generateTagsFile() {
 
 }
 
-bool LauncherCTags::addPathToAnalyze ( string path ) {
-	listPaths.push_back(path);
-	return true;
-}
-
 void LauncherCTags::display() const {
 	cout << "LAUNCHER CTAGS ------>" << endl
 	<< "Executable : " << pathExecutable << endl
