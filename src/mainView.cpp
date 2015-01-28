@@ -98,10 +98,7 @@ void MainView::changeTab(int index){
 
 void MainView::onCjsonChanged()
 {
-	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
-	objectTo->setValue(ui->getWebView(), QString::fromUtf8(filepath.c_str()));
-	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"));
-	ui->getWebView()->show();
+	createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath);
 	
 	waitingStop();
 }
@@ -261,8 +258,6 @@ void MainView::generateGraph(QString number, std::string buildType)
 	{
 		waitingStop();
 	}
-	
-	createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath);
 }
 
 void MainView::generateHighlightFunction(QString number)
