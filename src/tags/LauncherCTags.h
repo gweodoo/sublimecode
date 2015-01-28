@@ -20,8 +20,8 @@
 #ifndef LAUNCHERCTAGS_H
 #define LAUNCHERCTAGS_H
 
-#include "Launcher.h"
-#include "Configuration.h"
+#include "../Configuration.h"
+
 class LauncherCTags
 {
 private:

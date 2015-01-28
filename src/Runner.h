@@ -32,8 +32,8 @@
 #include "inclusiongraph/IncludeParser.h"
 
 #include "GraphCaller.h"
-#include "LauncherCTags.h"
 
+#include "tags/LauncherCTags.h"
 #include "tags/TagsParser.h"
 #include "tags/TagsManager.h"
 
