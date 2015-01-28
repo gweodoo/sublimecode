@@ -130,7 +130,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 			/**
 			 * checking if c/c++
 			 */
-			//cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
+			
 			unsigned  long int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
 			
 			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
@@ -175,7 +175,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					string output =this->launchExternalTool(3,tagAssociatedToFunction->getFileName());
 					vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
 					//now we get the list of function called as if it was given by cscope
-					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction);
+					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction,1);
 			//		cout<<" tagAssociated "<< tagAssociatedToFunction->getName()<<endl;
 					for(int i=0;i<listOfFunctionCalled->size();i++)
 					{
@@ -233,6 +233,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		}
 		if(command==2)
 		{
+			cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
 			vector<FunctionGraph*>* listOfCallingFunction=NULL;
 			listOfCallingFunction=this->cscopeOutputParser(this->launchExternalTool(2,tagAssociatedToFunction->getName()));
 			
@@ -242,11 +243,15 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				if(!listOfCallingFunction->at(i)->getTagName().empty())
 				{
 					vector<FunctionGraph*>* listOfGlobalDefinitions=this->cscopeOutputParser(this->launchExternalTool(0,listOfCallingFunction->at(i)->getTagName()));
+					cout<<"I size if definition list for I "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
 					this->removeMatchesFromHAndC(listOfGlobalDefinitions);
+					cout<<"II size if definition list for II "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
 					this->removeNotFunctionOutput(listOfGlobalDefinitions);
+					cout<<"III size if definition list for III "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
 					this->removeNotConcernedDefinitionBasedOnFileName(listOfGlobalDefinitions,listOfCallingFunction->at(i)->getFileName());
-					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfGlobalDefinitions,tagAssociatedToFunction);
-					
+					cout<<"IV size if definition list for IV "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
+					this->removeFromListFunctionNotBelonginToStackCall(0,0,listOfGlobalDefinitions,listOfCallingFunction->at(i),2);
+					cout<<"V size if definition list for V "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
 					if(listOfGlobalDefinitions->empty())
 					{
 						
@@ -277,10 +282,16 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 						}
 						}
 					}
+					
 					delete listOfGlobalDefinitions;
+					printf("\n\n");
 				}
 			}
 			delete listOfCallingFunction;
+			for( int i=0;i<listOfTagToReturn->size();i++)
+					{
+						cout<<" tag name "<< listOfTagToReturn->at(i)->getName()<< " line " << listOfTagToReturn->at(i)->getLineNumber()<<endl;
+					}
 		}
 		
 	}
@@ -1041,19 +1052,48 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
  * @param[in] listOfFunctionCalled the list of function definition to sort
  * @param[in] listOfFunctionCalled function definition to compare with
  */
-void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,int lineStop, vector<FunctionGraph*>* listOfFunctionCalled,Tag * functionAssociatedToTag)
+void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,int lineStop, vector<FunctionGraph*>* listOfFunctionCalled,void * functionAssociatedToTag,int argForSensOfUse)
 {
-	cout<<"removing start "<<endl;
-		for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
-		{
-		
-			if((listOfFunctionCalled->at(i)->getLine()>=lineStop)||(listOfFunctionCalled->at(i)->getLine()<=lineStart)||(listOfFunctionCalled->at(i)->getFileName().compare(functionAssociatedToTag->getFileName())!=0))
-			{	
-				delete listOfFunctionCalled->at(i);
-				listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
-				i--;
+	
+			if( argForSensOfUse==1)
+			{
+				Tag * tagAssociatedToFunction=(Tag*)functionAssociatedToTag;
+				for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
+				{
+			
+					if((listOfFunctionCalled->at(i)->getLine()>=lineStop)||(listOfFunctionCalled->at(i)->getLine()<=lineStart)||(listOfFunctionCalled->at(i)->getFileName().compare(tagAssociatedToFunction->getFileName())!=0))
+					{	
+						delete listOfFunctionCalled->at(i);
+						listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
+						i--;
+					}
+				}
 			}
-		}
+			if( argForSensOfUse==2)
+			{
+				for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
+				{
+					FunctionGraph* functionGraphAssociatedToFunction=(FunctionGraph*)functionAssociatedToTag;
+					FunctionGraph* currentDef=listOfFunctionCalled->at(i);
+					Tag* myTag=this->myTagManager->findSpecificTag(currentDef->getTagName(),currentDef->getFileName(),currentDef->getLine());
+					if(myTag==NULL)
+					{
+						delete listOfFunctionCalled->at(i);
+						listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
+						i--;
+					}else{
+						int lineStartForDefinition=currentDef->getLine();
+						int lineStopForDefinition=this->getLineForEndOfFunctionDefinition(myTag);
+					
+						if(functionGraphAssociatedToFunction->getLine()<lineStartForDefinition||functionGraphAssociatedToFunction->getLine()>lineStopForDefinition||functionGraphAssociatedToFunction->getFileName().compare(currentDef->getFileName())!=0)
+						{
+								delete listOfFunctionCalled->at(i);
+								listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
+								i--;
+						}
+					}
+				}
+			}
 		
 	
 }
