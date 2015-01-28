@@ -347,7 +347,7 @@ std::string CreateHTML::getFileCopied(std::string fileToCopy)
 	int positionOfFileName=fileToCopy.find_last_of("/");
 	string FileNameToReturn=fileToCopy;
 	if(positionOfFileName!=string::npos)
-		{
+	{
 		string FileName=fileToCopy.substr(positionOfFileName+1);
 		string newFileLocation=this->config->getDestDir()+string("/")+string("Modified")+FileName;
 		ofstream outfile(newFileLocation.c_str());
@@ -356,19 +356,12 @@ std::string CreateHTML::getFileCopied(std::string fileToCopy)
 		{
 			for(int i=0;i<currentLine.size();i++)
 			{
-				if((int)currentLine.at(i)==9){
-				
-					outfile<<(char)9<<(char)9<<(char)9<<(char)9;
-				}else
-				{
-					outfile<<currentLine.at(i);
-				}
-				
+				if((int)currentLine.at(i)==9) for(int i=0;i<10;i++)outfile<<(char)9;
+				else outfile<<currentLine.at(i);
 			}
 			outfile<<endl;
 		}
 		FileNameToReturn=newFileLocation;
 	}
-	
 	return FileNameToReturn;
 }
