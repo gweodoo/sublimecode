@@ -130,6 +130,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 			/**
 			 * checking if c/c++
 			 */
+			cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
 			unsigned  long int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
 			
 			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
@@ -148,7 +149,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				string isClassMethod=tagAssociatedToFunction->getInfoByKey("class");
 				if(isClassMethod.empty())
 				{
-					
+					cout<<" CPP but not object style "<<endl;
 					/**
 					 * we can deal with it like in C it's not an object method
 					 */
@@ -166,6 +167,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				}
 				else
 				{
+					cout<<" CPP & object style "<<endl;
 					/**
 					 * we have to deal it for the C++ style object method
 					 */
@@ -174,10 +176,17 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
 					//now we get the list of function called as if it was given by cscope
 					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction);
+					cout<<" tagAssociated "<< tagAssociatedToFunction->getName()<<endl;
+					for(int i=0;i<listOfFunctionCalled->size();i++)
+					{
+							cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
+					
+					}
 					//now we have only the ouput matching to the tag associated function
 					for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 					{
 				
+							cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
 						FunctionGraph* functToFind=listOfFunctionCalled->at(i);
 						Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 						if(tag!=NULL)listOfTagToReturn->push_back(tag);
@@ -189,6 +198,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				
 			}else if(isC!=string::npos)
 			{
+				cout<<" C not object style "<<endl;
 				
 				/**
 				 * C special treatement
@@ -392,6 +402,7 @@ std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string outpu
 Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunction)
 {
 
+	cout <<"looking for definition "<<outputFunction->getTagName() <<"sign "<<outputFunction->getSignature()<<endl;
 	vector<FunctionGraph*>* listOfGlobalDefinition=this->getGlobalDefinitionsFrom(outputFunction->getTagName());
 	
 	if(listOfGlobalDefinition->size()==1)
@@ -415,10 +426,14 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 	else if(listOfGlobalDefinition->size()>1)
 	{
 		
+	
 		vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
+		cout<<" I ----------------I"<<endl;
 		this->removeNotFunctionOutput(listOfGlobalDefinition);
+		cout<<" II ----------------II"<<endl;
 		// getting rid of the .h and .c/c++ redundances ( the one in .h)
-		this->removeNotMatchingFunctionOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction,1);
+		listOfGlobalDefinition=this->getFunctionNotMacthingOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction,1);
+		cout<<" III ----------------III"<<endl;
 		this->removeMatchesFromHAndC(listOFTypeForFunction,listOfGlobalDefinition);
 		if(listOfGlobalDefinition->size()==1)
 		{
@@ -442,7 +457,6 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		}
 		else
 		{
-			
 			
 			Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinition->at(0)->getTagName(),listOfGlobalDefinition->at(0)->getFileName(),listOfGlobalDefinition->at(0)->getLine());
 			if(FunctionDefinitionTag!=NULL)
@@ -499,7 +513,7 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L8 ")+arg;
 			break;
 		}
-		
+		cout<< "debug -command typed :"<<commandToExecute<<endl;
 			
 			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
 			
@@ -569,7 +583,7 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 		for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 		{
 			vector<string>* listOfArgumentType=new vector<string>();
-			string stringToParse=listOfGlobalDefinitions->at(i)->getSignature();
+			string stringToParse=listOfGlobalDefinitions->at(i)->getSignature().substr(listOfGlobalDefinitions->at(i)->getSignature().find(listOfGlobalDefinitions->at(i)->getTagName()));
 			/**
 			 **get the number of Argument
 			 * get the arguments as String
@@ -630,8 +644,10 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 						}
 						
 						string typeOfTheArgument=this->getArgumentType(argumentWithType);
+						
 						listOfArgumentType->push_back(typeOfTheArgument);
 						numberOfArgument++;
+					
 					}while(argFoundIsLast==false);
 				}
 			}else
@@ -642,6 +658,7 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 		}
 	}
 
+	
 	return listOfArgumentAndType;
 }
 /**
@@ -853,22 +870,7 @@ std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string
  */
 void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind,vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions,int arg)
 {
-	if(arg==1)
-	{
-		FunctionGraph*calledFunctionToFindCasted=(FunctionGraph*)calledFunctionToFind;
-		unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFindCasted);
-		for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
-		{
 	
-			if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument)
-			{
-				delete listOfGlobalDefinitions->at(i);
-				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
-				i--;
-			}
-		}
-		
-	}
 	if(arg==2)
 	{
 		Tag*calledFunctionToFindCasted=(Tag*)calledFunctionToFind;
@@ -893,7 +895,23 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 	}
 	
 }
-
+std::vector<FunctionGraph*>* LauncherCscope::getFunctionNotMacthingOnArgumentNumber(void* calledFunctionToFind,std::vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions,int arg)
+{
+	vector<FunctionGraph*>* newListOfGlobalDefinition=new vector<FunctionGraph*>();
+	if(arg==1)
+	{
+		FunctionGraph*calledFunctionToFindCasted=(FunctionGraph*)calledFunctionToFind;
+		cout<<"getting numberOfVariablesUsedInFunctionCall "<< calledFunctionToFindCasted->getTagName() <<" sginatture "<<calledFunctionToFindCasted->getSignature()<<endl;
+		unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFindCasted);
+		cout<<"getting number of argument "<< numberOfArgument <<endl;
+		for(int i=0;i<listOfTypesforGlobalDefinitions->size();i++){
+		
+			if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument) newListOfGlobalDefinition->push_back(listOfGlobalDefinitions->at(i));
+		}
+		
+	}
+	return newListOfGlobalDefinition;
+}
 /**
  * return the line for the end of function definition
  * to the associated Tag
@@ -911,7 +929,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 		int functionInitialPos=0;
 		bool firstBraceBracketAlreyFound=false;
 		/**
-		 * skip the n-first line beforde function definition
+		 * skip the n-first line before function definition
 		 */
 		for(unsigned int i=1;i<tagAssociatedToFunction->getLineNumber();i++) 
 		{
@@ -925,37 +943,88 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 		 */
 		do
 		{
+			
+				getline(stream,currentLine);
+				cout<<"ccurent line "<<currentLine<<endl;
+		
 			if(numberOfLine==0)
 			{
-				getline(stream,currentLine);
+			
 				functionInitialPos=currentLine.find(tagAssociatedToFunction->getName());
 				
 				for(unsigned int p=functionInitialPos;p<currentLine.length();p++)
 				{
 					
 					if(currentLine.at(p)=='{')
+					{	if(p>0)
+						{
+						
+							if(currentLine.at(p-1)!='\''&&currentLine.at(p-1)!='"')
+							{
+								niveauBraceBracket++;
+								firstBraceBracketAlreyFound=true;
+							}
+						}
+						else
+						{
+							niveauBraceBracket++;
+							firstBraceBracketAlreyFound=true;
+						}
+					}if(currentLine.at(p)=='}')
 					{
-						niveauBraceBracket++;
-						firstBraceBracketAlreyFound=true;
-					}if(currentLine.at(p)=='}')niveauBraceBracket--;
+						if(p>0)
+						{
+							if(currentLine.at(p-1)!='\''&&currentLine.at(p-1)!='"')
+							{
+										niveauBraceBracket--;
+							}
+					
+						}
+						else{
+							niveauBraceBracket--;
+						}
+					}
+					
 				}
 				functionNameAlreadyRead=true;
 			}
 			else
 			{
-				getline(stream,currentLine);
+			
 				
 				for(unsigned int p=0;p<currentLine.length();p++)
 				{	if(currentLine.at(p)=='{')
+					{	if(p>0)
+						{
+						
+							if(currentLine.at(p-1)!='\''&&currentLine.at(p-1)!='"')
+							{
+								niveauBraceBracket++;
+								firstBraceBracketAlreyFound=true;
+							}
+						}else{
+								niveauBraceBracket++;
+								firstBraceBracketAlreyFound=true;
+						}
+					}if(currentLine.at(p)=='}')
 					{
-						firstBraceBracketAlreyFound=true;
-						niveauBraceBracket++;
+						if(p>0)
+						{
+							if(currentLine.at(p-1)!='\''&&currentLine.at(p-1)!='"')
+									{
+										niveauBraceBracket--;
+							}
+					
+						}else{
+							niveauBraceBracket--;
+						}
 					}
-					if(currentLine.at(p)=='}')niveauBraceBracket--;
 				}
 			}
+			
 			if(functionNameAlreadyRead==true&&niveauBraceBracket==0&&firstBraceBracketAlreyFound)endOfFunctionFound=true;
 			numberOfLine++;
+			
 		}while(endOfFunctionFound==false);
 	
 		numberOfEndLine=numberOfLine+tagAssociatedToFunction->getLineNumber()-1;
@@ -971,15 +1040,19 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
  */
 void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,int lineStop, vector<FunctionGraph*>* listOfFunctionCalled,Tag * functionAssociatedToTag)
 {
+	cout<<"removing start "<<endl;
 		for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 		{
 		
 			if((listOfFunctionCalled->at(i)->getLine()>=lineStop)||(listOfFunctionCalled->at(i)->getLine()<=lineStart)||(listOfFunctionCalled->at(i)->getFileName().compare(functionAssociatedToTag->getFileName())!=0))
 			{	
+				delete listOfFunctionCalled->at(i);
 				listOfFunctionCalled->erase(listOfFunctionCalled->begin()+i);
 				i--;
 			}
 		}
+		
+	
 }
 /**
  * remove the .h function definition from the function called list
@@ -991,6 +1064,7 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfG
 	for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 	{
 		if(listOfGlobalDefinitions->at(i)->getFileName().find(".h")!=string::npos) {
+			delete listOfGlobalDefinitions->at(i);
 			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 			i--;
 		}
@@ -1009,6 +1083,7 @@ void LauncherCscope::removeNotConcernedDefinitionBasedOnFileName(std::vector< Fu
 		
 		if((listOfGlobalDefinitions->at(i)->getFileName().find(fileName)==string::npos))
 		{
+			delete listOfGlobalDefinitions->at(i);
 			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
 			i--;
 		}
@@ -1045,10 +1120,7 @@ FunctionGraph* LauncherCscope::removeNotConcernedDefinitionBaseInLineNumer(std::
 	}
 	 return funcToReturn;
 }
-CscopeThreadObject* LauncherCscope::getCscopeThreadObject()
-{
-	return this->MyCscopeThreadObject;
-}
+
 bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 {
 	bool isLanguageKey=false;
@@ -1093,16 +1165,9 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 		{
 			getline(stream,currentLine);
 			
-			if(currentLine.find("/*")!=string::npos)
-			{
-				cursorIsInComment=true;
-			}
-			if(currentLine.find("*/")!=string::npos)
-			{
-				cursorIsInComment=false;
-			}
+		
 			
-			if(!cursorIsInComment||currentLine.find("//")==string::npos){
+		
 				unsigned long int namePosition=currentLine.find(calledFunctionToFindCasted->getName());
 				if(namePosition!=string::npos)
 				{
@@ -1128,17 +1193,12 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 						listOfArgument.append(currentLine);
 					}
 				}
-
-				
-			}
-		
-			
 		}while(firstBraceBracketAlreyFound==false);
 	
 		
 		
 	}
-	int positionOfFunctionName=listOfArgument.find(calledFunctionToFindCasted->getName());
+	//int positionOfFunctionName=listOfArgument.find(calledFunctionToFindCasted->getName());
 	
 	string callExpressionwithOnlyFunctionNameAndParameters=listOfArgument;
 	std::vector<std::string>* variablesNames=this->getVariablesNamesInFunctionCall(callExpressionwithOnlyFunctionNameAndParameters);

@@ -24,7 +24,6 @@
 #include "Tag.h"
 #include "TagsManager.h"
 #include "FunctionGraph.h"
-#include "CscopeThreadObject.h"
 
 void* FindFunctionDefinitionInThread(void* listOfCscopeOutput);
 /**
@@ -45,7 +44,7 @@ private :
 	 bool isLaunched;
 	 Configuration* myConfiguration;
 	 std::vector<Tag*>*listOfLastTagAsked ;
-	 CscopeThreadObject* MyCscopeThreadObject;
+	
 	 /**
 	  * need internally for parsing cscope output
 	  */
@@ -70,7 +69,8 @@ private :
 	 FunctionGraph* removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction);
 	std::vector<FunctionGraph*>* egrepOutputParser(std::string output,std::string fileName);
 	bool isLanguageKey(std::string nameOfSymbolFound);
-	 unsigned int getNumberOfVariableUsedInFunctionDefinition(Tag* calledFunctionToFindCasted);
+	std::vector<FunctionGraph*>* getFunctionNotMacthingOnArgumentNumber(void* calledFunctionToFind,std::vector<FunctionGraph*>* listOfGlobalDefinitions,std::vector<std::vector<std::string>*>* listOfTypesforGlobalDefinitions,int arg);
+	unsigned int getNumberOfVariableUsedInFunctionDefinition(Tag* calledFunctionToFindCasted);
 	
 	
 public :
@@ -84,8 +84,8 @@ public :
 	
 	 int launchCommandExternalTool(Tag *tagAssociatedToFunction);
 	 bool getIsLaunched();
-	 CscopeThreadObject * getCscopeThreadObject();
-	 void setCscopeThreadObject(CscopeThreadObject* threadObj);
+	
+	
 	 	Tag * getTagFromFunctionGraphOutput(FunctionGraph* outputFunction);
 
 };
