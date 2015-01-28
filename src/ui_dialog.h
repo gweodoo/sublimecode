@@ -29,6 +29,8 @@
 #include <QPushButton>
 #include <QTreeView>
 #include <QDesktopWidget>
+#include <QLabel>
+#include <QMovie>
 
 QT_BEGIN_NAMESPACE
 

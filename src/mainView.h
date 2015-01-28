@@ -27,6 +27,10 @@
 #include "CreateHTML.h"
 #include <QCompleter>
 #include "Runner.h"
+#include <QThread>
+#include <QCloseEvent>
+#include "CreateJson.h"
+
 class MainView : public QMainWindow
 {
     Q_OBJECT
@@ -50,6 +54,11 @@ public slots:
 	void createNewHighlightTab(QString html);
 	void createNewGraphTab(QUrl html, string filename);
 	QString readFile (const QString& filename);
+	void onCjsonChanged();
+	void onRunnerChanged();
+	void waitingStart();
+	void waitingStop();
+	
 private:
 	Ui_MainView * ui;
 	Configuration *config;
@@ -67,9 +76,11 @@ private:
 	QString xslFile;
 	QString xslHighlight;
 	CreateHTML* cHTML;
+	CreateJson * cjson;
 	std::vector<Tag *>* list;
 	QWebView *webViewSearch;
 	Runner * runner;
+	std::string filepath;
 };
 
 #endif // MAINVIEW_H

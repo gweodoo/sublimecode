@@ -18,7 +18,7 @@
 /***************************************************************************/ 
 
 #include "ui_mainView.h"
-
+#include <QDebug>
 #define RSZW(percent) (this->width*percent/100)
 #define RSZH(percent) (this->height*percent/100)
 
@@ -86,34 +86,28 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	rightWidget->setObjectName(QString("rightWidget"));
 	rightWidget->setGeometry(QRect(RSZW(28), 0, RSZW(72), RSZH(100)));
 	MainView->setCentralWidget(centralWidget);
-	menuBar = new QMenuBar(MainView);
-	menuBar->setObjectName(QString("menuBar"));
-	menuBar->setGeometry(QRect(0, 0, RSZW(100), RSZH(3)));
-	menuFile = new QMenu(menuBar);
-	menuFile->setObjectName(QString("menuFile"));
-	menuEdit = new QMenu(menuBar);
-	menuEdit->setObjectName(QString("menuEdit"));
-	menuView = new QMenu(menuBar);
-	menuView->setObjectName(QString("menuView"));
-	MainView->setMenuBar(menuBar);
 	
-	webView = new QWebView(MainView);
-	webView->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
+	webView = new QWebView(rightWidget);
+	webView->setGeometry(QRect(RSZW(0), RSZH(0), RSZW(71), RSZH(100)));
 	webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-	webView->page()->view()->resize(200,200);
 	webView->settings()->setObjectCacheCapacities(0,0,0);
 	
-	tabWidget = new QTabWidget(MainView);
-	tabWidget->setGeometry(QRect(RSZW(28), RSZH(0), RSZW(71), RSZH(100)));
+	tabWidget = new QTabWidget(rightWidget);
+	tabWidget->setGeometry(QRect(RSZW(0), RSZH(0), RSZW(71), RSZH(100)));
 	tabWidget->addTab(webView, "Home");
 	tabWidget->setTabsClosable(true);
+	
+	waitingMovie = new QMovie(":/mySpinner.gif");
+	waitingLabel = new QLabel(centralWidget);
+	waitingLabel->setFixedSize(200, 200);
+	waitingLabel->move((this->width - waitingLabel->width()) /2, (this->height - waitingLabel->height()) /2);
+	waitingLabel->setObjectName(QString("waitingWidget"));
+	waitingLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+	waitingLabel->setMovie (waitingMovie);
+	waitingLabel->setVisible(false);
 
 	enterShortcut = new QShortcut(QKeySequence("Return"), tagGroupBox);
 
-	menuBar->addAction(menuFile->menuAction());
-	menuBar->addAction(menuEdit->menuAction());
-	menuBar->addAction(menuView->menuAction());
-       
 	retranslateUi(MainView);
 	MainView->setWindowTitle("Sublime Code");
 
@@ -126,9 +120,6 @@ void Ui_MainView::retranslateUi(QMainWindow *MainView)
 	tagGroupBox->setTitle(QApplication::translate("MainView", "TAG", 0));
 	pushButton->setText(QApplication::translate("MainView", "Search", 0));
 	resetButton->setText(QApplication::translate("MainView", "Open", 0));
-	menuFile->setTitle(QApplication::translate("MainView", "File", 0));
-	menuEdit->setTitle(QApplication::translate("MainView", "Edit", 0));
-	menuView->setTitle(QApplication::translate("MainView", "View", 0));
 }
 
 QWidget * Ui_MainView::getCentralWidget()
@@ -185,10 +176,19 @@ QPushButton* Ui_MainView::getResetButton() {
 	return this->resetButton;
 }
 
-Ui_MainView::~Ui_MainView() {
-	delete menuBar;
+QLabel* Ui_MainView::getWaitingLabel()
+{
+	return this->waitingLabel;
+}
+
+Ui_MainView::~Ui_MainView() 
+{
 	delete webView;
 	delete tabWidget;
 	delete centralWidget;
-    }
+}
 
+QMovie* Ui_MainView::getWaitingMovie()
+{
+	return this->waitingMovie;
+}

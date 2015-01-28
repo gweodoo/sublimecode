@@ -46,3 +46,8 @@ QGroupBox::title
 // {
 // 	background-color: #F5FAF0;
 // }
+
+#waitingWidget
+{
+	border: none;
+}

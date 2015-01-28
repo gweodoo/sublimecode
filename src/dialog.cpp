@@ -19,48 +19,48 @@
 
 #include "dialog.h"
 #include "ui_dialog.h"
-#include <QDebug>
 
 Dialog::Dialog(Configuration *config, QWidget *parent) :
     QDialog(parent)
 {
-    ui = new Ui_Dialog();
-    this->config = config;
-    mpath = QString::fromUtf8(config->getSourcesDir().c_str());
+	ui = new Ui_Dialog();
+	this->config = config;
+	mpath = QString::fromUtf8(config->getSourcesDir().c_str());
 
-    ui->setupUi(this);
-    model = new CFileSystemModel();
-    ui->getTreeView()->setModel(model); 
-    ui->getTreeView()->setRootIndex(model->index(mpath));
-    ui->getTreeView()->setColumnHidden(1, true);
-    ui->getTreeView()->setColumnHidden(2, true);
-    ui->getTreeView()->setColumnHidden(3, true);
-    model->checkAllBoxes(mpath);
-    QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(Finish()));
-    QObject::connect(ui->getSelectAll(), SIGNAL(clicked()), this, SLOT(SelectAll()));
-    QObject::connect(ui->getdeSelectAll(), SIGNAL(clicked()), this, SLOT(DeSelectAll()));
+	ui->setupUi(this);
+	model = new CFileSystemModel();
+	ui->getTreeView()->setModel(model); 
+	ui->getTreeView()->setRootIndex(model->index(mpath));
+	ui->getTreeView()->setColumnHidden(1, true);
+	ui->getTreeView()->setColumnHidden(2, true);
+	ui->getTreeView()->setColumnHidden(3, true);
+	model->checkAllBoxes(mpath);
+	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(Finish()));
+	QObject::connect(ui->getSelectAll(), SIGNAL(clicked()), this, SLOT(SelectAll()));
+	QObject::connect(ui->getdeSelectAll(), SIGNAL(clicked()), this, SLOT(DeSelectAll()));
 }
 
 Dialog::~Dialog()
 {
-    delete ui;
+	delete ui;
 }
 
 void Dialog::Finish()
 {
-   foreach (const QPersistentModelIndex &value, model->checkedIndexes)
-   {
-	QFileInfo fileInfo = model->filePath(value);
-	if(fileInfo.isFile()){
-	absolutePath = fileInfo.absolutePath().toStdString() + "/" + value.data().toString().toStdString();
-	QString convrt = QString::fromStdString(absolutePath);
-	string converti = convrt.toUtf8().data();
-	fileList.push_back(converti);
+	foreach (const QPersistentModelIndex &value, model->checkedIndexes)
+	{
+		QFileInfo fileInfo = model->filePath(value);
+		if(fileInfo.isFile()) {
+			absolutePath = fileInfo.absolutePath().toStdString() + "/" + value.data().toString().toStdString();
+			QString convrt = QString::fromStdString(absolutePath);
+			string converti = convrt.toUtf8().data();
+			fileList.push_back(converti);
+		}
 	}
-   }
-   MainView *w = new MainView(this->config, fileList);
-   w->show();
-   this->hide();
+
+	MainView *w = new MainView(this->config, fileList);
+
+	this->hide();
 }
 
 void Dialog::SelectAll()
@@ -89,6 +89,3 @@ void Dialog::closeEvent ( QCloseEvent* e ) {
 	delete ui;
 	delete model;
 }
-
-
-

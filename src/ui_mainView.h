@@ -37,6 +37,8 @@
 #include <QRadioButton>
 #include <QComboBox>
 #include <QShortcut>
+#include <QLabel>
+#include <QMovie>
 
 QT_BEGIN_NAMESPACE
 
@@ -57,6 +59,8 @@ public:
 	QComboBox *gettypeSelector();
 	QTabWidget *getTabWidget();
 	QShortcut *getShortcutEnter();
+	QLabel *getWaitingLabel();
+	QMovie *getWaitingMovie();
     
 private:
 	QComboBox *typeSelector;
@@ -67,15 +71,13 @@ private:
 	QPushButton *resetButton;
 	QLineEdit *lineEdit;
 	QWidget *rightWidget;
-	QMenuBar *menuBar;
-	QMenu *menuFile;
-	QMenu *menuEdit;
-	QMenu *menuView;
 	QWebView *webView;
 	QRadioButton *radio1, *radio2, *radio3;
 	QTabWidget *tabWidget;
 	QShortcut *enterShortcut;
 	int width, height;
+	QLabel *waitingLabel;
+	QMovie *waitingMovie;
 };
 
 QT_END_NAMESPACE

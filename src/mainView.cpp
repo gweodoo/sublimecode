@@ -26,15 +26,17 @@
 #include "GraphCaller.h"
 #include "CreateJson.h"
 #include "ObjectTo.h"
+#include <QApplication>
 
 MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 {
+	
 	ui = new Ui_MainView();
-		
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
+	waitingStart();
+	
 	config = c;
-	runner = new Runner(config);
 
 	cssFile = QString::fromStdString(config->getRootPath())+"/style.css";
 	cssHighlightFile = QString::fromStdString(config->getRootPath())+"/default.css";
@@ -54,12 +56,14 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	if (ui->getRadioType()->isChecked()){
 		ui->gettypeSelector()->setVisible(true);
 	}
-
-	runner->setListFiles(fileList);
-	runner->generateContents();
-
-	cHTML = new CreateHTML(config, runner);
-
+	
+	this->show();
+	
+	runner = new Runner;
+	runner->initEnvironment(config, fileList);
+	QObject::connect(runner, SIGNAL(runnerChanged()), this, SLOT(onRunnerChanged()));
+	runner->start();
+	
 	QObject::connect(ui->getResetButton(), SIGNAL(clicked()), this, SLOT(handleResetButton()));
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
@@ -77,7 +81,7 @@ void MainView::closeEvent(QCloseEvent* e){
 	delete config;
 	delete cHTML;
 	delete ui;
-// 	delete cjson;
+ 	delete cjson;
 }
 
 MainView::~MainView() {
@@ -92,6 +96,26 @@ void MainView::changeTab(int index){
 	//cout << index << endl;
 }
 
+void MainView::onCjsonChanged()
+{
+	ObjectTo *objectTo = new ObjectTo(ui->getWebView());
+	objectTo->setValue(ui->getWebView(), QString::fromUtf8(filepath.c_str()));
+	ui->getWebView()->setUrl(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"));
+	ui->getWebView()->show();
+	
+	waitingStop();
+}
+
+void MainView::onRunnerChanged()
+{
+	cHTML = new CreateHTML(config, runner);
+	cjson = new CreateJson;
+	cjson->setRunner(runner);
+	QObject::connect(cjson, SIGNAL(cjsonChanged()), this, SLOT(onCjsonChanged()));
+	
+	waitingStop();
+}
+
 void MainView::closeTab(int index)
 {
 	if (index !=0){
@@ -104,6 +128,11 @@ void MainView::slot_linkClicked(const QUrl& url)
 {	
 	QString delimiter("///");
 	QStringList elements = url.toString().split(delimiter);
+	
+	if(elements.at(0).contains("Graph"))
+	{
+		waitingStart();
+	}
 
 	if (elements.at(0) == "CalledGraph")
 		generateGraph(elements.at(1), "Called");
@@ -156,7 +185,8 @@ void MainView::handlePushButton()
 		if(exists(xmlFile.toUtf8().data()) == false){
 			cHTML->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
 		}
- 		html = cHTML->TransformToHTML(xmlFile, xslType);
+ 		html = cHTML->TransformToHTML(xmlFile, xslType);ui->getWaitingMovie()->stop();
+	ui->getWaitingLabel()->setVisible(false);
 	}
 	else if(ui->getRadioFile()->isChecked()){
 		QString filename_modified = QString::fromStdString(tag);
@@ -203,9 +233,6 @@ void MainView::handlePushRadioType()
 
 void MainView::generateGraph(QString number, std::string buildType)
 {
-	CreateJson * cjson;
-	std::string filepath;
-	
 	researchList.push_back(cHTML->getList());
 	
 	if (buildType == "Called" || buildType == "Calling")
@@ -220,16 +247,21 @@ void MainView::generateGraph(QString number, std::string buildType)
 	{
 		if (buildType == "Called" || buildType == "Calling")
 		{
-			cjson = new CreateJson(config, runner->getGraph());
-			cjson->TransformToJson(researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1), filepath, buildType);
+			cjson->setRunner(runner);
+			cjson->setCallGraphParams(researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1), filepath, buildType);
 			
 		}
 		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		{
-			cjson = new CreateJson(config);
-			cjson->TransformToJson(config->getSourcesDir() + this->tag, filepath, runner->getIncludeParser(), buildType);
+			cjson->setIncludeGraphParams(config->getSourcesDir() + this->tag, filepath, buildType);
 		}
+		cjson->start();
 	}
+	else
+	{
+		waitingStop();
+	}
+	
 	createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath);
 }
 
@@ -313,3 +345,16 @@ void MainView::createNewGraphTab(QUrl html, string filepath)
 	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 }
 
+void MainView::waitingStart()
+{
+	ui->getCentralWidget()->setEnabled(false);
+	ui->getWaitingMovie()->start();
+	ui->getWaitingLabel()->setVisible(true);
+}
+
+void MainView::waitingStop()
+{
+	ui->getCentralWidget()->setEnabled(true);
+	ui->getWaitingMovie()->stop();
+	ui->getWaitingLabel()->setVisible(false);
+}

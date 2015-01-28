@@ -25,27 +25,40 @@
 #include <QVariant>
 #include <QFile>
 #include "tags/Tag.h"
-#include "Graph.h"
+#include "Runner.h"
 #include "Configuration.h"
 #include "inclusiongraph/IncludeParser.h"
 #include <string>
+#include <QThread>
 
-class CreateJson {
+class CreateJson : public QThread
+{
+	Q_OBJECT
 	
 public:
 	static const char * const buildTypes[];
-	explicit CreateJson(Configuration *c, Graph* myGraph);
-	CreateJson(Configuration *c);
+	explicit CreateJson(QObject *parent = 0);
 	~CreateJson();
-	void TransformToJson(Tag * tag, std::string filepath, std::string buildType);
-	void TransformToJson(std::string myPath, std::string filepath, IncludeParser * includeParser, std::string buildType);
-	void buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator);
-	void buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator);
-	void buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream * out, IncludeParser * includeParser, std::string buildType, int nbIterator);
+	void run();
+	void buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std::string buildType, int nbIterator);
+	void buildItem(Tag* tag, QTextStream * out, std::string buildType, int nbIterator);
+	void buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream * out, std::string buildType, int nbIterator);
+	void setConfiguration(Configuration * config);
+	void setRunner(Runner * runner);
+	void setCallGraphParams(Tag * tag, std::string filepath, std::string buildType);
+	void setIncludeGraphParams(std::string myPath, std::string filepath, std::string buildType);
 	
 private:
 	Configuration *config;
-	Graph* myGraph;
+	Runner * runner;
+	Tag * tag;
+	std::string filepath;
+	std::string buildType;
+	std::string myPath;
+	
+signals:
+	void cjsonChanged();
+	
 };
 
 #endif // CREATEJSON_H

@@ -22,6 +22,7 @@
 
 #include <QDialog>
 #include <QFileSystemModel>
+#include <QCloseEvent>
 #include "ui_dialog.h"
 #include "CFileSystemModel.h"
 #include "mainView.h"

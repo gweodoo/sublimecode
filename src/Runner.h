@@ -37,13 +37,17 @@
 #include "tags/TagsParser.h"
 #include "tags/TagsManager.h"
 
+#include <QThread>
+
 /**
  * a runner is the main object representing model interaction. The application need to go through
  * this object to access to the model. Only one runner exists per application and is forwarded between
  * classes as a <b>Runner *</b>
  */
-class Runner
+class Runner : public QThread
 {
+	Q_OBJECT
+	
 private:
 	Graph* graphResolver;               /// the model object which generate function callgraph system
 	IncludeParser * includeResolver;    /// object model which generate file callgraph system
@@ -51,31 +55,10 @@ private:
 	TagsManager * tagMan;           /// the tagsManager shared by the whole model
 	std::vector<std::string> listFiles; /// list of selected files (@see Dialog.h) by user
 public:
-	/**
-	 * Main constructor
-	 * \param[in] config the global configuration
-	 */
-	Runner(Configuration *config);
-	/**
-	 * Init environment, instanciate global objects from model.
-	 */
-	void initEnvironment();
-	/**
-	 * generate contents : fill tagsManager from TagsParser.
-	 */
-	void generateContents();
-	/**
-	 * After selected, store list of files the user wants to analyze.
-	 * \param[in] list the strings vector contaings file paths
-	 */
-	void setListFiles(std::vector<std::string> list);
-	/**
-	 * EXECUTE MODEL : From The IncludeParser, generate childs for given file path.
-	 * THIS FUNCTION FINDS FILES WHICH INCLUDES GIVEN FILES (i.e. #include "path")
-	 * \param[in] path the file from which childs are generated
-	 * \return a map with the file name and a boolean. True if file have really been found on filesystem. False otherwise
-	 */
-	std::map<std::string, bool> getFilesIncludingThisFile(std::string path);
+	explicit Runner(QObject *parent = 0);
+	void initEnvironment(Configuration *config, std::vector< std::string > list);
+	void run();
+
 	/**
 	 * EXECUTE MODEL : From The IncludeParser, generate childs for given file path.
 	 * THIS FUNCTION FINDS FILES INCLUDED IN THIS FILE (i.e. #include "*" in path)
@@ -83,12 +66,18 @@ public:
 	 * \return a map with the file name and a boolean. True if file have really been found on filesystem. False otherwise
 	 */
 	std::map<std::string, bool> getFilesIncludedByThisFile(std::string path);
+	
+	std::map< std::string, bool > getFilesIncludingThisFile ( std::string path );
+
+	/* Launcher CScope */
 	/**
 	 * Get size of function definition, from its definition start line to the end (from beginning '{' to '}')
 	 * \param[in] cur the tag to measure
 	 * \return the number of line
 	 */
 	int getFunctionLength(Tag * cur);
+
+	/* TAG MANAGER */
 	/**
 	 * EXECUTE MODEL : From The Graph, generate childs for given tag.
 	 * THIS FUNCTION FINDS TAGS WHICH CALLS the GIVEN TAG (where "cur" is called)
@@ -160,6 +149,10 @@ public:
 	TagsManager* getTagsManager() const;
 	/// global destructor
 	~Runner();
+	
+signals:
+	void runnerChanged();
+	
 };
 
 #endif // RUNNER_H

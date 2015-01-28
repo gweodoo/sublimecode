@@ -19,8 +19,10 @@
 
 #include "Runner.h"
 
-Runner::Runner(Configuration *config) : config(config) {
-	initEnvironment();
+Runner::Runner(QObject *parent) :
+	QThread(parent)
+{
+	
 }
 
 Runner::~Runner() {
@@ -29,23 +31,22 @@ Runner::~Runner() {
 	delete this->includeResolver;
 }
 
-void Runner::initEnvironment() {
+void Runner::initEnvironment(Configuration *config, std::vector< std::string > list) {
+	this->config = config;
+	this->listFiles = list;
 	this->tagMan = new TagsManager(config);
 }
 
-void Runner::generateContents() {
+void Runner::run() {
 	LauncherCTags launcher(config, listFiles);
 	TagsParser parser(tagMan);
 
 	launcher.generateTagsFile();
-
 	parser.loadFromFile(config->getDestDir()+"/tags");
 	this->graphResolver = new GraphCaller(config, tagMan);
 	this->includeResolver = new IncludeParser(config, listFiles);
-}
-
-void Runner::setListFiles ( std::vector< std::string > list ) {
-	listFiles = list;
+	
+	emit runnerChanged();
 }
 
 std::map< std::string, bool > Runner::getFilesIncludedByThisFile ( std::string path ) {

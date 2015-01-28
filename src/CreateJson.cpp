@@ -23,82 +23,48 @@
 #include <QFile>
 #include "Configuration.h"
 #include "tags/TagsManager.h"
-#include "Graph.h"
-#include "GraphCaller.h"
 #include <unistd.h>
 #include <string>
 
 using namespace std;
 
 const char * const CreateJson::buildTypes[] = {"Called", "Calling", "IncludedGraph", "InclusionGraph"};
-
-CreateJson::CreateJson(Configuration *c, Graph* myGraph)
+	
+CreateJson::CreateJson(QObject *parent) :
+	QThread(parent)
 {
-	//config = new Configuration(c->getSourcesDir(), c->getDestDir());
-	this->config = c;
-	this->myGraph = myGraph;
+	
 }
-
-CreateJson::CreateJson(Configuration *c)
-{
-	this->config = c;
-}
-
 
 CreateJson::~CreateJson()
 {
 
 }
 
-void CreateJson::TransformToJson(Tag * tag, std::string filepath, std::string buildType)
-{/*
-	TagsManagerImpl *tagMan = new TagsManagerImpl(config);
-	TagsManager*myTagManager = tagMan;
-	Graph* myGraph = new GraphCaller(config,myTagManager);
-*/
-	
-/*
-	TagsParserImpl tagParse(tagMan);
-	tagParse.loadFromFile(config->getDestDir() + "/tags");
-	qDebug() << QString::fromStdString(config->getDestDir()) + "/tags";
-	
-		
-	//Gerener le fichier
-	LauncherCTags launcher(config);
-	launcher.addPathToAnalyze(config->getSourcesDir());
-	launcher.generateTagsFile();
-	*/
-	//Tag * testTag=new TagImpl("test_media_list",myConf->getSourcesDir()+string("/test/libvlc/media_list.c"),26,TYPE_FUNCTION);	
-	
-	//"libvlc_InternalInit"
-	//"test_media_list"
-	//"libvlc_InternalCreate" 
-	//"vlc_mutex_init"
-	QFile file(QString::fromUtf8(filepath.c_str()));
-	file.open(QIODevice::WriteOnly | QIODevice::Text);
-	QTextStream out(&file);
-	
-	buildItem(tag, &out, myGraph, buildType, 0);
-	
-	file.close();
-}
-
-void CreateJson::TransformToJson(std::string myPath, std::string filepath, IncludeParser * includeParser, std::string buildType)
+void CreateJson::run()
 {
 	cout << myPath << endl;
 	QFile file(QString::fromUtf8(filepath.c_str()));
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	
-	std::map<std::string, bool> myMap;
-	myMap.insert(std::pair<string, bool>(myPath, true));
-	
-	buildItem(&myMap, &out, includeParser, buildType, 0);
+	if (buildType == "Called" || buildType == "Calling")
+	{
+		buildItem(tag, &out, buildType, 0);
+	}
+	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
+	{
+		std::map<std::string, bool> myMap;
+		myMap.insert(std::pair<string, bool>(myPath, true));
+		buildItem(&myMap, &out, buildType, 0);
+	}
 	
 	file.close();
+	
+	emit cjsonChanged();
 }
 
-void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream * out, IncludeParser * includeParser, std::string buildType, int nbIterator)
+void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream * out, std::string buildType, int nbIterator)
 {
 	qDebug() << mapOfFiles->size();
 	
@@ -123,14 +89,14 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 				*out << "\"name\": \"" << QString::fromStdString(nameValue.erase(0, this->config->getSourcesDir().length())) << "\"";
 			
 				if (buildType == buildTypes[2])
-					myMap = includeParser->lookForIncludedGraph((*it).first);
+					myMap = runner->getIncludeParser()->lookForIncludedGraph((*it).first);
 				else if (buildType == buildTypes[3])
-					myMap = includeParser->lookForInclusionGraph((*it).first);
+					myMap = runner->getIncludeParser()->lookForInclusionGraph((*it).first);
 				
 				if (!myMap.empty())
 				{
 					*out << ",\"children\": [";
-					buildItem(&myMap, out, includeParser, buildType, nbIterator + 1);
+					buildItem(&myMap, out, buildType, nbIterator + 1);
 					*out << "]";
 				}
 				else 
@@ -157,7 +123,7 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 	}
 }
 
-void CreateJson::buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator)
+void CreateJson::buildItem(Tag* tag, QTextStream * out, std::string buildType, int nbIterator)
 {
 
 	qDebug() << nbIterator << " : 0    " << QString::fromStdString(tag->getName()) << "    " << QString::fromStdString(tag->getFileName());
@@ -165,9 +131,9 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::st
 	vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
 	
 	if (buildType == buildTypes[0])
-		listOfFunctions = myGraph->getFunctionsCalledBy(tag);
+		listOfFunctions = runner->getFunctionsCalledByThisTag(tag);
 	else if (buildType == buildTypes[1])
-		listOfFunctions = myGraph->getFunctionsCallingThis(tag);
+		listOfFunctions = runner->getFunctionsCallingThisTag(tag);
 	
 	qDebug() << listOfFunctions->size();
 	
@@ -175,11 +141,11 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, Graph * myGraph, std::st
 	*out << "\"name\": \"" << QString::fromStdString(tag->getName()) << "\"," ;
 	*out << "\"info\": \"" << QString::fromStdString(tag->getName()) << "\"," ;
 	*out << "\"children\": [";
-	buildItem(listOfFunctions, out, myGraph, buildType, nbIterator + 1);
+	buildItem(listOfFunctions, out, buildType, nbIterator + 1);
 	*out << "]}";
 }
 
-void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Graph * myGraph, std::string buildType, int nbIterator)
+void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std::string buildType, int nbIterator)
 {
 	qDebug() << tagVector->size();
 	
@@ -211,14 +177,14 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Gra
 					vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
 					
 					if (buildType == buildTypes[0]) 
-						listOfFunctions = myGraph->getFunctionsCalledBy(*it);
+						listOfFunctions = runner->getFunctionsCalledByThisTag(*it);
 					else if (buildType == buildTypes[1])
-						listOfFunctions = myGraph->getFunctionsCallingThis(*it);
+						listOfFunctions = runner->getFunctionsCallingThisTag(*it);
 					
 					if (!listOfFunctions->empty())
 					{
 						*out << ",\"children\": [";
-						buildItem(listOfFunctions, out, myGraph, buildType, nbIterator + 1);
+						buildItem(listOfFunctions, out, buildType, nbIterator + 1);
 						*out << "]";
 					}
 				//}
@@ -238,4 +204,28 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, Gra
 			i++;
 		}
 	}
+}
+
+void CreateJson::setConfiguration(Configuration * config)
+{
+	this->config = config;
+}
+
+void CreateJson::setRunner(Runner * Runner)
+{
+	this->runner = Runner;
+}
+
+void CreateJson::setCallGraphParams(Tag * tag, std::string filepath, std::string buildType)
+{
+	this->tag = tag;
+	this->filepath = filepath;
+	this->buildType = buildType;
+}
+
+void CreateJson::setIncludeGraphParams(std::string myPath, std::string filepath, std::string buildType)
+{
+	this->myPath = myPath;
+	this->filepath = filepath;
+	this->buildType = buildType;
 }

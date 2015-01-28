@@ -91,4 +91,3 @@ QTreeView* Ui_Dialog::getTreeView()
 {
 	return treeView;
 }
-
