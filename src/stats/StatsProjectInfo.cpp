@@ -16,21 +16,21 @@
 /* along with Sublime Code.  If not, see <http://www.gnu.org/licenses/>.   */
 /*                                                                         */
 /***************************************************************************/
-#include "ProjectInfo.h"
+#include "StatsProjectInfo.h"
 #include <algorithm>
 using namespace std;
 
-ProjectInfo::ProjectInfo(Configuration *config){
+StatsProjectInfo::StatsProjectInfo(Configuration *config){
 	this->config = config;
 }
 
-void ProjectInfo::addFilesList ( std::vector< std::string > filesList ) {
+void StatsProjectInfo::addFilesList ( std::vector< std::string > filesList ) {
 	this->filesTree = filesList;
 	//for(std::vector<std::string>::iterator it = filesTree.begin(); it != filesTree.end(); it++)
 	//	cout << *it << endl;
 }
 
-void ProjectInfo::analyzeSourcesTree() {
+void StatsProjectInfo::analyzeSourcesTree() {
 	string authors = "No authors found", type = "Cannot be termined";
 	for(std::vector<string>::iterator it = filesTree.begin(); it != filesTree.end(); it++){
 		if((*it) == "/Makefile.in" || (*it) == "/Makefile.am" || (*it) == "/configure.ac"){

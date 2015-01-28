@@ -20,17 +20,17 @@
 #ifndef FILESYSTEMPARSER_H
 #define FILESYSTEMPARSER_H
 
-#include "Utils.h"
-#include "Configuration.h"
+#include "../Utils.h"
+#include "../Configuration.h"
 
-class ProjectInfo
+class StatsProjectInfo
 {
 private:
 	Configuration *config;
 	std::vector<std::string> filesTree;
 	std::map<std::string ,std::string> mapProjectInfo;
 public:
-	ProjectInfo(Configuration *config);
+	StatsProjectInfo(Configuration *config);
 	void addFilesList(std::vector<std::string> filesList);
 	void analyzeSourcesTree();
 
