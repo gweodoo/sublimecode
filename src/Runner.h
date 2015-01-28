@@ -113,18 +113,52 @@ public:
 	 */
 	Tag* findSpecificTag ( std::string name, std::string filename, size_t line );
 	/**
-	 * retrieve tags list
+	 * retrieve tags according to a specific type
+	 * \param[in] type the given type
+	 * \return a tag pointer vector pointer if type exists
+	 * \return NULL otherwise
 	 */
 	std::vector<Tag*>* findTagsByType(tagType type);
-	std::vector<Tag*>* getTagsByName(std::string name);
-	std::vector<Tag*>* getTagsByFile(std::string filename);
+	/**
+	 * retrieve tags according to a specific type, results are string array.
+	 * \param[in] type the given type
+	 * \return a tag vector pointer if at least one tag matches.
+	 * \return NULL otherwise
+	 */
 	std::vector<std::string>* getTagNamesByType(tagType type);
-
-	/* GETTERS */
+	/**
+	 * retrieve tags according to a specific name
+	 * \param[in] name the given name
+	 * \return a tag pointer vector pointer if at least one tag matches
+	 * \return NULL otherwise
+	 */
+	std::vector<Tag*>* getTagsByName(std::string name);
+	/**
+	 * retrieve tags according to a specific file
+	 * \param[in] filename the given filename
+	 * \return a tag pointer vector pointer if file exists
+	 * \return NULL otherwise
+	 */
+	std::vector<Tag*>* getTagsByFile(std::string filename);
+	/**
+	 * getter on graph class member
+	 * \deprecated
+	 * \return a Graph pointer
+	 */
 	Graph*  getGraph() const;
+	/**
+	 * Getter on IncludeParser class member
+	 * \deprecated
+	 * \return IncludeParser pointer
+	 */
 	IncludeParser * getIncludeParser() const;
+	/**
+	 * Getter on current tag manager
+	 * \deprecated
+	 * \return a TagsManager pointer
+	 */
 	TagsManagerImpl * getTagsManager() const;
-
+	/// global destructor
 	~Runner();
 };
 
