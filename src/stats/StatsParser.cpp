@@ -23,23 +23,13 @@ using namespace std;
 StatsParser::StatsParser ( Configuration *config, TagsManager* tagMan ) : tagMan(tagMan), config(config) {}
 
 void StatsParser::loadFrom(std::string path){
-	std::string command = "cloc --quiet --by-file-by-lang --csv "+path, result="", cur="";
+	std::string command = "cloc --quiet --by-file-by-lang --csv "+path+" --report-file="+config->getDestDir()+" > /dev/null", result="", cur="";
 	vector<string> header;
-	FILE* fd = popen(command.c_str(), "r");
-	const short MAX = 1024;
-	char buf[MAX];
 	bool first = false;
-
-	assert(fd != NULL);
-	while(!feof(fd)){
-
-		if(fgets(buf,MAX,fd)!=NULL){
-
-			result.append(buf);
-		}
-	}
-
-	stringstream flux(result);
+	
+	system(command.c_str());
+	
+	ifstream flux(result.c_str());
 	while(getline(flux, cur, '\n')){
 		if(cur.empty()) continue;
 		map<string, int> splitLine = splitOn(cur, ',');
