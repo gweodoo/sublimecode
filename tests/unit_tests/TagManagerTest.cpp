@@ -17,19 +17,18 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "../../src/TagImpl.h"
-#include "../../src/TagsManagerImpl.h"
+#include "../../src/tags/TagsManager.h"
 #include <cassert>
 
 using namespace std;
 
 int main(void) {
 	Configuration config(".", ".");
-	TagImpl tag("nameTag", "FileNameTag", 459, TYPE_STRUCT);
-	TagImpl tag2("nameTag2", "FileNameTag2", 666, TYPE_FUNCTION);
-	TagImpl tag3("nameTag2", "FileNameTag3", 435, TYPE_FUNCTION);
+	Tag tag("nameTag", "FileNameTag", 459, TYPE_STRUCT);
+	Tag tag2("nameTag2", "FileNameTag2", 666, TYPE_FUNCTION);
+	Tag tag3("nameTag2", "FileNameTag3", 435, TYPE_FUNCTION);
 
-	TagsManagerImpl tagMan(&config);
+	TagsManager tagMan(&config);
 
 
 	assert(tagMan.isEmpty());

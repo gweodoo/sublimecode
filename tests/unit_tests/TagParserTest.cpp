@@ -17,17 +17,15 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "../../src/TagImpl.h"
-#include "../../src/TagsManagerImpl.h"
-#include "../../src/TagsParserImpl.h"
+#include "../../src/tags/TagsParser.h"
 #include <cassert>
 
 using namespace std;
 
 int main(void) {
 	Configuration config(".", ".");
-	TagsManagerImpl tagMan(&config);
-	TagsParserImpl tagParse(&tagMan);
+	TagsManager tagMan(&config);
+	TagsParser tagParse(&tagMan);
 
 	tagParse.loadFromFile("tags");
 

@@ -17,13 +17,13 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "../../src/TagImpl.h"
+#include "../../src/tags/Tag.h"
 #include <cassert>
 
 using namespace std;
 
 int main(void) {
-	TagImpl tag("nameTag", "FileNameTag", 459, TYPE_STRUCT);
+	Tag tag("nameTag", "FileNameTag", 459, TYPE_STRUCT);
 
 	tag.display();file:///home/adamj/Documents/cours/S9/PFE/SublimeCode/tests/unit_tests/TagTest.cpp
 	assert(tag.getFileName() == "FileNameTag");

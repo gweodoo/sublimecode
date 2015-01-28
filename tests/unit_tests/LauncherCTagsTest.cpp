@@ -17,24 +17,17 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "../../src/LauncherCTags.h"
+#include "../../src/tags/LauncherCTags.h"
 #include <cassert>
 
 using namespace std;
 
 int main(void) {
 	Configuration config("..", ".");
-	//LauncherCTags launcher(&config), launcher2(&config);
-
-// 	assert(launcher.addPathToAnalyze("my/super/path"));
-//
-// 	assert(launcher.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags my/super/path ");
-// 	assert(launcher.generateTagsFile());
-//
-// 	assert(launcher2.addPathToAnalyze("../../src/"));
-// 	assert(launcher2.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuv -f ./tags ../../src/ ");
-// 	assert(launcher2.generateTagsFile());
-
+	vector<string> list; list.push_back("my/super/path");
+	LauncherCTags launcher(&config, list);
+	assert(launcher.constructCommand() == "ctags  -Rn --c-kinds=+cdefgmnstuvx -f ./tags my/super/path ");
+	assert(launcher.generateTagsFile());
 
 	return 0;
 }

@@ -21,6 +21,9 @@
 
 #include "../Utils.h"
 
+/**
+ * StatsFileItem represents a stats from Cloc, which 
+ */
 class StatsFileItem {
 private:
 	std::string filename;
