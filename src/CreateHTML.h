@@ -56,6 +56,7 @@ private:
 	std::vector<std::string> beforeFunction;
 	std::vector<std::string> inFunction;
 	std::vector<std::string> afterFunction;
+	std::string getFileCopied(std::string fileToCopy);
 };
 
 #endif

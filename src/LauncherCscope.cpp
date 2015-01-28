@@ -149,7 +149,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				string isClassMethod=tagAssociatedToFunction->getInfoByKey("class");
 				if(isClassMethod.empty())
 				{
-			//		cout<<" CPP but not object style "<<endl;
+			
 					/**
 					 * we can deal with it like in C it's not an object method
 					 */
@@ -167,7 +167,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				}
 				else
 				{
-					cout<<" CPP & object style "<<endl;
+					
 					/**
 					 * we have to deal it for the C++ style object method
 					 */
@@ -176,17 +176,17 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName());
 					//now we get the list of function called as if it was given by cscope
 					this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction,1);
-			//		cout<<" tagAssociated "<< tagAssociatedToFunction->getName()<<endl;
+			
 					for(int i=0;i<listOfFunctionCalled->size();i++)
 					{
-			//				cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
+			
 					
 					}
 					//now we have only the ouput matching to the tag associated function
 					for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 					{
 				
-			//				cout<<"function called "<<listOfFunctionCalled->at(i)->getTagName()<<endl;
+			
 						FunctionGraph* functToFind=listOfFunctionCalled->at(i);
 						Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 						if(tag!=NULL)listOfTagToReturn->push_back(tag);
@@ -198,7 +198,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				
 			}else if(isC!=string::npos)
 			{
-			//	cout<<" C not object style "<<endl;
+			
 				
 				/**
 				 * C special treatement
@@ -233,7 +233,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		}
 		if(command==2)
 		{
-			cout<<"tagAssociated is " <<tagAssociatedToFunction->getName()<<" file "<<tagAssociatedToFunction->getFileName()<<" number "<<tagAssociatedToFunction->getLineNumber()<<endl;
+			
 			vector<FunctionGraph*>* listOfCallingFunction=NULL;
 			listOfCallingFunction=this->cscopeOutputParser(this->launchExternalTool(2,tagAssociatedToFunction->getName()));
 			
@@ -243,15 +243,15 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				if(!listOfCallingFunction->at(i)->getTagName().empty())
 				{
 					vector<FunctionGraph*>* listOfGlobalDefinitions=this->cscopeOutputParser(this->launchExternalTool(0,listOfCallingFunction->at(i)->getTagName()));
-					cout<<"I size if definition list for I "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
+			
 					this->removeMatchesFromHAndC(listOfGlobalDefinitions);
-					cout<<"II size if definition list for II "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
+			
 					this->removeNotFunctionOutput(listOfGlobalDefinitions);
-					cout<<"III size if definition list for III "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
+			
 					this->removeNotConcernedDefinitionBasedOnFileName(listOfGlobalDefinitions,listOfCallingFunction->at(i)->getFileName());
-					cout<<"IV size if definition list for IV "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
+			
 					this->removeFromListFunctionNotBelonginToStackCall(0,0,listOfGlobalDefinitions,listOfCallingFunction->at(i),2);
-					cout<<"V size if definition list for V "<<listOfCallingFunction->at(i)->getTagName()<< " is "<< listOfGlobalDefinitions->size()<<endl;
+			
 					if(listOfGlobalDefinitions->empty())
 					{
 						
@@ -288,10 +288,6 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				}
 			}
 			delete listOfCallingFunction;
-			for( int i=0;i<listOfTagToReturn->size();i++)
-					{
-						cout<<" tag name "<< listOfTagToReturn->at(i)->getName()<< " line " << listOfTagToReturn->at(i)->getLineNumber()<<endl;
-					}
 		}
 		
 	}
@@ -413,7 +409,7 @@ std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string outpu
 Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunction)
 {
 
-//	cout <<"looking for definition "<<outputFunction->getTagName() <<"sign "<<outputFunction->getSignature()<<endl;
+
 	vector<FunctionGraph*>* listOfGlobalDefinition=this->getGlobalDefinitionsFrom(outputFunction->getTagName());
 	
 	if(listOfGlobalDefinition->size()==1)
@@ -439,12 +435,10 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 		
 	
 		vector<vector<string>*>* listOFTypeForFunction=this->getNumberOfArgumentAndTypeForFunction(listOfGlobalDefinition);
-		//cout<<" I ----------------I size of global definition "<<listOfGlobalDefinition->size()<< " size of global type "<<listOFTypeForFunction->size()<<endl;
 		this->removeNotFunctionOutput(listOfGlobalDefinition);
-		//cout<<" II ----------------II size of global definition "<<listOfGlobalDefinition->size()<< " size of global type "<<listOFTypeForFunction->size()<<endl;
 		// getting rid of the .h and .c/c++ redundances ( the one in .h)
 		listOfGlobalDefinition=this->getFunctionNotMacthingOnArgumentNumber(outputFunction,listOfGlobalDefinition,listOFTypeForFunction,1);
-		//cout<<" III ----------------III size of global definition "<<listOfGlobalDefinition->size()<< " size of global type "<<listOFTypeForFunction->size()<<endl;
+	
 		this->removeMatchesFromHAndC(listOFTypeForFunction,listOfGlobalDefinition);
 		if(listOfGlobalDefinition->size()==1)
 		{
@@ -524,7 +518,7 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L8 ")+arg;
 			break;
 		}
-		cout<< "debug -command typed :"<<commandToExecute<<endl;
+		
 			
 			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
 			

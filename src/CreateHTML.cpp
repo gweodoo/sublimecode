@@ -256,7 +256,7 @@ void CreateHTML::createListHighlightFunction(Tag* tag)
 	int BeginLineFunction = tag->getLineNumber();
 	int EndLineFunction = tag->getLineNumber() + runner->getFunctionLength(tag);
 	
-	std::ifstream ifs(tag->getFileName().c_str());
+	std::ifstream ifs(this->getFileCopied(tag->getFileName()).c_str());
 	
 	while(std::getline(ifs, line)){
 		if(lines_count>0 && lines_count<BeginLineFunction){
@@ -340,4 +340,35 @@ QString CreateHTML::TransformToHTML(QString fileXML, QString fileXSL)
 std::vector<Tag *>* CreateHTML::getList()
 {
 	return this->list;
+}
+std::string CreateHTML::getFileCopied(std::string fileToCopy)
+{
+	ifstream stream(fileToCopy.c_str());
+	int positionOfFileName=fileToCopy.find_last_of("/");
+	string FileNameToReturn=fileToCopy;
+	if(positionOfFileName!=string::npos)
+		{
+		string FileName=fileToCopy.substr(positionOfFileName+1);
+		string newFileLocation=this->config->getDestDir()+string("/")+string("Modified")+FileName;
+		ofstream outfile(newFileLocation.c_str());
+		string currentLine;
+		while(getline(stream,currentLine))
+		{
+			for(int i=0;i<currentLine.size();i++)
+			{
+				if((int)currentLine.at(i)==9){
+				
+					outfile<<(char)9<<(char)9<<(char)9<<(char)9;
+				}else
+				{
+					outfile<<currentLine.at(i);
+				}
+				
+			}
+			outfile<<endl;
+		}
+		FileNameToReturn=newFileLocation;
+	}
+	
+	return FileNameToReturn;
 }
