@@ -122,4 +122,20 @@ std::map< std::string, std::string > Runner::getProjectInfos() const {
 	return this->projectInfo->getProjectInfo();
 }
 
+bool Runner::checkCalledGraphChildren ( Tag * cur ) const {
+	return false;
+}
+
+bool Runner::checkCallingGraphChildren ( Tag* cur ) const {
+	return false;
+}
+
+bool Runner::checkIncludedGraphChildren ( std::string filename ) const {
+
+	return this->includeResolver->checkIncludedGraphChild(filename);
+}
+
+bool Runner::checkInclusionGraphChildren ( std::string filename ) const {
+	return this->includeResolver->checkInclusionGraphChild(filename);
+}
 

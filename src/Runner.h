@@ -86,14 +86,14 @@ public:
 	/* TAG MANAGER */
 	/**
 	 * EXECUTE MODEL : From The Graph, generate childs for given tag.
-	 * THIS FUNCTION FINDS TAGS WHICH CALLS the GIVEN TAG (where "cur" is called)
+	 * THIS FUNCTION FINDS TAGS CALLED IN GIVEN TAG (which tag are present in given tag definition)
 	 * \param[in] cur from which childs are generated
 	 * \return a vector with the associated childs as tags.
 	 */
 	std::vector< Tag* >* getFunctionsCalledByThisTag( Tag* cur );
 	/**
 	 * EXECUTE MODEL : From The Graph, generate childs for given tag.
-	 * THIS FUNCTION FINDS TAGS CALLED IN GIVEN TAG (which tag are present in given tag definition)
+	 * THIS FUNCTION FINDS TAGS WHICH CALLS the GIVEN TAG (where "cur" is called)
 	 * \param[in] cur from which childs are generated
 	 * \return a vector with the associated childs as tags.
 	 */
@@ -153,6 +153,11 @@ public:
 	 * \return a TagsManager pointer
 	 */
 	TagsManager* getTagsManager() const;
+	bool checkCalledGraphChildren(Tag * cur) const;
+	bool checkCallingGraphChildren(Tag * cur) const;
+	bool checkInclusionGraphChildren ( std::string filename ) const;
+	bool checkIncludedGraphChildren ( std::string filename ) const;
+
 	/// global destructor
 	~Runner();
 	

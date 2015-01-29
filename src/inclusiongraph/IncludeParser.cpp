@@ -197,3 +197,10 @@ string IncludeParser::findIncludeInProject ( string filename ) const {
 
 	return "";
 }
+
+bool IncludeParser::checkIncludedGraphChild ( string path ) const {
+	return getIncludedResult(path) != "";
+}
+bool IncludeParser::checkInclusionGraphChild ( string path ) const {
+	return getInclusionResult(path) != "";
+}

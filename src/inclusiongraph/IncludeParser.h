@@ -45,6 +45,8 @@ public:
 	IncludeParser(Configuration *config, std::vector<std::string> list);
 	std::map<std::string, bool> lookForIncludedGraph(std::string path) const;
 	std::map<std::string, bool> lookForInclusionGraph(std::string path) const;
+	bool checkInclusionGraphChild(std::string path) const;
+	bool checkIncludedGraphChild(std::string path) const;
 
 	void addPathToAnalyze(std::string path);
 };
