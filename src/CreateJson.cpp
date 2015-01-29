@@ -174,16 +174,17 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 				string filename = (*it)->getFileName();
 				*out << ", \"infofile\": \"" << QString::fromUtf8(filename.c_str()) << "\"";
 				*out << ", \"infoline\": \"" << QString::fromStdString(ss.str()) << "\"";
-				
+
 // 				if (nbIterator+1 < wantedIterator)
 // 				{
-					vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
+					vector<Tag*>* listOfFunctions = NULL;
 					
 					if (buildType == buildTypes[0]) 
 						listOfFunctions = runner->getFunctionsCalledByThisTag(*it);
 					else if (buildType == buildTypes[1])
 						listOfFunctions = runner->getFunctionsCallingThisTag(*it);
-					
+
+					assert(listOfFunctions != NULL);
 					if (!listOfFunctions->empty())
 					{
 						*out << ",\"children\": [";
