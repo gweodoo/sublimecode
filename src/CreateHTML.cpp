@@ -55,9 +55,10 @@ void CreateHTML::createXMLSearchByTags(string tag)
 	document.appendChild(root);
 	
 	if(!list->empty()){
-		if(list->at(0)->getFileName() != "OutOfscope"){
-			for (size_t i=0; i<list->size(); i++)
-			{
+		for (size_t i=0; i<list->size(); i++)
+		{
+			if(list->at(i)->getFileName() != "OutOfscope"){
+
 				QDomElement element = document.createElement("Tags");
 				
 				QDomElement element1 = document.createElement("Number");
@@ -76,7 +77,6 @@ void CreateHTML::createXMLSearchByTags(string tag)
 				ostr.clear();
 				
 				string converti = list->at(i)->getFileName();
-				
 				QDomText txt1 = document.createTextNode(QString::number(i+1));
 				QDomText txt2 = document.createTextNode(QString::fromStdString(lineNumberString));
 				QDomText txt3 = document.createTextNode(QString::fromStdString(converti.substr(config->getSourcesDir().size())));
@@ -101,7 +101,6 @@ void CreateHTML::createXMLSearchByTags(string tag)
 
 				root.appendChild(element);
 			}
-			
 		}
 		
 	}
