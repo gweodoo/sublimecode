@@ -102,14 +102,14 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 				else 
 				{
 					if (nbIterator == 0)
-						*out << ",\"children\": []";
+						*out << ", \"children\": []";
 				}
 			}
 			else 
 			{
 				*out << "\"name\": \"" << QString::fromStdString(nameValue) << "\"";
-				*out << ",\"info\": \"Unresolved\"";
-				*out << ",\"checked\": \"false\"";
+				*out << ", \"infofile\": \"Unresolved\"";
+				*out << ", \"checked\": \"false\"";
 			}
 			
 			*out << "}";
@@ -138,8 +138,12 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, std::string buildType, i
 	qDebug() << listOfFunctions->size();
 	
 	*out << "\n{";
-	*out << "\"name\": \"" << QString::fromStdString(tag->getName()) << "\"," ;
-	*out << "\"info\": \"" << QString::fromStdString(tag->getName()) << "\"," ;
+	*out << "\"name\": \"" << QString::fromStdString(tag->getName()) << "\", " ;
+	stringstream ss;
+	ss << tag->getLineNumber();
+	string filename = tag->getFileName();
+	*out << "\"infofile\": \"" << QString::fromUtf8(filename.c_str()) << "\", ";
+	*out << "\"infoline\": \"" << QString::fromStdString(ss.str()) << "\", ";
 	*out << "\"children\": [";
 	buildItem(listOfFunctions, out, buildType, nbIterator + 1);
 	*out << "]}";
@@ -168,9 +172,8 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 				stringstream ss;
 				ss << (*it)->getLineNumber();
 				string filename = (*it)->getFileName();
-				*out << ",\"info\": \" In the file " << QString::fromUtf8(filename.c_str()) << " at line "
-// 				*out << ",\"info\": \" In the file " << QString::fromStdString((*it)->getFileName()) << " at line "
-				<< QString::fromStdString(ss.str())<< "\"";
+				*out << ", \"infofile\": \"" << QString::fromUtf8(filename.c_str()) << "\"";
+				*out << ", \"infoline\": \"" << QString::fromStdString(ss.str()) << "\"";
 				
 				//if (nbIterator < (wantedIterator -1))
 				//{
@@ -191,14 +194,14 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 			}
 			else
 			{
-				*out << ",\"info\": \"" << QString::fromStdString((*it)->getFileName()) << "\"";
+				*out << ", \"infofile\": \"" << QString::fromStdString((*it)->getFileName()) << "\"";
 			}
 			
 			*out << "}";
 			
 			if (it+1 != tagVector->end())
 			{
-				*out << ",";
+				*out << ", ";
 			}
 			
 			i++;

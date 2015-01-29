@@ -103,6 +103,7 @@ void MainView::onRunnerChanged()
 	cHTML = new CreateHTML(config, runner);
 	cjson = new CreateJson;
 	cjson->setRunner(runner);
+	cjson->setConfiguration(config);
 	QObject::connect(cjson, SIGNAL(cjsonChanged()), this, SLOT(onCjsonChanged()));
 	
 	waitingStop();
@@ -117,7 +118,7 @@ void MainView::closeTab(int index)
 }
 
 void MainView::slot_linkClicked(const QUrl& url)
-{	
+{	qDebug() << "tototototo" << url.toString();
 	QString delimiter("///");
 	QStringList elements = url.toString().split(delimiter);
 	
@@ -134,9 +135,10 @@ void MainView::slot_linkClicked(const QUrl& url)
 		generateGraph("0", elements.at(0).toStdString());
 	else if (elements.at(0) == "InclusionGraph")
 		generateGraph("0", elements.at(0).toStdString());
-	else if(elements.at(0) == "Path"){
+	else if(elements.at(0) == "Path")
 		generateHighlightFunction(elements.at(1));
-	}
+	else if (elements.at(0).contains("file"));
+	
 }
 
 bool exists(const char *fname)
@@ -249,6 +251,8 @@ void MainView::generateGraph(QString number, std::string buildType)
 	}
 	else
 	{
+		createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath);
+		
 		waitingStop();
 	}
 }
@@ -328,6 +332,8 @@ void MainView::createNewGraphTab(QUrl html, string filepath)
 	objectTo->setValue(webView, QString::fromUtf8(filepath.c_str()));
 	webView->setUrl(html);
 	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+	QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
+	qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 }
 
 void MainView::waitingStart()

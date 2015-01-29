@@ -232,19 +232,38 @@ function update(source) {
 				d.children = d._children;
 				d._children = null;
 			}
+			else
+			{
+				if (d.infofile)
+				{
+					alert(d.name);
+					
+					var newGraph = document.createElement('a');
+					newGraph.href = "///" + d.name + "///" + d.infofile + "///" + d.infoline;
+					document.body.appendChild(newGraph);
+					newGraph.click();
+				}
+			}
 		}
 		update(d);
 	}
 
 	// Set visible the tooptip div on a hover in event
 	function nodeHoverIn(d) {
-		if (d.info) {
+		if (d.infofile) {
 			var matrix = this.getScreenCTM();
-			tooltip.text(d.info)
-				.style("visibility", "visible")
+			tooltip.style("visibility", "visible")
 				.style("left", Math.min((window.pageXOffset + matrix.e),
 				(window.innerWidth - parseInt(window.getComputedStyle(tooltip.node())["width"]))) + "px")
 				.style("top", (window.pageYOffset + matrix.f + 10) + "px");
+			if (d.infoline)
+			{
+				tooltip.text("In the file " + d.infofile + " at line " + d.infoline);
+			}
+			else 
+			{
+				tooltip.text(d.infofile);
+			}
 		}
 	}
 
