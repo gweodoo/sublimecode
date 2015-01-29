@@ -30,7 +30,6 @@
 
 MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 {
-	
 	ui = new Ui_MainView();
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
@@ -118,11 +117,11 @@ void MainView::closeTab(int index)
 }
 
 void MainView::slot_linkClicked(const QUrl& url)
-{	qDebug() << "tototototo" << url.toString();
+{
 	QString delimiter("///");
 	QStringList elements = url.toString().split(delimiter);
 	
-	if(elements.at(0).contains("Graph"))
+	if(elements.at(0).contains("Graph") || elements.at(0).contains("file"))
 	{
 		waitingStart();
 	}
