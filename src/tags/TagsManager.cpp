@@ -125,3 +125,12 @@ std::string TagsManager::hashTag(std::string name, std::string filename, size_t 
 	ss << filename << ":" << line << ":" << name;
 	return ss.str();
 }
+
+std::vector< Tag* >* TagsManager::getTagsByTypeAndFile ( string file, tagType type ) {
+	std::vector<Tag*>* vec = findTagsByType(type);
+	for(vector<Tag*>::iterator it = vec->begin(); it != vec->end();){
+		it = ((*it)->getFileName() == file) ? it+1 : vec->erase(it);
+	}
+	return vec;
+}
+

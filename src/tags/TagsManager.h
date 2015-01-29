@@ -107,6 +107,13 @@ public:
 	 * \return a pointer tag pointer vector, containing tag information for given type)
 	 */
 	std::vector<std::string>* getTagNamesByType(tagType type);
+	/**
+	 * filter tags per specific type and file
+	 * \param[in] file the given file where tag need to be in
+	 * \param[in] type the given type from which the tag need to belong
+	 * \return a tag pointer vector pointer if at least one tag matches
+	 */
+	std::vector<Tag*>* getTagsByTypeAndFile(std::string file, tagType type);
 	/// default destructor
 	~TagsManager();
 };
