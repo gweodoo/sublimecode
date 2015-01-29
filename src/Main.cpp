@@ -56,6 +56,7 @@ int main(int argc, char **argv){
 	w.show();
 	ret = app.exec();
 
+	// if user required to restart application to open new project
 	if(ret == APPLICATION_REBOOT){
 		QStringList args = app.arguments();
 		args.removeFirst();

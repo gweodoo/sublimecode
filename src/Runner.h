@@ -80,7 +80,13 @@ public:
 	 * \return a map with the file name and a boolean. True if file have really been found on filesystem. False otherwise
 	 */
 	std::map<std::string, bool> getFilesIncludedByThisFile(std::string path);
-	
+	/**
+	 * EXECUTE MODEL : From The IncludeParser, generate childs for given file path.
+	 * THIS FUNCTION FINDS FILES WHERER THIS FILE IS INCLUDED (i.e. #include "path")
+	 * \param[in] path the file from which childs are generated
+	 * \return a map with the file name and a boolean. True if file have really been found on filesystem. False otherwise
+	 */
+
 	std::map< std::string, bool > getFilesIncludingThisFile ( std::string path );
 
 	/* Launcher CScope */

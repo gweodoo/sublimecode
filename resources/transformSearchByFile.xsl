@@ -9,11 +9,11 @@
 	<body>
 		<h1>Search By File</h1>
 		<a>
-			<xsl:attribute name="href">IncludedGraph</xsl:attribute>
+			<xsl:attribute name="href">InclusionGraph</xsl:attribute>
 			<button class="includeButtons">Files including this file</button>
 		</a>
 		<a>
-			<xsl:attribute name="href">InclusionGraph</xsl:attribute>
+			<xsl:attribute name="href">IncludedGraph</xsl:attribute>
 			<button class="includeButtons">Files included in this file</button>
 		</a>
 		<xsl:for-each select="SearchByFile">

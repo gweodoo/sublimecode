@@ -23,17 +23,21 @@
 #include "../Utils.h"
 #include "../Configuration.h"
 
+/**
+ * The includeParser generates inclusions graphs for sublimeCode.
+ */
 class IncludeParser {
 private:
+	Configuration *config;              /// default global configuration
+	std::vector<std::string> listPaths; /// list of selected paths
 
-	Configuration *config;
-	std::vector<std::string> listPaths;
+	static const short NB_POSSIBLE_PATHS = 2;     /// nb possible extra paths for inclusions
+	static const std::string tabInclusivePaths[]; /// tab with possible extra paths
 
-	static const short NB_POSSIBLE_PATHS = 2;
-	static const std::string tabInclusivePaths[];
-
+	/**
+	 * Start
+	 */
 	std::string getIncludedResult(std::string path) const;
-	std::string runCommand( std::string startCommand ) const;
 
 	std::string getInclusionResult(std::string path) const;
 	std::string findIncludeInProject(std::string filename) const;

@@ -21,22 +21,52 @@
 
 #include "../Utils.h"
 
+/**
+ * A StatsLanguageItem represents one stats language in the source code. This
+ * item is generated from cloc by StatsParser and loaded into this object
+ */
 class StatsLanguageItem {
 private:
-	std::string name;
-	size_t nbFiles;
-	size_t nbBlankLines;
-	size_t nbCommentLines;
-	size_t nbCodeLines;
+	std::string name;      /// the language name
+	size_t nbFiles;        /// number of files using this language
+	size_t nbBlankLines;   /// number of blank lines in files using this language
+	size_t nbCommentLines; /// number of comment lines in files using this language
+	size_t nbCodeLines;    /// number of code lines in files using this language
 
 public:
+	/// default constructor
 	StatsLanguageItem();
+	/**
+	 * fill the current statsLanguageItem from data containing in comma-separated chain
+	 * \param[in] chain the chain to split
+	 */
 	void fillFromString(std::string chain);
+	/**
+	 * language name getter
+	 * \return the name as a string
+	 */
 	std::string getName() const;
+	/**
+	 * associated files number getter
+	 * \return quantity as a size_t
+	 */
 	size_t getNbFiles() const;
+	/**
+	 * associates blank lines number getter
+	 * \return quantity as a size_t
+	 */
 	size_t getNbBlankLines() const;
+	/**
+	 * associated commented lines number getter
+	 * \return quantity as a size_t
+	 */
 	size_t getNbCommentLines() const;
+	/**
+	 * associated code lines number getter
+	 * \return quantity as a size_t
+	 */
 	size_t getNbCodeLines() const;
+	/// object displayer
 	void display() const;
 };
 

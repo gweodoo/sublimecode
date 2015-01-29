@@ -23,15 +23,36 @@
 #include "../Utils.h"
 #include "../Configuration.h"
 
+/**
+ * the handler catches sources project gathering. The easy way is the simple
+ * directory already on file system. But SublimeCode can interact directly with
+ * some version control system as Git, Svn, Mercurial... This base class defines
+ * generic methods handling project fetching.
+ */
 class Handler
 {
 protected:
-	Configuration *config;
-	std::string address;
+	Configuration *config;  /// current global configuration
+	std::string address;    /// where project is located
 public:
+	/**
+	 * default constructor
+	 * \param[in] config current config
+	 * \param[in] address where project is located
+	 */
 	Handler(Configuration *config, std::string address);
+	/**
+	 * fetch project from address
+	 * \return True if project fetching succeeded
+	 * \return False otherwise
+	 */
 	virtual bool getProject() = 0;
+	/**
+	 * fetch different revision of the project.
+	 * \return string vector containing multiple project's revision.
+	 */
 	virtual std::vector<std::string>  getBranchesList() = 0;
+	///default destructor
 	virtual ~Handler();
 };
 
