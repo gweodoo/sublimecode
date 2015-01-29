@@ -58,13 +58,21 @@ private:
 	StatsProjectInfo * projectInfo;     /// projects mains stats for home page
 	std::vector<std::string> listFiles; /// list of selected files (@see Dialog.h) by user
 public:
+	/**
+	 * default constructor
+	 * \param[in] parent a QObject needed to make runner threaded.
+	 */
 	explicit Runner(QObject *parent = 0);
+	/**
+	 * set global class members
+	 * \param[in] config global current configuration
+	 * \param[in] list list of selected files
+	 */
 	void initEnvironment(Configuration *config, std::vector< std::string > list);
+	/**
+	 * As a thread, start project analysis
+	 */
 	void run();
-	std::vector<std::pair<std::string, int > > getStatsPerLanguage( std::string language ) const;
-	std::vector<std::pair<std::string, float> > getStatsAboutLanguages() const;
-	std::vector<std::pair<std::string, int > > getStatsPerFile() const;
-	std::map< std::string, std::string > getProjectInfos() const;
 	/**
 	 * EXECUTE MODEL : From The IncludeParser, generate childs for given file path.
 	 * THIS FUNCTION FINDS FILES INCLUDED IN THIS FILE (i.e. #include "*" in path)
@@ -153,11 +161,27 @@ public:
 	 * \return a TagsManager pointer
 	 */
 	TagsManager* getTagsManager() const;
-	bool checkCalledGraphChildren(Tag * cur) const;
-	bool checkCallingGraphChildren(Tag * cur) const;
-	bool checkInclusionGraphChildren ( std::string filename ) const;
-	bool checkIncludedGraphChildren ( std::string filename ) const;
-
+	/**
+	 * get statistics for front page. Get 10 most code-filled file for given language
+	 * \param[in] language the language to analyze
+	 * \return vector (ordered) of key(string,int), representing the file and its code lines number
+	 */
+	std::vector<std::pair<std::string, int > > getStatsPerLanguage( std::string language ) const;
+	/**
+	 * get most present languages
+	 * \return a vector (ordered) of pair(string,float) representing the language name and the number of code lines about it
+	 */
+	std::vector<std::pair<std::string, float> > getStatsAboutLanguages() const;
+	/**
+	 * get statistics for front page. Get 10 most tags definition-filled files
+	 * \return vector (ordered) of key(string,int), representing the file and its tags number
+	 */
+	std::vector<std::pair<std::string, int > > getStatsPerFile() const;
+	/**
+	 * Get global infos about the project. The rsult is a map of strings, which contains the type of value (authors...) and the value
+	 * \return a strings map with a (key;value) combination for each data
+	 */
+	std::map< std::string, std::string > getProjectInfos() const;
 	/// global destructor
 	~Runner();
 	

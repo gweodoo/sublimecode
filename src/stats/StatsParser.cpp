@@ -82,7 +82,7 @@ vector<std::pair<string, float> >  StatsParser::getMostUsedLanguages() const {
 	const short MAX = 10;
 	vector<std::pair<string, float> >  vec;
 	for(vector<StatsLanguageItem*>::const_iterator it = tabLanguages.begin(); it != tabLanguages.end() && i < MAX; it++){
-		vec.push_back(make_pair((*it)->getName(), (*it)->getNbCodeLines()+(*it)->getNbBlankLines()));
+		vec.push_back(make_pair((*it)->getName(), (*it)->getNbCodeLines()+(*it)->getNbCommentLines()));
 		i++;
 	}
 	return vec;

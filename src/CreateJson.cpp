@@ -175,8 +175,8 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 				*out << ", \"infofile\": \"" << QString::fromUtf8(filename.c_str()) << "\"";
 				*out << ", \"infoline\": \"" << QString::fromStdString(ss.str()) << "\"";
 				
-				if (nbIterator+1 < wantedIterator)
-				{
+// 				if (nbIterator+1 < wantedIterator)
+// 				{
 					vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
 					
 					if (buildType == buildTypes[0]) 
@@ -190,16 +190,7 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 						buildItem(listOfFunctions, out, buildType, nbIterator + 1);
 						*out << "]";
 					}
-				} else {
-					if (buildType == buildTypes[0]){
-						if(runner->checkCalledGraphChildren(*it))
-							*out << ",\"children\": []";
-					}
-					else if (buildType == buildTypes[1]){
-						if(runner->checkCallingGraphChildren(*it))
-							*out << ",\"children\": []";
-					}
-				}
+// 				}
 			}
 			else
 			{
