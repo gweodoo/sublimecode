@@ -44,7 +44,8 @@ public slots:
 	void handleResetButton();
 	void handlePushRadioType();
 	void slot_linkClicked(const QUrl &url);
-	void generateGraph(QString number, std::string buildType);
+	void generateGraph(int number, std::string buildType);
+	void generateGraph(Tag * myTag, std::string buildType);
 	void generateHighlightFunction(QString number);
 	void closeTab(int index);
 	QWebView *pageActuelle();

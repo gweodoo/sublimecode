@@ -67,6 +67,7 @@ private:
 	QWidget *centralWidget;
 	QWidget *leftWidget;
 	QGroupBox *tagGroupBox;
+	QGroupBox *projectGroupBox;
 	QPushButton *pushButton;
 	QPushButton *resetButton;
 	QLineEdit *lineEdit;

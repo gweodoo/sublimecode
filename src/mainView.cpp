@@ -128,17 +128,29 @@ void MainView::slot_linkClicked(const QUrl& url)
 	}
 
 	if (elements.at(0) == "CalledGraph")
-		generateGraph(elements.at(1), "Called");
+		generateGraph(elements.at(1).toInt(), elements.at(0).toStdString());
 	else if (elements.at(0) == "CallingGraph")
-		generateGraph(elements.at(1), "Calling");
+		generateGraph(elements.at(1).toInt(), elements.at(0).toStdString());
 	else if (elements.at(0) == "IncludedGraph")
-		generateGraph("0", elements.at(0).toStdString());
+		generateGraph(0, elements.at(0).toStdString());
 	else if (elements.at(0) == "InclusionGraph")
-		generateGraph("0", elements.at(0).toStdString());
+		generateGraph(0, elements.at(0).toStdString());
 	else if(elements.at(0) == "Path")
 		generateHighlightFunction(elements.at(1));
-	else if (elements.at(0).contains("file"));
-	
+	else if (elements.at(0).contains("file"))
+	{
+		if (elements.at(1).toStdString() == "CalledGraph" || elements.at(1).toStdString() == "CallingGraph")
+		{
+			researchList.push_back(cHTML->getList());
+			Tag * myTag = runner->findSpecificTag(elements.at(2).toStdString(), elements.at(3).toStdString(), elements.at(4).toInt());
+			generateGraph(myTag, elements.at(1).toStdString());
+		}
+		else if (elements.at(1).toStdString() == "IncludedGraph" || elements.at(1).toStdString() == "InclusionGraph")
+		{
+			this->tag = elements.at(2).toStdString();
+			generateGraph(0, elements.at(1).toStdString());
+		}
+	}
 }
 
 bool exists(const char *fname)
@@ -153,7 +165,7 @@ bool exists(const char *fname)
 void MainView::handleResetButton(){
 	int reply = QMessageBox::question(this, "Open new project", "Would you close current opened project ?",QMessageBox::Yes|QMessageBox::No);
 
-	if(reply){
+	if(reply == QMessageBox::Yes) {
 		QApplication::exit(APPLICATION_REBOOT);
 	}
 }
@@ -223,12 +235,20 @@ void MainView::handlePushRadioType()
 	}
 }
 
-void MainView::generateGraph(QString number, std::string buildType)
+void MainView::generateGraph(int number, std::string buildType)
 {
-	researchList.push_back(cHTML->getList());
+	Tag * myTag = NULL;
 	
-	if (buildType == "Called" || buildType == "Calling")
-		filepath = config->getDestDir() + "/" + buildType + "Graph_" + (researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1))->hashFileName() + ".json";
+	researchList.push_back(cHTML->getList());
+	if (buildType == "CalledGraph" || buildType == "CallingGraph")
+		myTag = researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number - 1);
+	generateGraph(myTag, buildType);
+}
+
+void MainView::generateGraph(Tag * myTag, std::string buildType)
+{
+	if (buildType == "CalledGraph" || buildType == "CallingGraph")
+		filepath = config->getDestDir() + "/" + buildType + "_" + myTag->hashFileName() + ".json";
 	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		filepath = config->getDestDir() + "/" + buildType + "_" 
 		+ (QString::fromStdString(this->tag).replace("/","_")).toStdString() + ".json";
@@ -237,11 +257,10 @@ void MainView::generateGraph(QString number, std::string buildType)
 
 	if(!file.exists())
 	{
-		if (buildType == "Called" || buildType == "Calling")
+		if (buildType == "CalledGraph" || buildType == "CallingGraph")
 		{
 			cjson->setRunner(runner);
-			cjson->setCallGraphParams(researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number.toInt() - 1), filepath, buildType);
-			
+			cjson->setCallGraphParams(myTag, filepath, buildType);
 		}
 		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
 		{

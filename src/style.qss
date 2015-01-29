@@ -42,11 +42,6 @@ QGroupBox::title
 	border-right: 1px solid gray;
 }
 
-// QWebView
-// {
-// 	background-color: #F5FAF0;
-// }
-
 #waitingWidget
 {
 	border: none;

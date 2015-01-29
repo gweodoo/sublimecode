@@ -159,7 +159,7 @@ function update(source) {
 		//.style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 		.style("fill", function(d) {
 				if (d.checked) return "#fdd"
-					else if (d._children) { if (d._children.length > 0) return "lightsteelblue"; return "#eef"; }
+					else if (d._children) { if (d._children.length > 0) return "lightsteelblue"; return "#bf9"; }
 						else return "#fff";
 			});
 
@@ -232,20 +232,29 @@ function update(source) {
 				d.children = d._children;
 				d._children = null;
 			}
-			else
-			{
-				if (d.infofile)
-				{
-					alert(d.name);
-					
-					var newGraph = document.createElement('a');
-					newGraph.href = "///" + d.name + "///" + d.infofile + "///" + d.infoline;
-					document.body.appendChild(newGraph);
-					newGraph.click();
-				}
+			else {
+				generateNewGraph(d);
 			}
 		}
 		update(d);
+	}
+
+	function generateNewGraph(d) {
+		if ((ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') == "CalledGraph")
+		|| (ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') == "CallingGraph")) {
+			if (d.infofile) {
+				var newGraph = document.createElement('a');
+				newGraph.href = "///" + ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') + "///" + d.name + "///" + d.infofile + "///" + d.infoline;
+				document.body.appendChild(newGraph);
+				newGraph.click();
+			}
+		}
+		else { 
+			var newGraph = document.createElement('a');
+			newGraph.href = "///" + ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') + "///" + d.name;
+			document.body.appendChild(newGraph);
+			newGraph.click();
+		}
 	}
 
 	// Set visible the tooptip div on a hover in event

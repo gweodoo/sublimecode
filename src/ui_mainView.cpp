@@ -47,6 +47,10 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	tagGroupBox->setObjectName(QString("tagGroupBox"));
 	tagGroupBox->setGeometry(QRect(RSZW(2), RSZH(3), RSZW(24), RSZH(26)));
 	
+	projectGroupBox = new QGroupBox(leftWidget);
+	projectGroupBox->setObjectName(QString("projectGroupBox"));
+	projectGroupBox->setGeometry(QRect(RSZW(2), RSZH(32), RSZW(24), RSZH(10)));
+	
 	lineEdit = new QLineEdit(tagGroupBox);
 	lineEdit->setObjectName(QString("lineEdit"));
 	lineEdit->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
@@ -66,10 +70,6 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	radio3->setObjectName(QString("radio3"));
 	radio3->setGeometry(QRect(RSZW(2), RSZH(16), RSZW(8), RSZH(4)));
 	radio3->setText(": By File");
-	
-	resetButton = new QPushButton(leftWidget);
-	resetButton->setObjectName(QString("resetButton"));
-	resetButton->setGeometry(QRect(RSZW(2), RSZH(50), RSZW(20), RSZH(4)));
 
 	pushButton = new QPushButton(tagGroupBox);
 	pushButton->setObjectName(QString("pushButton"));
@@ -80,7 +80,12 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	typeSelector->setGeometry(QRect(RSZW(11), RSZH(12), RSZW(11), RSZH(4)));
 	typeSelector->setVisible(false);
 	
+	resetButton = new QPushButton(projectGroupBox);
+	resetButton->setObjectName(QString("resetButton"));
+	resetButton->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
+	
 	tagGroupBox->raise();
+	projectGroupBox->raise();
 	
 	rightWidget = new QWidget(centralWidget);
 	rightWidget->setObjectName(QString("rightWidget"));
@@ -118,8 +123,9 @@ void Ui_MainView::retranslateUi(QMainWindow *MainView)
 {
 	MainView->setWindowTitle(QApplication::translate("MainView", "MainView", 0));
 	tagGroupBox->setTitle(QApplication::translate("MainView", "TAG", 0));
+	projectGroupBox->setTitle(QApplication::translate("MainView", "PROJECT", 0));
 	pushButton->setText(QApplication::translate("MainView", "Search", 0));
-	resetButton->setText(QApplication::translate("MainView", "Open", 0));
+	resetButton->setText(QApplication::translate("MainView", "Open project", 0));
 }
 
 QWidget * Ui_MainView::getCentralWidget()

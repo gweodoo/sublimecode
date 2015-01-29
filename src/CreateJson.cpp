@@ -28,7 +28,7 @@
 
 using namespace std;
 
-const char * const CreateJson::buildTypes[] = {"Called", "Calling", "IncludedGraph", "InclusionGraph"};
+const char * const CreateJson::buildTypes[] = {"CalledGraph", "CallingGraph", "IncludedGraph", "InclusionGraph"};
 	
 CreateJson::CreateJson(QObject *parent) :
 	QThread(parent)
@@ -48,7 +48,7 @@ void CreateJson::run()
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	
-	if (buildType == "Called" || buildType == "Calling")
+	if (buildType == "CalledGraph" || buildType == "CallingGraph")
 	{
 		buildItem(tag, &out, buildType, 0);
 	}
