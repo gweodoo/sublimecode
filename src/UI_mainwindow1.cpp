@@ -59,8 +59,8 @@ UI_MainWindow1::~UI_MainWindow1(){
 
 }
 
-const char * const UI_MainWindow1::vcsTypes[] = {"Cvs", "Git", "Mercurial", "Svn"};
-const char * const UI_MainWindow1::archiveTypes[] = {"Tarbz2", "Targz", "Zip"};
+const char * const UI_MainWindow1::vcsTypes[] = {"CVS", "Git", "Mercurial", "SVN"};
+const char * const UI_MainWindow1::archiveTypes[] = {"Bzip", "Gzip", "Zip"};
 
 void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 {	
