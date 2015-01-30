@@ -19,6 +19,7 @@
 
 #include "dialog.h"
 #include "ui_dialog.h"
+using namespace std;
 
 Dialog::Dialog(Configuration *config, QWidget *parent) :
     QDialog(parent)

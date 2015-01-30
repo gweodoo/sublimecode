@@ -27,7 +27,7 @@
 #include "CreateJson.h"
 #include "ObjectTo.h"
 #include <QApplication>
-
+using namespace std;
 
 const char * const MainView::buildTypes[] = {"CalledGraph", "CallingGraph", "IncludedGraph", "InclusionGraph"};
 

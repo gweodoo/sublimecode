@@ -103,13 +103,12 @@ public:
 	void setIncludeGraphParams(std::string myPath, std::string filepath, std::string buildType);
 	
 private:
-	Configuration *config; //The current configuration
-	Runner * runner; //The current runner
-	Tag * tag; //The current tag
-	std::string filepath; //The current filepath
-	std::string buildType; //The current buildType
-	std::string myPath; //The current path
-	
+	Configuration *config; ///< The current configuration
+	Runner * runner;       ///< The current runner
+	Tag * tag;             ///< The current tag
+	std::string filepath;  ///< The current filepath
+	std::string buildType; ///< The current buildType
+	std::string myPath;    ///< The current path
 signals:
 	/**
 	 * Signal when the json process has finished

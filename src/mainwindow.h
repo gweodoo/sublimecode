@@ -39,10 +39,6 @@
 #include "handler/ZipTarballHandler.h"
 
 
-//namespace Ui {
-//class MainWindow;
-//}
-
 class MainWindow : public QMainWindow//, public QObject
 {
     Q_OBJECT

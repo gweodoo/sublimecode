@@ -22,6 +22,7 @@
 #include "Utils.h"
 #include <QDir>
 #include <qinputdialog.h>
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(NULL)

@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QXmlQuery>
 #include <vector>  
+using namespace std;
 
 CreateHTML::~CreateHTML(){}
 

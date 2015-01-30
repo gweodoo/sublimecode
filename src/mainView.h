@@ -126,7 +126,7 @@ public slots:
 	 * \param[in] html The html that will be shown on the webview
 	 * \param[in] filename The json file
 	 */
-	void createNewGraphTab(QUrl html, string filename);
+	void createNewGraphTab(QUrl html, std::string filename);
 	
 	/**
 	 * Creates the HTML file
