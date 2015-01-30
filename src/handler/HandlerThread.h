@@ -20,7 +20,7 @@
 #ifndef HANDLETHREAD_H
 #define HANDLETHREAD_H
 
-#include "handler/Handler.h"
+#include "Handler.h"
 #include <QThread>
 
 /**

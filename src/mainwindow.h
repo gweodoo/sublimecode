@@ -37,7 +37,7 @@
 #include "handler/Tarbz2TarballHandler.h"
 #include "handler/TargzTarballHandler.h"
 #include "handler/ZipTarballHandler.h"
-#include "HandlerThread.h"
+#include "handler/HandlerThread.h"
 
 class MainWindow : public QMainWindow//, public QObject
 {
