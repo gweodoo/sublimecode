@@ -67,10 +67,14 @@ private :
 	int  getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind);
 	 void removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions,std::string fileName);
 	 FunctionGraph* removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction);
-	std::vector<FunctionGraph*>* egrepOutputParser(std::string output,std::string fileName);
+	std::vector<FunctionGraph*>* egrepOutputParser(std::string output, std::string fileName, int arg);
 	bool isLanguageKey(std::string nameOfSymbolFound);
 	std::vector<FunctionGraph*>* getFunctionNotMacthingOnArgumentNumber(void* calledFunctionToFind,std::vector<FunctionGraph*>* listOfGlobalDefinitions,std::vector<std::vector<std::string>*>* listOfTypesforGlobalDefinitions,int arg);
 	unsigned int getNumberOfVariableUsedInFunctionDefinition(Tag* calledFunctionToFindCasted);
+	 void removeFromListWhereTagNameIsDefinition(std::vector< FunctionGraph* >* listOfCallingFunction);
+	 std::vector< Tag* >* fullFilleWithListOftagForEachFile(std::map< std::string, std::vector< Tag* >* >* listOfFileWithListOfTagFunctionType, std::vector<FunctionGraph* >* listOfCallingFunction);
+	 Tag* getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction);
+	void fullfillListOfTagToReturn ( std::vector< Tag* >* listOfTagToReturn, std::vector< FunctionGraph* >* listOfFunctionOutput, Tag* tagAssociatedToFunction);
 	
 	
 public :
