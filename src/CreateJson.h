@@ -31,15 +31,21 @@
 #include <string>
 #include <QThread>
 
+/**
+ * CreateJSon object handles JSON files generation, fetching information about diffrent graphs
+ * (callgraphs, inclusiongraphs...). Then the javacript is applied to these files and graphs
+ * can be displayed in webview. This object is the interface between the webview and the model.
+ */
 class CreateJson : public QThread
 {
 	Q_OBJECT
 	
 public:
-	static const char * const buildTypes[]; //The different types of graphs
+	static const char * const buildTypes[]; ///< The different types of graphs
 	
 	/**
 	 * Default constructor
+	 * \param[in] parent upstream accessor (used for Qt)
 	 */
 	explicit CreateJson(QObject *parent = 0);
 	
@@ -74,7 +80,7 @@ public:
 	
 	/**
 	 * Building the json file with a map (include graphs)
-	 * \param[in] tag The tag
+	 * \param[in] mapOfFiles the files map containing elements to iterate
 	 * \param[in] out QTextStream to write in the file
 	 * \param[in] buildType the wanted type of graph
 	 * \param[in] nbIterator current number of iterations
@@ -100,6 +106,12 @@ public:
 	 * \param[in] buildType the wanted type of graph
 	 */
 	void setCallGraphParams(Tag * tag, std::string filepath, std::string buildType);
+	/**
+	 * Setting the needed parameters in order to generate the json for a inclusion graph
+	 * \param[in] myPath the file name
+	 * \param[in] filepath The path where the file will be created
+	 * \param[in] buildType the wanted type of graph
+	 */
 	void setIncludeGraphParams(std::string myPath, std::string filepath, std::string buildType);
 	
 private:
@@ -114,7 +126,6 @@ signals:
 	 * Signal when the json process has finished
 	 */
 	void cjsonChanged();
-	
 };
 
 #endif // CREATEJSON_H
