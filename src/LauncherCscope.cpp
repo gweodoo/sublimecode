@@ -301,7 +301,7 @@ void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,
 			this->removeNotFunctionOutput(listOfGlobalDefinitions);
 			this->removeNotConcernedDefinitionBasedOnFileName(listOfGlobalDefinitions,listOfFunctionOutput->at(i)->getFileName());
 			this->removeFromListFunctionNotBelonginToStackCall(0,0,listOfGlobalDefinitions,listOfFunctionOutput->at(i),2);
-		for(int i =0;i<listOfGlobalDefinitions->size();i++)  cout <<" II-- "<< listOfGlobalDefinitions->at(i)->getTagName() << " " << listOfGlobalDefinitions->at(i)->getSignature()<<endl;;
+		
 			if(listOfGlobalDefinitions->empty())
 			{
 				
@@ -310,7 +310,7 @@ void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,
 				if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
 				
 			}
-			for(int i =0;i<listOfGlobalDefinitions->size();i++)  cout <<" III-- "<< listOfGlobalDefinitions->at(i)->getTagName() << " " << listOfGlobalDefinitions->at(i)->getSignature()<<endl;;
+			
 			if(listOfGlobalDefinitions->size()==1)
 			{
 					//we can search for the tag directly now 
