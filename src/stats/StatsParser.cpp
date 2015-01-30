@@ -24,7 +24,7 @@ StatsParser::StatsParser ( Configuration *config, TagsManager* tagMan ) : tagMan
 
 void StatsParser::load(){
 	string filename = config->getDestDir()+"/cloc_result";
-	std::string command = "cloc --quiet --by-file-by-lang --csv "+config->getSourcesDir()+ "--report-file="+filename+" > /dev/null", result="", cur="";
+	std::string command = "cloc --quiet --by-file-by-lang --csv "+config->getSourcesDir()+ " --report-file="+filename+" > /dev/null", result="", cur="";
 	vector<string> header;
 	bool first = false;
 	

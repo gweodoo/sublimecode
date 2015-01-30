@@ -20,8 +20,12 @@
 #include <algorithm>
 using namespace std;
 
-StatsProjectInfo::StatsProjectInfo(Configuration *config,  std::vector< std::string > filesList ) : config(config), filesTree(filesList) {
+StatsProjectInfo::StatsProjectInfo(Configuration *config,  std::vector< std::string > filesList ) : config(config) {
 	this->config = config;
+	for(std::vector<string>::iterator it = filesList.begin(); it != filesList.end(); it++){
+		filesTree.push_back(it->substr(config->getSourcesDir().size()));
+	}
+
 }
 
 void StatsProjectInfo::analyzeSourcesTree() {
@@ -67,9 +71,9 @@ map< string, string > StatsProjectInfo::getProjectInfo() const {
 }
 
 std::string StatsProjectInfo::listOfAuthors(std::string filename){
+	filename = config->getSourcesDir() + filename;
 	ifstream file(filename.c_str());
 	std::string cur = "", result = "";
-
 	while(std::getline(file, cur, '\n')){
 		result += cur;
 	}
