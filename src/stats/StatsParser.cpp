@@ -23,13 +23,14 @@ using namespace std;
 StatsParser::StatsParser ( Configuration *config, TagsManager* tagMan ) : tagMan(tagMan), config(config) {}
 
 void StatsParser::load(){
-	std::string command = "cloc --quiet --by-file-by-lang --csv "+config->getSourcesDir()+" --report-file="+config->getDestDir()+" > /dev/null", result="", cur="";
+	string filename = config->getDestDir()+"/cloc_result";
+	std::string command = "cloc --quiet --by-file-by-lang --csv "+config->getSourcesDir()+ "--report-file="+filename+" > /dev/null", result="", cur="";
 	vector<string> header;
 	bool first = false;
 	
 	system(command.c_str());
 	
-	ifstream flux(result.c_str());
+	ifstream flux(filename.c_str());
 	while(getline(flux, cur, '\n')){
 		if(cur.empty()) continue;
 		map<string, int> splitLine = splitOn(cur, ',');
@@ -110,7 +111,7 @@ vector< pair< string, int > > StatsParser::getNbTagsPerFile() const {
 		size_t total = cur.size();
 		size_t nb = atoi(cur.substr(pos+1, total - (pos+1)).c_str());
 		string file = cur.substr(0, pos);
-		vec.push_back(std::pair<string, int>(file, nb));
+		vec.push_back(std::pair<string, int>(file, (int)nb));
 		i++;
 	}
 
