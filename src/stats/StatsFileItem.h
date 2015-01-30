@@ -28,11 +28,11 @@
  */
 class StatsFileItem {
 private:
-	std::string filename;    ///the file name where stats apply
-	std::string languageName;///file language
-	size_t nbBlankLines;     ///number of blank lines (spaces,tabs...)
-	size_t nbCommentLines;   ///number of commented lines (fully commented : comment + code = code line)
-	size_t nbCodeLines;      ///number of code lines in current file
+	std::string filename;    ///< the file name where stats apply
+	std::string languageName;///< file language
+	size_t nbBlankLines;     ///< number of blank lines (spaces,tabs...)
+	size_t nbCommentLines;   ///< number of commented lines (fully commented : comment + code = code line)
+	size_t nbCodeLines;      ///< number of code lines in current file
 
 public:
 	///default constructor

@@ -24,21 +24,47 @@
 #include "StatsLanguageItem.h"
 #include "../tags/TagsManager.h"
 
+/**
+ * StatsParser is the main stats handler for sublime code. It analyzes and
+ * parse data from Cloc execution and store it in its own structure.
+ */
 class StatsParser {
 private:
-	std::vector<StatsLanguageItem*> tabLanguages;
-	std::vector<StatsFileItem*> tabFiles;
-	TagsManager* tagMan;
-	Configuration *config;
+	std::vector<StatsLanguageItem*> tabLanguages; ///< list of project languages
+	std::vector<StatsFileItem*> tabFiles;         ///< list of project sources files
+	TagsManager* tagMan;                          ///< global TagsManager where tags are stored
+	Configuration *config;                        ///< main configuration
 
-	StatsLanguageItem const * findLanguage(std::string name) const;
 public:
+	/**
+	 * default constructor
+	 * \param[in] config main configuration
+	 * \param[in] tagMan a pointer to the main tagsManager
+	 */
 	StatsParser( Configuration* config, TagsManager* tagMan );
-	void loadFrom(std::string path);
+	/**
+	 * launch cloc and generate data from its output
+	 */
+	void load();
+	///object displayer
 	void display() const;
+	/**
+	 * STATS generator : get 10 files with the most lines of code for given language
+	 * \param[in]  language the given to language to filter
+	 * \return a vector (ordered) containing pair with the name of the files and number of code lines in it
+	 */
 	std::vector<std::pair<std::string, int > > getMostImplementedFilesPerLanguage( std::string language ) const;
+	/**
+	 * STATS generator : get 10 most present languages in the project
+	 * \return a vector (ordered) containing the language and the number of languages belongs to it
+	 */
 	std::vector<std::pair<std::string, float> > getMostUsedLanguages() const;
+	/**
+	 * STATS generator : get 10 files with the most tags in it.
+	 * \return a vector (ordered) containing pari with the name of the file and number of tags in it
+	 */
 	std::vector<std::pair<std::string, int > > getNbTagsPerFile() const;
+	///default destructor
 	~StatsParser();
 };
 

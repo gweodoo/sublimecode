@@ -22,8 +22,8 @@ using namespace std;
 
 StatsParser::StatsParser ( Configuration *config, TagsManager* tagMan ) : tagMan(tagMan), config(config) {}
 
-void StatsParser::loadFrom(std::string path){
-	std::string command = "cloc --quiet --by-file-by-lang --csv "+path+" --report-file="+config->getDestDir()+" > /dev/null", result="", cur="";
+void StatsParser::load(){
+	std::string command = "cloc --quiet --by-file-by-lang --csv "+config->getSourcesDir()+" --report-file="+config->getDestDir()+" > /dev/null", result="", cur="";
 	vector<string> header;
 	bool first = false;
 	
@@ -88,16 +88,6 @@ vector<std::pair<string, float> >  StatsParser::getMostUsedLanguages() const {
 	return vec;
 }
 
-StatsLanguageItem const * StatsParser::findLanguage(std::string name) const {
-	const StatsLanguageItem * item = NULL;
-	for(vector<StatsLanguageItem*>::const_iterator it = tabLanguages.begin(); it != tabLanguages.end(); it++){
-		if((*it)->getName() == name){
-			item = const_cast<const StatsLanguageItem*>(*it);
-			break;
-		}
-	}
-	return item;
-}
 vector< pair< string, int > > StatsParser::getNbTagsPerFile() const {
 	std::string command = "cut -f2 "+config->getDestDir()+"/tags | sort | uniq -c | awk '{printf(\"%s,%s\\n\",$2,$1)}'";
 	string result = "", cur = "", cur2 = "";

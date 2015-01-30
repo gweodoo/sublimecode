@@ -48,7 +48,7 @@ void Runner::run() {
 	this->graphResolver = new GraphCaller(config, tagMan);
 	this->includeResolver = new IncludeParser(config);
 	this->statsResolver = new StatsParser(config, tagMan);
-	this->statsResolver->loadFrom(config->getSourcesDir());
+	this->statsResolver->load();
 	this->projectInfo = new StatsProjectInfo(config);
 	this->projectInfo->addFilesList(listFiles);
 	this->projectInfo->analyzeSourcesTree();

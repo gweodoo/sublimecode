@@ -27,11 +27,11 @@
  */
 class StatsLanguageItem {
 private:
-	std::string name;      /// the language name
-	size_t nbFiles;        /// number of files using this language
-	size_t nbBlankLines;   /// number of blank lines in files using this language
-	size_t nbCommentLines; /// number of comment lines in files using this language
-	size_t nbCodeLines;    /// number of code lines in files using this language
+	std::string name;      ///< the language name
+	size_t nbFiles;        ///< number of files using this language
+	size_t nbBlankLines;   ///< number of blank lines in files using this language
+	size_t nbCommentLines; ///< number of comment lines in files using this language
+	size_t nbCodeLines;    ///< number of code lines in files using this language
 
 public:
 	/// default constructor
