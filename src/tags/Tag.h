@@ -65,11 +65,11 @@ extern const char* tabTypeNames[];  ///< Contains assiocated names to each type,
  */
 class Tag {
 private:
-	std::string name;                                  ///tag name
-	std::string fileName;                              ///tag file name (where the tag is defined)
-	size_t lineNumber;                                 /// line number in file name
-	tagType type;                                      /// tag type (FUNCTION, CLASS...) @see tagType
-	std::map<std::string, std::string> additionalInfo; /// optional information list about the tag
+	std::string name;                                  ///< tag name
+	std::string fileName;                              ///< tag file name (where the tag is defined)
+	size_t lineNumber;                                 ///< line number in file name
+	tagType type;                                      ///< tag type (FUNCTION, CLASS...) @see tagType
+	std::map<std::string, std::string> additionalInfo; ///< optional information list about the tag
 public:
 	static const short NB_TAGS_TYPES = 15;     ///< represents max number of possible tags
 	static const std::string OUT_OF_SCOPE_TAG; ///< defines the global chain to identify "out of scope" tag (not in the project tree, like printf, malloc,...)
@@ -97,7 +97,8 @@ public:
 	tagType getType() const;
 	/**
 	 * Get the associated value of the given key for current tag
-	 * For example, the key class will return the referent class name if exist
+	 * For example, the key class will return the referent class name if exists
+	 * \param[in] key the map key which the value need to be associated
 	 * \return the value as a string
 	 * \return empty string if key is not found.
 	 */

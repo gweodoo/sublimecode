@@ -29,7 +29,7 @@
  */
 class TagsParser {
 private:
-	TagsManager* myTagMan; /// a pointer to the used tagsManager (in order to fill it)
+	TagsManager* myTagMan; ///< a pointer to the used tagsManager (in order to fill it)
 public:
 	/**
 	 * Main constructor

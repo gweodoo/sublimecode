@@ -31,8 +31,8 @@
 class TagsManager
 {
 private:
-	Configuration* config;                                /// current global configuration as pointer
-	std::vector<std::map<std::string, Tag*>* > hashtable; /// vector of map, containing tags (one map  = one tag type)
+	Configuration* config;                                ///< current global configuration as pointer
+	std::vector<std::map<std::string, Tag*>* > hashtable; ///< vector of map, containing tags (one map  = one tag type)
 public:
 	/**
 	 * main constructor
@@ -47,7 +47,7 @@ public:
 	bool addTag(Tag* nw);
 	/**
 	 * remove a tag in the tag manager
-	 * \param[in] nw the new tag to delete
+	 * \param[in] old the new tag to delete
 	 * \return true if successes, false otherwise
 	 */
 	bool delTag(Tag* old);
@@ -78,6 +78,7 @@ public:
 	 * \param[in] name the tag name
 	 * \param[in] filename the tag filename
 	 * \param[in] line the line
+	 * \return the hash composed of name:filename:line
 	 */
 	std::string hashTag(std::string name, std::string filename, size_t line) const;
 	/**

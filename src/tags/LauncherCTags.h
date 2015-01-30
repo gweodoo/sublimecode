@@ -28,13 +28,13 @@
 class LauncherCTags
 {
 private:
-	std::string pathExecutable;         ///path to ctags program
-	std::string options;                /// user specific options
-	std::vector<std::string> listPaths; /// list of files to analyze
-	Configuration* config;              ///current configuration
+	std::string pathExecutable;         ///< path to ctags program
+	std::string options;                ///< user specific options
+	std::vector<std::string> listPaths; ///< list of files to analyze
+	Configuration* config;              ///< current configuration
 
-	static const std::string DEF_EXEC;       ///constant defining default ctags path
-	static const std::string GLOBAL_OPTIONS; ///constant defining default ctags options
+	static const std::string DEF_EXEC;       ///< constant defining default ctags path
+	static const std::string GLOBAL_OPTIONS; ///< constant defining default ctags options
 
 public:
 	/**
