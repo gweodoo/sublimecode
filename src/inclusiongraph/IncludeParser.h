@@ -28,31 +28,62 @@
  */
 class IncludeParser {
 private:
-	Configuration *config;              /// default global configuration
-	std::vector<std::string> listPaths; /// list of selected paths
+	Configuration *config;              ///< default global configuration
 
-	static const short NB_POSSIBLE_PATHS = 2;     /// nb possible extra paths for inclusions
-	static const std::string tabInclusivePaths[]; /// tab with possible extra paths
+	static const short NB_POSSIBLE_PATHS = 2;     ///< nb possible extra paths for inclusions
+	static const std::string tabInclusivePaths[]; ///< tab with possible extra paths
 
 	/**
-	 * Start
+	 * launch the command to get all files where "path" is included, i.e. find where
+	 * current file is included in whole project
+	 * \param[in] path the file to look look for
+	 * \return the result as a string : the grep output
 	 */
 	std::string getIncludedResult(std::string path) const;
-
+	/**
+	 * launch the command to get all files included in given file i.e. find which files are
+	 * pointed by \#include pattern found in "path"
+	 * \param[in] path the file to analyze
+	 * \return the result as a string : the grep output
+	 */
 	std::string getInclusionResult(std::string path) const;
+	/**
+	 * From a specific file name, check if this file exists in project tree
+	 * \param[in] filename the file to check
+	 * \return absolute path corresponding to the filename
+	 * \return empty string if file doesn't exist
+	 */
 	std::string findIncludeInProject(std::string filename) const;
-
+	/**
+	 * Isolate a path from the file name and return the path
+	 * \param[in] name the file name
+	 * \return the dirname where this file is stored
+	 */
 	std::string findDirname(std::string name) const;
+	/**
+	 * Isolate a path from the file name and return the file name
+	 * \param[in] name the file name
+	 * \return the basename for the given path
+	 */
 	std::string findBasename(std::string name) const;
-
 public:
-	IncludeParser(Configuration *config, std::vector<std::string> list);
+	/**
+	 * default constructor
+	 * \param[in] config current global configuration
+	 */
+	IncludeParser(Configuration *config);
+	/**
+	 * MAIN FUNCTION : look for files where path is included
+	 * \param[in] path the file to check for include
+	 * \return a map containing the file which does the include (string) and check on existency (true/false)
+	 */
 	std::map<std::string, bool> lookForIncludedGraph(std::string path) const;
+	/**
+	 * MAIN FUNCTION : look for files called as \#include in given path
+	 * \param[in] path the file to check for include
+	 * \return a map containing the file which does the include (string) and check on existency (true/false)
+	 */
 	std::map<std::string, bool> lookForInclusionGraph(std::string path) const;
-	bool checkInclusionGraphChild(std::string path) const;
-	bool checkIncludedGraphChild(std::string path) const;
-
-	void addPathToAnalyze(std::string path);
 };
 
 #endif // INCLUDEPARSER_H

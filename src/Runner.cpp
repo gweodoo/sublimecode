@@ -46,7 +46,7 @@ void Runner::run() {
 	launcher.generateTagsFile();
 	parser.loadFromFile(config->getDestDir()+"/tags");
 	this->graphResolver = new GraphCaller(config, tagMan);
-	this->includeResolver = new IncludeParser(config, listFiles);
+	this->includeResolver = new IncludeParser(config);
 	this->statsResolver = new StatsParser(config, tagMan);
 	this->statsResolver->loadFrom(config->getSourcesDir());
 	this->projectInfo = new StatsProjectInfo(config);

@@ -24,7 +24,7 @@ using namespace std;
 
 const string IncludeParser::tabInclusivePaths[] = {"include/", "lib/"};
 
-IncludeParser::IncludeParser(Configuration *config, std::vector<std::string> list) : config(config), listPaths(list) {}
+IncludeParser::IncludeParser(Configuration *config) : config(config) {}
 
 std::map< std::string, bool > IncludeParser::lookForIncludedGraph ( std::string path ) const {
 	std::string result = "", cur = "";
@@ -140,11 +140,6 @@ string IncludeParser::getIncludedResult ( string path ) const {
 	return result;
 }
 
-void IncludeParser::addPathToAnalyze ( string path ) {
-	listPaths.push_back(path);
-}
-
-
 string IncludeParser::findDirname(std::string name) const {
 	size_t last = name.find_last_of("/");
 	if(last < name.size()){
@@ -178,11 +173,4 @@ string IncludeParser::findIncludeInProject ( string filename ) const {
 	}
 
 	return "";
-}
-
-bool IncludeParser::checkIncludedGraphChild ( string path ) const {
-	return getIncludedResult(path) != "";
-}
-bool IncludeParser::checkInclusionGraphChild ( string path ) const {
-	return getInclusionResult(path) != "";
 }
