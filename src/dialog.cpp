@@ -52,15 +52,14 @@ void Dialog::Finish()
 	{
 		QFileInfo fileInfo = model->filePath(value);
 		if(fileInfo.isFile()) {
-			absolutePath = fileInfo.absolutePath().toStdString() + "/" + value.data().toString().toStdString();
+			string absolutePath = fileInfo.absolutePath().toStdString() + "/" + value.data().toString().toStdString();
 			QString convrt = QString::fromStdString(absolutePath);
 			string converti = convrt.toUtf8().data();
 			fileList.push_back(converti);
 		}
 	}
 
-	MainView *w = new MainView(this->config, fileList);
-
+	new MainView(this->config, fileList);
 	this->hide();
 }
 

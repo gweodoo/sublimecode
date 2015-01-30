@@ -32,24 +32,56 @@
 #include <QLabel>
 #include <QMovie>
 
-QT_BEGIN_NAMESPACE
 
+#define RSZW(percent) (this->width*percent/100)  ///< compute width in percent (resolution scale)
+#define RSZH(percent) (this->height*percent/100) ///< compute height in percent (resolution scale)
+
+QT_BEGIN_NAMESPACE
+/**
+ * Ui dialog is the displayer (window maker) for dialog view
+ */
 class Ui_Dialog
 {
 private: 
-	QTreeView *treeView;
-	QPushButton *pushButton;
-	QPushButton *selectAll;
-	QPushButton *deselectAll;
-	int width, height;
+	QTreeView *treeView;      ///< sources tree displayer
+	QPushButton *pushButton;  ///< finish button
+	QPushButton *selectAll;   ///< checkAll button
+	QPushButton *deselectAll; ///< uncheckAll button
+	int width;                ///< window width
+	int height;               ///< window height
 
 public:
+	///default destructor
 	~Ui_Dialog();
+	/**
+	 * graphical initializer
+	 * \param[in] Dialog the base class dialog, our container
+	 */
 	void setupUi(QDialog *Dialog);
+	/**
+	 * Translate buttons according to system language.
+	 * \param[in] Dialog the base class dialog, our container
+	 */
 	void retranslateUi(QDialog *Dialog);
+	/**
+	 * sources tree qt object getter
+	 * \return class member as pointer
+	 */
 	QTreeView *getTreeView();
+	/**
+	 * Finish button qt object getter
+	 * \return class member as pointer
+	 */
 	QPushButton *getPushButton();
+	/**
+	 * selectAll button qt object getter
+	 * \return class member as pointer
+	 */
 	QPushButton *getSelectAll();
+	/**
+	 * uncheck button qt object getter
+	 * \return class member as pointer
+	 */
 	QPushButton *getdeSelectAll();
 };
 

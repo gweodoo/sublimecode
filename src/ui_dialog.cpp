@@ -18,10 +18,6 @@
 /***************************************************************************/ 
 #include "ui_dialog.h"
 
-#define RSZW(percent) (this->width*percent/100)
-#define RSZH(percent) (this->height*percent/100)
-
-
 void Ui_Dialog::setupUi(QDialog *Dialog)
     {
 	QRect rect = QApplication::desktop()->screenGeometry();

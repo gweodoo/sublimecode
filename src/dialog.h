@@ -27,33 +27,58 @@
 #include "CFileSystemModel.h"
 #include "mainView.h"
 
-namespace Ui {
-class Dialog;
-}
-
+/**
+ * Dialog is object called to display sources tree to user.
+ * Then, he can select paths he wants to analyze
+ */
 class Dialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit Dialog(Configuration *config, QWidget *parent = 0);
-    ~Dialog();
-    Ui_Dialog *ui;
+	/**
+	 * default constructor
+	 * \param[in] config global configuration
+	 * \param[in] parent upstream accessor
+	 */
+	explicit Dialog(Configuration *config, QWidget *parent = 0);
+	///default destructor
+	~Dialog();
+
 
 private:
-    CFileSystemModel *model;
-    QString mpath;
-    std::vector<std::string> fileList;
-    Configuration *config;
-    QModelIndex *index;
-    std::string absolutePath;
-
+	Ui_Dialog *ui;                     ///< the graphical displayer
+	CFileSystemModel *model;           ///< sources tree handler
+	QString mpath;                     ///< root sources tree
+	std::vector<std::string> fileList; ///< select list of files
+	Configuration *config;             ///< current configuration
 public slots:
+	/**
+	 * when click on "Finish", do some post-actions before running MainView
+	 */
 	void Finish();
+	/**
+	 * action to select all paths in sources tree
+	 */
 	void SelectAll();
+	/**
+	 * action to deselect all paths in sources tree
+	 */
 	void DeSelectAll();
+	/**
+	 * handler to check all paths in current tree
+	 * \param[in] mpath current folder to check
+	 */
 	void updateCheckAllComboBox(QString mpath);
+	/**
+	 * handler to uncheck all paths in current tree
+	 * \param[in] mpath current folder to uncheck
+	 */
 	void updateunCheckAllComboBox(QString mpath);
+	/**
+	 * Handler when close button is pressed
+	 * \param[in] e the event
+	 */
 	void closeEvent(QCloseEvent* e);
 };
 
