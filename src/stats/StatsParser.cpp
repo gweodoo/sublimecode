@@ -89,10 +89,11 @@ vector<std::pair<string, float> >  StatsParser::getMostUsedLanguages() const {
 }
 
 vector< pair< string, int > > StatsParser::getNbTagsPerFile() const {
-	std::string command = "cut -f2 "+config->getDestDir()+"/tags | sort | uniq -c | awk '{printf(\"%s,%s\\n\",$2,$1)}'";
+	std::string command = "cut -f2 "+config->getDestDir()+"/tags | sort | uniq -c | sort -rn | awk '{printf(\"%s,%s\\n\",$2,$1)}'";
 	string result = "", cur = "", cur2 = "";
 	vector<std::pair<string, int> > vec;
-	const short MAX = 256;
+	const short MAX = 256, MAX_TAGS = 10;
+	short i = 0;
 	char buf[MAX];
 
 	FILE* fd = popen(command.c_str(), "r");
@@ -103,13 +104,14 @@ vector< pair< string, int > > StatsParser::getNbTagsPerFile() const {
 	}
 
 	stringstream flux(result);
-	while(getline(flux, cur, '\n')){
+	while(getline(flux, cur, '\n') && i < MAX_TAGS){
 		if(cur[0] != '/') continue;
 		size_t pos = cur.find(",");
 		size_t total = cur.size();
 		size_t nb = atoi(cur.substr(pos+1, total - (pos+1)).c_str());
 		string file = cur.substr(0, pos);
 		vec.push_back(std::pair<string, int>(file, nb));
+		i++;
 	}
 
 	return vec;
