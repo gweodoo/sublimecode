@@ -89,7 +89,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->statusBar->setObjectName(QString("statusBar"));
         MainWindow->setStatusBar(this->statusBar);
 	
-	sourcesGroupBox = new QGroupBox(MainWindow);
+	sourcesGroupBox = new QGroupBox(centralWidget);
 	sourcesGroupBox->setObjectName(QString("sourcesGroupBox"));
 	//sourcesGroupBox->setGeometry(QRect(20, 20, 560, 150));
 	sourcesGroupBox->setGeometry(QRect(RSZW(3), RSZH(12), RSZW(94), RSZH(38)));
@@ -135,7 +135,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->tabs->addTab(this->vcsWidget,"VCS");
 	this->tabs->addTab(this->archiveWidget,"Archive");
 	
-	destinationGroupBox = new QGroupBox(MainWindow);
+	destinationGroupBox = new QGroupBox(centralWidget);
 	destinationGroupBox->setObjectName(QString("destinationGroupBox"));
 	destinationGroupBox->setGeometry(QRect(RSZW(3), RSZH(56), RSZW(94), RSZH(19)));
 
@@ -145,9 +145,18 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->Parcourir1->setText(QString("Browse..."));
 	this->Parcourir1->setGeometry(QRect(RSZW(73), RSZH(8), RSZW(16), RSZH(6)));
 	
-	this->Finish = new QPushButton(MainWindow);
+	this->Finish = new QPushButton(centralWidget);
         this->Finish->setGeometry(QRect(RSZW(76), RSZH(81), RSZW(21), RSZH(6)));
 	this->Finish->setText(QString("Next"));
+	
+	waitingMovie = new QMovie(":/mySpinner.gif");
+	waitingLabel = new QLabel(centralWidget);
+	waitingLabel->setFixedSize(200, 200);
+	waitingLabel->move((this->width - waitingLabel->width()) /2, (this->height - waitingLabel->height()) /2);
+	waitingLabel->setObjectName(QString("waitingWidget"));
+	waitingLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+	waitingLabel->setMovie (waitingMovie);
+	waitingLabel->setVisible(false);
 	
         retranslateUi(MainWindow);
 	MainWindow->setWindowTitle("Sublime Code");
@@ -227,3 +236,17 @@ QComboBox* UI_MainWindow1::getComboBoxArchive()
 	return this->comboBoxArchive;
 }
 
+QMovie* UI_MainWindow1::getWaitingMovie()
+{
+	return this->waitingMovie;
+}
+
+QWidget * UI_MainWindow1::getCentralWidget()
+{
+	return this->centralWidget;
+}
+
+QLabel* UI_MainWindow1::getWaitingLabel()
+{
+	return this->waitingLabel;
+}

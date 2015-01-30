@@ -17,60 +17,48 @@
 /*                                                                         */
 /***************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef HANDLETHREAD_H
+#define HANDLETHREAD_H
 
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QFile>
-#include "CreateHTML.h"
-#include "mainView.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include "UI_mainwindow1.h"
-#include "handler/CvsVcsHandler.h"
-#include "handler/GitVcsHandler.h"
-#include "handler/MercurialVcsHandler.h"
-#include "handler/SvnVcsHandler.h"
-#include "handler/Tarbz2TarballHandler.h"
-#include "handler/TargzTarballHandler.h"
-#include "handler/ZipTarballHandler.h"
-#include "HandleThread.h"
+#include "handler/Handler.h"
+#include <QThread>
 
-class MainWindow : public QMainWindow//, public QObject
+/**
+ * Threaded handler process 
+ */
+class HandleThread : public QThread
 {
 	Q_OBJECT
-
+	
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
-	UI_MainWindow1 *ui;
-	void waitingStart();
-	void waitingStop();
-    
+	/**
+	 * Default constructor
+	 */
+	HandleThread(QObject *parent = 0);
+	
+	/**
+	 * Default Destructor
+	 */
+	~HandleThread();
+	
+	/**
+	 * Launch the handler process that try to get the project from a vcs
+	 */
+	void run();
+	
+	/**
+	 * Sets handler with the configured handler
+	 */
+	void setHandler(Handler *handler);
+	
 private:
-	//Ui::MainWindow *ui;
-	QString fileNameSource;
-	QString fileNameSourceTest;
-	QString branchNameSource;
-	QString fileNameDestination;
-	QString fileNameArchive;
-	QString fileNameDestinationTest;
-	Configuration *config;
-	Handler* handler;
-	HandleThread *handleThread;
-    
-public slots:
-	void Rechercher_Sources();
-	void Rechercher_Destination();
-	void Rechercher_Archive();
-	void Finish();
-	bool exists(const char *fname);
-	bool removeDir(QString file);
-	void closeEvent(QCloseEvent* e);
-	void onHandlerChanged(bool isDone); 
+	Handler *handler; //The configured handler
+	
+signals:
+	/**
+	 * Signal when the handler process has finished
+	 */
+	void handlerChanged(bool isDone);
 };
 
-#endif // MAINWINDOW_H
+#endif // HANDLETHREAD_H

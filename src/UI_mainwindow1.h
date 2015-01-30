@@ -36,6 +36,8 @@
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QGroupBox>
 #include <QtGui/QComboBox>
+#include <QLabel>
+#include <QMovie>
 
 QT_BEGIN_NAMESPACE
 
@@ -67,6 +69,8 @@ private:
     int width, height;
     QComboBox *comboBoxVcs;
     QComboBox *comboBoxArchive;
+    QLabel *waitingLabel;
+    QMovie *waitingMovie;
 
 public:
     static const char * const vcsTypes[];
@@ -87,6 +91,9 @@ public:
     QTabWidget *getQTabWidget();
     QComboBox *getComboBoxVcs();
     QComboBox *getComboBoxArchive();
+    QMovie *getWaitingMovie();
+    QWidget *getCentralWidget();
+    QLabel *getWaitingLabel();
 };
 
 QT_END_NAMESPACE

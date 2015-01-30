@@ -116,13 +116,13 @@ bool MainWindow::exists(const char *fname)
     }
 }
 
-
 void MainWindow::Finish()
 {
 	int currentTab = ui->getQTabWidget()->currentIndex();
 	fileNameDestinationTest = ui->getLineEdit1()->text();
 
-	Handler* handler = NULL;
+	handler = NULL;
+	handleThread = NULL;
 	Dialog *dialog = NULL;
 	QFileInfo fileInfoSource;
 	QFileInfo fileInfoDestination;
@@ -185,14 +185,15 @@ void MainWindow::Finish()
 					handler = new SvnVcsHandler(config, fileNameSourceTest.toStdString(), branchNameSource.toStdString());
 					break;
 			}
+			
+			handleThread = new HandleThread;
+			handleThread->setHandler(handler);
+			QObject::connect(handleThread, SIGNAL(handlerChanged(bool)), this, SLOT(onHandlerChanged(bool)));
+			waitingStart();
+			handleThread->start();
 
-			if(handler->getProject()){
-				config->setSourceDir(config->getDestDir()+"/sources_project");
-				dialog = new Dialog(config);
-				dialog->show();
-				this->hide();
-			} else QMessageBox::critical(this, "Project issue", "Unable to load sources project\nCheck path you provide", QMessageBox::Ok);
-			delete handler;
+			//delete handler;
+			//delete handleThread;
 			break;
 		}
 		case 2 :
@@ -236,4 +237,37 @@ void MainWindow::Finish()
 void MainWindow::closeEvent(QCloseEvent* e){
 	delete ui;
 	QMainWindow::closeEvent(e);
+}
+
+void MainWindow::onHandlerChanged(bool isDone)
+{
+	Dialog *dialog = NULL;
+	
+	waitingStop();
+	
+	if(isDone) {
+		config->setSourceDir(config->getDestDir()+"/sources_project");
+		dialog = new Dialog(config);
+		dialog->show();
+		this->hide();
+	} else {
+		QMessageBox::critical(this, "Project issue", "Unable to load sources project\nCheck path you provide", QMessageBox::Ok);
+	}
+	
+	delete handler;
+	delete handleThread;
+}
+
+void MainWindow::waitingStart()
+{
+	ui->getCentralWidget()->setEnabled(false);
+	ui->getWaitingMovie()->start();
+	ui->getWaitingLabel()->setVisible(true);
+}
+
+void MainWindow::waitingStop()
+{
+	ui->getCentralWidget()->setEnabled(true);
+	ui->getWaitingMovie()->stop();
+	ui->getWaitingLabel()->setVisible(false);
 }
