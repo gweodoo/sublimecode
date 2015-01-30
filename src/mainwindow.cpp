@@ -122,7 +122,7 @@ void MainWindow::Finish()
 	fileNameDestinationTest = ui->getLineEdit1()->text();
 
 	handler = NULL;
-	handleThread = NULL;
+	handlerThread = NULL;
 	Dialog *dialog = NULL;
 	QFileInfo fileInfoSource;
 	QFileInfo fileInfoDestination;
@@ -186,11 +186,11 @@ void MainWindow::Finish()
 					break;
 			}
 			
-			handleThread = new HandleThread;
-			handleThread->setHandler(handler);
-			QObject::connect(handleThread, SIGNAL(handlerChanged(bool)), this, SLOT(onHandlerChanged(bool)));
+			handlerThread = new HandlerThread;
+			handlerThread->setHandler(handler);
+			QObject::connect(handlerThread, SIGNAL(handlerChanged(bool)), this, SLOT(onHandlerChanged(bool)));
 			waitingStart();
-			handleThread->start();
+			handlerThread->start();
 
 			//delete handler;
 			//delete handleThread;
@@ -255,7 +255,7 @@ void MainWindow::onHandlerChanged(bool isDone)
 	}
 	
 	delete handler;
-	delete handleThread;
+	delete handlerThread;
 }
 
 void MainWindow::waitingStart()

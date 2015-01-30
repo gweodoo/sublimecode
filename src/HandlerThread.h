@@ -26,20 +26,21 @@
 /**
  * Threaded handler process 
  */
-class HandleThread : public QThread
+class HandlerThread : public QThread
 {
 	Q_OBJECT
 	
 public:
 	/**
 	 * Default constructor
+	 * \param[in] parent Upstream accessor
 	 */
-	HandleThread(QObject *parent = 0);
+	HandlerThread(QObject *parent = 0);
 	
 	/**
 	 * Default Destructor
 	 */
-	~HandleThread();
+	~HandlerThread();
 	
 	/**
 	 * Launch the handler process that try to get the project from a vcs
@@ -48,15 +49,17 @@ public:
 	
 	/**
 	 * Sets handler with the configured handler
+	 * \param[in] handler The configured handler
 	 */
 	void setHandler(Handler *handler);
 	
 private:
-	Handler *handler; //The configured handler
+	Handler *handler; ///< The configured handler
 	
 signals:
 	/**
 	 * Signal when the handler process has finished
+	 * \param[in] isDone Boolean that indicates the process ended successfully
 	 */
 	void handlerChanged(bool isDone);
 };

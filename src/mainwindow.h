@@ -37,7 +37,7 @@
 #include "handler/Tarbz2TarballHandler.h"
 #include "handler/TargzTarballHandler.h"
 #include "handler/ZipTarballHandler.h"
-#include "HandleThread.h"
+#include "HandlerThread.h"
 
 class MainWindow : public QMainWindow//, public QObject
 {
@@ -60,7 +60,7 @@ private:
 	QString fileNameDestinationTest;
 	Configuration *config;
 	Handler* handler;
-	HandleThread *handleThread;
+	HandlerThread *handlerThread;
     
 public slots:
 	void Rechercher_Sources();

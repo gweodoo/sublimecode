@@ -17,27 +17,27 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "HandleThread.h"
+#include "HandlerThread.h"
 
-HandleThread::HandleThread(QObject *parent) :
+HandlerThread::HandlerThread(QObject *parent) :
 	QThread(parent)
 {
 	
 }
 
-HandleThread::~HandleThread()
+HandlerThread::~HandlerThread()
 {
 
 }
 
-void HandleThread::run()
+void HandlerThread::run()
 {
 	bool isDone = false; //Boolean that indicates if the project has been copied successfully
 	isDone = handler->getProject();
 	emit handlerChanged(isDone); //Send the boolean to the view process
 }
 
-void HandleThread::setHandler(Handler *handler)
+void HandlerThread::setHandler(Handler *handler)
 {
 	this->handler = handler;
 }
