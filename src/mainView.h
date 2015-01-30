@@ -36,12 +36,15 @@ typedef std::vector<std::pair<std::string, float> > vector_type_float;
 typedef std::vector<std::pair<std::string, int> > vector_type_int;
 typedef std::map<std::string, std::string > map_type_string;
 
+/**
+ * Main view in sublimeCode. Display Qt manager and webview
+ */
 class MainView : public QMainWindow
 {
     Q_OBJECT
 
 public:
-	static const char * const buildTypes[]; //The different types of graphs
+	static const char * const buildTypes[]; ///< The different types of graphs
 	
 	/**
 	 * Construtor of the main view
@@ -105,12 +108,13 @@ public slots:
 	
 	/**
 	 * Getting the current page
-	 * \param[out] QWebView The current page
+	 * \return QWebView The current page
 	 */
 	QWebView *pageActuelle();
 	
 	/**
 	 * Elements destructor when closing
+	 * \param[in] e the close event
 	 */
 	void closeEvent(QCloseEvent* e);
 	
@@ -143,7 +147,7 @@ public slots:
 	/**
 	 * Reading the whole file
 	 * \param[in] filename The name of the file
-	 * \param[out] QString The file read
+	 * \return QString The file read
 	 */
 	QString readFile (const QString& filename);
 	
@@ -166,35 +170,38 @@ public slots:
 	 * Stop the spinner
 	 */
 	void waitingStop();
+	/**
+	 * stats generator call
+	 */
 	void generateStats();
 	
 private:
-	Ui_MainView * ui; //The main view interface
-	Configuration *config; //The current configuration
-	std::vector<std::string> allfileList; //The file list that we want to analyze
-	std::vector<std::vector<Tag *>*> researchList; //The tab list
-	std::string tag; //The current tag
-	QStringList wordList; //The list of words for the word completer
-	std::string pathToAnalyse; //The path that we want to analyze
-	std::string relativePathToAnalyse; //The relative path that we want to analyze
-	QCompleter *completer; //The completer
-	QString cssFile; //The global css file
-	QString cssHighlightFile; //The hightlight css file
-	QString xslTag; //The tag xsl file path
-	QString xslType; //The type xsl file path
-	QString xslFile; //The file xsl file path
-	QString xslHighlight; //The highlight xsl file path
-	QString statFile; //The stat html file path
-	CreateHTML* cHTML; //The object to create the HTML file
-	CreateJson * cjson; //The object to create the Json file
-	QWebView *webViewSearch; //The searching web view
-	Runner * runner; //The current runner
-	std::string filepath; //The file path
-	QVariantMap list_cplus;
-	QVariantMap list_header;
-	QVariantMap list_language;
-	QVariantMap list_tag;
-	QVariantMap list_info;
+	Ui_MainView * ui;                              ///< The main view interface
+	Configuration *config;                         ///< The current configuration
+	std::vector<std::string> allfileList;          ///< The file list that we want to analyze
+	std::vector<std::vector<Tag *>*> researchList; ///< The tab list
+	std::string tag;                               ///< The current tag
+	QStringList wordList;                          ///< The list of words for the word completer
+	std::string pathToAnalyse;                     ///< The path that we want to analyze
+	std::string relativePathToAnalyse;             ///< The relative path that we want to analyze
+	QCompleter *completer;                         ///< The completer
+	QString cssFile;                               ///< The global css file
+	QString cssHighlightFile;                      ///< The hightlight css file
+	QString xslTag;                                ///< The tag xsl file path
+	QString xslType;                               ///< The type xsl file path
+	QString xslFile;                               ///< The file xsl file path
+	QString xslHighlight;                          ///< The highlight xsl file path
+	QString statFile;                              ///< The stat html file path
+	CreateHTML* cHTML;                             ///< The object to create the HTML file
+	CreateJson * cjson;                            ///< The object to create the Json file
+	QWebView *webViewSearch;                       ///< The searching web view
+	Runner * runner;                               ///< The current runner
+	std::string filepath;                          ///< The file path
+	QVariantMap list_cplus;                        ///< stats list
+	QVariantMap list_header;                       ///< stats list
+	QVariantMap list_language;                     ///< stats list
+	QVariantMap list_tag;                          ///< stats list
+	QVariantMap list_info;                         ///< stats list
 };
 
 #endif // MAINVIEW_H

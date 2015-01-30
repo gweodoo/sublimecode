@@ -24,30 +24,34 @@
 #include <QVariant>
 
 using namespace std;
-
+///simplify stats object handling with typeref
 typedef std::vector<std::pair<std::string, float> > vector_type_float;
+///simplify stats object handling with typeref
 typedef std::vector<std::pair<std::string, int> > vector_type_int;
 
+/**
+ * Object handling Javascript displaying on front page, about stats
+ */
 class MyJavaScriptOperations : public QObject {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    void fillcplusList(QVariantMap list_cplus);
-    void fillheaderList(QVariantMap list_header);
-    void filllanguageList(QVariantMap list_language);
-    void filltagList(QVariantMap list_tag);
-    void fillinfoList(QVariantMap list_info);
-    Q_INVOKABLE QVariantMap getcpluslistToJavaScript();
-    Q_INVOKABLE QVariantMap getheaderlistToJavaScript();
-    Q_INVOKABLE QVariantMap getlanguagelistToJavaScript();
-    Q_INVOKABLE QVariantMap gettaglistToJavaScript();
-    Q_INVOKABLE QVariantMap getinfolistToJavaScript();
+	void fillcplusList(QVariantMap list_cplus);
+	void fillheaderList(QVariantMap list_header);
+	void filllanguageList(QVariantMap list_language);
+	void filltagList(QVariantMap list_tag);
+	void fillinfoList(QVariantMap list_info);
+	Q_INVOKABLE QVariantMap getcpluslistToJavaScript();
+	Q_INVOKABLE QVariantMap getheaderlistToJavaScript();
+	Q_INVOKABLE QVariantMap getlanguagelistToJavaScript();
+	Q_INVOKABLE QVariantMap gettaglistToJavaScript();
+	Q_INVOKABLE QVariantMap getinfolistToJavaScript();
 
 private:
-    QVariantMap listcplusToJavaScript;
-    QVariantMap listheaderToJavaScript;
-    QVariantMap listlanguageToJavaScript;
-    QVariantMap listtagToJavaScript;
-    QVariantMap listinfoToJavaScript;
+	QVariantMap listcplusToJavaScript;
+	QVariantMap listheaderToJavaScript;
+	QVariantMap listlanguageToJavaScript;
+	QVariantMap listtagToJavaScript;
+	QVariantMap listinfoToJavaScript;
 };
 
 #endif // MYJAVASCRIPTOPERATIONS_H
