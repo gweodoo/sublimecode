@@ -21,14 +21,22 @@
 
 #include "Handler.h"
 
+/**
+ * Abstract class which add specific informations about project fetching with
+ * tarball extraction tools
+ */
 class TarballHandler :  public Handler
 {
 protected:
-	std::string executable;
+	std::string executable; ///< path to executable for this tarball extractor
 public:
+	/**
+	 * default constructor for a tarball extraction project
+	 * \param[in] config the current configuration
+	 * \param[in] address the address where checking out the project
+	 */
 	TarballHandler ( Configuration* config, std::string address );
 	virtual bool getProject() = 0;
-	virtual std::vector<std::string>  getBranchesList();
 	virtual ~TarballHandler();
 };
 

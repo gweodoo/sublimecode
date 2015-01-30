@@ -35,12 +35,5 @@ bool MercurialVcsHandler::getProject () {
 
 }
 
-std::vector<std::string> MercurialVcsHandler::getBranchesList() {
-	std::string command = "hg -R "+config->getDestDir()+"/sources_project branches | cut -f1 -d\" \"";
-	return VcsHandler::executeBranchesGetter(command);
-}
-
-MercurialVcsHandler::~MercurialVcsHandler() {
-
-    }
+MercurialVcsHandler::~MercurialVcsHandler() {}
 

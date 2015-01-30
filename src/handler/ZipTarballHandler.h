@@ -23,9 +23,17 @@
 
 #include "TarballHandler.h"
 
+/**
+ * implements TarballHandler for zip tarball extraction tool
+ */
 class ZipTarballHandler :  public TarballHandler
 {
 public:
+	/**
+	 * default constructor for a ZIP tarball extraction project
+	 * \param[in] config the current configuration
+	 * \param[in] address the address where checking out the project
+	 */
 	ZipTarballHandler(Configuration *config, std::string address);
 	bool getProject();
 	virtual ~ZipTarballHandler();

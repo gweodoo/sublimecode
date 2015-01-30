@@ -39,12 +39,5 @@ bool SvnVcsHandler::getProject () {
 
 }
 
-std::vector<std::string>  SvnVcsHandler::getBranchesList() {
-	std::string command = "svn ls "+address+"/branches";
-	return VcsHandler::executeBranchesGetter(command);
-}
-
-SvnVcsHandler::~SvnVcsHandler() {
-
-    }
+SvnVcsHandler::~SvnVcsHandler() {}
 

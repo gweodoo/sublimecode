@@ -35,14 +35,5 @@ bool CvsVcsHandler::getProject () {
 
 CvsVcsHandler::CvsVcsHandler ( Configuration* config, std::string address, std::string branch)  : VcsHandler(config, address, branch) {}
 
-std::vector<std::string>  CvsVcsHandler::getBranchesList(){
-	std:: string command = "ls -l";
-
-	scError("Not implemented");
-	return VcsHandler::executeBranchesGetter(command);
-}
-
-CvsVcsHandler::~CvsVcsHandler() {
-
-    }
+CvsVcsHandler::~CvsVcsHandler() {}
 

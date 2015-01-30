@@ -37,13 +37,5 @@ bool GitVcsHandler::getProject () {
 	return (WEXITSTATUS(ret) == 0);
 }
 
-std::vector<std::string>  GitVcsHandler::getBranchesList() {
-	std::string command = "git --git-dir "+config->getDestDir()+"/sources_project/.git branch --list | rev | cut -f1 -d" " | rev";
-	return VcsHandler::executeBranchesGetter(command);
-
-}
-
-GitVcsHandler::~GitVcsHandler() {
-
-    }
+GitVcsHandler::~GitVcsHandler() {}
 

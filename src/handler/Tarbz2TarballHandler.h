@@ -22,9 +22,17 @@
 
 #include "TarballHandler.h"
 
+/**
+ * implements TarballHandler for bzip tarball extraction tool
+ */
 class Tarbz2TarballHandler :  public TarballHandler
 {
 public:
+	/**
+	 * default constructor for a BZIP tarball extraction project
+	 * \param[in] config the current configuration
+	 * \param[in] address the address where checking out the project
+	 */
 	Tarbz2TarballHandler(Configuration *config, std::string address);
 	virtual bool getProject();
 	virtual ~Tarbz2TarballHandler();

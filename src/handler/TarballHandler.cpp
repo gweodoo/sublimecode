@@ -21,11 +21,4 @@
 
 TarballHandler::TarballHandler ( Configuration* config, std::string address) : Handler(config, address) {}
 
-std::vector< std::string > TarballHandler::getBranchesList() {
-	//NOT USED WITH TARBALL
-	return *(new std::vector<std::string>());
-}
-
-TarballHandler::~TarballHandler() {
-
-    }
+TarballHandler::~TarballHandler() {}

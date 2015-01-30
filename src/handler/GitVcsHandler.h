@@ -21,14 +21,23 @@
 #define GITVCSHANDLER_H
 
 #include "VcsHandler.h"
+
+/**
+ * Implements the version control system with Git specification
+ */
 class GitVcsHandler : public VcsHandler
 {
 private:
-	static const std::string DEFAULT_BRANCH;
+	static const std::string DEFAULT_BRANCH; ///< default branch name for this vcs
 public:
+	/**
+	 * default constructor for a Git project
+	 * \param[in] config the current configuration
+	 * \param[in] address the address where checking out the project
+	 * \param[in] branch a specific branch to checkout (default : DEFAULT_BRANCH}
+	 */
 	GitVcsHandler( Configuration* config, std::string address, std::string branch);
 	virtual bool getProject ();
-	virtual std::vector<std::string>  getBranchesList();
 	virtual ~GitVcsHandler();
 };
 

@@ -21,16 +21,22 @@
 
 #include "Handler.h"
 
+/**
+ * Abstract class which add some specific information about version control systems specifications
+ */
 class VcsHandler : public Handler
 {
 protected:
-	std::vector<std::string> branchlist;
-	std::string curBranch;
+	std::string curBranch; ///< vcs specific attribute : branch to checkout
 public:
+	/**
+	 * default constructor for a version control system project
+	 * \param[in] config the current configuration
+	 * \param[in] address the address where checking out the project
+	 * \param[in] branch a specific branch to checkout (default : DEFAULT_BRANCH}
+	 */
 	VcsHandler(Configuration *config, std::string address, std::string branch);
 	virtual bool getProject() = 0;
-	virtual std::vector<std::string>  getBranchesList() = 0;
-	std::vector< std::string > executeBranchesGetter(std::string command);
 	virtual ~VcsHandler();
 };
 

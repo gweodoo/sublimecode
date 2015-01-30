@@ -26,14 +26,14 @@
 /**
  * the handler catches sources project gathering. The easy way is the simple
  * directory already on file system. But SublimeCode can interact directly with
- * some version control system as Git, Svn, Mercurial... This base class defines
- * generic methods handling project fetching.
+ * some version control system as Git, Svn, Mercurial, or tarball tools as
+ * Gzip, Bzip or zip. This base class defines generic methods handling project fetching.
  */
 class Handler
 {
 protected:
-	Configuration *config;  /// current global configuration
-	std::string address;    /// where project is located
+	Configuration *config;  ///< current global configuration
+	std::string address;    ///< where project is located
 public:
 	/**
 	 * default constructor
@@ -47,11 +47,6 @@ public:
 	 * \return False otherwise
 	 */
 	virtual bool getProject() = 0;
-	/**
-	 * fetch different revision of the project.
-	 * \return string vector containing multiple project's revision.
-	 */
-	virtual std::vector<std::string>  getBranchesList() = 0;
 	///default destructor
 	virtual ~Handler();
 };

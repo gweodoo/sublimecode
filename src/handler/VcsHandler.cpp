@@ -22,23 +22,6 @@ using namespace std;
 
 VcsHandler::VcsHandler(Configuration *config, std::string address, std::string branch) : Handler(config, address), curBranch(branch) {}
 
-std::vector< std::string > VcsHandler::executeBranchesGetter(std::string command) {
-	FILE * outputFile = popen(command.c_str(), "r");
-	string output = "", cur ="";
-	char buf[250];
-	while(fgets(buf, 250, outputFile) != NULL)
-		output += buf;
-
-	stringstream flux(output);
-
-	while(getline(flux, cur, '\n')){
-		branchlist.push_back(cur);
-	}
-	return branchlist;
-}
-
-VcsHandler::~VcsHandler() {
-
-    }
+VcsHandler::~VcsHandler() {}
 
 
