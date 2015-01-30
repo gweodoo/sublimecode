@@ -253,8 +253,19 @@ void CreateHTML::createListHighlightFunction(Tag* tag)
 	
 	int TotalLine = getTotalLine(content);
 	int BeginLineFunction = tag->getLineNumber();
-	int EndLineFunction = tag->getLineNumber() + runner->getFunctionLength(tag);
-	
+	int EndLineFunction = BeginLineFunction;
+
+	switch(tag->getType()){
+		case TYPE_FUNCTION:
+		case TYPE_CLASS:
+		case TYPE_STRUCT:
+		case TYPE_ENUM:
+		case TYPE_UNION:
+			EndLineFunction = tag->getLineNumber() + runner->getFunctionLength(tag);
+			break;
+		default: break;
+	}
+
 	std::ifstream ifs(this->getFileCopied(tag->getFileName()).c_str());
 	
 	while(std::getline(ifs, line)){
@@ -315,14 +326,13 @@ void CreateHTML::createXMLHighlightFunction(vector< string > beforeFunction, vec
 	
 	if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
-		qDebug() << "Open file failed";
+		scError("Can't open file !");
 	}
 	else
 	{	
 		QTextStream stream(&file);
 		stream << document.toString();
 		file.close();
-		qDebug() << "Done";
 	}
 }
 
@@ -343,7 +353,7 @@ std::vector<Tag *>* CreateHTML::getList()
 std::string CreateHTML::getFileCopied(std::string fileToCopy)
 {
 	ifstream stream(fileToCopy.c_str());
-	int positionOfFileName=fileToCopy.find_last_of("/");
+	size_t positionOfFileName=fileToCopy.find_last_of("/");
 	string FileNameToReturn=fileToCopy;
 	if(positionOfFileName!=string::npos)
 	{
@@ -353,7 +363,7 @@ std::string CreateHTML::getFileCopied(std::string fileToCopy)
 		string currentLine;
 		while(getline(stream,currentLine))
 		{
-			for(int i=0;i<currentLine.size();i++)
+			for(size_t i=0;i<currentLine.size();i++)
 			{
 				if((int)currentLine.at(i)==9) for(int i=0;i<10;i++)outfile<<(char)9;
 				else outfile<<currentLine.at(i);
