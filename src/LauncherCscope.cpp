@@ -323,7 +323,7 @@ void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,
 						
 					}
 			}
-			for(int i =0;i<listOfGlobalDefinitions->size();i++)  cout <<" IV-- "<< listOfGlobalDefinitions->at(i)->getTagName() << " " << listOfGlobalDefinitions->at(i)->getSignature()<<endl;;
+			
 			if(listOfGlobalDefinitions->size()>1)
 			{
 				FunctionGraph* singleDefinitionLeft=this->removeNotConcernedDefinitionBaseInLineNumer(listOfGlobalDefinitions,tagAssociatedToFunction);
@@ -588,7 +588,7 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 				commandToExecute=string("cd ")+this->myConfiguration->getDestDir()+string(" && cscope -d -L8 ")+arg;
 				break;
 		}
-		cout<<"debug command "<<commandToExecute<<endl;
+		
 			
 			if((myCommandOutput=popen(commandToExecute.c_str(),"r"))==NULL)perror("searching Called Function");
 			
@@ -997,7 +997,7 @@ std::vector<FunctionGraph*>* LauncherCscope::getFunctionNotMacthingOnArgumentNum
  */
 int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction)
 {
-	cout<< "looking for end in function definition "<<tagAssociatedToFunction->getName()<<" in file "<<tagAssociatedToFunction->getFileName()<<" at line " << tagAssociatedToFunction->getLineNumber()<<endl;
+	
 	ifstream stream(tagAssociatedToFunction->getFileName().c_str());
 	int numberOfEndLine=0;
 	if(stream!=0){
@@ -1428,8 +1428,7 @@ std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std
 
 bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction)
 {
-	cout <<"calling function "<<callingFunction->getName()<<endl;
-	cout <<"called function " <<calledFunction->getName()<<endl;
+	
 	int lineStop=this->getLineForEndOfFunctionDefinition(callingFunction);
 	bool callf=false;
 	ifstream stream(callingFunction->getFileName().c_str());
@@ -1444,7 +1443,7 @@ bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunctio
 			getline(stream,currentLine);
 		}
 		do {
-			cout <<"currentLine"<<currentLine<<endl;
+			
 			
 			if(currentLine.find(calledFunction->getName())!=string::npos){
 				callf=true;
@@ -1454,7 +1453,7 @@ bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunctio
 			currentLineNumber++;
 		}while(getline(stream,currentLine)||currentLineNumber<lineStop);
 	}
-	cout << "CALLF --------------------> "<< callf<<endl;
+	
 		return callf;
 
 }
