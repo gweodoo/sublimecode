@@ -259,7 +259,13 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 							
 						}else
 						{
+						
+							
 							fullfillListOfTagToReturn(listOfTagToReturn,listOfCallingFunction,tagAssociatedToFunction);
+							for(vector<Tag*>::iterator it = listOfTagToReturn->begin(); it != listOfTagToReturn->end();){
+							
+								it=((*it)->getName().compare(tagAssociatedToFunction->getName())==0&&(*it)->getLineNumber()==tagAssociatedToFunction->getLineNumber()&&(*it)->getFileName().compare(tagAssociatedToFunction->getFileName()))?listOfTagToReturn->erase(it):it+1;
+							}
 							
 						}
 					}else
@@ -267,30 +273,35 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 						fullfillListOfTagToReturn(listOfTagToReturn,listOfCallingFunction,tagAssociatedToFunction);
 					}
 			//END  MODIFICATION
-			
+		
 			
 			delete listOfCallingFunction;
 			}
 			
 		}
 	}
+		
 	sort(listOfTagToReturn->begin(),listOfTagToReturn->end());
 	listOfTagToReturn->erase(unique(listOfTagToReturn->begin(),listOfTagToReturn->end()),listOfTagToReturn->end());
 	return listOfTagToReturn;
 }
 void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,vector<FunctionGraph*>* listOfFunctionOutput,Tag * tagAssociatedToFunction)
 {
+	
 	this->removeNotMatchingFunctionOnArgumentNumber(tagAssociatedToFunction,listOfFunctionOutput,NULL,2);
 	for(unsigned int i=0;i<listOfFunctionOutput->size();i++)
 	{
 		if(!listOfFunctionOutput->at(i)->getTagName().empty())
 		{
+			
 			vector<FunctionGraph*>* listOfGlobalDefinitions=this->cscopeOutputParser(this->launchExternalTool(0,listOfFunctionOutput->at(i)->getTagName()));
-	
+			
+			
 			this->removeMatchesFromHAndC(listOfGlobalDefinitions);
 			this->removeNotFunctionOutput(listOfGlobalDefinitions);
 			this->removeNotConcernedDefinitionBasedOnFileName(listOfGlobalDefinitions,listOfFunctionOutput->at(i)->getFileName());
 			this->removeFromListFunctionNotBelonginToStackCall(0,0,listOfGlobalDefinitions,listOfFunctionOutput->at(i),2);
+		for(int i =0;i<listOfGlobalDefinitions->size();i++)  cout <<" II-- "<< listOfGlobalDefinitions->at(i)->getTagName() << " " << listOfGlobalDefinitions->at(i)->getSignature()<<endl;;
 			if(listOfGlobalDefinitions->empty())
 			{
 				
@@ -299,13 +310,20 @@ void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,
 				if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
 				
 			}
+			for(int i =0;i<listOfGlobalDefinitions->size();i++)  cout <<" III-- "<< listOfGlobalDefinitions->at(i)->getTagName() << " " << listOfGlobalDefinitions->at(i)->getSignature()<<endl;;
 			if(listOfGlobalDefinitions->size()==1)
 			{
 					//we can search for the tag directly now 
 					Tag * FunctionDefinitionTag=this->myTagManager->findSpecificTag(listOfGlobalDefinitions->at(0)->getTagName(),listOfGlobalDefinitions->at(0)->getFileName(),listOfGlobalDefinitions->at(0)->getLine());
 					if(FunctionDefinitionTag==NULL) FunctionDefinitionTag=new Tag(listOfFunctionOutput->at(0)->getTagName(),string("OutOfscope"), 0, TYPE_FUNCTION);
-					if(FunctionDefinitionTag!=NULL)listOfTagToReturn->push_back(FunctionDefinitionTag);
+					
+					if(FunctionDefinitionTag!=NULL){
+						listOfTagToReturn->push_back(FunctionDefinitionTag);
+						
+						
+					}
 			}
+			for(int i =0;i<listOfGlobalDefinitions->size();i++)  cout <<" IV-- "<< listOfGlobalDefinitions->at(i)->getTagName() << " " << listOfGlobalDefinitions->at(i)->getSignature()<<endl;;
 			if(listOfGlobalDefinitions->size()>1)
 			{
 				FunctionGraph* singleDefinitionLeft=this->removeNotConcernedDefinitionBaseInLineNumer(listOfGlobalDefinitions,tagAssociatedToFunction);
@@ -1355,7 +1373,14 @@ void LauncherCscope::removeFromListWhereTagNameIsDefinition(std::vector< Functio
 	
 	for(vector<FunctionGraph*>::iterator it = listOfCallingFunction->begin(); it != listOfCallingFunction->end();){
 		assert((*it)!=NULL);
-		it = (this->myTagManager->findSpecificTag((*it)->getTagName(),(*it)->getFileName(),(*it)->getLine())==NULL) ? it+1 : listOfCallingFunction->erase(it);
+		if (this->myTagManager->findSpecificTag((*it)->getTagName(),(*it)->getFileName(),(*it)->getLine())==NULL)
+		{
+			it= it+1; 
+		}
+		else{
+			
+			listOfCallingFunction->erase(it);
+		}
 	}
 	
 }
@@ -1379,26 +1404,57 @@ std::vector<Tag*>* LauncherCscope::fullFilleWithListOftagForEachFile(std::map< s
 		{
 			myPair=*listOfTagForFile;
 		}
-		Tag* functionWhichCallsTheCurrentOutput=this->getTagByNearestPositionFromFunctionOutput(myPair.second,currentOutputFunction);
-		if(functionWhichCallsTheCurrentOutput!=NULL) listOfTagToReturn->push_back(functionWhichCallsTheCurrentOutput);
+		std::vector<Tag*>* listOfTagToconcat=this->getTagByNearestPositionFromFunctionOutput(myPair.second,currentOutputFunction);
+		listOfTagToReturn->insert(listOfTagToReturn->end(),listOfTagToconcat->begin(),listOfTagToconcat->end());
 	}
 	return listOfTagToReturn;
 }
 
 
-Tag* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction)
+std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction)
 {
-	int max=0;
-	int lineNumber=0;
-	Tag* currentTag=NULL;
-	do{
-		
-		currentTag=listOfTagInfileMatchingCurrentOutputFunction->at(max);
-		if(lineNumber<currentTag->getLineNumber()) lineNumber=currentTag->getLineNumber();
-		max++;
-	}
-	while(currentTag->getLineNumber()>lineNumber&&(currentTag->getLineNumber()<currentOutputFunction->getLine())||max<listOfTagInfileMatchingCurrentOutputFunction->size());
+	std::vector< Tag* >* listOfTagToReturn=new std::vector< Tag* >();
 	
-	return currentTag;
+	for(int i=0;i<listOfTagInfileMatchingCurrentOutputFunction->size();i++)
+	{
+		Tag * currTag=listOfTagInfileMatchingCurrentOutputFunction->at(i);
+		int lineStartTag=currTag->getLineNumber();
+		int lineStopTag=this->getLineForEndOfFunctionDefinition(currTag);
+		if(lineStartTag<currentOutputFunction->getLine()&&lineStopTag>currentOutputFunction->getLine()) listOfTagToReturn->push_back(currTag);
+		
+	}
+	return listOfTagToReturn;
 }
 
+bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction)
+{
+	cout <<"calling function "<<callingFunction->getName()<<endl;
+	cout <<"called function " <<calledFunction->getName()<<endl;
+	int lineStop=this->getLineForEndOfFunctionDefinition(callingFunction);
+	bool callf=false;
+	ifstream stream(callingFunction->getFileName().c_str());
+	if(stream!=0){
+		string currentLine;
+		int currentLineNumber=0;
+		/**
+		 * skip the n-first line beforde function definition
+		 */
+		for(unsigned int i=1;i<callingFunction->getLineNumber();i++) 
+		{
+			getline(stream,currentLine);
+		}
+		do {
+			cout <<"currentLine"<<currentLine<<endl;
+			
+			if(currentLine.find(calledFunction->getName())!=string::npos){
+				callf=true;
+				break;
+				
+			}
+			currentLineNumber++;
+		}while(getline(stream,currentLine)||currentLineNumber<lineStop);
+	}
+	cout << "CALLF --------------------> "<< callf<<endl;
+		return callf;
+
+}

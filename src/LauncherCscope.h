@@ -73,9 +73,9 @@ private :
 	unsigned int getNumberOfVariableUsedInFunctionDefinition(Tag* calledFunctionToFindCasted);
 	 void removeFromListWhereTagNameIsDefinition(std::vector< FunctionGraph* >* listOfCallingFunction);
 	 std::vector< Tag* >* fullFilleWithListOftagForEachFile(std::map< std::string, std::vector< Tag* >* >* listOfFileWithListOfTagFunctionType, std::vector<FunctionGraph* >* listOfCallingFunction);
-	 Tag* getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction);
+	 std::vector< Tag* >* getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction);
 	void fullfillListOfTagToReturn ( std::vector< Tag* >* listOfTagToReturn, std::vector< FunctionGraph* >* listOfFunctionOutput, Tag* tagAssociatedToFunction);
-	
+	bool checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction);
 	
 public :
 	
@@ -83,14 +83,11 @@ public :
 	 bool initExternalTool();
 	 bool closeExternalTool();
 	 int getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction);
-	 
 	 std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction);
 	
 	 int launchCommandExternalTool(Tag *tagAssociatedToFunction);
 	 bool getIsLaunched();
-	
-	
-	 	Tag * getTagFromFunctionGraphOutput(FunctionGraph* outputFunction);
+	 Tag * getTagFromFunctionGraphOutput(FunctionGraph* outputFunction);
 
 };
 
