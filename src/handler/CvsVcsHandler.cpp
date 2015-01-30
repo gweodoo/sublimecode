@@ -26,8 +26,8 @@ bool CvsVcsHandler::getProject () {
 
 	if(curBranch.empty()) curBranch = DEFAULT_BRANCH;
 
-	//command = "cvs -Q checkout -d "+ config->getDestDir()+"/sources_project "+address;
-	scError("Not implemented");
+	command = "cvs -Q -d "+address+ " checkout -d "+config->getDestDir()+"/sources_project "+curBranch;
+// 	std::cout << command << std::endl;
 	int ret = system(command.c_str());
 	assert(ret != -1);
 	return (WEXITSTATUS(ret) == 0);
