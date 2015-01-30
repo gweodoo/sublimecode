@@ -427,7 +427,7 @@ std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string outpu
 			newCscopeOutputLine->setTagName(newCscopeOutputLine->getSignature().substr(0,positionOfFirstBracket));
 			//setting the fileName
 			newCscopeOutputLine->setFileName(fileName);
-			cout <<" newCscopeOutputLine "<<newCscopeOutputLine->getTagName() << " sign "<< newCscopeOutputLine->getSignature() << "get line "<< newCscopeOutputLine->getLine()<<endl;
+			
 			if(this->isLanguageKey(newCscopeOutputLine->getTagName()))free(newCscopeOutputLine);
 			else listOfCscopeOutput->push_back(newCscopeOutputLine);
 		}
@@ -899,7 +899,7 @@ std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string
 	unsigned long int positionFollowingComma=0;
 	do
 	{
-		cout<<"in the do II"<<endl;
+
 			positionFollowingComma=callExpression.find(",",positionPrecedentComma+1);
 			if(positionFollowingComma==string::npos)
 			{
@@ -1113,7 +1113,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 				}
 			if(currentLine.find(" */")!=string::npos||currentLine.find("*/")!=string::npos||currentLine.find("  */")!=string::npos||currentLine.find("#endif")!=string::npos)weAreInComment=false;
 				
-			cout<<"funtionNameAlreadyread "<<functionNameAlreadyRead<< "niveau brace bracket "<< niveauBraceBracket<<endl;
+			
 			if(functionNameAlreadyRead==true&&niveauBraceBracket==0&&firstBraceBracketAlreyFound)endOfFunctionFound=true;
 			numberOfLine++;
 			
@@ -1306,7 +1306,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 		 */
 		do
 		{
-			cout<<"in the do IV"<<endl;
+			
 			getline(stream,currentLine);
 				unsigned long int namePosition=currentLine.find(calledFunctionToFindCasted->getName());
 				if(namePosition!=string::npos)
@@ -1392,7 +1392,7 @@ Tag* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std::vector< Tag*
 	int lineNumber=0;
 	Tag* currentTag=NULL;
 	do{
-		cout<<"in the do V"<<endl;
+		
 		currentTag=listOfTagInfileMatchingCurrentOutputFunction->at(max);
 		if(lineNumber<currentTag->getLineNumber()) lineNumber=currentTag->getLineNumber();
 		max++;
