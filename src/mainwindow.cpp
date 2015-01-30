@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
 	QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(Rechercher_Archive()));
 	QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
+	
+	handlerThread = new HandlerThread;
 }
 
 MainWindow::~MainWindow() {}
@@ -122,7 +124,6 @@ void MainWindow::Finish()
 	fileNameDestinationTest = ui->getLineEdit1()->text();
 
 	handler = NULL;
-	handlerThread = NULL;
 	Dialog *dialog = NULL;
 	QFileInfo fileInfoSource;
 	QFileInfo fileInfoDestination;
@@ -191,9 +192,6 @@ void MainWindow::Finish()
 			QObject::connect(handlerThread, SIGNAL(handlerChanged(bool)), this, SLOT(onHandlerChanged(bool)));
 			waitingStart();
 			handlerThread->start();
-
-			//delete handler;
-			//delete handleThread;
 			break;
 		}
 		case 2 :
@@ -221,13 +219,11 @@ void MainWindow::Finish()
 					handler = new ZipTarballHandler(config, str_source);
 					break;
 			}
-			if(handler->getProject()) {
-				config->setSourceDir(config->getDestDir()+"/sources_project");
-				dialog = new Dialog(config);
-				dialog->show();
-				this->hide();
-			} else QMessageBox::critical(this, "Project issue", "Unable to load sources project\nCheck path you provide", QMessageBox::Ok);
-			delete handler;
+			
+			handlerThread->setHandler(handler);
+			QObject::connect(handlerThread, SIGNAL(handlerChanged(bool)), this, SLOT(onHandlerChanged(bool)));
+			waitingStart();
+			handlerThread->start();
 			break;
 		}
 		default: break;
@@ -235,6 +231,9 @@ void MainWindow::Finish()
 }
 
 void MainWindow::closeEvent(QCloseEvent* e){
+	handlerThread->quit();
+	delete handler;
+	delete handlerThread;
 	delete ui;
 	QMainWindow::closeEvent(e);
 }
@@ -253,9 +252,6 @@ void MainWindow::onHandlerChanged(bool isDone)
 	} else {
 		QMessageBox::critical(this, "Project issue", "Unable to load sources project\nCheck path you provide", QMessageBox::Ok);
 	}
-	
-	delete handler;
-	delete handlerThread;
 }
 
 void MainWindow::waitingStart()

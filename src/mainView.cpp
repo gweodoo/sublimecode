@@ -62,6 +62,8 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	
 	this->show();
 	
+	cHTML = NULL;
+	cjson = new CreateJson;
 	runner = new Runner;
 	runner->initEnvironment(config, fileList);
 	QObject::connect(runner, SIGNAL(runnerChanged()), this, SLOT(onRunnerChanged()));
@@ -116,13 +118,16 @@ void MainView::generateStats()
 	ui->getWebView()->load(QUrl(statFile));
 }
 
-void MainView::closeEvent(QCloseEvent* e){
-	QMainWindow::closeEvent(e);
+void MainView::closeEvent(QCloseEvent* e) {
+	cjson->quit();
+	runner->quit();
+	delete cjson;
 	delete runner;
-	delete config;
-	delete cHTML;
+	if (cHTML != NULL)
+		delete cHTML;
 	delete ui;
- 	delete cjson;
+	delete config;
+	QMainWindow::closeEvent(e);
 }
 
 MainView::~MainView() {
@@ -143,7 +148,6 @@ void MainView::onCjsonChanged()
 void MainView::onRunnerChanged()
 {
 	cHTML = new CreateHTML(config, runner);
-	cjson = new CreateJson;
 	cjson->setRunner(runner);
 	cjson->setConfiguration(config);
 	QObject::connect(cjson, SIGNAL(cjsonChanged()), this, SLOT(onCjsonChanged()));
