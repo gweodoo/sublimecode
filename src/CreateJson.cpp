@@ -71,7 +71,7 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 	std::map<std::string, bool> myMap;
 	std::string nameValue;
 
-	int wantedIterator = 3; //The number of iteration that will be shown on the graph
+	int wantedIterator = 5; //The number of iteration that will be shown on the graph
 	
 	if (nbIterator < wantedIterator) //While the current number of iteration is under the wanted one
 	{
@@ -153,7 +153,7 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 {
 	qDebug() << tagVector->size();
 	
-	int wantedIterator = 3;
+	int wantedIterator = 5;
 	
 	if (nbIterator < wantedIterator)
 	{
