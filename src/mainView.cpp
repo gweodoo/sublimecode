@@ -28,12 +28,15 @@
 #include "ObjectTo.h"
 #include <QApplication>
 
+
+const char * const MainView::buildTypes[] = {"CalledGraph", "CallingGraph", "IncludedGraph", "InclusionGraph"};
+
 MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 {
 	ui = new Ui_MainView();
 	ui->setupUi(this);
 	ui->getCentralWidget()->show();
-	waitingStart();
+	waitingStart(); //Starts the spinner
 	
 	config = c;
 
@@ -48,7 +51,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
 	}
 	
-	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){
+	for(vector<string>::iterator it = fileList.begin(); it != fileList.end(); it++){ //Adds the file paths on the file vector
 		wordList.push_back(QString::fromStdString((*it).substr(config->getSourcesDir().size())));
 	}
 	
@@ -61,8 +64,9 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	runner = new Runner;
 	runner->initEnvironment(config, fileList);
 	QObject::connect(runner, SIGNAL(runnerChanged()), this, SLOT(onRunnerChanged()));
-	runner->start();
+	runner->start(); //Configures tags mechanism
 	
+	//Initialize the different signals
 	QObject::connect(ui->getResetButton(), SIGNAL(clicked()), this, SLOT(handleResetButton()));
 	QObject::connect(ui->getPushButton(), SIGNAL(clicked()), this, SLOT(handlePushButton()));
 	QObject::connect(ui->getRadioType(), SIGNAL(clicked(bool)), this, SLOT(handlePushRadioType())); 
@@ -126,25 +130,25 @@ void MainView::slot_linkClicked(const QUrl& url)
 		waitingStart();
 	}
 
-	if (elements.at(0) == "CalledGraph")
+	if (elements.at(0) == buildTypes[0])
 		generateGraph(elements.at(1).toInt(), elements.at(0).toStdString());
-	else if (elements.at(0) == "CallingGraph")
+	else if (elements.at(0) == buildTypes[1])
 		generateGraph(elements.at(1).toInt(), elements.at(0).toStdString());
-	else if (elements.at(0) == "IncludedGraph")
+	else if (elements.at(0) == buildTypes[2])
 		generateGraph(0, elements.at(0).toStdString());
-	else if (elements.at(0) == "InclusionGraph")
+	else if (elements.at(0) == buildTypes[3])
 		generateGraph(0, elements.at(0).toStdString());
 	else if(elements.at(0) == "Path")
 		generateHighlightFunction(elements.at(1));
 	else if (elements.at(0).contains("file"))
 	{
-		if (elements.at(1).toStdString() == "CalledGraph" || elements.at(1).toStdString() == "CallingGraph")
+		if (elements.at(1).toStdString() == buildTypes[0] || elements.at(1).toStdString() == buildTypes[1]) //If call graphs
 		{
 			researchList.push_back(cHTML->getList());
 			Tag * myTag = runner->findSpecificTag(elements.at(2).toStdString(), elements.at(3).toStdString(), elements.at(4).toInt());
 			generateGraph(myTag, elements.at(1).toStdString());
 		}
-		else if (elements.at(1).toStdString() == "IncludedGraph" || elements.at(1).toStdString() == "InclusionGraph")
+		else if (elements.at(1).toStdString() == buildTypes[2] || elements.at(1).toStdString() == buildTypes[3]) //If include graph
 		{
 			this->tag = elements.at(2).toStdString();
 			generateGraph(0, elements.at(1).toStdString());
@@ -239,16 +243,16 @@ void MainView::generateGraph(int number, std::string buildType)
 	Tag * myTag = NULL;
 	
 	researchList.push_back(cHTML->getList());
-	if (buildType == "CalledGraph" || buildType == "CallingGraph")
+	if (buildType == buildTypes[0] || buildType == buildTypes[1]) //If call graph
 		myTag = researchList.at(ui->getTabWidget()->currentIndex() -1)->at(number - 1);
 	generateGraph(myTag, buildType);
 }
 
 void MainView::generateGraph(Tag * myTag, std::string buildType)
 {
-	if (buildType == "CalledGraph" || buildType == "CallingGraph")
+	if (buildType == buildTypes[0] || buildType == buildTypes[1]) //If call graph
 		filepath = config->getDestDir() + "/" + buildType + "_" + myTag->hashFileName() + ".json";
-	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
+	else if (buildType == buildTypes[2] || buildType == buildTypes[3]) //If include graph
 		filepath = config->getDestDir() + "/" + buildType + "_" 
 		+ (QString::fromStdString(this->tag).replace("/","_")).toStdString() + ".json";
 	
@@ -256,12 +260,12 @@ void MainView::generateGraph(Tag * myTag, std::string buildType)
 
 	if(!file.exists())
 	{
-		if (buildType == "CalledGraph" || buildType == "CallingGraph")
+		if (buildType == buildTypes[0] || buildType == buildTypes[1]) //If call graph
 		{
 			cjson->setRunner(runner);
 			cjson->setCallGraphParams(myTag, filepath, buildType);
 		}
-		else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
+		else if (buildType == buildTypes[2] || buildType == buildTypes[3]) //If include graph
 		{
 			cjson->setIncludeGraphParams(config->getSourcesDir() + this->tag, filepath, buildType);
 		}

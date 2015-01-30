@@ -239,6 +239,7 @@ function update(source) {
 		update(d);
 	}
 
+	//Generate a new graph if the one of the last children of the graph also has children
 	function generateNewGraph(d) {
 		if ((ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') == "CalledGraph")
 		|| (ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') == "CallingGraph")) {
@@ -246,31 +247,29 @@ function update(source) {
 				var newGraph = document.createElement('a');
 				newGraph.href = "///" + ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') + "///" + d.name + "///" + d.infofile + "///" + d.infoline;
 				document.body.appendChild(newGraph);
-				newGraph.click();
+				newGraph.click(); //In order to send information
 			}
 		}
 		else { 
 			var newGraph = document.createElement('a');
 			newGraph.href = "///" + ObjectTo.getValue().replace(/^.*[\\\/]/, '').replace(/_(.*)/, '') + "///" + d.name;
 			document.body.appendChild(newGraph);
-			newGraph.click();
+			newGraph.click(); //In order to send information
 		}
 	}
 
 	// Set visible the tooptip div on a hover in event
 	function nodeHoverIn(d) {
 		if (d.infofile) {
-			var matrix = this.getScreenCTM();
+			var matrix = this.getScreenCTM(); //Set the tooltip position
 			tooltip.style("visibility", "visible")
 				.style("left", Math.min((window.pageXOffset + matrix.e),
 				(window.innerWidth - parseInt(window.getComputedStyle(tooltip.node())["width"]))) + "px")
 				.style("top", (window.pageYOffset + matrix.f + 10) + "px");
-			if (d.infoline)
-			{
+			if (d.infoline) {
 				tooltip.text("In the file " + d.infofile + " at line " + d.infoline);
 			}
-			else 
-			{
+			else {
 				tooltip.text(d.infofile);
 			}
 		}

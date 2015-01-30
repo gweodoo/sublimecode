@@ -48,20 +48,20 @@ void CreateJson::run()
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	
-	if (buildType == "CalledGraph" || buildType == "CallingGraph")
+	if (buildType == buildTypes[0] || buildType == buildTypes[1]) //If it is a call graph
 	{
 		buildItem(tag, &out, buildType, 0);
 	}
-	else if (buildType == "IncludedGraph" || buildType == "InclusionGraph")
+	else if (buildType == buildTypes[2] || buildType == buildTypes[3]) //If it is a include graph
 	{
 		std::map<std::string, bool> myMap;
-		myMap.insert(std::pair<string, bool>(myPath, true));
+		myMap.insert(std::pair<string, bool>(myPath, true)); //insert the first path
 		buildItem(&myMap, &out, buildType, 0);
 	}
 	
 	file.close();
 	
-	emit cjsonChanged();
+	emit cjsonChanged(); //The json file has been created
 }
 
 void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream * out, std::string buildType, int nbIterator)
@@ -71,29 +71,29 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 	std::map<std::string, bool> myMap;
 	std::string nameValue;
 
-	int wantedIterator = 3;
+	int wantedIterator = 3; //The number of iteration that will be shown on the graph
 	
-	if (nbIterator < wantedIterator)
+	if (nbIterator < wantedIterator) //While the current number of iteration is under the wanted one
 	{
 		int i = 0;
 		qDebug() << nbIterator << " : " << i ;
-		for(std::map<std::string, bool>::iterator it = mapOfFiles->begin(); it != mapOfFiles->end(); it++)
+		for(std::map<std::string, bool>::iterator it = mapOfFiles->begin(); it != mapOfFiles->end(); it++) //for each element of the map
 		{
 			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it).first);
 			
 			*out << "\n{";
 			nameValue = (*it).first;
 			
-			if ((*it).second)
+			if ((*it).second) //If we have the information on the data
 			{
 				*out << "\"name\": \"" << QString::fromStdString(nameValue.erase(0, this->config->getSourcesDir().length())) << "\"";
 			
-				if (buildType == buildTypes[2])
+				if (buildType == buildTypes[2]) //IncludedGraph
 					myMap = runner->getFilesIncludedByThisFile((*it).first);
-				else if (buildType == buildTypes[3])
+				else if (buildType == buildTypes[3]) //InclusionGraph
 					myMap = runner->getFilesIncludingThisFile((*it).first);
 				
-				if (!myMap.empty())
+				if (!myMap.empty()) //If there is no more child
 				{
 					*out << ",\"children\": [";
 					buildItem(&myMap, out, buildType, nbIterator + 1);
@@ -105,7 +105,7 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 						*out << ", \"children\": []";
 				}
 			}
-			else 
+			else //If it is not resolved
 			{
 				*out << "\"name\": \"" << QString::fromStdString(nameValue) << "\"";
 				*out << ", \"infofile\": \"Unresolved\"";
@@ -130,9 +130,9 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, std::string buildType, i
 	
 	vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
 	
-	if (buildType == buildTypes[0])
+	if (buildType == buildTypes[0]) //CalledGraph
 		listOfFunctions = runner->getFunctionsCalledByThisTag(tag);
-	else if (buildType == buildTypes[1])
+	else if (buildType == buildTypes[1]) //CallingGraph
 		listOfFunctions = runner->getFunctionsCallingThisTag(tag);
 	
 	qDebug() << listOfFunctions->size();
@@ -145,7 +145,7 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, std::string buildType, i
 	*out << "\"infofile\": \"" << QString::fromUtf8(filename.c_str()) << "\", ";
 	*out << "\"infoline\": \"" << QString::fromStdString(ss.str()) << "\", ";
 	*out << "\"children\": [";
-	buildItem(listOfFunctions, out, buildType, nbIterator + 1);
+	buildItem(listOfFunctions, out, buildType, nbIterator + 1); //Continue with the tag's children
 	*out << "]}";
 }
 
@@ -159,7 +159,7 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 	{
 		int i = 0;
 		
-		for(vector<Tag*>::iterator it = tagVector->begin(); it != tagVector->end(); it++)
+		for(vector<Tag*>::iterator it = tagVector->begin(); it != tagVector->end(); it++) //For each element of the tag vector
 		{
 			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it)->getName()) << "    " 
 			<< QString::fromStdString((*it)->getFileName());
@@ -167,9 +167,9 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 			*out << "\n{";
 			*out << "\"name\": \"" << QString::fromStdString((*it)->getName()) << "\"";
 
-			if ((*it)->getFileName() != "OutOfscope")
+			if ((*it)->getFileName() != "OutOfscope") //If it is not out of our scope and we can find where it is
 			{
-				stringstream ss;
+				stringstream ss; //Used to transfor our size_t to string
 				ss << (*it)->getLineNumber();
 				string filename = (*it)->getFileName();
 				*out << ", \"infofile\": \"" << QString::fromUtf8(filename.c_str()) << "\"";
@@ -179,28 +179,28 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 // 				{
 					vector<Tag*>* listOfFunctions = NULL;
 					
-					if (buildType == buildTypes[0]) 
+					if (buildType == buildTypes[0]) //CalledGraph
 						listOfFunctions = runner->getFunctionsCalledByThisTag(*it);
-					else if (buildType == buildTypes[1])
+					else if (buildType == buildTypes[1]) //CallingGraph
 						listOfFunctions = runner->getFunctionsCallingThisTag(*it);
 
 					assert(listOfFunctions != NULL);
-					if (!listOfFunctions->empty())
+					if (!listOfFunctions->empty()) //If it has children
 					{
 						*out << ",\"children\": [";
-						buildItem(listOfFunctions, out, buildType, nbIterator + 1);
+						buildItem(listOfFunctions, out, buildType, nbIterator + 1); //Continue
 						*out << "]";
 					}
 // 				}
 			}
-			else
+			else //If it is out of our scope
 			{
 				*out << ", \"infofile\": \"" << QString::fromStdString((*it)->getFileName()) << "\"";
 			}
 			
 			*out << "}";
 			
-			if (it+1 != tagVector->end())
+			if (it+1 != tagVector->end()) //If not the last one
 			{
 				*out << ", ";
 			}
