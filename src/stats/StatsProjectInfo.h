@@ -23,18 +23,39 @@
 #include "../Utils.h"
 #include "../Configuration.h"
 
+/**
+ * StatsProjectInfo provides global informations about project like the type
+ * (builder used), authors (if found), ...
+ */
 class StatsProjectInfo
 {
 private:
-	Configuration *config;
-	std::vector<std::string> filesTree;
-	std::map<std::string ,std::string> mapProjectInfo;
+	Configuration *config;                             ///< global configuration pointer
+	std::vector<std::string> filesTree;                ///< list of selected files
+	std::map<std::string ,std::string> mapProjectInfo; ///< map containing list of extracted data
 
+	/**
+	 * read a file depicted as "AUTHORS" one and extract each line as an author name
+	 * \param[in] filename "AUTHORS" file path
+	 * \return string to print authors
+	 */
 	std::string listOfAuthors(std::string filename);
 public:
-	StatsProjectInfo(Configuration *config);
-	void addFilesList(std::vector<std::string> filesList);
+	/**
+	 * Default constructor
+	 * \param[in] config global configuration
+	 * \param[in] filesList list of selected files
+	 */
+	StatsProjectInfo(Configuration *config, std::vector<std::string> filesList);
+	/**
+	 * Start sources tree data extraction
+	 */
 	void analyzeSourcesTree();
+	/**
+	 * return filled map by analyzeSourcesTree() function.
+	 * \warning need to be called AFTER analyzeSourcesTree() (or map will be empty)
+	 * \return the filled map
+	 */
 	std::map<std::string,std::string> getProjectInfo() const;
 };
 

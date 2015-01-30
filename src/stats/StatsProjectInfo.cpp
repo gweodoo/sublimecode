@@ -20,14 +20,8 @@
 #include <algorithm>
 using namespace std;
 
-StatsProjectInfo::StatsProjectInfo(Configuration *config){
+StatsProjectInfo::StatsProjectInfo(Configuration *config,  std::vector< std::string > filesList ) : config(config), filesTree(filesList) {
 	this->config = config;
-}
-
-void StatsProjectInfo::addFilesList ( std::vector< std::string > filesList ) {
-	this->filesTree = filesList;
-	//for(std::vector<std::string>::iterator it = filesTree.begin(); it != filesTree.end(); it++)
-	//	cout << *it << endl;
 }
 
 void StatsProjectInfo::analyzeSourcesTree() {
