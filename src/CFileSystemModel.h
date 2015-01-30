@@ -23,18 +23,53 @@
 #include <QFileSystemModel>
 #include <QSet>
 #include <QPersistentModelIndex>
+
+/**
+ * Handling sources tree to allows user the selection/deselection of paths parts
+ * haven't a native way with Qt. This class manages QDir for well displaying in Dialog.
+ */
 class CFileSystemModel : public QDirModel
 {
 public:
-    CFileSystemModel();
-    QSet<QPersistentModelIndex> checkedIndexes;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    void checkAllBoxes(QString mpath);
-    void uncheckAllBoxes(QString mpath);
-    virtual ~CFileSystemModel();
+	QSet<QPersistentModelIndex> checkedIndexes; ///< global list of selected paths
+
+	/// default constructor
+	CFileSystemModel();
+	/**
+	 * get current index state
+	 * \param[in] index current index
+	 * \param[in] role not really used here
+	 * \return Qt::checked if index is checked
+	 * \return Qt::unchecked if index is unchecked
+	 */
+	QVariant data(const QModelIndex &index, int role) const;
+	/**
+	 * change current index value data
+	 * \param[in] index current index
+	 * \param[in] value associated value
+	 * \param[in] role not really used here
+	 * \return Always true
+	 */
+	bool setData(const QModelIndex &index, const QVariant &value, int role);
+	/**
+	 * check all subpaths
+	 * \param[in] mpath path to fullcheck
+	 */
+	void checkAllBoxes(QString mpath);
+	/**
+	 * uncheck all subpaths
+	 * \param[in] mpath path to fulluncheck
+	 */
+	void uncheckAllBoxes(QString mpath);
+	///default destructor
+	virtual ~CFileSystemModel();
 private:
-    bool recursiveCheck(const QModelIndex &index, const QVariant &value);
+	/**
+	 * browse on subpaths
+	 * \param[in] index current index
+	 * \param[in] value associated value
+	 * \return True all the time
+	 */
+	bool recursiveCheck(const QModelIndex &index, const QVariant &value);
 };
 #endif // CFileSystemModel_H

@@ -25,10 +25,6 @@ CFileSystemModel::CFileSystemModel()
 {
 }
 
-Qt::ItemFlags CFileSystemModel::flags(const QModelIndex &index) const
-{
-    return QDirModel::flags(index) | Qt::ItemIsUserCheckable;
-}
 QVariant CFileSystemModel::data(const QModelIndex &index, int role) const
 {
     if(role == Qt::CheckStateRole)
