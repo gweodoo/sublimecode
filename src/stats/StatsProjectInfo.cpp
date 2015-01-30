@@ -75,10 +75,8 @@ std::string StatsProjectInfo::listOfAuthors(std::string filename){
 	ifstream file(filename.c_str());
 	std::string cur = "", result = "";
 	while(std::getline(file, cur, '\n')){
-		result += cur;
+		result += cur + "/";
 	}
-
 	return result;
-
 }
 

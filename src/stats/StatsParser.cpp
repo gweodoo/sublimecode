@@ -71,7 +71,7 @@ vector<std::pair<string, int> > StatsParser::getMostImplementedFilesPerLanguage(
 
 	for(vector<StatsFileItem*>::const_iterator it = tabFiles.begin(); it != tabFiles.end() && i < MAX; it++){
 		if((*it)->getLanguageName() == language){
-			vec.push_back(make_pair((*it)->getFileName(), (*it)->getNbCodeLines()));
+			vec.push_back(make_pair((*it)->getFileName().substr(config->getSourcesDir().size()), (*it)->getNbCodeLines()));
 			i++;
 		}
 	}
@@ -111,7 +111,7 @@ vector< pair< string, int > > StatsParser::getNbTagsPerFile() const {
 		size_t total = cur.size();
 		size_t nb = atoi(cur.substr(pos+1, total - (pos+1)).c_str());
 		string file = cur.substr(0, pos);
-		vec.push_back(std::pair<string, int>(file, (int)nb));
+		vec.push_back(std::pair<string, int>(file.substr(config->getSourcesDir().size()), (int)nb));
 		i++;
 	}
 

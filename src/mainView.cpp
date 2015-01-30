@@ -46,6 +46,7 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	xslType = QString::fromStdString(config->getRootPath()+"/transformSearchByType.xsl");
 	xslFile = QString::fromStdString(config->getRootPath()+"/transformSearchByFile.xsl");
 	xslHighlight = QString::fromStdString(config->getRootPath()+"/transformHighlightFunction.xsl");
+	statFile = QString::fromStdString(config->getRootPath()+"/statFile.html");
 	
 	for (int i=0; i<15; i++){
 		ui->gettypeSelector()->addItem(tabTypeNames[i]);
@@ -75,6 +76,44 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	QObject::connect(ui->getTabWidget(), SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int))); 
 	QObject::connect(ui->getShortcutEnter(), SIGNAL(activated()), ui->getPushButton(), SLOT(click()));
 	QObject::connect(ui->getTabWidget(), SIGNAL(currentChanged(int)), this, SLOT(changeTab(int)));
+}
+
+void MainView::generateStats()
+{
+	map_type_string map_project_info = runner->getProjectInfos();
+ 	vector_type_float vec_float_language = runner->getStatsAboutLanguages();
+  	vector_type_int vec_int_stat_file = runner->getStatsPerFile();
+	vector_type_int vec_int_language_header = runner->getStatsPerLanguage("C/C++ Header");
+	vector_type_int vec_int_language_cplus = runner->getStatsPerLanguage("C++");
+	MyJavaScriptOperations *myoperations = new MyJavaScriptOperations();
+	
+	for (map_type_string::const_iterator pos = map_project_info.begin(); pos != map_project_info.end(); pos++)
+	{
+		list_info.insert(QString::fromStdString(pos->first), QString::fromStdString(pos->second));
+	}
+	for (vector_type_float::const_iterator pos = vec_float_language.begin(); pos != vec_float_language.end(); pos++)
+	{
+		list_language.insert(QString::fromStdString(pos->first), pos->second);
+	}
+	for (vector_type_int::const_iterator pos = vec_int_stat_file.begin(); pos != vec_int_stat_file.end(); pos++)
+	{
+		list_tag.insert(QString::fromStdString(pos->first), pos->second);
+	}
+	for (vector_type_int::const_iterator pos = vec_int_language_header.begin(); pos != vec_int_language_header.end(); pos++)
+	{
+		list_header.insert(QString::fromStdString(pos->first), pos->second);
+	}
+	for (vector_type_int::const_iterator pos = vec_int_language_cplus.begin(); pos != vec_int_language_cplus.end(); pos++)
+	{
+		list_cplus.insert(QString::fromStdString(pos->first), pos->second);
+	}
+	myoperations->fillcplusList(list_cplus);
+	myoperations->fillheaderList(list_header);
+	myoperations->filllanguageList(list_language);
+	myoperations->filltagList(list_tag);
+	myoperations->fillinfoList(list_info);
+	ui->getWebView()->page()->mainFrame()->addToJavaScriptWindowObject("myoperations", myoperations);
+	ui->getWebView()->load(QUrl(statFile));
 }
 
 void MainView::closeEvent(QCloseEvent* e){
@@ -108,7 +147,7 @@ void MainView::onRunnerChanged()
 	cjson->setRunner(runner);
 	cjson->setConfiguration(config);
 	QObject::connect(cjson, SIGNAL(cjsonChanged()), this, SLOT(onCjsonChanged()));
-	
+	generateStats();
 	waitingStop();
 }
 

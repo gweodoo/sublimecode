@@ -30,6 +30,11 @@
 #include <QThread>
 #include <QCloseEvent>
 #include "CreateJson.h"
+#include "MyJavaScriptOperations.h"
+
+typedef std::vector<std::pair<std::string, float> > vector_type_float;
+typedef std::vector<std::pair<std::string, int> > vector_type_int;
+typedef std::map<std::string, std::string > map_type_string;
 
 class MainView : public QMainWindow
 {
@@ -161,6 +166,7 @@ public slots:
 	 * Stop the spinner
 	 */
 	void waitingStop();
+	void generateStats();
 	
 private:
 	Ui_MainView * ui; //The main view interface
@@ -178,11 +184,17 @@ private:
 	QString xslType; //The type xsl file path
 	QString xslFile; //The file xsl file path
 	QString xslHighlight; //The highlight xsl file path
+	QString statFile; //The stat html file path
 	CreateHTML* cHTML; //The object to create the HTML file
 	CreateJson * cjson; //The object to create the Json file
 	QWebView *webViewSearch; //The searching web view
 	Runner * runner; //The current runner
 	std::string filepath; //The file path
+	QVariantMap list_cplus;
+	QVariantMap list_header;
+	QVariantMap list_language;
+	QVariantMap list_tag;
+	QVariantMap list_info;
 };
 
 #endif // MAINVIEW_H

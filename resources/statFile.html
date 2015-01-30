@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>d3pie examples</title>
+</head>
+<body>
+
+<div id="pie"></div>
+<script src="callGraph.js"></script>
+<script src="d3pie.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<table id = "table" border='2' CELLSPACING='0' CELLPADDING='8' >
+	<thead><TH>Authors</TH><TH>Number of files</TH><TH>Project type</TH></thead>
+		<tbody>
+			<TR>
+				<TD></TD>
+				<TD></TD>
+				<TD></TD>
+			</TR>
+		</tbody>
+</table>
+
+<script>
+
+var cplus_list = myoperations.getcpluslistToJavaScript();
+var header_list = myoperations.getheaderlistToJavaScript();
+var language_list = myoperations.getlanguagelistToJavaScript();
+var tag_list = myoperations.gettaglistToJavaScript();
+var info_list = myoperations.getinfolistToJavaScript();
+
+var json_cplus = [];
+var json_header= [];
+var json_language= [];
+var json_tag= [];
+var json_info= [];
+
+readValuefromCpluslist();
+readValuefromHeaderlist();
+readValuefromLanguagelist();
+readValuefromTaglist();
+readValuefromInfolist();
+fillTable();
+
+createLanguagepie();
+createCpluspie();
+createHeaderpie();
+createTagpie();
+
+function readValuefromCpluslist(){
+	for(var filename in cplus_list){
+		json_cplus.push({label:filename, value:cplus_list[filename], color:getRandomColor()});
+	}
+}
+
+function readValuefromHeaderlist(){
+	for(var filename in header_list){
+		json_header.push({label:filename, value:header_list[filename], color:getRandomColor()});
+	}
+}
+
+function readValuefromLanguagelist(){
+	for(var filename in language_list){
+		json_language.push({label:filename, value:language_list[filename], color:getRandomColor()});
+	}
+}
+
+function readValuefromTaglist(){
+	for(var filename in tag_list){
+		json_tag.push({label:filename, value:tag_list[filename], color:getRandomColor()});
+	}
+}
+
+function readValuefromInfolist(){
+	for(var filename in info_list){
+		json_info.push({label:filename, value:info_list[filename]});
+	}
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function cplusData(){
+	return json_cplus.map(function(d){
+		return {label:d.label, value:d.value, color:d.color};});
+}
+
+function headerData(){
+	return json_header.map(function(d){
+		return {label:d.label, value:d.value, color:d.color};});
+}
+
+function languageData(){
+	return json_language.map(function(d){
+		return {label:d.label, value:d.value, color:d.color};});
+}
+
+function tagData(){
+	return json_tag.map(function(d){
+		return {label:d.label, value:d.value, color:d.color};});
+}
+
+function fillTable(){
+	var table = document.getElementById("table");
+
+	table.rows[1].cells[0].innerHTML = json_info[0].value;
+	table.rows[1].cells[1].innerHTML = json_info[1].value;	
+	table.rows[1].cells[2].innerHTML = json_info[2].value;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function createCpluspie(){
+	var pie = new d3pie("pie", {
+		data: {
+			content: cplusData()
+		},
+		tooltips: {
+    			enabled: true,
+    			type: "placeholder",
+    			string: "{label} ({value})",
+
+    			// data is an object with the three properties listed below. Just modify the properties
+    			// directly - there's no need to return anything
+    			placeholderParser: function(index, data) {
+      			data.label = "path : " + data.label;
+      			data.value = "lines : " + data.value;
+    		}
+  		},
+		size: {
+			canvasHeight: 600,
+			canvasWidth: 700,
+		},
+		labels : {
+			  outer : hideWhenLessThanPercentage = 10
+		},
+		header : {
+			  title : {
+			  	  text : "C/C++ Files",
+				  fontSize : 24,
+			          font : "open sans"
+		 		  },
+			  subtitle : {
+				  text : "10 biggest files by lines of code",
+				  color : "#999999",
+				  fontSize : 12,
+				  font : "open sans"
+				  },
+		titleSubtitlePadding : 9
+		} 
+	});
+}
+
+function createHeaderpie(){
+var pie = new d3pie("pie", {
+		data: {
+			content: headerData()
+		},
+		tooltips: {
+    			enabled: true,
+    			type: "placeholder",
+    			string: "{label} ({value})",
+
+    			// data is an object with the three properties listed below. Just modify the properties
+    			// directly - there's no need to return anything
+    			placeholderParser: function(index, data) {
+      			data.label = "path : " + data.label;
+      			data.value = "lines : " + data.value;
+    		}
+  		},
+		size: {
+			canvasHeight: 600,
+			canvasWidth: 700,
+		},
+		labels : {
+			  outer : hideWhenLessThanPercentage = 10
+		},
+		header : {
+			  title : {
+			  	  text : "Header Files",
+				  fontSize : 24,
+			          font : "open sans"
+		 		  },
+			  subtitle : {
+				  text : "10 biggest files by lines of code",
+				  color : "#999999",
+				  fontSize : 12,
+				  font : "open sans"
+				  },
+		titleSubtitlePadding : 9
+		} 
+	});
+	
+}
+
+function createLanguagepie(){
+var pie = new d3pie("pie", {
+		data: {
+			content: languageData()
+		},
+		tooltips: {
+    			enabled: true,
+    			type: "placeholder",
+    			string: "{label} ({value})",
+
+    			// data is an object with the three properties listed below. Just modify the properties
+    			// directly - there's no need to return anything
+    			placeholderParser: function(index, data) {
+      			data.label = "language : " + data.label;
+      			data.value = "lines : " + data.value;
+    		}
+  		},
+		size: {
+			canvasHeight: 600,
+			canvasWidth: 700,
+		},
+		labels : {
+			  outer : hideWhenLessThanPercentage = 10
+		},
+		header : {
+			  title : {
+			  	  text : "Programming Languages",
+				  fontSize : 24,
+			          font : "open sans"
+		 		  },
+			  subtitle : {
+				  text : "10 most used languages",
+				  color : "#999999",
+				  fontSize : 12,
+				  font : "open sans"
+				  },
+		titleSubtitlePadding : 9
+		} 
+	});
+	
+}
+
+function createTagpie(){
+var pie = new d3pie("pie", {
+		data: {
+			content: tagData()
+		},
+		tooltips: {
+    			enabled: true,
+    			type: "placeholder",
+    			string: "{label} ({value})",
+
+    			// data is an object with the three properties listed below. Just modify the properties
+    			// directly - there's no need to return anything
+    			placeholderParser: function(index, data) {
+      			data.label = "path : " + data.label;
+      			data.value = "tags : " + data.value;
+    		}
+  		},
+		size: {
+			canvasHeight: 600,
+			canvasWidth: 700,
+		},
+		labels : {
+			  outer : hideWhenLessThanPercentage = 10
+		},
+		header : {
+			  title : {
+			  	  text : "Tag By Files",
+				  fontSize : 24,
+			          font : "open sans"
+		 		  },
+			  subtitle : {
+				  text : "10 biggest files by number of tags",
+				  color : "#999999",
+				  fontSize : 12,
+				  font : "open sans"
+				  },
+		titleSubtitlePadding : 9
+		} 
+	});
+	
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+</script>
+</body>
+</html>
