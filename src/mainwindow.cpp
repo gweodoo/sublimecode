@@ -207,7 +207,6 @@ void MainWindow::Finish()
 			const char *convert_source = fileInfoSource.canonicalFilePath().toUtf8().constData();
 			std::string str_source(convert_source);
 			config = new Configuration(str_source, str_dest);
-			cout << str_source << endl;
 			switch(currentArchive){
 				case 0 :
 					handler = new Tarbz2TarballHandler(config, str_source);

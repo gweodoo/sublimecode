@@ -43,7 +43,6 @@ CreateJson::~CreateJson()
 
 void CreateJson::run()
 {
-	cout << myPath << endl;
 	QFile file(QString::fromUtf8(filepath.c_str()));
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
@@ -66,8 +65,6 @@ void CreateJson::run()
 
 void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream * out, std::string buildType, int nbIterator)
 {
-	qDebug() << mapOfFiles->size();
-	
 	std::map<std::string, bool> myMap;
 	std::string nameValue;
 
