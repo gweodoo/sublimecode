@@ -121,21 +121,23 @@ public slots:
 	/**
 	 * Creates a new searching tab
 	 * \param[in] html The html that will be shown on the webview
+	 * \param[in] text text to display in tab
 	 */
-	void createNewSearchTab(QString html);
+	void createNewSearchTab( QString html, string text );
 	
 	/**
 	 * Creates a new hightlighting tab
 	 * \param[in] html The html that will be shown on the webview
+	 * \param[in] text text to display in tab
 	 */
-	void createNewHighlightTab(QString html);
+	void createNewHighlightTab(QString html,string text);
 	
 	/**
 	 * Creates a new graph tab
 	 * \param[in] html The html that will be shown on the webview
 	 * \param[in] filename The json file
 	 */
-	void createNewGraphTab(QUrl html, std::string filename);
+	void createNewGraphTab( QUrl html, string filepath, string text );
 	
 	/**
 	 * Creates the HTML file
@@ -197,6 +199,7 @@ private:
 	QWebView *webViewSearch;                       ///< The searching web view
 	Runner * runner;                               ///< The current runner
 	std::string filepath;                          ///< The file path
+	std::string display;                           ///< next displaying chain to insert in tab
 	QVariantMap list_cplus;                        ///< stats list
 	QVariantMap list_header;                       ///< stats list
 	QVariantMap list_language;                     ///< stats list

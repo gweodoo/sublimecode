@@ -140,7 +140,8 @@ QWebView *MainView::pageActuelle()
 
 void MainView::onCjsonChanged()
 {
-	createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath);
+
+	createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath, display);
 	
 	waitingStop();
 }
@@ -221,6 +222,7 @@ void MainView::handlePushButton()
 	this->tag = ui->getLineEdit()->text().toStdString();
 	QString html;
 	QString xmlFile;
+	string display;
 		
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
@@ -229,6 +231,7 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByTags(tag);
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslTag);
+		display="Search : "+tag;
 	}
 	else if (ui->getRadioType()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
@@ -237,7 +240,8 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByType(ui->gettypeSelector()->currentIndex());
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslType);ui->getWaitingMovie()->stop();
-	ui->getWaitingLabel()->setVisible(false);
+		ui->getWaitingLabel()->setVisible(false);
+		display="Search : "+string(tabTypeNames[ui->gettypeSelector()->currentIndex()]);
 	}
 	else if(ui->getRadioFile()->isChecked()){
 		QString filename_modified = QString::fromStdString(tag);
@@ -248,9 +252,10 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByFile(tag);
 		}
 		html = cHTML->TransformToHTML(xmlFile , xslFile);
+		display = "Search : "+tag;
 	}
 	researchList.push_back(cHTML->getList());
-	createNewSearchTab(html);
+	createNewSearchTab(html, display);
 }
 
 
@@ -293,12 +298,16 @@ void MainView::generateGraph(int number, std::string buildType)
 
 void MainView::generateGraph(Tag * myTag, std::string buildType)
 {
-	if (buildType == buildTypes[0] || buildType == buildTypes[1]) //If call graph
+	display = "";
+	if (buildType == buildTypes[0] || buildType == buildTypes[1]){ //If call graph
+		display = "Graph : " + myTag->getName()+"()";
 		filepath = config->getDestDir() + "/" + buildType + "_" + myTag->hashFileName() + ".json";
-	else if (buildType == buildTypes[2] || buildType == buildTypes[3]) //If include graph
-		filepath = config->getDestDir() + "/" + buildType + "_" 
+	}
+	else if (buildType == buildTypes[2] || buildType == buildTypes[3]){ //If include graph
+		display = "Graph : " + tag;
+		filepath = config->getDestDir() + "/" + buildType + "_"
 		+ (QString::fromStdString(this->tag).replace("/","_")).toStdString() + ".json";
-	
+	}
 	QFile file(QString::fromUtf8(filepath.c_str()));
 
 	if(!file.exists())
@@ -316,7 +325,12 @@ void MainView::generateGraph(Tag * myTag, std::string buildType)
 	}
 	else
 	{
-		createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath);
+		if (buildType == buildTypes[0] || buildType == buildTypes[1]) //If call graph
+			display = "Graph : " + myTag->getName()+"()";
+		else if (buildType == buildTypes[2] || buildType == buildTypes[3]) //If include graph
+			display = "Graph : " + filepath;
+
+		createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath, display);
 		
 		waitingStop();
 	}
@@ -335,16 +349,16 @@ void MainView::generateHighlightFunction(QString number)
 	if(ext!="js"){
 		cHTML->createListHighlightFunction(researchList.at(ui->getTabWidget()->currentIndex())->at(number.toInt() - 1));
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
-		createNewHighlightTab(html);
+		createNewHighlightTab(html, "Highlight");
 	}
 	else {
 		QMessageBox::information(this, "Warning", "Unsupported file format");
 	}
 }
 
-void MainView::createNewSearchTab(QString html)
+void MainView::createNewSearchTab(QString html, string text)
 {
-	ui->getTabWidget()->addTab(new QWebView, "Search");
+	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
 	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
 	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
  	QWebView *webView = qobject_cast<QWebView *>(w);
@@ -355,9 +369,9 @@ void MainView::createNewSearchTab(QString html)
 }
 
 
-void MainView::createNewHighlightTab(QString html)
+void MainView::createNewHighlightTab(QString html, string text)
 {
-	ui->getTabWidget()->addTab(new QWebView, "Highlight");
+	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
 	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
 	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
  	QWebView *webView = qobject_cast<QWebView *>(w);
@@ -387,9 +401,9 @@ QString MainView::readFile (const QString& filename)
     return "";
 }
 
-void MainView::createNewGraphTab(QUrl html, string filepath)
+void MainView::createNewGraphTab(QUrl html, string filepath, string text)
 {
-	ui->getTabWidget()->addTab(new QWebView, "Graph");
+	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
 	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
 	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
 	QWebView *webView = qobject_cast<QWebView *>(w);

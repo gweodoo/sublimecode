@@ -115,7 +115,6 @@ void CreateHTML::createXMLSearchByTags(string tag)
 		QTextStream stream(&file);
 		stream << document.toString();
 		file.close();
-		qDebug() << "Done";
 	}
 }
 
@@ -170,7 +169,6 @@ void CreateHTML::createXMLSearchByType(int type)
 		QTextStream stream(&file);
 		stream << document.toString();
 		file.close();
-		qDebug() << "Done";
 	}
 }
 
@@ -225,7 +223,6 @@ void CreateHTML::createXMLSearchByFile(string filename)
 		QTextStream stream(&file);
 		stream << document.toString();
 		file.close();
-		qDebug() << "Done";
 	}
 }
 

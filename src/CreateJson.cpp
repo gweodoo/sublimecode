@@ -75,11 +75,11 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 	
 	if (nbIterator < wantedIterator) //While the current number of iteration is under the wanted one
 	{
-		int i = 0;
-		qDebug() << nbIterator << " : " << i ;
+		size_t i = 0;
+// 		qDebug() << nbIterator << " : " << i ;
 		for(std::map<std::string, bool>::iterator it = mapOfFiles->begin(); it != mapOfFiles->end(); it++) //for each element of the map
 		{
-			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it).first);
+// 			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it).first);
 			
 			*out << "\n{";
 			nameValue = (*it).first;
@@ -126,7 +126,7 @@ void CreateJson::buildItem(std::map<std::string, bool> * mapOfFiles, QTextStream
 void CreateJson::buildItem(Tag* tag, QTextStream * out, std::string buildType, int nbIterator)
 {
 
-	qDebug() << nbIterator << " : 0    " << QString::fromStdString(tag->getName()) << "    " << QString::fromStdString(tag->getFileName());
+// 	qDebug() << nbIterator << " : 0    " << QString::fromStdString(tag->getName()) << "    " << QString::fromStdString(tag->getFileName());
 	
 	vector<Tag*>* listOfFunctions = new std::vector<Tag*>();
 	
@@ -134,8 +134,6 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, std::string buildType, i
 		listOfFunctions = runner->getFunctionsCalledByThisTag(tag);
 	else if (buildType == buildTypes[1]) //CallingGraph
 		listOfFunctions = runner->getFunctionsCallingThisTag(tag);
-	
-	qDebug() << listOfFunctions->size();
 	
 	*out << "\n{";
 	*out << "\"name\": \"" << QString::fromStdString(tag->getName()) << "\", " ;
@@ -151,8 +149,6 @@ void CreateJson::buildItem(Tag* tag, QTextStream * out, std::string buildType, i
 
 void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std::string buildType, int nbIterator)
 {
-	qDebug() << tagVector->size();
-	
 	int wantedIterator = 3;
 	
 	if (nbIterator < wantedIterator)
@@ -161,8 +157,8 @@ void CreateJson::buildItem(std::vector<Tag*> * tagVector, QTextStream * out, std
 		
 		for(vector<Tag*>::iterator it = tagVector->begin(); it != tagVector->end(); it++) //For each element of the tag vector
 		{
-			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it)->getName()) << "    " 
-			<< QString::fromStdString((*it)->getFileName());
+// 			qDebug() << nbIterator << " : " << i << "    " << QString::fromStdString((*it)->getName()) << "    "
+// 			<< QString::fromStdString((*it)->getFileName());
 			
 			*out << "\n{";
 			*out << "\"name\": \"" << QString::fromStdString((*it)->getName()) << "\"";

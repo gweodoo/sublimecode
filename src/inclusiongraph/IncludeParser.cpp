@@ -135,8 +135,8 @@ string IncludeParser::getIncludedResult ( string path ) const {
 			result.append(buf);
 		}
 	}
-	cout << "command = " << command << endl;
-	cout << "result = " << result << endl;
+// 	cout << "command = " << command << endl;
+// 	cout << "result = " << result << endl;
 	return result;
 }
 
