@@ -61,6 +61,12 @@ public:
 	 * \param[in] mpath path to fulluncheck
 	 */
 	void uncheckAllBoxes(QString mpath);
+	/**
+	 * check item validity : checkable or not
+	 * \param[in] index the index to check
+	 * \return a Qt element used by library
+	 */
+	Qt::ItemFlags flags(const QModelIndex &index) const;
 	///default destructor
 	virtual ~CFileSystemModel();
 private:
