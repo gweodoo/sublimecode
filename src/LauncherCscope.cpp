@@ -44,10 +44,6 @@ LauncherCscope::LauncherCscope(Configuration* myconfiguration,TagsManager*myTagM
 	
 }
 
-/**
- * init Cscope as an external tool
- * @return true once initialized correctly
- */
 bool LauncherCscope::initExternalTool(){
 	
 	
@@ -91,10 +87,7 @@ bool LauncherCscope::initExternalTool(){
 	}
 	return returnParam;
 }
-/**
- * erase all the cscope files in the working directory
- * @return returnParam
- */
+
 bool LauncherCscope::closeExternalTool()
 {
 	bool returnParam=false;
@@ -103,15 +96,6 @@ bool LauncherCscope::closeExternalTool()
 	return returnParam;
 	
 }
-
-/**
- * launch the external tool with the given command and parameter
- * the id of the command does not match the id given in the manual
- * @param[in] command the number corresponding to the executed command
- * @param[in] tagAssociatedToFunction the tag on which the search is done
- * @return  a list of Tag for the view
- * 
- */
 
 vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)
 {
@@ -250,6 +234,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 	listOfTagToReturn->erase(unique(listOfTagToReturn->begin(),listOfTagToReturn->end()),listOfTagToReturn->end());
 	return listOfTagToReturn;
 }
+
 void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,vector<FunctionGraph*>* listOfFunctionOutput,Tag * tagAssociatedToFunction)
 {
 	
@@ -310,11 +295,7 @@ void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,
 		}
 	}
 }
-/**
- * calculate the length of the function passed in the tag
- * @param[in] tagAssociatedToFunction the taf on which the search is done
- * @return the length in line unit
- */
+
 int LauncherCscope::launchCommandExternalTool(Tag * tagAssociatedToFunction)
 {
 
@@ -338,12 +319,7 @@ bool LauncherCscope::getIsLaunched()
 }
 
 
-/**
- * parse the output from a cscope command
- * and return a vector of Function Graph Object (functionName-fileName-call's line- signature)
- * @param[in] output the cscope's output to parse
- * @return a vector of FunctionGraph object containing the parsed cscope output
- */
+
 std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string output)
 {
 	vector<FunctionGraph*>* listOfCscopeOutput=new vector<FunctionGraph*>();
@@ -380,9 +356,7 @@ std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string outp
 	}
 	return listOfCscopeOutput;
 }
-/**
- * 
- */
+
 std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string output,std::string fileName,int arg)
 {
 	
@@ -433,11 +407,7 @@ std::vector<FunctionGraph*>* LauncherCscope::egrepOutputParser(std::string outpu
 	}
 	return listOfCscopeOutput;
 }
-/**
- * function which returns a tag corresponding to the functionGraph 
- * @param[in] outputFunction corresponds to a line from cscope output , on which one we do tasks
- * @return the tag matching the cscope output line
- */
+
 Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunction)
 {
 
@@ -514,11 +484,7 @@ Tag  *LauncherCscope::getTagFromFunctionGraphOutput(FunctionGraph* outputFunctio
 	return NULL;
 }
  
-/**
- * function which makes the system calls in order to execute cscope
- * @param[in] command the number crreponsding to the command to execute, argument need by cscope
- * @param[in] command the argument describing the name need by cscope
- */
+
 std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 {
 	if(!this->isLaunched) this->initExternalTool();
@@ -569,14 +535,7 @@ std::string LauncherCscope::launchExternalTool(int command, std::string arg)
 		}
 	return result;
 }
-/*
- * step - 1
- * first step to get the right function definition for the calledFunction from CScope
- * get the global definitions found by Cscope
- * 
- * @param[in] nameOfFunction the name of the function to search the right definition on
- * @return list of definition found by cscope after being parsed
- */
+
 std::vector<FunctionGraph*>* LauncherCscope::getGlobalDefinitionsFrom(std::string nameOfFunction)
 {
 	vector<FunctionGraph*>* outputglobalDefinition=new vector<FunctionGraph*>();
@@ -585,12 +544,7 @@ std::vector<FunctionGraph*>* LauncherCscope::getGlobalDefinitionsFrom(std::strin
 	return outputglobalDefinition;
 }
 
-/**
- * step - 2
- * second step remove from the list the definition which are not function definitions and which are #define aliases
- * @param[in] listOfGlobalDefinitions the list of definitions on which we remove the not function output given by cscope
- * 
- */
+
 void LauncherCscope::removeNotFunctionOutput(std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {
 	if(listOfGlobalDefinitions!=NULL)
@@ -607,15 +561,7 @@ void LauncherCscope::removeNotFunctionOutput(std::vector<FunctionGraph*>* listOf
 		}
 	}
 }
-/**
- * step - 3
- * third step will look at the number of Argument and its type for each function graph
- * return a vector of vector. the vector contains the type of argument and a vector containing all the vector of type 
- * after this step we have two differents object: vector<FunctionGraph*>* containing the global definitions of the called function
- *						: vector<std::vector<std::string>*>* containing the list of argument type for each FunctionGraph
- * @param[in] listOfGlobalDefinitions the lift of definition to treat
- * @return a vector of vector containing the type of argument for each definition
- */
+
 std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTypeForFunction(std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {	
 	vector<vector<string>*>* listOfArgumentAndType=new vector<vector<string>*>();
@@ -698,13 +644,7 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 
 	return listOfArgumentAndType;
 }
-/**
- * exemple  (const char *) -> (constchar*)
- * function here to parse a string composed af an argument and its type 
- * return the type only
- * @param[in] argumentAndTypeToParse the string to parse in order to get the type of argument
- * @return the type of the argument
- */
+
 std::string LauncherCscope::getArgumentType(std::string  argumentAndTypeToParse)
 {
 	string NameOfArgument;
@@ -736,11 +676,7 @@ std::string LauncherCscope::getArgumentType(std::string  argumentAndTypeToParse)
 	typeOfArgument=(this->removeSpaceFromString(stringOfArgumentToParse));
 	return typeOfArgument;
 }
-/**
- * check if the char is a valid one it means between a-zA-Z0-9
- * @param[in] caracterToTest the char to check
- * @return the boolean 
- */
+
 bool LauncherCscope::isValidCaracter(char& caracterToTest)
 {
 	int asciValue=(int)caracterToTest;
@@ -748,11 +684,7 @@ bool LauncherCscope::isValidCaracter(char& caracterToTest)
 	else return false;
 }
 
-/**
- *in the case where we have the same definition for a function ( com from .h and .c  )
- * @param[in] listOfTypes vector of vector containing the list of type for each definition
- * @param[in] listOfGlobalDefinitions list of definitions to sort 
- */
+
 void LauncherCscope::removeMatchesFromHAndC(std::vector<std::vector<std::string>*>* listOfTypes,std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {	/**
 	 * we iterate on the global definition vector
@@ -808,23 +740,14 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<std::vector<std::string>
 		}
 	}
 }
-/**
- * remove all space from a string
- * @param[in] stringToParse the string to remove the space from
- * @return the string whithout space
- */
+
 std::string LauncherCscope::removeSpaceFromString(std::string stringToParse)
 {
 	string t ="";
 	if(!stringToParse.empty())for(unsigned int i=0;i<stringToParse.length();i++)if(stringToParse.at(i)!=' ')t.push_back(stringToParse.at(i));
 	return t;
 }
-/**
- * returns the list of variable's type for on function called
- * ["ml","md"] ----> ["int","void *"]
- * @param[in] calledFunctionToFind cscope's output's line to search the variable in
- * @return a vector of string containing all the type of variables
- */
+
 std::vector<std::string>* LauncherCscope::getTypeForVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind)
 {
 	int positionOfFunctionName=calledFunctionToFind->getSignature().find(calledFunctionToFind->getTagName());
@@ -833,11 +756,7 @@ std::vector<std::string>* LauncherCscope::getTypeForVariableUsedInFunctionCall(F
 	return variablesNames;
 	
 }
-/**
- * return the number of variable used for the function call
- * @param[in] calledFunctionToFind cscope's output's line to search the variable in
- * @return the size of the list of variables
- */
+
 int LauncherCscope::getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledFunctionToFind)
 {
 	int number=0;	
@@ -846,12 +765,7 @@ int LauncherCscope::getNumberOfVariableUsedInFunctionCall(FunctionGraph* calledF
 	delete variablesNames;
 	return number;
 }
-/**
- * returns the list of variable's name for on function called
- * example libvlc_media_list_add_media( ml, md) ----> ["ml","md"]
- * @param[in] callExpression the call expression to parse
- * @return vector of string corresponding to the name of each param in the call
- */
+
 std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string callExpression)
 {
 	bool endreached=false;
@@ -879,14 +793,6 @@ std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string
 	
 }
 
-/**
- * remove the not matchings definition of a function towards the number of argument
- * if in the the list we have myFunction(var_1,var_2,var_3)
- * 			      myFunction(var_1,var_2)
- * 	and the number of argument is 2 we remove the first one
- * @param[in] calledFunctionToFind cscope's output's line to compare with
- * @param[in] listOfGlobalDefinitions the list of cscope's ouput to sort 
- */
 void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind,vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions,int arg)
 {
 	if(arg==2)
@@ -909,11 +815,7 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 		}
 	}
 }
-/**
- * 
- * 
- * 
- * */
+
 std::vector<FunctionGraph*>* LauncherCscope::getFunctionNotMacthingOnArgumentNumber(void* calledFunctionToFind,std::vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions,int arg)
 {
 	vector<FunctionGraph*>* newListOfGlobalDefinition=new vector<FunctionGraph*>();
@@ -934,12 +836,7 @@ std::vector<FunctionGraph*>* LauncherCscope::getFunctionNotMacthingOnArgumentNum
 	}
 	return newListOfGlobalDefinition;
 }
-/**
- * return the line for the end of function definition
- * to the associated Tag
- * @param[in] tagAssociatedToFunction the function to make the search on
- * @return the number of the line for definition's end
- */
+
 int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFunction)
 {
 	
@@ -1077,13 +974,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 	}	
 	 return numberOfEndLine;
 }
-/**
- * this function removes from the function called which do not belong to the function 
- * @param[in] lineStart the line where the function definition starts
- * @param[in] lineStop the line where the function definition stops
- * @param[in] listOfFunctionCalled the list of function definition to sort
- * @param[in] listOfFunctionCalled function definition to compare with
- */
+
 void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,int lineStop, vector<FunctionGraph*>* listOfFunctionCalled,void * functionAssociatedToTag,int argForSensOfUse)
 {
 			if( argForSensOfUse==1)
@@ -1126,11 +1017,6 @@ void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,
 				}
 			}	
 }
-/**
- * remove the .h function definition from the function called list
- * @param[in] listOfGlobalDefinitions list of function definition to sort
- * 
- */
 void LauncherCscope::removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {
 	for(vector<FunctionGraph*>::iterator it = listOfGlobalDefinitions->begin(); it != listOfGlobalDefinitions->end();){
@@ -1145,11 +1031,7 @@ void LauncherCscope::removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfG
 		}
 	}
 }
-/**
- * removes not matching function definition based on file Name et function line
- * @param[in] listOfGlobalDefinitions list of function definition to sort
- * @param[in] fileName the fine Name to compare with
- */
+
 void LauncherCscope::removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions, std::string  fileName)
 {
 	
@@ -1164,13 +1046,6 @@ void LauncherCscope::removeNotConcernedDefinitionBasedOnFileName(std::vector< Fu
 	}
 }
 
-/**
- * removes not matching function definition base on line number
- * in case ov several definition with the same name of function , we take the neareast definition
- * @param[in] listOfGlobalDefinitions list of definitions to sort
- * @param[in] tagAssociatedToFunction the tag to compare with
- * @return the matching function definition
- */
 FunctionGraph* LauncherCscope::removeNotConcernedDefinitionBaseInLineNumer(std::vector< FunctionGraph* >* listOfGlobalDefinitions, Tag* tagAssociatedToFunction)
 {
 
@@ -1195,13 +1070,7 @@ FunctionGraph* LauncherCscope::removeNotConcernedDefinitionBaseInLineNumer(std::
 	 return funcToReturn;
 }
 
-/**
- * utility function which checks if the string pass as an argument belongs to the language syntax
- * with the regex pattern we get [a-zA-Z0-9_]* *\\(.*\\)\" pattern
- * so we canget not wanted output as for(argumentExample) instead of myFunction1() , myFunction2() ...
- * @param[in] nameOfSymbolFound the string to check
- * @return the check result as a boolean
- **/
+
 bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 {
 	bool isLanguageKey=false;
@@ -1217,11 +1086,7 @@ bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 	return isLanguageKey;
 }
 
-/**
- * this function search and calculated the number of argument for a function in its definition
- * it's used generally by the launcCommandExternalTool arg 1 when we search for functions called list with egrep
- * @param[in] calledFunctionToFindCasted 
- */
+
 unsigned int LauncherCscope::getNumberOfVariableUsedInFunctionDefinition(Tag* calledFunctionToFindCasted)
 {
 ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
@@ -1286,14 +1151,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 	return numberOfVariable;
 	
 }
-/**
- * utility function needed for creating the calling graph
- * it's used in the calling graph launchCommandExternalTool arg 2
- * after having  made an egrep on the searched tag 
- * we  remove from the output list (listOfCallingFunction) the name of matching a definition
- * @param[in] listOfCallingFunction the list of calling function to sort
- * 
- */
+
 void LauncherCscope::removeFromListWhereTagNameIsDefinition(std::vector< FunctionGraph* >* listOfCallingFunction)
 {
 	for(vector<FunctionGraph*>::iterator it = listOfCallingFunction->begin(); it != listOfCallingFunction->end();){
@@ -1303,18 +1161,7 @@ void LauncherCscope::removeFromListWhereTagNameIsDefinition(std::vector< Functio
 	}
 	
 }
-/**
- * utility function needed in the calling graph
- * searching for the calling functions of a tag
- * we've get the list of each places ( so each files ) where the tag is called
- * for each files we get the the list of tag decalred in it
- * then with this list we'll look for the nearest position of each tag to find the good one
- * we store it as a map < key:nameOfFile , value:list of Tags in it >
- * @param[in] listOfFileWithListOfTagFunctionType the list of tag for each file
- * @param[in]  listOfCallingFunction the list of every calls of the searched tag
- * @return the list of caling Tag for every output
- * 
- * */
+
 std::vector<Tag*>* LauncherCscope::fullFilleWithListOftagForEachFile(std::map< string, std::vector< Tag* >* >* listOfFileWithListOfTagFunctionType,std::vector< FunctionGraph* >*listOfCallingFunction )
 {
 	std::vector<Tag*>* listOfTagToReturn=new std::vector<Tag*>();
@@ -1340,15 +1187,6 @@ std::vector<Tag*>* LauncherCscope::fullFilleWithListOftagForEachFile(std::map< s
 	}
 	return listOfTagToReturn;
 }
-/**
- * utility function used in calling graph function
- * we have the called function and the files where it's called
- * for each file where it appears we look for the tag for whom the definition start  is the nearest of the  called function
- * the neareast tag found is the callinf function
- * @param[in] listOfTagInfileMatchingCurrentOutputFunction the list of tag which might call the tag
- * @param[in] currentOutputFunction the output which contains the call of the tag (called one as it appears) which the parents are looked for 
- * @return list of the calling tags
- * */
 
 std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction)
 {
@@ -1364,15 +1202,7 @@ std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std
 	}
 	return listOfTagToReturn;
 }
-/**
- * utility function needed in calling graph function
- * used in the case we do not use cscope in order to get the list of parent
- * we find the calling function ( as a tag ) in its file
- * and we are , line by line , looking for a call of the called function
- * @param[in] callingFunction function which might call the child ( called function )
- * @param[in] calledFunction function whom parents are searched
- * @return true if the function is truly one of the parent
- */
+
 bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction)
 {
 	
@@ -1401,12 +1231,7 @@ bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunctio
 	}
 		return callf;
 }
-/**
- * remove the tags which are the same than the parents one
- * @param[in] listOfTagToReturn the child list
- * @param[in] tagAssociatedToFunction the parent
- * 
- */
+
 void LauncherCscope::removeSameTagForCalling(std::vector< Tag* >* listOfTagToReturn, Tag* tagAssociatedToFunction)
 {
 	for(vector<Tag*>::iterator it = listOfTagToReturn->begin(); it != listOfTagToReturn->end();){
