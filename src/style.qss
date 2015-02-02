@@ -46,3 +46,32 @@ QGroupBox::title
 {
 	border: none;
 }
+
+#legendRadio0::indicator, #legendRadio1::indicator, #legendRadio2::indicator, #legendRadio3::indicator
+{
+	border: 1px solid lightsteelblue;
+	border-radius: 6px;
+	width: 12px;
+	height: 12px;
+}
+
+
+#legendRadio0::indicator
+{
+	background-color: lightsteelblue;
+}
+
+#legendRadio1::indicator
+{
+	background-color: #fff;
+}
+
+#legendRadio2::indicator
+{
+	background-color: #bf9;
+}
+
+#legendRadio3::indicator
+{
+	background-color: #fdd;
+}

@@ -109,6 +109,12 @@ public slots:
 	void generateHighlightFunction(QString number);
 	
 	/**
+	 * On changing tab
+	 * \param[in] index The tab index
+	 */
+	void changeTab(int index);
+	
+	/**
 	 * Close a tab
 	 * \param[in] index The tab index
 	 */
@@ -181,17 +187,29 @@ public slots:
 	 * Stop the spinner
 	 */
 	void waitingStop();
+	
 	/**
 	 * stats generator call
 	 */
 	void generateStats();
 	
+	/**
+	 * Set the current filename searched
+	 */
+	void setCurrentFileSearched();
+	
+	/**
+	 * Remove from vector the filename searched of the tab
+	 * \param[in] index The index of the closed tab
+	 */
+	void removeFileSearched(int index);
+	
 private:
 	Ui_MainView * ui;                              ///< The main view interface
 	Configuration *config;                         ///< The current configuration
-	std::vector<std::string> allfileList;          ///< The file list that we want to analyze
 	std::vector<std::vector<Tag *>*> researchList; ///< The tab list
 	std::string tag;                               ///< The current tag
+	std::vector<std::string> *fileSearchedVector;   ///< The vector of filenames searched
 	QStringList wordList;                          ///< The list of words for the word completer
 	std::string pathToAnalyse;                     ///< The path that we want to analyze
 	std::string relativePathToAnalyse;             ///< The relative path that we want to analyze

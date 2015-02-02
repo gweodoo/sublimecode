@@ -48,6 +48,7 @@ QT_BEGIN_NAMESPACE
 class Ui_MainView
 {
 public:
+	static const char * const legendLabels[];
 	///default destructor
 	~Ui_MainView();    
 	/**
@@ -125,6 +126,7 @@ public:
 	 * \return class member as pointer
 	 */
 	QMovie *getWaitingMovie();
+	QGroupBox *getLegendGroupBox();
     
 private:
 	QComboBox *typeSelector;                   ///< tag type selector
@@ -133,6 +135,7 @@ private:
 	QGroupBox *tagGroupBox;                    ///< tag search group box
 	QGroupBox *projectGroupBox;                ///< open new project group box
 	QPushButton *pushButton;                   ///< search button
+	QGroupBox *legendGroupBox;
 	QPushButton *resetButton;                  ///< open new project button
 	QLineEdit *lineEdit;                       ///< get tag line edit
 	QWidget *rightWidget;                      ///< right widget
@@ -146,6 +149,10 @@ private:
 	int height;                                ///< window height
 	QLabel *waitingLabel;                      ///< waiting spinner label
 	QMovie *waitingMovie;                      ///< waiting spinner movie 
+	QRadioButton *legendRadio0;
+	QRadioButton *legendRadio1;
+	QRadioButton *legendRadio2;
+	QRadioButton *legendRadio3;
 };
 
 QT_END_NAMESPACE

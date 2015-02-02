@@ -60,6 +60,8 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 		ui->gettypeSelector()->setVisible(true);
 	}
 	
+	fileSearchedVector = new std::vector<std::string>();
+	
 	this->show();
 	
 	cHTML = NULL;
@@ -125,6 +127,7 @@ void MainView::closeEvent(QCloseEvent* e) {
 	delete runner;
 	if (cHTML != NULL)
 		delete cHTML;
+	delete fileSearchedVector;
 	delete ui;
 	delete config;
 	QMainWindow::closeEvent(e);
@@ -140,7 +143,6 @@ QWebView *MainView::pageActuelle()
 
 void MainView::onCjsonChanged()
 {
-
 	createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath, display);
 	
 	waitingStop();
@@ -156,9 +158,18 @@ void MainView::onRunnerChanged()
 	waitingStop();
 }
 
+void MainView::changeTab(int index) 
+{
+	if (ui->getTabWidget()->tabText(index).contains("Graph")) //A modifier
+		ui->getLegendGroupBox()->setVisible(true);
+	else 
+		ui->getLegendGroupBox()->setVisible(false);
+}
+
 void MainView::closeTab(int index)
 {
 	if (index !=0){
+		removeFileSearched(index);
 		ui->getTabWidget()->removeTab(index);
 		researchList.erase(researchList.begin() + index - 1);
 	}
@@ -174,14 +185,12 @@ void MainView::slot_linkClicked(const QUrl& url)
 		waitingStart();
 	}
 
-	if (elements.at(0) == buildTypes[0])
+	if ((elements.at(0) == buildTypes[0]) || (elements.at(0) == buildTypes[1]))
 		generateGraph(elements.at(1).toInt(), elements.at(0).toStdString());
-	else if (elements.at(0) == buildTypes[1])
-		generateGraph(elements.at(1).toInt(), elements.at(0).toStdString());
-	else if (elements.at(0) == buildTypes[2])
+	else if ((elements.at(0) == buildTypes[2]) || (elements.at(0) == buildTypes[3])) {
+		setCurrentFileSearched();
 		generateGraph(0, elements.at(0).toStdString());
-	else if (elements.at(0) == buildTypes[3])
-		generateGraph(0, elements.at(0).toStdString());
+	}
 	else if(elements.at(0) == "Path")
 		generateHighlightFunction(elements.at(1));
 	else if (elements.at(0).contains("file"))
@@ -223,7 +232,7 @@ void MainView::handlePushButton()
 	QString html;
 	QString xmlFile;
 	string display;
-		
+	
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
 		cHTML->generateTagByTag(tag);
@@ -363,6 +372,7 @@ void MainView::createNewSearchTab(QString html, string text)
 {
 	int index = 0;
 	index = checkAlreadyOpenedTab(text);
+	
 	if(index >= 0 && index < ui->getTabWidget()->count()){
 		ui->getTabWidget()->setCurrentIndex(index);
 	} else {
@@ -374,6 +384,8 @@ void MainView::createNewSearchTab(QString html, string text)
 		webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 		QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
 		qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	
+		fileSearchedVector->push_back(this->tag);
 	}
 }
 
@@ -444,4 +456,31 @@ int MainView::checkAlreadyOpenedTab( string chain ) {
 			return i;
 	}
 	return -1;
+}
+
+void MainView::setCurrentFileSearched()
+{
+	int cpt = -1;
+	for(int i = 0; i < ui->getTabWidget()->count(); i++) {
+		if (ui->getTabWidget()->tabText(i).contains("Search") && i <= ui->getTabWidget()->currentIndex())
+			cpt++;
+	}
+	
+	if (cpt >= 0)
+		this->tag = fileSearchedVector->at(cpt);
+}
+
+void MainView::removeFileSearched(int index)
+{
+	if (ui->getTabWidget()->tabText(index).contains("Search"))
+	{
+		int cpt = -1;
+		for(int i = 0; i < ui->getTabWidget()->count(); i++) {
+			if (ui->getTabWidget()->tabText(i).contains("Search") && i <= ui->getTabWidget()->currentIndex())
+				cpt++;
+		}
+		
+		if (cpt >= 0)
+			fileSearchedVector->erase(fileSearchedVector->begin() + cpt);
+	}
 }

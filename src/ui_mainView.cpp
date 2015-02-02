@@ -22,6 +22,8 @@
 #define RSZW(percent) (this->width*percent/100)
 #define RSZH(percent) (this->height*percent/100)
 
+const char * const Ui_MainView::legendLabels[] = {"Expand graph", "Compress graph", "Next graph", "Unresolved"};
+
 void Ui_MainView::setupUi(QMainWindow *MainView)
 {
 	QRect rect = QApplication::desktop()->screenGeometry();
@@ -50,24 +52,29 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	projectGroupBox->setObjectName(QString("projectGroupBox"));
 	projectGroupBox->setGeometry(QRect(RSZW(2), RSZH(32), RSZW(24), RSZH(10)));
 	
+	legendGroupBox = new QGroupBox(leftWidget);
+	legendGroupBox->setObjectName(QString("legendGroupBox"));
+	legendGroupBox->setGeometry(QRect(RSZW(2), RSZH(45), RSZW(24), RSZH(22)));
+	legendGroupBox->setVisible(false);
+	
 	lineEdit = new QLineEdit(tagGroupBox);
 	lineEdit->setObjectName(QString("lineEdit"));
 	lineEdit->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
 	
 	radio1 = new QRadioButton(tagGroupBox);
 	radio1->setObjectName(QString("radio1"));
-	radio1->setGeometry(QRect(RSZW(2), RSZH(8), RSZW(8), RSZH(4)));
+	radio1->setGeometry(QRect(RSZW(2), RSZH(8), RSZW(9), RSZH(4)));
 	radio1->setText(": By Name");
 	radio1->setChecked(true);
 	
 	radio2 = new QRadioButton(tagGroupBox);
 	radio2->setObjectName(QString("radio2"));
-	radio2->setGeometry(QRect(RSZW(2), RSZH(12), RSZW(8), RSZH(4)));
+	radio2->setGeometry(QRect(RSZW(2), RSZH(12), RSZW(9), RSZH(4)));
 	radio2->setText(": By Type");
 	
 	radio3 = new QRadioButton(tagGroupBox);
 	radio3->setObjectName(QString("radio3"));
-	radio3->setGeometry(QRect(RSZW(2), RSZH(16), RSZW(8), RSZH(4)));
+	radio3->setGeometry(QRect(RSZW(2), RSZH(16), RSZW(9), RSZH(4)));
 	radio3->setText(": By File");
 
 	pushButton = new QPushButton(tagGroupBox);
@@ -83,8 +90,33 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	resetButton->setObjectName(QString("resetButton"));
 	resetButton->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
 	
+	legendRadio0 = new QRadioButton(legendGroupBox);
+	legendRadio0->setObjectName(QString("legendRadio0"));
+	legendRadio0->setGeometry(QRect(RSZW(2), RSZH(4), RSZW(20), RSZH(4)));
+	legendRadio0->setText(legendLabels[0]);
+	legendRadio0->setCheckable(false);
+	
+	legendRadio1 = new QRadioButton(legendGroupBox);
+	legendRadio1->setObjectName(QString("legendRadio1"));
+	legendRadio1->setGeometry(QRect(RSZW(2), RSZH(8), RSZW(20), RSZH(4)));
+	legendRadio1->setText(legendLabels[1]);
+	legendRadio1->setCheckable(false);
+	
+	legendRadio2 = new QRadioButton(legendGroupBox);
+	legendRadio2->setObjectName(QString("legendRadio2"));
+	legendRadio2->setGeometry(QRect(RSZW(2), RSZH(12), RSZW(20), RSZH(4)));
+	legendRadio2->setText(legendLabels[2]);
+	legendRadio2->setCheckable(false);
+	
+	legendRadio3 = new QRadioButton(legendGroupBox);
+	legendRadio3->setObjectName(QString("legendRadio3"));
+	legendRadio3->setGeometry(QRect(RSZW(2), RSZH(16), RSZW(20), RSZH(4)));
+	legendRadio3->setText(legendLabels[3]);
+	legendRadio3->setCheckable(false);
+	
 	tagGroupBox->raise();
 	projectGroupBox->raise();
+	legendGroupBox->raise();
 	
 	rightWidget = new QWidget(centralWidget);
 	rightWidget->setObjectName(QString("rightWidget"));
@@ -124,6 +156,7 @@ void Ui_MainView::retranslateUi(QMainWindow *MainView)
 	MainView->setWindowTitle(QApplication::translate("MainView", "MainView", 0));
 	tagGroupBox->setTitle(QApplication::translate("MainView", "TAG", 0));
 	projectGroupBox->setTitle(QApplication::translate("MainView", "PROJECT", 0));
+	legendGroupBox->setTitle(QApplication::translate("MainView", "LEGEND", 0));
 	pushButton->setText(QApplication::translate("MainView", "Search", 0));
 	resetButton->setText(QApplication::translate("MainView", "Open project", 0));
 }
@@ -197,4 +230,9 @@ Ui_MainView::~Ui_MainView()
 QMovie* Ui_MainView::getWaitingMovie()
 {
 	return this->waitingMovie;
+}
+
+QGroupBox* Ui_MainView::getLegendGroupBox()
+{
+	return this->legendGroupBox;
 }
