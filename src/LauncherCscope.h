@@ -28,6 +28,12 @@
 void* FindFunctionDefinitionInThread(void* listOfCscopeOutput);
 /**
  * class implementing the Launcher interface specificly to cscope
+ * tue public API can give:
+ * 				- the list of function calling a function
+ * 				- it can give the list of function celled by a function
+ * 				- the end of a function definition
+ * 				- initialize Cscope
+ * 				- destruct Cscope files in WD
  */
 class LauncherCscope: public  Launcher {
 
@@ -41,8 +47,17 @@ private :
 	 */
 	
 	 TagsManager* myTagManager;
+	 /**
+	  * property to store if Cscope has been initialized or not 
+	  **/
 	 bool isLaunched;
+	 /**
+	  * configuration object need for SourcesDir & DestDir
+	  **/
 	 Configuration* myConfiguration;
+	 /**
+	  * the last list of tag asked
+	  */
 	 std::vector<Tag*>*listOfLastTagAsked ;
 	
 	/**

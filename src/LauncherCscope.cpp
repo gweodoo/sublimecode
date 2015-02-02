@@ -31,7 +31,6 @@
 #include<vector>
 
 
-
 using namespace std;
 
 
@@ -291,7 +290,6 @@ void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,
 			}
 			
 			delete listOfGlobalDefinitions;
-			printf("\n\n");
 		}
 	}
 }
