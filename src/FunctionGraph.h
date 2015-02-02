@@ -23,14 +23,34 @@
 
 /**
  * Represents a Line output given by cscope;
- * 
+ * it's composed of:
+ * 			- output name
+ * 			- output file name
+ * 			- output line number
+ * 			- output signature 
+ * 				it can be the signature of the function if it's a definition or the expression of a function call 
  */
 
 class FunctionGraph
 {
 public:
+	/**
+	 * simple constructor with 4 parts initialization
+	 * @param[in] fileName the file Name for the matching output
+	 * @param[in] tagName the name of the function output
+	 * @param[in] signature the expression
+	 * @param[in] line the line where the expression is localisez
+	 * 
+	 */
 	FunctionGraph(std::string fileName,std::string tagName,std::string signature,int line );
+	/**
+	 * simple constructir
+	 */
 	FunctionGraph();
+	/**
+	 * simple destructor
+	 * 
+	 **/
 	~FunctionGraph();
 	/**
 	* classical getter for fileName-tagName-Line-Signature
