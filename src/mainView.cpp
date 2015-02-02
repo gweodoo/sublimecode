@@ -341,15 +341,19 @@ void MainView::generateHighlightFunction(QString number)
 	QString xmlFile;
 	QString html;
 	std::string filename;
+	Tag * cur;
+	std::string chain = "";
 	xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMHighlightFunction.xml";
 
 	researchList.push_back(cHTML->getList());
-	QString ext = QString::fromStdString(researchList.at(ui->getTabWidget()->currentIndex())->at(number.toInt() - 1)->getFileName()).section('.',-1);
+	cur = researchList.at(ui->getTabWidget()->currentIndex()-1)->at(number.toInt() - 1);
+	QString ext = QString::fromStdString(cur->getFileName()).section('.',-1);
 		
 	if(ext!="js"){
-		cHTML->createListHighlightFunction(researchList.at(ui->getTabWidget()->currentIndex())->at(number.toInt() - 1));
+		cHTML->createListHighlightFunction(cur);
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
-		createNewHighlightTab(html, "Highlight");
+		chain = "File : " + cur->getFileName().substr(config->getSourcesDir().size());
+		createNewHighlightTab(html, chain);
 	}
 	else {
 		QMessageBox::information(this, "Warning", "Unsupported file format");
