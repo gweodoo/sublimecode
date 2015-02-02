@@ -143,7 +143,8 @@ public slots:
 	/**
 	 * Creates a new graph tab
 	 * \param[in] html The html that will be shown on the webview
-	 * \param[in] filename The json file
+	 * \param[in] filepath The json file
+	 * \param[in] text text to display in tab
 	 */
 	void createNewGraphTab( QUrl html, string filepath, string text );
 	

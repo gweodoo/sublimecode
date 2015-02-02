@@ -39,37 +39,71 @@
 #include "handler/ZipTarballHandler.h"
 #include "handler/HandlerThread.h"
 
-class MainWindow : public QMainWindow//, public QObject
+/**
+ * MainWindow is first window opened to the user.
+ *
+ * On this window, user can select sources path where project is located, and define
+ * where sublimeCode output files will be stored. This window also
+ * allows many VSC to download projects
+ */
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
-
 public:
+	/**
+	 * default constructor
+	 * \param[in] parent upstream accessor
+	 */
 	explicit MainWindow(QWidget *parent = 0);
+	/// default destructor
 	~MainWindow();
-	UI_MainWindow1 *ui;
+	///start the spinner during long work
 	void waitingStart();
+	///stop the spinner after a long work
 	void waitingStop();
-    
 private:
-	//Ui::MainWindow *ui;
-	QString fileNameSource;
-	QString fileNameSourceTest;
-	QString branchNameSource;
-	QString fileNameDestination;
-	QString fileNameArchive;
-	QString fileNameDestinationTest;
-	Configuration *config;
-	Handler* handler;
-	HandlerThread *handlerThread;
+	UI_MainWindow1 *ui;             ///< GUI object
+	QString fileNameSource;         ///< source path
+	QString branchNameSource;       ///< source branch (in case of VCS using)
+	QString fileNameDestination;    ///< build path
+	QString fileNameArchive;        ///< archive path
+	Configuration *config;          ///< current global configuration
+	Handler* handler;               ///< handler on sources project
+	HandlerThread *handlerThread;   ///< thread on handler (to display spinner)
     
 public slots:
-	void Rechercher_Sources();
-	void Rechercher_Destination();
-	void Rechercher_Archive();
+	///start sources loading from file system
+	void findSources();
+	///start build path checking
+	void findDestination();
+	///start tarball checking and decompression
+	void findArchive();
+	///action on "Next" button
 	void Finish();
+	/**
+	 * check if a specific file exists on file system, from its name as a string
+	 * \param[in] fname the file path to test
+	 * \return True if file exists
+	 * \return False otherwise
+	 */
 	bool exists(const char *fname);
+	/**
+	 * delete directory on the disk. Used to remove old "SublimeCode_build" on disk
+	 * \param[in] file the directory path to delete
+	 * \return True if succeded
+	 * \return false otherwise
+	 */
 	bool removeDir(QString file);
+	/**
+	 * event when window is closed
+	 * \param[in] e the event
+	 */
 	void closeEvent(QCloseEvent* e);
+	/**
+	 * state function, called when handler have done. Do some post-stuff after
+	 * handler downloaded the project.
+	 * \param[in] isDone True if handler have done when function is called
+	 */
 	void onHandlerChanged(bool isDone); 
 };
 

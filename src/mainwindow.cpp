@@ -121,7 +121,6 @@ bool MainWindow::exists(const char *fname)
 void MainWindow::Finish()
 {
 	int currentTab = ui->getQTabWidget()->currentIndex();
-	fileNameDestinationTest = ui->getLineEdit1()->text();
 
 	handler = NULL;
 	Dialog *dialog = NULL;
@@ -139,15 +138,15 @@ void MainWindow::Finish()
 	switch (currentTab){
 		case 0 :
 		{
-			fileNameSourceTest = ui->getLineEdit()->text();
+			fileNameSource = ui->getLineEdit()->text();
 
-			if(fileNameSourceTest==""){
+			if(fileNameSource==""){
 				QMessageBox::critical(this, "Empty field", "Please provide project sources", QMessageBox::Ok);
 				break;
 			}
 
 			if(exists(fileNameSource.toUtf8().data()) == true){
-				fileInfoSource = fileNameSourceTest;
+				fileInfoSource = fileNameSource;
 				const char *convert_source = fileInfoSource.canonicalFilePath().toUtf8().constData();
 				std::string str_source(convert_source);
 				config = new Configuration(str_source, str_dest);
@@ -160,30 +159,30 @@ void MainWindow::Finish()
 		}
 		case 1 :
 		{
-			fileNameSourceTest = ui->getLineEditVcs()->text();
+			fileNameSource = ui->getLineEditVcs()->text();
 			branchNameSource = ui->getLineEditBranch()->text();
 
-			if(fileNameSourceTest==""){
+			if(fileNameSource==""){
 				QMessageBox::critical(this, "Empty field", "Please provide project sources", QMessageBox::Ok);
 				break;
 			}
 			int currentVcs = ui->getComboBoxVcs()->currentIndex();
-			fileInfoSource = fileNameSourceTest;
+			fileInfoSource = fileNameSource;
 			const char *convert_source = fileInfoSource.canonicalFilePath().toUtf8().constData();
 			std::string str_source(convert_source);
 			config = new Configuration(str_source, str_dest);
 			switch (currentVcs){
 				case 0 :
-					handler = new CvsVcsHandler(config,fileNameSourceTest.toStdString(), branchNameSource.toStdString());
+					handler = new CvsVcsHandler(config,fileNameSource.toStdString(), branchNameSource.toStdString());
 					break;
 				case 1 :
-					handler = new GitVcsHandler(config, fileNameSourceTest.toStdString(), branchNameSource.toStdString());
+					handler = new GitVcsHandler(config, fileNameSource.toStdString(), branchNameSource.toStdString());
 					break;
 				case 2 :
-					handler = new MercurialVcsHandler(config, fileNameSourceTest.toStdString(), branchNameSource.toStdString());
+					handler = new MercurialVcsHandler(config, fileNameSource.toStdString(), branchNameSource.toStdString());
 					break;
 				case 3 :
-					handler = new SvnVcsHandler(config, fileNameSourceTest.toStdString(), branchNameSource.toStdString());
+					handler = new SvnVcsHandler(config, fileNameSource.toStdString(), branchNameSource.toStdString());
 					break;
 			}
 			
@@ -196,14 +195,14 @@ void MainWindow::Finish()
 		}
 		case 2 :
 		{
-			fileNameSourceTest = ui->getLineEditArchive()->text();
+			fileNameSource = ui->getLineEditArchive()->text();
 
-			if(fileNameSourceTest==""){
+			if(fileNameSource==""){
 				QMessageBox::critical(this, "Empty field", "Please provide project sources", QMessageBox::Ok);
 				break;
 			}
 			int currentArchive = ui->getComboBoxArchive()->currentIndex();
-			fileInfoSource = fileNameSourceTest;
+			fileInfoSource = fileNameSource;
 			const char *convert_source = fileInfoSource.canonicalFilePath().toUtf8().constData();
 			std::string str_source(convert_source);
 			config = new Configuration(str_source, str_dest);
