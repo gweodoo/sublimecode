@@ -238,15 +238,12 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 void LauncherCscope::fullfillListOfTagToReturn (vector<Tag*> *listOfTagToReturn,vector<FunctionGraph*>* listOfFunctionOutput,Tag * tagAssociatedToFunction)
 {
 	
-	this->removeNotMatchingFunctionOnArgumentNumber(tagAssociatedToFunction,listOfFunctionOutput,NULL,2);
+	this->removeNotMatchingFunctionOnArgumentNumber(tagAssociatedToFunction,listOfFunctionOutput);
 	for(unsigned int i=0;i<listOfFunctionOutput->size();i++)
 	{
 		if(!listOfFunctionOutput->at(i)->getTagName().empty())
 		{
-			
 			vector<FunctionGraph*>* listOfGlobalDefinitions=this->cscopeOutputParser(this->launchExternalTool(0,listOfFunctionOutput->at(i)->getTagName()));
-			
-			
 			this->removeMatchesFromHAndC(listOfGlobalDefinitions);
 			this->removeNotFunctionOutput(listOfGlobalDefinitions);
 			this->removeNotConcernedDefinitionBasedOnFileName(listOfGlobalDefinitions,listOfFunctionOutput->at(i)->getFileName());
@@ -307,17 +304,10 @@ return endOfFunctionDefinition;
 	
 }
 
-/**
- * simple getter 
- * @return a boolean translating 
- */
-
 bool LauncherCscope::getIsLaunched()
 {
 	return this->isLaunched;
 }
-
-
 
 std::vector<FunctionGraph*>* LauncherCscope::cscopeOutputParser(std::string output)
 {
@@ -573,8 +563,8 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 			 **get the number of Argument
 			 * get the arguments as String
 			 */
-			unsigned int positionOpeningbracket=0;
-			unsigned int positionEndingbracket=0;
+			size_t positionOpeningbracket=0;
+			size_t positionEndingbracket=0;
 			
 			positionOpeningbracket=stringToParse.find_first_of("(");
 			positionEndingbracket=stringToParse.find_last_of(")");
@@ -609,7 +599,7 @@ std::vector<std::vector<std::string>*>* LauncherCscope::getNumberOfArgumentAndTy
 					do
 					{
 						string argumentWithType="";
-						unsigned long int  pos=0;
+						size_t  pos=0;
 					
 						pos=stringToParse.find(',',positionPrecedentComma+1);
 						
@@ -792,26 +782,22 @@ std::vector<std::string>* LauncherCscope::getVariablesNamesInFunctionCall(string
 	
 }
 
-void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind,vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions,int arg)
+void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind,vector<FunctionGraph*>* listOfGlobalDefinitions)
 {
-	if(arg==2)
+	Tag*calledFunctionToFindCasted=(Tag*)calledFunctionToFind;
+	// getting the number of argument of the tag defintion
+	unsigned int numberOfArgument=this-> getNumberOfVariableUsedInFunctionDefinition(calledFunctionToFindCasted);
+	//now comparing with the list of function calling
+	// here the argument is listOfglabDefinitions but its in fact list Of the function call 
+	for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 	{
-		
-		Tag*calledFunctionToFindCasted=(Tag*)calledFunctionToFind;
-		// getting the number of argument of the tag defintion
-		unsigned int numberOfArgument=this-> getNumberOfVariableUsedInFunctionDefinition(calledFunctionToFindCasted);
-		//now comparing with the list of function calling
-		// here the argument is listOfglabDefinitions but its in fact list Of the function call 
-		for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
+		string call=listOfGlobalDefinitions->at(i)->getSignature().substr(listOfGlobalDefinitions->at(i)->getSignature().find(calledFunctionToFindCasted->getName()));
+		vector<string>* variablesNames=this->getVariablesNamesInFunctionCall(call);
+		if((variablesNames->size())!=numberOfArgument)
 		{
-			string call=listOfGlobalDefinitions->at(i)->getSignature().substr(listOfGlobalDefinitions->at(i)->getSignature().find(calledFunctionToFindCasted->getName()));
-			vector<string>* variablesNames=this->getVariablesNamesInFunctionCall(call);
-			if((variablesNames->size())!=numberOfArgument)
-			{
-				delete  listOfGlobalDefinitions->at(i);
-				listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
-				i--;
-			}
+			delete  listOfGlobalDefinitions->at(i);
+			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
+			i--;
 		}
 	}
 }

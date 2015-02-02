@@ -86,8 +86,8 @@ private :
 	* step - 3
 	* third step will look at the number of Argument and its type for each function graph
 	* return a vector of vector. the vector contains the type of argument and a vector containing all the vector of type 
-	* after this step we have two differents object: vector<FunctionGraph*>* containing the global definitions of the called function
-	*						: vector<std::vector<std::string>*>* containing the list of argument type for each FunctionGraph
+	* after this step we have two differents object: vector\<FunctionGraph*\>* containing the global definitions of the called function
+	*						: vector\<std::vector\<std::string\>*\>* containing the list of argument type for each FunctionGraph
 	* @param[in] listOfGlobalDefinitions the lift of definition to treat
 	* @return a vector of vector containing the type of argument for each definition
 	*/
@@ -135,7 +135,7 @@ private :
 	* @param[in] calledFunctionToFind cscope's output's line to compare with
 	* @param[in] listOfGlobalDefinitions the list of cscope's ouput to sort 
 	*/
-	void removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind, std::vector< FunctionGraph* >* listOfGlobalDefinitions, std::vector< std::vector< std::string >* >* listOfTypesforGlobalDefinitions, int arg);
+	void removeNotMatchingFunctionOnArgumentNumber(void* calledFunctionToFind, std::vector< FunctionGraph* >* listOfGlobalDefinitions);
 	/**
 	*in the case where we have the same definition for a function ( com from .h and .c  )
 	* @param[in] listOfTypes vector of vector containing the list of type for each definition
@@ -318,10 +318,12 @@ public :
 	* @return the length in line unit
 	*/
 	int launchCommandExternalTool(Tag *tagAssociatedToFunction);
+
 	/**
-	 * simple getter
-	 * @areturn the property isLaunched
-	 */
+	* simple getter 
+	* @return a boolean translating 
+	*/
+
 	bool getIsLaunched();
 	/**
 	* function which returns a tag corresponding to the functionGraph 

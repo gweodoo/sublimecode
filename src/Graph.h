@@ -27,9 +27,27 @@
 class Graph {
 
 public : 
+	/**
+	 * return the list of function called by the tag
+	 * @param[in] tagAssociatedToFunction tag for which the list of function called is searched
+	 * @return the list of called functions
+	 **/
 	virtual std::vector<Tag*>*  getFunctionsCalledBy(Tag * tagAssociatedToFunction)=0;
+	/**
+	 * return the list of function calling this tag
+	 * @param[in] tagAssociatedToFunction tag for which the list of the calling function is searched
+	 * @return the list of calling functions
+	 * 
+	 **/
 	virtual std::vector<Tag*>* getFunctionsCallingThis(Tag * tagAssociatedToFunction)=0;
+	/**
+	 * calculater the end of a function definition
+	 * @param[in] tagAssociatedToFunction the tag which definition's end is looked for
+	 */
 	virtual int getFunctionLength(Tag * tagAssociatedToFunction)=0;
+	/**
+	 * calsical destructor
+	 **/
 	virtual ~Graph(){};
 	
 };

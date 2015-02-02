@@ -45,9 +45,21 @@ public:
 	Launcher* getLauncher();
 	/**
 	 * functions implementing the Graph Interface
+	 * @param[in] name the tagAssociatedToFunction
+	 * @return the list of called function
 	 */
 	std::vector<Tag*>* getFunctionsCalledBy(Tag* name);
+	/**
+	 * functions implementing the Graph Interface
+	 * @param[in] name the tagAssociatedToFunction
+	 * @return the list of calling  function
+	 */
 	std::vector<Tag*>* getFunctionsCallingThis(Tag* name);
+	/**
+	 * functions implementing the Graph Interface
+	 * @param[in] name the tagAssociatedToFunction
+	 * @return the line for the end
+	 */
 	int getFunctionLength(Tag * tagAssociatedToFunction);
 
 

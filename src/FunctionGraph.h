@@ -40,31 +40,62 @@ public:
 	 * @param[in] tagName the name of the function output
 	 * @param[in] signature the expression
 	 * @param[in] line the line where the expression is localisez
+	 * @return functionGraph Object
 	 * 
 	 */
 	FunctionGraph(std::string fileName,std::string tagName,std::string signature,int line );
 	/**
 	 * simple constructir
-	 */
+	 * @return functionGraph Object
+	**/
 	FunctionGraph();
 	/**
 	 * simple destructor
 	 * 
-	 **/
+	**/
 	~FunctionGraph();
 	/**
 	* classical getter for fileName-tagName-Line-Signature
+	* @return file name
 	*/
 	std::string getFileName();
+	/**
+	 * simple getter
+	 * @return tag name
+	**/
 	std::string getTagName();
+	/**
+	 *@return the expression for expression 
+	**/
 	std::string getSignature();
-	int getLine();
 	/**
 	* classical setter for fileName-tagName-Line-Signature
+	* @return the line for output
 	*/
+	int getLine();
+
+	/**
+	*
+	*set the File Name
+	*@param[in] fileName file Name  
+	* 
+	**/
 	void setFileName(std::string fileName);
+	/**
+	 *@param[in] tagName the tag name set
+	 **/
 	void setTagName(std::string tagName);
+	/**
+	 * simple setter
+	 *@param[in] signature the expression 
+	 * 
+	 **/
 	void setSignature(std::string signature);
+	/**
+	 * simple setter
+	 * @param[in] line the line to set
+	 * 
+	 **/ 
 	void setLine(int line);
 
 private:
@@ -72,8 +103,18 @@ private:
 	 * Needs 4 attributes Cscope always giving as output fileName-tagName-Line-Signature
 	 */
 	std::string fileName;
+	/**
+	 * property storing the tag Name 
+	 **/
 	std::string tagName;
+	/**
+	 * 
+	 * storing signature expression 
+	**/
 	std::string signature;
+	/**
+	 * storing line
+	 **/
 	int line;
 
 };
