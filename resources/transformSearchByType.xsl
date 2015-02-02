@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/">  
+	<xsl:template match="/SearchByType">
 	<html>
 	<head>
-		<title>Unitary test report</title>
 		<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
 	</head>
 	<body>
-		<h1>Search By Type</h1>
-		<xsl:for-each select="SearchByType">
+		<h1>Search for <xsl:value-of select="target"/></h1>
 			<table border='2' CELLSPACING='0' CELLPADDING='8' >
 			<thead><TH>Number</TH><TH>Line</TH><TH>Path</TH><TH>Name</TH></thead>
 			<tbody>
@@ -25,7 +23,6 @@
 			</xsl:for-each>
 			</tbody>
 			</table>
-		</xsl:for-each>  
 	</body>
 	</html>
 	</xsl:template>

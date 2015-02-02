@@ -82,11 +82,12 @@ public:
 	void generateTagByTag(std::string tag);
 	/**
 	 * Generate highlighted XML displayer , from 3 vectors, start of file, highlighted section and the end of file
+	 * \param[in] filename the file name
 	 * \param[in] beforeFunction the vector representing the start of the file
 	 * \param[in] inFunction the vector representing the section to highlight
 	 * \param[in] afterFunction the end of the file
 	 */
-	void createXMLHighlightFunction(std::vector<std::string> beforeFunction, std::vector<std::string> inFunction,std::vector<std::string> afterFunction);
+	void createXMLHighlightFunction(std::string filename, std::vector<std::string> beforeFunction, std::vector<std::string> inFunction,std::vector<std::string> afterFunction);
 	/**
 	 * Apply XSL files to specific XML, in order to generate final HTML, then displayed in webview
 	 * \param[in] fileXML the XML to display

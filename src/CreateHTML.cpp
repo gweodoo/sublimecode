@@ -54,7 +54,10 @@ void CreateHTML::createXMLSearchByTags(string tag)
 	
 	QDomElement root = document.createElement("SearchByTags");
 	document.appendChild(root);
-	
+
+	QDomElement header = document.createElement("target");
+	header.appendChild(document.createTextNode(QString::fromStdString(tag)));
+	root.appendChild(header);
 	if(!list->empty()){
 		for (size_t i=0; i<list->size(); i++)
 		{
@@ -92,7 +95,7 @@ void CreateHTML::createXMLSearchByTags(string tag)
 				string chain = "";
 				QDomElement curElem = document.createElement("Extras");
 				element.appendChild(curElem);
-				
+
 				for(map<string,string>::const_iterator it = m.begin(); it!= m.end(); it++){
 					chain += it->first +" : " + it->second + "\n";
 				}
@@ -125,6 +128,10 @@ void CreateHTML::createXMLSearchByType(int type)
 	
 	QDomElement root = document.createElement("SearchByType");
 	document.appendChild(root);
+
+	QDomElement header = document.createElement("target");
+	header.appendChild(document.createTextNode(QString::fromStdString(tabTypeNames[type])));
+	root.appendChild(header);
 
 	for (size_t i=0; i<list->size(); i++)
 	{
@@ -181,6 +188,9 @@ void CreateHTML::createXMLSearchByFile(string filename)
 	
 	QDomElement root = document.createElement("SearchByFile");
 	document.appendChild(root);
+	QDomElement header = document.createElement("target");
+	header.appendChild(document.createTextNode(QString::fromStdString(filename)));
+	root.appendChild(header);
 
 	for (size_t i=0; i<list->size(); i++)
 	{
@@ -278,7 +288,7 @@ void CreateHTML::createListHighlightFunction(Tag* tag)
 		}
 		lines_count++;
 	}
-	createXMLHighlightFunction(beforeFunction, inFunction, afterFunction);
+	createXMLHighlightFunction(tag->getFileName(), beforeFunction, inFunction, afterFunction);
 }
 
 string CreateHTML::stringFromVector(vector< string > vector)
@@ -294,7 +304,7 @@ string CreateHTML::stringFromVector(vector< string > vector)
 	return oss.str();
 }
 
-void CreateHTML::createXMLHighlightFunction(vector< string > beforeFunction, vector< string > inFunction, vector< string > afterFunction)
+void CreateHTML::createXMLHighlightFunction(std::string filename, vector< string > beforeFunction, vector< string > inFunction, vector< string > afterFunction)
 {	
 	QFile file(QString::fromUtf8(config->getDestDir().c_str())+"/myXLMHighlightFunction.xml"); 
 	QDomDocument document;
@@ -302,6 +312,10 @@ void CreateHTML::createXMLHighlightFunction(vector< string > beforeFunction, vec
 	QDomElement root = document.createElement("HighlightFunction");
 	document.appendChild(root);
 	
+	QDomElement header = document.createElement("fileName");
+	header.appendChild(document.createTextNode(QString::fromStdString(filename.substr(config->getSourcesDir().size()))));
+	root.appendChild(header);
+
 	QDomElement element = document.createElement("Highlight");
 
 	QDomElement element1 = document.createElement("BeforeFunction");
