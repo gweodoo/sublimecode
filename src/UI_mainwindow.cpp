@@ -17,7 +17,7 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include "UI_mainwindow1.h"
+#include "UI_mainwindow.h"
 #include "ui_mainView.h"
 #include <QInputDialog>
 

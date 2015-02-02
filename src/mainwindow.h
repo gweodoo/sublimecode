@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "UI_mainwindow1.h"
+#include "UI_mainwindow.h"
 #include "handler/CvsVcsHandler.h"
 #include "handler/GitVcsHandler.h"
 #include "handler/MercurialVcsHandler.h"
