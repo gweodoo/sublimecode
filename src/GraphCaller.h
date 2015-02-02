@@ -33,6 +33,9 @@ class GraphCaller:public Graph
 public:
 	/**
 	 * constructor
+	 * @param[in] myConf the fonf object for storing dest dir and sources dir
+	 * @param[in] myTagManager the tag manager for manipulating tags
+	 * @return a graphCalle Object
 	 */
 	GraphCaller (Configuration * myConf,TagsManager*myTagManager);
 	/**
@@ -41,6 +44,7 @@ public:
 	~GraphCaller();
 	/**
 	 * getter
+	 * @return a Launcher
 	 */
 	Launcher* getLauncher();
 	/**
@@ -57,7 +61,7 @@ public:
 	std::vector<Tag*>* getFunctionsCallingThis(Tag* name);
 	/**
 	 * functions implementing the Graph Interface
-	 * @param[in] name the tagAssociatedToFunction
+	 * @param[in] tagAssociatedToFunction the tagAssociatedToFunction
 	 * @return the line for the end
 	 */
 	int getFunctionLength(Tag * tagAssociatedToFunction);
