@@ -1368,6 +1368,12 @@ bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunctio
 	}
 		return callf;
 }
+/**
+ * remove the tags which are the same than the parents one
+ * @param[in] listOfTagToReturn the child list
+ * @param[in] tagAssociatedToFunction the parent
+ * 
+ */
 void LauncherCscope::removeSameTagForCalling(std::vector< Tag* >* listOfTagToReturn, Tag* tagAssociatedToFunction)
 {
 	for(vector<Tag*>::iterator it = listOfTagToReturn->begin(); it != listOfTagToReturn->end();){
