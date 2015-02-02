@@ -74,16 +74,3 @@ QGroupBox::title
 {
 	background-color: #fdd;
 }
-
-#tabWidget::tab 
-{
-	min-width: 30ex;
-	max-width: 30ex; 
-	
-} 
-
-#tabWidget::tab::hover 
-{
-	background: #F5F5F5; 
-	border-radius: 3px;
-}

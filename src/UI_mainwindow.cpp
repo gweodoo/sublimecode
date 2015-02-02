@@ -113,6 +113,7 @@ void UI_MainWindow::setupUi(QMainWindow *MainWindow)
 	
    	this->tabs = new QTabWidget(this->sourcesGroupBox);
 	this->tabs->setGeometry(QRect(RSZW(2), RSZH(7), RSZW(90), RSZH(28)));
+	this->tabs->setStyleSheet("QTabBar::tab { min-width: 12ex;}");
   	this->tabs->addTab(this->directoryWidget,"Directory");  
 	this->tabs->addTab(this->vcsWidget,"VCS");
 	this->tabs->addTab(this->archiveWidget,"Archive");

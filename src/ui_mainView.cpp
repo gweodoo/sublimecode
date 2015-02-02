@@ -129,10 +129,10 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	webView->settings()->setObjectCacheCapacities(0,0,0);
 	
 	tabWidget = new QTabWidget(rightWidget);
-	tabWidget->setObjectName(QString("tabWidget"));
 	tabWidget->setGeometry(QRect(RSZW(0), RSZH(0), RSZW(71), RSZH(100)));
 	tabWidget->addTab(webView, "Home");
 	tabWidget->setTabsClosable(true);
+	tabWidget->setStyleSheet("QTabBar::tab { min-width: 30ex; max-width: 30ex; } QTabBar::tab::hover {background: #F5F5F5; border-radius: 3px;} ");
 	
 	waitingMovie = new QMovie(":/mySpinner.gif");
 	waitingLabel = new QLabel(centralWidget);
