@@ -1298,7 +1298,18 @@ void LauncherCscope::removeFromListWhereTagNameIsDefinition(std::vector< Functio
 	}
 	
 }
-
+/**
+ * utility function needed in the calling graph
+ * searching for the calling functions of a tag
+ * we've get the list of each places ( so each files ) where the tag is called
+ * for each files we get the the list of tag decalred in it
+ * then with this list we'll look for the nearest position of each tag to find the good one
+ * we store it as a map < key:nameOfFile , value:list of Tags in it >
+ * @param[in] listOfFileWithListOfTagFunctionType the list of tag for each file
+ * @param[in]  listOfCallingFunction the list of every calls of the searched tag
+ * @return the list of caling Tag for every output
+ * 
+ * */
 std::vector<Tag*>* LauncherCscope::fullFilleWithListOftagForEachFile(std::map< string, std::vector< Tag* >* >* listOfFileWithListOfTagFunctionType,std::vector< FunctionGraph* >*listOfCallingFunction )
 {
 	std::vector<Tag*>* listOfTagToReturn=new std::vector<Tag*>();
