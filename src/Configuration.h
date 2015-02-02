@@ -30,9 +30,9 @@
  */
 class Configuration {
 private:
-	std::string sourcesDir; ///global position for sources path, given by user
-	std::string destDir;    ///global position for sublimeCode build folder
-	std::string scRootPath; ///sublimeCode resources folder
+	std::string sourcesDir; ///< global position for sources path, given by user
+	std::string destDir;    ///< global position for sublimeCode build folder
+	std::string scRootPath; ///< sublimeCode resources folder
 public:
 	/// default constructor (\deprecated)
 	explicit Configuration();
