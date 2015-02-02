@@ -1,6 +1,6 @@
 Sublime Code Documentation (Last Edit : Oct 23rd 2014) Version 1.0  {#mainpage}
 ===============================================================================
-
+Available at https://github.com/gweodoo/sublimecode.git
 
 PREAMBLE
 -------------------------------------------------------------------------------
