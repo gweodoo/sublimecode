@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE
 class Ui_MainView
 {
 public:
-	static const char * const legendLabels[];
+	static const char * const legendLabels[]; ///< array of labels corresponding to the graph's legend
 	///default destructor
 	~Ui_MainView();    
 	/**
@@ -126,6 +126,10 @@ public:
 	 * \return class member as pointer
 	 */
 	QMovie *getWaitingMovie();
+	/**
+	 * Legend qt object getter
+	 * \return class member as pointer
+	 */
 	QGroupBox *getLegendGroupBox();
     
 private:
@@ -135,7 +139,7 @@ private:
 	QGroupBox *tagGroupBox;                    ///< tag search group box
 	QGroupBox *projectGroupBox;                ///< open new project group box
 	QPushButton *pushButton;                   ///< search button
-	QGroupBox *legendGroupBox;
+	QGroupBox *legendGroupBox;                 ///< groupbox with the graph's legend
 	QPushButton *resetButton;                  ///< open new project button
 	QLineEdit *lineEdit;                       ///< get tag line edit
 	QWidget *rightWidget;                      ///< right widget
@@ -149,10 +153,10 @@ private:
 	int height;                                ///< window height
 	QLabel *waitingLabel;                      ///< waiting spinner label
 	QMovie *waitingMovie;                      ///< waiting spinner movie 
-	QRadioButton *legendRadio0;
-	QRadioButton *legendRadio1;
-	QRadioButton *legendRadio2;
-	QRadioButton *legendRadio3;
+	QRadioButton *legendRadio0;                ///< legend radio button expand
+	QRadioButton *legendRadio1;                ///< legend radio button compress 
+	QRadioButton *legendRadio2;                ///< legend radio button next
+	QRadioButton *legendRadio3;                ///< legend radio button unresolved
 };
 
 QT_END_NAMESPACE

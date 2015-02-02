@@ -209,7 +209,7 @@ private:
 	Configuration *config;                         ///< The current configuration
 	std::vector<std::vector<Tag *>*> researchList; ///< The tab list
 	std::string tag;                               ///< The current tag
-	std::vector<std::string> *fileSearchedVector;   ///< The vector of filenames searched
+	std::vector<std::string> *fileSearchedVector;  ///< The vector of filenames searched
 	QStringList wordList;                          ///< The list of words for the word completer
 	std::string pathToAnalyse;                     ///< The path that we want to analyze
 	std::string relativePathToAnalyse;             ///< The relative path that we want to analyze
