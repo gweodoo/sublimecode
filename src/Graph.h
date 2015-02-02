@@ -43,6 +43,7 @@ public :
 	/**
 	 * calculater the end of a function definition
 	 * @param[in] tagAssociatedToFunction the tag which definition's end is looked for
+	 * @return the line number for end of function definition
 	 */
 	virtual int getFunctionLength(Tag * tagAssociatedToFunction)=0;
 	/**
