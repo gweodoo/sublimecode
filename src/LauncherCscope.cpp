@@ -796,7 +796,7 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 {
 	if(arg==2)
 	{
-		if(listOfTypesforGlobalDefinitions->t
+		
 		Tag*calledFunctionToFindCasted=(Tag*)calledFunctionToFind;
 		// getting the number of argument of the tag defintion
 		unsigned int numberOfArgument=this-> getNumberOfVariableUsedInFunctionDefinition(calledFunctionToFindCasted);
