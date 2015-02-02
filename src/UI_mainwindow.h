@@ -44,7 +44,7 @@ QT_BEGIN_NAMESPACE
 /**
 * Ui mainwindow is the displayer (window maker) for the project selection view
 */
-class UI_MainWindow1
+class UI_MainWindow
 {
 private: 
 	QWidget *centralWidget;                      ///< main widget 
@@ -77,9 +77,9 @@ private:
 
 public:
 	///default destructor
-	explicit UI_MainWindow1();
+	explicit UI_MainWindow();
 	///default destructor
-	~UI_MainWindow1();
+	~UI_MainWindow();
 	/**
 	* graphical initializer
 	* \param[in] MainWindow the base class MainWindow, our container

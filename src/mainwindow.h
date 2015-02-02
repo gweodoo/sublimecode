@@ -62,7 +62,7 @@ public:
 	///stop the spinner after a long work
 	void waitingStop();
 private:
-	UI_MainWindow1 *ui;             ///< GUI object
+	UI_MainWindow *ui;             ///< GUI object
 	QString fileNameSource;         ///< source path
 	QString branchNameSource;       ///< source branch (in case of VCS using)
 	QString fileNameDestination;    ///< build path

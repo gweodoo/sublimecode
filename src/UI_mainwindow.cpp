@@ -24,7 +24,7 @@
 #define RSZW(percent) (this->width*percent/100)
 #define RSZH(percent) (this->height*percent/100)
 
-UI_MainWindow1::UI_MainWindow1(){
+UI_MainWindow::UI_MainWindow(){
 	centralWidget = NULL;
 	directoryWidget = NULL;
 	vcsWidget = NULL;
@@ -45,17 +45,17 @@ UI_MainWindow1::UI_MainWindow1(){
 	comboBoxVcs= NULL;
 	comboBoxArchive= NULL;
 }
-UI_MainWindow1::~UI_MainWindow1(){
+UI_MainWindow::~UI_MainWindow(){
 	if(Finish != NULL) delete Finish;
 	if(destinationGroupBox != NULL) delete destinationGroupBox;
 	if(sourcesGroupBox != NULL) delete sourcesGroupBox;
 	if(centralWidget != NULL) delete centralWidget;
 }
 
-const char * const UI_MainWindow1::vcsTypes[] = {"CVS", "Git", "Mercurial", "SVN"};
-const char * const UI_MainWindow1::archiveTypes[] = {"Bzip", "Gzip", "Zip"};
+const char * const UI_MainWindow::vcsTypes[] = {"CVS", "Git", "Mercurial", "SVN"};
+const char * const UI_MainWindow::archiveTypes[] = {"Bzip", "Gzip", "Zip"};
 
-void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
+void UI_MainWindow::setupUi(QMainWindow *MainWindow)
 {	
 	QRect rect = QApplication::desktop()->screenGeometry();
 
@@ -146,7 +146,7 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
         QMetaObject::connectSlotsByName(MainWindow);
 } // setupUi
 
-void UI_MainWindow1::retranslateUi(QMainWindow *MainWindow)
+void UI_MainWindow::retranslateUi(QMainWindow *MainWindow)
 {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
 	sourcesGroupBox->setTitle(QApplication::translate("MainWindow", "Sources project : ", 0));
@@ -158,77 +158,77 @@ void UI_MainWindow1::retranslateUi(QMainWindow *MainWindow)
 		this->comboBoxArchive->addItem(archiveTypes[i]);
 } // retranslateUi
 
-QLineEdit* UI_MainWindow1::getLineEditSource()
+QLineEdit* UI_MainWindow::getLineEditSource()
 {
 	return this->lineEditSource;
 }
 
-QLineEdit* UI_MainWindow1::getLineEditBranch()
+QLineEdit* UI_MainWindow::getLineEditBranch()
 {
 	return this->lineEditBranch;
 }
 
-QLineEdit* UI_MainWindow1::getLineEditDest()
+QLineEdit* UI_MainWindow::getLineEditDest()
 {
 	return this->lineEditDest;
 }
 
-QLineEdit* UI_MainWindow1::getLineEditArchive()
+QLineEdit* UI_MainWindow::getLineEditArchive()
 {
 	return this->lineEditArchive;
 }
 
-QPushButton* UI_MainWindow1::getButtonBrowseSource()
+QPushButton* UI_MainWindow::getButtonBrowseSource()
 {
 	return this->browseSource;
 }
 
-QPushButton* UI_MainWindow1::getButtonBrowseDest()
+QPushButton* UI_MainWindow::getButtonBrowseDest()
 {
 	return this->browseDest;
 }
 
-QPushButton* UI_MainWindow1::getButtonBrowseArchive()
+QPushButton* UI_MainWindow::getButtonBrowseArchive()
 {
 	return this->browseArchive;
 }
 
-QPushButton* UI_MainWindow1::getFinish()
+QPushButton* UI_MainWindow::getFinish()
 {	
 	return this->Finish;
 }
 
-QTabWidget* UI_MainWindow1::getQTabWidget()
+QTabWidget* UI_MainWindow::getQTabWidget()
 {
 	return this->tabs;
 }
 
-QLineEdit* UI_MainWindow1::getLineEditVcs()
+QLineEdit* UI_MainWindow::getLineEditVcs()
 {
 	return this->lineEditVcs;
 }
 
-QComboBox* UI_MainWindow1::getComboBoxVcs()
+QComboBox* UI_MainWindow::getComboBoxVcs()
 {
 	return this->comboBoxVcs;
 }
 
-QComboBox* UI_MainWindow1::getComboBoxArchive()
+QComboBox* UI_MainWindow::getComboBoxArchive()
 {
 	return this->comboBoxArchive;
 }
 
-QMovie* UI_MainWindow1::getWaitingMovie()
+QMovie* UI_MainWindow::getWaitingMovie()
 {
 	return this->waitingMovie;
 }
 
-QWidget * UI_MainWindow1::getCentralWidget()
+QWidget * UI_MainWindow::getCentralWidget()
 {
 	return this->centralWidget;
 }
 
-QLabel* UI_MainWindow1::getWaitingLabel()
+QLabel* UI_MainWindow::getWaitingLabel()
 {
 	return this->waitingLabel;
 }

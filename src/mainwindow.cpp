@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		QMessageBox::critical(this, "Dependency issue", "Some dependencies aren't resolved.\n Check for dependency:\n\t- CTags\n\t- CScope\n\t- Cloc\n\nAdd then to your PATH environment");
 		exit(1);
 	}
-	ui = new UI_MainWindow1();
+	ui = new UI_MainWindow();
 	ui->setupUi(this);
    
 	QObject::connect(ui->getButtonBrowseSource(), SIGNAL(clicked()), this, SLOT(findSources()));
