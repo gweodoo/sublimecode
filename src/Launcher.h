@@ -48,7 +48,7 @@ public :
 	 * @param[in] tagAssociatedToFunction the concerned tagAssociatedToFunction
 	 * @return the list of tags
 	 * 
-	 * 
+	 **/
 	virtual std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)=0;
 	/**
 	 * calculates some metrics for a tag

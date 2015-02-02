@@ -59,7 +59,6 @@ private :
 	  * the last list of tag asked
 	  */
 	 std::vector<Tag*>*listOfLastTagAsked ;
-	
 	/**
 	* parse the output from a cscope command
 	* and return a vector of Function Graph Object (functionName-fileName-call's line- signature)
@@ -98,13 +97,13 @@ private :
 	* return the type only
 	* @param[in] argumentAndTypeToParse the string to parse in order to get the type of argument
 	* @return the type of the argument
-	*/
-	std::string getArgumentType(std::string  argumentAndTypeToParse)
+	**/
+	std::string getArgumentType(std::string  argumentAndTypeToParse);
 	/**
 	* function which makes the system calls in order to execute cscope
 	* @param[in] command the number crreponsding to the command to execute, argument need by cscope
-	* @param[in] command the argument describing the name need by cscope
-	*/;
+	* @param[in] arg the argument describing the name need by cscope
+	**/
 	std::string launchExternalTool(int command, std::string arg);
 	/**
 	* remove all space from a string
@@ -126,7 +125,6 @@ private :
 	* @return vector of string corresponding to the name of each param in the call
 	*/
 	std::vector<std::string>* getVariablesNamesInFunctionCall(std::string callExpression);
-	
 	/**
 	* remove the not matchings definition of a function towards the number of argument
 	* if in the the list we have myFunction(var_1,var_2,var_3)
@@ -142,7 +140,6 @@ private :
 	* @param[in] listOfGlobalDefinitions list of definitions to sort 
 	*/
 	void removeMatchesFromHAndC(std::vector<std::vector<std::string>*>* listOfTypes,std::vector<FunctionGraph*>* listOfGlobalDefinitions);
-	
 	/**
 	* remove the .h function definition from the function called list
 	* @param[in] listOfGlobalDefinitions list of function definition to sort
@@ -163,7 +160,6 @@ private :
 	* @return the boolean 
 	*/
 	bool isValidCaracter(char& caracterToTest);
-
 	/**
 	* return the number of variable used for the function call
 	* @param[in] calledFunctionToFind cscope's output's line to search the variable in
@@ -176,7 +172,6 @@ private :
 	* @param[in] fileName the fine Name to compare with
 	*/
 	void removeNotConcernedDefinitionBasedOnFileName(std::vector< FunctionGraph* >* listOfGlobalDefinitions,std::string fileName);
-	
 	/**
 	* removes not matching function definition base on line number
 	* in case ov several definition with the same name of function , we take the neareast definition
@@ -193,6 +188,7 @@ private :
 	* in the second case we use the searched tag's Name
 	* @param[in] output the ouput from the egrep command to parse
 	* @param[in] arg
+	* @param[in] fileName the fileName of the associated tag output some time its the tag name
 	* @return list Of Function as FunctionGraph Formatted output
 	*/
 	std::vector<FunctionGraph*>* egrepOutputParser(std::string output, std::string fileName, int arg);
@@ -215,8 +211,7 @@ private :
 	* @param[in] listOfTypesforGlobalDefinitions the list of type as array for each definition in the list to sort
 	* @param[in] arg the arg to as Object or non Object Style
 	* @return the list od definition after sorting 
-	* 
-	* */
+	**/
 	std::vector<FunctionGraph*>* getFunctionNotMacthingOnArgumentNumber(void* calledFunctionToFind,std::vector<FunctionGraph*>* listOfGlobalDefinitions,std::vector<std::vector<std::string>*>* listOfTypesforGlobalDefinitions,int arg);
 	/**
 	* this function search and calculated the number of argument for a function in its definition
@@ -244,8 +239,7 @@ private :
 	* @param[in] listOfFileWithListOfTagFunctionType the list of tag for each file
 	* @param[in]  listOfCallingFunction the list of every calls of the searched tag
 	* @return the list of caling Tag for every output
-	* 
-	* */
+	**/
 	std::vector< Tag* >* fullFilleWithListOftagForEachFile(std::map< std::string, std::vector< Tag* >* >* listOfFileWithListOfTagFunctionType, std::vector<FunctionGraph* >* listOfCallingFunction);
 	/**
 	* utility function used in calling graph function
@@ -256,12 +250,12 @@ private :
 	* @param[in] currentOutputFunction the output which contains the call of the tag (called one as it appears) which the parents are looked for 
 	* @return list of the calling tags
 	**/
-
 	std::vector< Tag* >* getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction);
 	/**
 	*used in calling graph creation for C++ code 
 	* @param[in] listOfTagToReturn the list to fullFill
 	* @param[in] listOfFunctionOutput the vector of calling 
+	* @param[in] tagAssociatedToFunction the tag for which we are searching the calling functions
 	* 
 	**/
 	void fullfillListOfTagToReturn ( std::vector< Tag* >* listOfTagToReturn, std::vector< FunctionGraph* >* listOfFunctionOutput, Tag* tagAssociatedToFunction);
@@ -273,18 +267,24 @@ private :
 	* @param[in] callingFunction function which might call the child ( called function )
 	* @param[in] calledFunction function whom parents are searched
 	* @return true if the function is truly one of the parent
-	*/
+	**/
 	bool checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction);
 	/**
 	* remove the tags which are the same than the parents one
 	* @param[in] listOfTagToReturn the child list
 	* @param[in] tagAssociatedToFunction the parent
-	* 
-	*/
+	**/
 	 void removeSameTagForCalling(std::vector< Tag* >* listOfTagToReturn, Tag* tagAssociatedToFunction);
 	
 public :
 	
+	/**
+	 * 
+	 * simple constructor
+	 * @param[in] myconfiguration the configuration object
+	 * @param[in] myTagManager tag manager for manipulatings tags
+	 * @return a LauncherCscope object
+	 **/
 	 LauncherCscope(Configuration* myconfiguration,TagsManager* myTagManager);
 	/**
 	* init Cscope as an external tool
@@ -309,8 +309,7 @@ public :
 	* @param[in] command the number corresponding to the executed command
 	* @param[in] tagAssociatedToFunction the tag on which the search is done
 	* @return  a list of Tag for the view
-	* 
-	*/
+	**/
 	std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction);
 	/**
 	* calculate the length of the function passed in the tag
@@ -318,18 +317,16 @@ public :
 	* @return the length in line unit
 	*/
 	int launchCommandExternalTool(Tag *tagAssociatedToFunction);
-
 	/**
 	* simple getter 
 	* @return a boolean translating 
 	*/
-
 	bool getIsLaunched();
 	/**
 	* function which returns a tag corresponding to the functionGraph 
 	* @param[in] outputFunction corresponds to a line from cscope output , on which one we do tasks
 	* @return the tag matching the cscope output line
-	*/
+	**/
 	Tag * getTagFromFunctionGraphOutput(FunctionGraph* outputFunction);
 
 };

@@ -47,7 +47,7 @@ public :
 	 */
 	virtual int getFunctionLength(Tag * tagAssociatedToFunction)=0;
 	/**
-	 * calsical destructor
+	 * classical destructor
 	 **/
 	virtual ~Graph(){};
 	
