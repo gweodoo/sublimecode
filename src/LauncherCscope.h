@@ -75,8 +75,7 @@ private :
 	std::vector<FunctionGraph*>* getGlobalDefinitionsFrom(std::string nameOfFunction);
 	
 	/**
-	* step - 2
-	* second step remove from the list the definition which are not function definitions and which are #define aliases
+	* second step remove from the list the definition which are not function definitions and which are \#define aliases
 	* @param[in] listOfGlobalDefinitions the list of definitions on which we remove the not function output given by cscope
 	* 
 	*/
@@ -103,6 +102,7 @@ private :
 	* function which makes the system calls in order to execute cscope
 	* @param[in] command the number crreponsding to the command to execute, argument need by cscope
 	* @param[in] arg the argument describing the name need by cscope
+	* @return the output of the external command launched
 	**/
 	std::string launchExternalTool(int command, std::string arg);
 	/**
@@ -148,10 +148,13 @@ private :
 	void removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions);
 	/**
 	* this function removes from the function called which do not belong to the function 
+	* it remove everythins external to the function, or everything internal to the function ( two usage )
 	* @param[in] lineStart the line where the function definition starts
 	* @param[in] lineStop the line where the function definition stops
 	* @param[in] listOfFunctionCalled the list of function definition to sort
 	* @param[in] listOfFunctionCalled function definition to compare with
+	* @param[in] functionAssociatedToTag the function associated to the tag
+	* @param[in] argForSensOfUse the arg in order to know how to use this function
 	*/
 	void removeFromListFunctionNotBelonginToStackCall( int lineStart,int lineStop,std::vector<FunctionGraph*>* listOfFunctionCalled,void * functionAssociatedToTag,int argForSensOfUse);
 	/**
