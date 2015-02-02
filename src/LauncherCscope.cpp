@@ -1339,7 +1339,15 @@ std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std
 	}
 	return listOfTagToReturn;
 }
-
+/**
+ * utility function need in calling graph function
+ * used in the case we do not use cscope in order to get the list of parent
+ * we find the calling function ( as a tag ) in its file
+ * and we are , line by line , looking for a call of the called function
+ * @param[in] callingFunction function which might call the child ( called function )
+ * @param[in] calledFunction function whom parents are searched
+ * 
+ */
 bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction)
 {
 	
