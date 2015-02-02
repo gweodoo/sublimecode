@@ -952,7 +952,7 @@ int LauncherCscope::getLineForEndOfFunctionDefinition(Tag* tagAssociatedToFuncti
 									if(currentLine.at(p-1)!='\''&&currentLine.at(p-1)!='"'&&currentLine.at(p-1)!='='&&currentLine.at(p-1)!=(char)39)niveauBraceBracket--;
 								}else
 									niveauBraceBracket--;
-								}
+								
 							}
 						}
 					}
