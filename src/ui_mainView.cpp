@@ -22,7 +22,7 @@
 #define RSZW(percent) (this->width*percent/100)
 #define RSZH(percent) (this->height*percent/100)
 
-const char * const Ui_MainView::legendLabels[] = {"Expand graph", "Compress graph", "Next graph", "Unresolved"};
+const char * const Ui_MainView::legendLabels[] = {"Collapsed", "Expanded", "Subgraph", "Unresolved"};
 
 void Ui_MainView::setupUi(QMainWindow *MainView)
 {
@@ -133,7 +133,6 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	tabWidget->setGeometry(QRect(RSZW(0), RSZH(0), RSZW(71), RSZH(100)));
 	tabWidget->addTab(webView, "Home");
 	tabWidget->setTabsClosable(true);
-	tabWidget->setStyleSheet("QTabBar::tab { min-width: 30ex; max-width: 30ex; } QTabBar::tab::hover {background: #F5F5F5; border-radius: 3px;} ");
 	
 	waitingMovie = new QMovie(":/mySpinner.gif");
 	waitingLabel = new QLabel(centralWidget);
