@@ -25,22 +25,42 @@
 #include <QWebView>
 #include <QWebPage>
 
+/**
+ * Object forwarded to HTML files, in order to transfer data
+ *
+ * This object is used to transfer data from SublimeCode application to html
+ * page, used by JS to display graphs.
+ */
 class ObjectTo : public QObject
 {
     Q_OBJECT
 public:
-    ObjectTo(QObject *parent);
-    void setValue(QWebView *view, QString objectValue);
+	/**
+	 * main constructor
+	 * \param[in] parent upstream accessor
+	 */
+	ObjectTo(QObject *parent);
+	/**
+	 * set attribute to transfer
+	 * \param[in] view the view
+	 * \param[in] objectValue the value to save
+	 */
+	void setValue(QWebView *view, QString objectValue);
     
 public slots:
-    QString getValue();
+	/**
+	 * get the associated value
+	 * \return a QString as the value to send
+	 */
+	QString getValue();
     
 private slots:
-    void attachObject();
+	///link the object to the javascript
+	void attachObject();
     
 private:
-    QWebFrame *frame;
-    QString objectValue;
+	QWebFrame *frame;     ///< the dependent view
+	QString objectValue;  ///< value to transfer
 };
 
 #endif // OBJECTTO_H

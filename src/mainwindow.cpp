@@ -34,9 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui = new UI_MainWindow1();
 	ui->setupUi(this);
    
-	QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(Rechercher_Sources()));
-	QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(Rechercher_Destination()));
-	QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(Rechercher_Archive()));
+	QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(findSources()));
+	QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(findDestination()));
+	QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(findArchive()));
 	QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
 	
 	handlerThread = new HandlerThread;
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::Rechercher_Sources()
+void MainWindow::findSources()
 {
 	fileNameSource = QFileDialog::getExistingDirectory(this, tr("Choose a Directory"),"~");
 	ui->getLineEdit()->setText(fileNameSource);
@@ -63,7 +63,7 @@ bool MainWindow::removeDir(QString file)
 	
 }
 
-void MainWindow::Rechercher_Destination()
+void MainWindow::findDestination()
 {
 	QMessageBox::StandardButton reply;
 	bool ok;
@@ -101,7 +101,7 @@ void MainWindow::Rechercher_Destination()
 	}
 }
 
-void MainWindow::Rechercher_Archive()
+void MainWindow::findArchive()
 {
 	fileNameArchive = QFileDialog::getOpenFileName(this, "Please select an Archive file","~", "*.zip *.tar.gz *.tar.bz2");
 	ui->getLineEditArchive()->setText(fileNameArchive);
