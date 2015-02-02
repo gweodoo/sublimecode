@@ -28,10 +28,34 @@
 class Launcher {
 
 public :
+	/**
+	 * init cscope program
+	 * @return boolean for successful initialization
+	 * 
+	 */
 	virtual bool initExternalTool()=0;
+	/**
+	 * init cscope program
+	 * @return boolean for successful destruction
+	 * 
+	 */
 	virtual bool closeExternalTool()=0;
+	/**
+	 * return list of tags 
+	 * can be the list of called tags by the tagAssociatedToFunction
+	 * can be the list of calling functions by the tagAssociatedToFunction
+	 * @param[in] command the number of the command
+	 * @param[in] tagAssociatedToFunction the concerned tagAssociatedToFunction
+	 * @return the list of tags
+	 * 
+	 * 
 	virtual std::vector<Tag*>* launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)=0;
-	
+	/**
+	 * calculates some metrics for a tag
+	 * for now it give just the function length ( number of line for the function definition )
+	 * @param[in] tagAssociatedToFunction the tagAssociatedToFunction
+	 * @return the number of Line
+	 */
 	virtual int launchCommandExternalTool(Tag *tagAssociatedToFunction)=0;
 };
 
