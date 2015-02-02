@@ -362,26 +362,39 @@ void MainView::generateHighlightFunction(QString number)
 
 void MainView::createNewSearchTab(QString html, string text)
 {
-	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
-	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
-	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
- 	QWebView *webView = qobject_cast<QWebView *>(w);
-	webView->setHtml(html);
-	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
-	QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
-	qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	int index = 0;
+	index = checkAlreadyOpenedTab(text);
+	if(index >= 0 && index < ui->getTabWidget()->count()){
+		ui->getTabWidget()->setCurrentIndex(index);
+	} else {
+		ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
+		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+		QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+		QWebView *webView = qobject_cast<QWebView *>(w);
+		webView->setHtml(html);
+		webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+		QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
+		qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	}
 }
 
 
 void MainView::createNewHighlightTab(QString html, string text)
 {
-	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
-	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
-	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
- 	QWebView *webView = qobject_cast<QWebView *>(w);
-	webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
-	createHTMLFile(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html", html);
-	webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
+	int index = 0;
+	index = checkAlreadyOpenedTab(text);
+	if(index >= 0 && index < ui->getTabWidget()->count()){
+		ui->getTabWidget()->setCurrentIndex(index);
+	} else {
+
+		ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
+		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+		QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+		QWebView *webView = qobject_cast<QWebView *>(w);
+		webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+		createHTMLFile(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html", html);
+		webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
+	}
 }
 
 void MainView::createHTMLFile(QString filename, QString html)
@@ -407,16 +420,22 @@ QString MainView::readFile (const QString& filename)
 
 void MainView::createNewGraphTab(QUrl html, string filepath, string text)
 {
-	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
-	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
-	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
-	QWebView *webView = qobject_cast<QWebView *>(w);
-	ObjectTo *objectTo = new ObjectTo(webView);
-	objectTo->setValue(webView, QString::fromUtf8(filepath.c_str()));
-	webView->setUrl(html);
-	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
-	QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
-	qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	int index = 0;
+	index = checkAlreadyOpenedTab(text);
+	if(index >= 0 && index < ui->getTabWidget()->count()){
+		ui->getTabWidget()->setCurrentIndex(index);
+	} else {
+		ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
+		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+		QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+		QWebView *webView = qobject_cast<QWebView *>(w);
+		ObjectTo *objectTo = new ObjectTo(webView);
+		objectTo->setValue(webView, QString::fromUtf8(filepath.c_str()));
+		webView->setUrl(html);
+		webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+		QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
+		qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	}
 }
 
 void MainView::waitingStart()
@@ -431,4 +450,12 @@ void MainView::waitingStop()
 	ui->getCentralWidget()->setEnabled(true);
 	ui->getWaitingMovie()->stop();
 	ui->getWaitingLabel()->setVisible(false);
+}
+
+int MainView::checkAlreadyOpenedTab( string chain ) {
+	for(int i = 0; i < ui->getTabWidget()->count(); i++){
+		if(chain == ui->getTabWidget()->tabText(i).toStdString())
+			return i;
+	}
+	return -1;
 }

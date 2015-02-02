@@ -42,6 +42,14 @@ typedef std::map<std::string, std::string > map_type_string;
 class MainView : public QMainWindow
 {
     Q_OBJECT
+private:
+	/**
+	 * check if a tab with given name is already opened
+	 * \param[in] chain the tab title
+	 * \return the tab index if exists
+	 * \return -1 otherwise
+	 */
+	int checkAlreadyOpenedTab( string chain );
 
 public:
 	static const char * const buildTypes[]; ///< The different types of graphs
