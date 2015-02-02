@@ -30,6 +30,7 @@
 using namespace std;
 
 const char * const MainView::buildTypes[] = {"CalledGraph", "CallingGraph", "IncludedGraph", "InclusionGraph"};
+const std::string MainView::tabTypes[] = {"Called", "Calling", "Included", "Inclusion", "Search", "File"};
 
 MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 {
@@ -160,7 +161,12 @@ void MainView::onRunnerChanged()
 
 void MainView::changeTab(int index) 
 {
-	if (ui->getTabWidget()->tabText(index).contains("Graph")) //A modifier
+	std::string myString = ui->getTabWidget()->tabText(index).toStdString();
+	
+	if ((myString.compare(0, tabTypes[0].length(), tabTypes[0]) == 0) 
+			|| (myString.compare(0, tabTypes[1].length(), tabTypes[1]) == 0)
+			|| (myString.compare(0, tabTypes[2].length(), tabTypes[2]) == 0) 
+			|| (myString.compare(0, tabTypes[3].length(), tabTypes[3]) == 0))
 		ui->getLegendGroupBox()->setVisible(true);
 	else 
 		ui->getLegendGroupBox()->setVisible(false);
@@ -231,7 +237,7 @@ void MainView::handlePushButton()
 	this->tag = ui->getLineEdit()->text().toStdString();
 	QString html;
 	QString xmlFile;
-	string display;
+	std::string display;
 	
 	if(ui->getRadioName()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByTags_"+QString::fromStdString(tag)+".xml";
@@ -240,7 +246,7 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByTags(tag);
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslTag);
-		display="Search : "+tag;
+		display = tabTypes[4] + " : "+tag;
 	}
 	else if (ui->getRadioType()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
@@ -250,7 +256,7 @@ void MainView::handlePushButton()
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslType);ui->getWaitingMovie()->stop();
 		ui->getWaitingLabel()->setVisible(false);
-		display="Search : "+string(tabTypeNames[ui->gettypeSelector()->currentIndex()]);
+		display = tabTypes[4] + " : "+string(tabTypeNames[ui->gettypeSelector()->currentIndex()]);
 	}
 	else if(ui->getRadioFile()->isChecked()){
 		QString filename_modified = QString::fromStdString(tag);
@@ -261,7 +267,7 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByFile(tag);
 		}
 		html = cHTML->TransformToHTML(xmlFile , xslFile);
-		display = "Search : "+tag;
+		display = tabTypes[4] + " : "+tag;
 	}
 	researchList.push_back(cHTML->getList());
 	createNewSearchTab(html, display);
@@ -310,13 +316,13 @@ void MainView::generateGraph(Tag * myTag, std::string buildType)
 	display = "";
 
 	if (buildType == buildTypes[0])
-		display = "Called : " + myTag->getName()+"()";
+		display = tabTypes[0] + " : " + myTag->getName()+"()";
 	else if (buildType == buildTypes[1])
-		display = "Calling : " + myTag->getName()+"()";
+		display = tabTypes[1] + " : " + myTag->getName()+"()";
 	else if (buildType == buildTypes[2])
-			display = "Included : "+tag;
+		display = tabTypes[2] + " : "+tag;
 	else if (buildType == buildTypes[3])
-		display = "Including : "+tag;
+		display = tabTypes[3] + " : "+tag;
 
 	if (buildType == buildTypes[0] || buildType == buildTypes[1]){ //If call graph
 		filepath = config->getDestDir() + "/" + buildType + "_" + myTag->hashFileName() + ".json";
@@ -363,7 +369,7 @@ void MainView::generateHighlightFunction(QString number)
 	if(ext!="js"){
 		cHTML->createListHighlightFunction(cur);
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
-		chain = "File : " + cur->getFileName().substr(config->getSourcesDir().size());
+		chain = tabTypes[5] + " : " + cur->getFileName().substr(config->getSourcesDir().size());
 		createNewHighlightTab(html, chain);
 	}
 	else {
@@ -475,11 +481,12 @@ void MainView::setCurrentFileSearched()
 
 void MainView::removeFileSearched(int index)
 {
-	if (ui->getTabWidget()->tabText(index).contains("Search"))
+	if (ui->getTabWidget()->tabText(index).toStdString().compare(0, tabTypes[4].length(), tabTypes[4]) == 0)
 	{
 		int cpt = -1;
 		for(int i = 0; i < ui->getTabWidget()->count(); i++) {
-			if (ui->getTabWidget()->tabText(i).contains("Search") && i <= ui->getTabWidget()->currentIndex())
+			if ((ui->getTabWidget()->tabText(i).toStdString().compare(0, tabTypes[4].length(), tabTypes[4]) == 0) 
+					&& (i <= ui->getTabWidget()->currentIndex()))
 				cpt++;
 		}
 		

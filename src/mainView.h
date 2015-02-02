@@ -53,6 +53,7 @@ private:
 
 public:
 	static const char * const buildTypes[]; ///< The different types of graphs
+	static const std::string tabTypes[]; ///< The different types of tabs
 	
 	/**
 	 * Construtor of the main view

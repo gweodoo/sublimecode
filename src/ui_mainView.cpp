@@ -34,7 +34,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	this->height = MainView->height();
 	
 	MainView->move((rect.width() - this->width) /2, (rect.height() - this->height) /2);
-	
+	 
 	if (MainView->objectName().isEmpty())
 		MainView->setObjectName(QString("MainView"));
 	centralWidget = new QWidget(MainView);
@@ -129,6 +129,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	webView->settings()->setObjectCacheCapacities(0,0,0);
 	
 	tabWidget = new QTabWidget(rightWidget);
+	tabWidget->setObjectName(QString("tabWidget"));
 	tabWidget->setGeometry(QRect(RSZW(0), RSZH(0), RSZW(71), RSZH(100)));
 	tabWidget->addTab(webView, "Home");
 	tabWidget->setTabsClosable(true);
