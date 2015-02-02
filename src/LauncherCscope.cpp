@@ -1298,6 +1298,7 @@ void LauncherCscope::removeFromListWhereTagNameIsDefinition(std::vector< Functio
 	}
 	
 }
+
 std::vector<Tag*>* LauncherCscope::fullFilleWithListOftagForEachFile(std::map< string, std::vector< Tag* >* >* listOfFileWithListOfTagFunctionType,std::vector< FunctionGraph* >*listOfCallingFunction )
 {
 	std::vector<Tag*>* listOfTagToReturn=new std::vector<Tag*>();
@@ -1323,7 +1324,15 @@ std::vector<Tag*>* LauncherCscope::fullFilleWithListOftagForEachFile(std::map< s
 	}
 	return listOfTagToReturn;
 }
-
+/**
+ * utility function used in calling graph function
+ * we have the called function and the files where it's called
+ * for each file where it appears we look for the tag for whom the definition start  is the nearest of the  called function
+ * the neareast tag found is the callinf function
+ * @param[in] listOfTagInfileMatchingCurrentOutputFunction the list of tag which might call the tag
+ * @param[in] currentOutputFunction the output which contains the call of the tag (called one as it appears) which the parents are looked for 
+ * @return list of the calling tags
+ * */
 
 std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction)
 {
@@ -1340,13 +1349,13 @@ std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std
 	return listOfTagToReturn;
 }
 /**
- * utility function need in calling graph function
+ * utility function needed in calling graph function
  * used in the case we do not use cscope in order to get the list of parent
  * we find the calling function ( as a tag ) in its file
  * and we are , line by line , looking for a call of the called function
  * @param[in] callingFunction function which might call the child ( called function )
  * @param[in] calledFunction function whom parents are searched
- * 
+ * @return true if the function is truly one of the parent
  */
 bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction)
 {
