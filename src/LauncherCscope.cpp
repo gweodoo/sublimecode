@@ -150,7 +150,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 							string output =this->launchExternalTool(3,tagAssociatedToFunction->getFileName());
 							vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName(),1);
 							//now we get the list of function called as if it was given by cscope
-							int line_stop=this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction);
+							
 							this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction,1);
 							//now we have only the ouput matching to the tag associated function
 							for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
@@ -168,7 +168,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				 */
 				string output =this->launchExternalTool(1,tagAssociatedToFunction->getName());
 				vector<FunctionGraph*>* listOfFunctionCalled=this->cscopeOutputParser(output);
-				for(int p=0;p<listOfFunctionCalled->size();p++)
+				for(unsigned int p=0;p<listOfFunctionCalled->size();p++)
 				{
 					if(this->isLanguageKey(listOfFunctionCalled->at(p)->getTagName()))
 					{
@@ -795,12 +795,13 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 {
 	if(arg==2)
 	{
+		listOfTypesforGlobalDefinitions->size();
 		Tag*calledFunctionToFindCasted=(Tag*)calledFunctionToFind;
 		// getting the number of argument of the tag defintion
 		unsigned int numberOfArgument=this-> getNumberOfVariableUsedInFunctionDefinition(calledFunctionToFindCasted);
 		//now comparing with the list of function calling
 		// here the argument is listOfglabDefinitions but its in fact list Of the function call 
-		for(int i=0;i<listOfGlobalDefinitions->size();i++)
+		for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
 		{
 			string call=listOfGlobalDefinitions->at(i)->getSignature().substr(listOfGlobalDefinitions->at(i)->getSignature().find(calledFunctionToFindCasted->getName()));
 			vector<string>* variablesNames=this->getVariablesNamesInFunctionCall(call);
@@ -821,13 +822,12 @@ std::vector<FunctionGraph*>* LauncherCscope::getFunctionNotMacthingOnArgumentNum
 	{
 		FunctionGraph*calledFunctionToFindCasted=(FunctionGraph*)calledFunctionToFind;
 		unsigned int numberOfArgument=this->getNumberOfVariableUsedInFunctionCall(calledFunctionToFindCasted);
-		for(int i=0;i<listOfTypesforGlobalDefinitions->size();i++){
-		
-			if((listOfTypesforGlobalDefinitions->at(i)->size())!=numberOfArgument) {
+		for(unsigned int i=0;i<listOfTypesforGlobalDefinitions->size();i++){
+			unsigned int sizeOfList=listOfTypesforGlobalDefinitions->at(i)->size();
+			if((sizeOfList)!=numberOfArgument) {
 				
 				if(listOfGlobalDefinitions->size()>i) newListOfGlobalDefinition->push_back(listOfGlobalDefinitions->at(i));
 			
-				
 			}
 		}
 		
@@ -1092,8 +1092,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 	string listOfArgument="";
 	if(stream!=0){
 		string currentLine;
-		int numberOfLine=0;
-		int niveauBraceBracket=0;
+		bool functionNameAlreadyRead=false;
 		int functionInitialPos=0;
 		bool firstBraceBracketAlreyFound=false;
 		/**
@@ -1103,10 +1102,7 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 		{
 			getline(stream,currentLine);
 		}
-		bool functionNameAlreadyRead=false;
-		bool cursorIsInComment=false;
-		bool signatureclosingBraceBracketFound=false;
-		
+
 		/**
 		 * looking for brace brackets
 		 * case division in order to find the first brace bracket
@@ -1164,7 +1160,7 @@ std::vector<Tag*>* LauncherCscope::fullFilleWithListOftagForEachFile(std::map< s
 {
 	std::vector<Tag*>* listOfTagToReturn=new std::vector<Tag*>();
 
-	for(int i=0;i<listOfCallingFunction->size();i++)
+	for(unsigned int i=0;i<listOfCallingFunction->size();i++)
 	{
 		FunctionGraph* currentOutputFunction=listOfCallingFunction->at(i);
 		std::map<std::string,std::vector<Tag*>*>::iterator listOfTagForFile=listOfFileWithListOfTagFunctionType->find(currentOutputFunction->getFileName());
@@ -1190,7 +1186,7 @@ std::vector<Tag*>* LauncherCscope::getTagByNearestPositionFromFunctionOutput(std
 {
 	std::vector< Tag* >* listOfTagToReturn=new std::vector< Tag* >();
 	
-	for(int i=0;i<listOfTagInfileMatchingCurrentOutputFunction->size();i++)
+	for(unsigned int i=0;i<listOfTagInfileMatchingCurrentOutputFunction->size();i++)
 	{
 		Tag * currTag=listOfTagInfileMatchingCurrentOutputFunction->at(i);
 		int lineStartTag=currTag->getLineNumber();
@@ -1234,7 +1230,7 @@ void LauncherCscope::removeSameTagForCalling(std::vector< Tag* >* listOfTagToRet
 {
 	for(vector<Tag*>::iterator it = listOfTagToReturn->begin(); it != listOfTagToReturn->end();){
 		if((((std::string)(*it)->getName()).compare(tagAssociatedToFunction->getName()))==0&&(((std::string)(*it)->getFileName()).compare(tagAssociatedToFunction->getFileName()))==0
-		&&(((int)(*it)->getLineNumber())==tagAssociatedToFunction->getLineNumber()))
+		&&(((unsigned int)(*it)->getLineNumber())==tagAssociatedToFunction->getLineNumber()))
 		{
 			listOfTagToReturn->erase(it);
 		}else{
