@@ -308,12 +308,20 @@ void MainView::generateGraph(int number, std::string buildType)
 void MainView::generateGraph(Tag * myTag, std::string buildType)
 {
 	display = "";
+
+	if (buildType == buildTypes[0])
+		display = "Called : " + myTag->getName()+"()";
+	else if (buildType == buildTypes[1])
+		display = "Calling : " + myTag->getName()+"()";
+	else if (buildType == buildTypes[2])
+			display = "Included : "+tag;
+	else if (buildType == buildTypes[3])
+		display = "Including : "+tag;
+
 	if (buildType == buildTypes[0] || buildType == buildTypes[1]){ //If call graph
-		display = "Graph : " + myTag->getName()+"()";
 		filepath = config->getDestDir() + "/" + buildType + "_" + myTag->hashFileName() + ".json";
 	}
 	else if (buildType == buildTypes[2] || buildType == buildTypes[3]){ //If include graph
-		display = "Graph : " + tag;
 		filepath = config->getDestDir() + "/" + buildType + "_"
 		+ (QString::fromStdString(this->tag).replace("/","_")).toStdString() + ".json";
 	}
@@ -334,11 +342,6 @@ void MainView::generateGraph(Tag * myTag, std::string buildType)
 	}
 	else
 	{
-		if (buildType == buildTypes[0] || buildType == buildTypes[1]) //If call graph
-			display = "Graph : " + myTag->getName()+"()";
-		else if (buildType == buildTypes[2] || buildType == buildTypes[3]) //If include graph
-			display = "Graph : " + filepath;
-
 		createNewGraphTab(QUrl(QString::fromStdString(config->getRootPath()) + "/callGraph.html"), filepath, display);
 		
 		waitingStop();
