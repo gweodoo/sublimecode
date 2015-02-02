@@ -193,6 +193,7 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 		}
 		if(command==2)
 		{
+		
 			vector<FunctionGraph*>* listOfCallingFunction=NULL;
 			string output=this->launchExternalTool(2,tagAssociatedToFunction->getName());
 			listOfCallingFunction=this->cscopeOutputParser(output);
@@ -795,7 +796,7 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 {
 	if(arg==2)
 	{
-		listOfTypesforGlobalDefinitions->size();
+		if(listOfTypesforGlobalDefinitions->t
 		Tag*calledFunctionToFindCasted=(Tag*)calledFunctionToFind;
 		// getting the number of argument of the tag defintion
 		unsigned int numberOfArgument=this-> getNumberOfVariableUsedInFunctionDefinition(calledFunctionToFindCasted);
