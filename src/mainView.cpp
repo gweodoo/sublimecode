@@ -420,22 +420,16 @@ QString MainView::readFile (const QString& filename)
 
 void MainView::createNewGraphTab(QUrl html, string filepath, string text)
 {
-	int index = 0;
-	index = checkAlreadyOpenedTab(text);
-	if(index >= 0 && index < ui->getTabWidget()->count()){
-		ui->getTabWidget()->setCurrentIndex(index);
-	} else {
-		ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
-		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
-		QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
-		QWebView *webView = qobject_cast<QWebView *>(w);
-		ObjectTo *objectTo = new ObjectTo(webView);
-		objectTo->setValue(webView, QString::fromUtf8(filepath.c_str()));
-		webView->setUrl(html);
-		webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
-		QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
-		qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-	}
+	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
+	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+	QWebView *webView = qobject_cast<QWebView *>(w);
+	ObjectTo *objectTo = new ObjectTo(webView);
+	objectTo->setValue(webView, QString::fromUtf8(filepath.c_str()));
+	webView->setUrl(html);
+	webView->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+	QObject::connect(qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page(), SIGNAL(linkClicked(QUrl)), this, SLOT(slot_linkClicked(QUrl)));
+	qobject_cast<QWebView *>(ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex()))->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 }
 
 void MainView::waitingStart()
