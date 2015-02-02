@@ -116,11 +116,9 @@ bool LauncherCscope::closeExternalTool()
 vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAssociatedToFunction)
 {
 	vector<Tag*> *listOfTagToReturn=NULL;
-	
-	
 	if(tagAssociatedToFunction!=NULL)
 	{
-	listOfTagToReturn=new vector<Tag*>();	
+		listOfTagToReturn=new vector<Tag*>();	
 		/**
 		* launch cscope and get the output
 		*/
@@ -130,13 +128,9 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 			/**
 			 * checking if c/c++
 			 */
-			
 			unsigned  long int lastSlashPosition=tagAssociatedToFunction->getFileName().find_last_of("/");
-			
 			string fileNameWithoutPath=tagAssociatedToFunction->getFileName().substr(lastSlashPosition);
-			
 			unsigned long  int isC=fileNameWithoutPath.find(".c");
-			
 			if(isC!=string::npos)
 			{
 					unsigned  long int isCpp=fileNameWithoutPath.substr(isC).find("pp");
@@ -168,30 +162,21 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 						}
 						else
 						{
-							
 							/**
 							* we have to deal it for the C++ style object method
 							*/
-							
 							string output =this->launchExternalTool(3,tagAssociatedToFunction->getFileName());
 							vector<FunctionGraph*>* listOfFunctionCalled=this->egrepOutputParser(output,tagAssociatedToFunction->getFileName(),1);
 							//now we get the list of function called as if it was given by cscope
 							int line_stop=this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction);
-							
 							this->removeFromListFunctionNotBelonginToStackCall(tagAssociatedToFunction->getLineNumber(),this->getLineForEndOfFunctionDefinition(tagAssociatedToFunction),listOfFunctionCalled,tagAssociatedToFunction,1);
-					
-						
 							//now we have only the ouput matching to the tag associated function
 							for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 							{
-						
-					
 								FunctionGraph* functToFind=listOfFunctionCalled->at(i);
 								Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 								if(tag!=NULL)listOfTagToReturn->push_back(tag);
 							}
-							
-							
 							
 						}
 				
@@ -216,7 +201,6 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 				
 				for(unsigned int i=0;i<listOfFunctionCalled->size();i++)
 				{
-			
 					FunctionGraph* functToFind=listOfFunctionCalled->at(i);
 					Tag* tag=this->getTagFromFunctionGraphOutput(functToFind);
 					if(tag!=NULL)listOfTagToReturn->push_back(tag);
@@ -248,38 +232,30 @@ vector<Tag*>* LauncherCscope::launchCommandExternalTool(int command, Tag * tagAs
 					//START MODIFICATION
 						if(listOfCallingFunction->empty())
 						{
-							
 							listOfCallingFunction=this->egrepOutputParser(this->launchExternalTool(4,tagAssociatedToFunction->getName()),tagAssociatedToFunction->getName(),2);
 							this->removeMatchesFromHAndC(listOfCallingFunction);
-							//for(int i =0;i<listOfCallingFunction->size();i++) cout<<" liste from egrep parse "<<listOfCallingFunction->at(i)->getTagName()<<" signature "<< listOfCallingFunction->at(i)->getSignature()<<endl;
 							std::map<std::string,std::vector<Tag*>*>* listOfFileWithListOfTagFunctionType=new std::map<std::string,std::vector<Tag*>*>();
 							this->removeFromListWhereTagNameIsDefinition(listOfCallingFunction);
 							vector<Tag*>* tagToConcatenate=this->fullFilleWithListOftagForEachFile(listOfFileWithListOfTagFunctionType,listOfCallingFunction);
 							listOfTagToReturn->insert(listOfTagToReturn->end(),tagToConcatenate->begin(),tagToConcatenate->end());
-							
 						}else
 						{
-						
-							
 							fullfillListOfTagToReturn(listOfTagToReturn,listOfCallingFunction,tagAssociatedToFunction);
-							for(vector<Tag*>::iterator it = listOfTagToReturn->begin(); it != listOfTagToReturn->end();){
-							
-								it=((*it)->getName().compare(tagAssociatedToFunction->getName())==0&&(*it)->getLineNumber()==tagAssociatedToFunction->getLineNumber()&&(*it)->getFileName().compare(tagAssociatedToFunction->getFileName()))?listOfTagToReturn->erase(it):it+1;
-							}
-							
 						}
 					}else
 					{
 						fullfillListOfTagToReturn(listOfTagToReturn,listOfCallingFunction,tagAssociatedToFunction);
 					}
 			//END  MODIFICATION
-		
-			
-			delete listOfCallingFunction;
+					delete listOfCallingFunction;
 			}
+			
 			
 		}
 	}
+		this->removeSameTagForCalling(listOfTagToReturn,tagAssociatedToFunction);
+		
+		
 		
 	sort(listOfTagToReturn->begin(),listOfTagToReturn->end());
 	listOfTagToReturn->erase(unique(listOfTagToReturn->begin(),listOfTagToReturn->end()),listOfTagToReturn->end());
@@ -1202,16 +1178,7 @@ void LauncherCscope::removeFromListFunctionNotBelonginToStackCall(int lineStart,
  */
 void LauncherCscope::removeMatchesFromHAndC(std::vector<FunctionGraph*>* listOfGlobalDefinitions)
 {
-	/*for(unsigned int i=0;i<listOfGlobalDefinitions->size();i++)
-	{
-		cout<< " ----------------removing start ------------------------- "<<listOfGlobalDefinitions->at(i)->getFileName()<<endl;
-		if(listOfGlobalDefinitions->at(i)->getFileName().find(".h")!=string::npos||listOfGlobalDefinitions->at(i)->getFileName().find(".js")!=string::npos) {
-			delete listOfGlobalDefinitions->at(i);
-			listOfGlobalDefinitions->erase(listOfGlobalDefinitions->begin()+i);
-			i--;
-		}
-		cout<< " ----------------removing End -------------------------"<<endl;
-	}*/
+	
 	for(vector<FunctionGraph*>::iterator it = listOfGlobalDefinitions->begin(); it != listOfGlobalDefinitions->end();){
 		assert((*it)!=NULL);
 		if((*it)->getFileName().find(".c")==string::npos)
@@ -1457,3 +1424,16 @@ bool LauncherCscope::checkFunctionIsTrulyCallingThisFunction(Tag* callingFunctio
 		return callf;
 
 }
+void LauncherCscope::removeSameTagForCalling(std::vector< Tag* >* listOfTagToReturn, Tag* tagAssociatedToFunction)
+{
+		for(vector<Tag*>::iterator it = listOfTagToReturn->begin(); it != listOfTagToReturn->end();){
+			if((((std::string)(*it)->getName()).compare(tagAssociatedToFunction->getName()))==0&&(((std::string)(*it)->getFileName()).compare(tagAssociatedToFunction->getFileName()))==0
+			&&(((int)(*it)->getLineNumber())==tagAssociatedToFunction->getLineNumber()))
+			{
+				listOfTagToReturn->erase(it);
+			}else{
+				it=it+1;
+			}
+		}
+}
+

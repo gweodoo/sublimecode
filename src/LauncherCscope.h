@@ -76,6 +76,7 @@ private :
 	 std::vector< Tag* >* getTagByNearestPositionFromFunctionOutput(std::vector< Tag* >* listOfTagInfileMatchingCurrentOutputFunction, FunctionGraph* currentOutputFunction);
 	void fullfillListOfTagToReturn ( std::vector< Tag* >* listOfTagToReturn, std::vector< FunctionGraph* >* listOfFunctionOutput, Tag* tagAssociatedToFunction);
 	bool checkFunctionIsTrulyCallingThisFunction(Tag* callingFunction, Tag* calledFunction);
+	 void removeSameTagForCalling(std::vector< Tag* >* listOfTagToReturn, Tag* tagAssociatedToFunction);
 	
 public :
 	
