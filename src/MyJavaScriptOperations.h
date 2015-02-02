@@ -35,23 +35,48 @@ typedef std::vector<std::pair<std::string, int> > vector_type_int;
 class MyJavaScriptOperations : public QObject {
 	Q_OBJECT
 public:
+	/**
+	 * function filling the listcplusToJavaScript 
+	 * \param[in] list_cplus the list of stats about C++ (name of the file and number of code lines)
+	 */
 	void fillcplusList(QVariantMap list_cplus);
+	/**
+	 * function filling the listheaderToJavaScript 
+	 * \param[in] list_header the list of stats about headers (name of the file and number of code lines)
+	 */
 	void fillheaderList(QVariantMap list_header);
+	/**
+	 * function filling the listlanguageToJavaScript 
+	 * \param[in] list_language the list of stats about programming language (name of language and number of code lines)
+	 */
 	void filllanguageList(QVariantMap list_language);
+	/**
+	 * function filling the listtagToJavaScript 
+	 * \param[in] list_tag the list of stats about tags in files (name of the file and number of tags)
+	 */
 	void filltagList(QVariantMap list_tag);
+	/**
+	 * function filling the listinfoToJavaScript 
+	 * \param[in] list_info the list of project infos (name of the information and information)
+	 */
 	void fillinfoList(QVariantMap list_info);
+	///function exposing the of stats about C++ to the Javascript file
 	Q_INVOKABLE QVariantMap getcpluslistToJavaScript();
+	///function exposing the of stats about header to the Javascript file
 	Q_INVOKABLE QVariantMap getheaderlistToJavaScript();
+	///function exposing the of stats about programming languages to the Javascript file
 	Q_INVOKABLE QVariantMap getlanguagelistToJavaScript();
+	///function exposing the of stats about tags to the Javascript file
 	Q_INVOKABLE QVariantMap gettaglistToJavaScript();
+	///function exposing the of stats about project info to the Javascript file
 	Q_INVOKABLE QVariantMap getinfolistToJavaScript();
 
 private:
-	QVariantMap listcplusToJavaScript;
-	QVariantMap listheaderToJavaScript;
-	QVariantMap listlanguageToJavaScript;
-	QVariantMap listtagToJavaScript;
-	QVariantMap listinfoToJavaScript;
+	QVariantMap listcplusToJavaScript;      ///< QVariantMap of C++ stats transmitted to JavaScript
+	QVariantMap listheaderToJavaScript;     ///< QVariantMap of header stats transmitted to JavaScript
+	QVariantMap listlanguageToJavaScript;   ///< QVariantMap of language stats transmitted to JavaScript
+	QVariantMap listtagToJavaScript;        ///< QVariantMap of tags stats transmitted to JavaScript
+	QVariantMap listinfoToJavaScript;       ///< QVariantMap of project info stats transmitted to JavaScript
 };
 
 #endif // MYJAVASCRIPTOPERATIONS_H
