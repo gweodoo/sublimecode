@@ -909,6 +909,11 @@ void LauncherCscope::removeNotMatchingFunctionOnArgumentNumber(void* calledFunct
 		}
 	}
 }
+/**
+ * 
+ * 
+ * 
+ * */
 std::vector<FunctionGraph*>* LauncherCscope::getFunctionNotMacthingOnArgumentNumber(void* calledFunctionToFind,std::vector<FunctionGraph*>* listOfGlobalDefinitions,vector<vector<string>*>* listOfTypesforGlobalDefinitions,int arg)
 {
 	vector<FunctionGraph*>* newListOfGlobalDefinition=new vector<FunctionGraph*>();
@@ -1190,6 +1195,13 @@ FunctionGraph* LauncherCscope::removeNotConcernedDefinitionBaseInLineNumer(std::
 	 return funcToReturn;
 }
 
+/**
+ * utility function which checks if the string pass as an argument belongs to the language syntax
+ * with the regex pattern we get [a-zA-Z0-9_]* *\\(.*\\)\" pattern
+ * so we canget not wanted output as for(argumentExample) instead of myFunction1() , myFunction2() ...
+ * @param[in] nameOfSymbolFound the string to check
+ * @return the check result as a boolean
+ **/
 bool LauncherCscope::isLanguageKey(std::string nameOfSymbolFound)
 {
 	bool isLanguageKey=false;
@@ -1275,26 +1287,19 @@ ifstream stream(calledFunctionToFindCasted->getFileName().c_str());
 	
 }
 /**
- * function used in launchCommandExternalTool
- * it's used in the calling graph ( arg 2 ) 
- * looking for the function calling a function
- * we make a egrep and remove from the output list (listOfCallingFunction) the name matching a definition
+ * utility function needed for creating the calling graph
+ * it's used in the calling graph launchCommandExternalTool arg 2
+ * after having  made an egrep on the searched tag 
+ * we  remove from the output list (listOfCallingFunction) the name of matching a definition
+ * @param[in] listOfCallingFunction the list of calling function to sort
  * 
  */
 void LauncherCscope::removeFromListWhereTagNameIsDefinition(std::vector< FunctionGraph* >* listOfCallingFunction)
 {
-
-	
 	for(vector<FunctionGraph*>::iterator it = listOfCallingFunction->begin(); it != listOfCallingFunction->end();){
 		assert((*it)!=NULL);
-		if (this->myTagManager->findSpecificTag((*it)->getTagName(),(*it)->getFileName(),(*it)->getLine())==NULL)
-		{
-			it= it+1; 
-		}
-		else{
-			
-			listOfCallingFunction->erase(it);
-		}
+		if (this->myTagManager->findSpecificTag((*it)->getTagName(),(*it)->getFileName(),(*it)->getLine())==NULL)it= it+1; 
+		else listOfCallingFunction->erase(it);
 	}
 	
 }
