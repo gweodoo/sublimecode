@@ -32,18 +32,15 @@ UI_MainWindow1::UI_MainWindow1(){
 	sourcesGroupBox = NULL;
 	destinationGroupBox = NULL;
 	tabs = NULL;
-	Parcourir = NULL;
-	Parcourir1 = NULL;
-	parcourirArchive = NULL;
+	browseSource = NULL;
+	browseDest = NULL;
+	browseArchive = NULL;
 	Finish= NULL;
-	lineEdit= NULL;
-	lineEdit1= NULL;
+	lineEditSource= NULL;
+	lineEditDest= NULL;
 	lineEditVcs= NULL;
 	lineEditArchive= NULL;
 	lineEditBranch= NULL;
-	menuBar= NULL;
-	mainToolBar= NULL;
-	statusBar= NULL;
 	labelBranch= NULL;
 	comboBoxVcs= NULL;
 	comboBoxArchive= NULL;
@@ -52,11 +49,7 @@ UI_MainWindow1::~UI_MainWindow1(){
 	if(Finish != NULL) delete Finish;
 	if(destinationGroupBox != NULL) delete destinationGroupBox;
 	if(sourcesGroupBox != NULL) delete sourcesGroupBox;
-	if(statusBar != NULL) delete statusBar;
 	if(centralWidget != NULL) delete centralWidget;
-	if(mainToolBar != NULL) delete mainToolBar;
-	if(menuBar != NULL) delete menuBar;
-
 }
 
 const char * const UI_MainWindow1::vcsTypes[] = {"CVS", "Git", "Mercurial", "SVN"};
@@ -75,33 +68,22 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString("MainWindow"));
-	//MainWindow->resize(600, 350);
-        this->menuBar = new QMenuBar(MainWindow);
-	this->menuBar->setObjectName(QString("menuBar"));
-        MainWindow->setMenuBar(this->menuBar);
-        this->mainToolBar = new QToolBar(MainWindow);
-	this->mainToolBar->setObjectName(QString("mainToolBar"));
-        MainWindow->addToolBar(this->mainToolBar);
         this->centralWidget = new QWidget(MainWindow);
 	this->centralWidget->setObjectName(QString("centralWidget"));
         MainWindow->setCentralWidget(this->centralWidget);
-        this->statusBar = new QStatusBar(MainWindow);
-	this->statusBar->setObjectName(QString("statusBar"));
-        MainWindow->setStatusBar(this->statusBar);
 	
 	sourcesGroupBox = new QGroupBox(centralWidget);
 	sourcesGroupBox->setObjectName(QString("sourcesGroupBox"));
-	//sourcesGroupBox->setGeometry(QRect(20, 20, 560, 150));
 	sourcesGroupBox->setGeometry(QRect(RSZW(3), RSZH(12), RSZW(94), RSZH(38)));
 	
 	this->directoryWidget = new QWidget();
-	this->lineEdit = new QLineEdit(this->directoryWidget);
-        this->lineEdit->setObjectName(QString("lineEdit"));
-        this->lineEdit->setGeometry(QRect(RSZW(3), RSZH(8), RSZW(67), RSZH(6)));
-	this->Parcourir = new QPushButton(this->directoryWidget);
-        this->Parcourir->setObjectName(QString("Parcourir"));
-	this->Parcourir->setGeometry(QRect(RSZW(71), RSZH(8), RSZW(16), RSZH(6)));
-	this->Parcourir->setText(QString("Browse..."));
+	this->lineEditSource = new QLineEdit(this->directoryWidget);
+        this->lineEditSource->setObjectName(QString("lineEdit"));
+        this->lineEditSource->setGeometry(QRect(RSZW(3), RSZH(8), RSZW(67), RSZH(6)));
+	this->browseSource = new QPushButton(this->directoryWidget);
+        this->browseSource->setObjectName(QString("Parcourir"));
+	this->browseSource->setGeometry(QRect(RSZW(71), RSZH(8), RSZW(16), RSZH(6)));
+	this->browseSource->setText(QString("Browse..."));
 	
 	this->vcsWidget = new QWidget();
 	this->comboBoxVcs = new QComboBox(this->vcsWidget);
@@ -124,10 +106,10 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	this->lineEditArchive = new QLineEdit(this->archiveWidget);
         this->lineEditArchive->setObjectName(QString("lineEditArchive"));
         this->lineEditArchive->setGeometry(QRect(RSZW(20), RSZH(8), RSZW(50), RSZH(6)));
-	this->parcourirArchive = new QPushButton(this->archiveWidget);
-        this->parcourirArchive->setObjectName(QString("parcourirArchive"));
-	this->parcourirArchive->setGeometry(QRect(RSZW(71), RSZH(8), RSZW(16), RSZH(6)));
-	this->parcourirArchive->setText(QString("Browse..."));
+	this->browseArchive = new QPushButton(this->archiveWidget);
+        this->browseArchive->setObjectName(QString("parcourirArchive"));
+	this->browseArchive->setGeometry(QRect(RSZW(71), RSZH(8), RSZW(16), RSZH(6)));
+	this->browseArchive->setText(QString("Browse..."));
 	
    	this->tabs = new QTabWidget(this->sourcesGroupBox);
 	this->tabs->setGeometry(QRect(RSZW(2), RSZH(7), RSZW(90), RSZH(28)));
@@ -139,11 +121,11 @@ void UI_MainWindow1::setupUi(QMainWindow *MainWindow)
 	destinationGroupBox->setObjectName(QString("destinationGroupBox"));
 	destinationGroupBox->setGeometry(QRect(RSZW(3), RSZH(56), RSZW(94), RSZH(19)));
 
-        this->lineEdit1 = new QLineEdit(this->destinationGroupBox);
-        this->lineEdit1->setGeometry(QRect(RSZW(5), RSZH(8), RSZW(67), RSZH(6)));
-	this->Parcourir1 = new QPushButton(this->destinationGroupBox);
-	this->Parcourir1->setText(QString("Browse..."));
-	this->Parcourir1->setGeometry(QRect(RSZW(73), RSZH(8), RSZW(16), RSZH(6)));
+        this->lineEditDest = new QLineEdit(this->destinationGroupBox);
+        this->lineEditDest->setGeometry(QRect(RSZW(5), RSZH(8), RSZW(67), RSZH(6)));
+	this->browseDest = new QPushButton(this->destinationGroupBox);
+	this->browseDest->setText(QString("Browse..."));
+	this->browseDest->setGeometry(QRect(RSZW(73), RSZH(8), RSZW(16), RSZH(6)));
 	
 	this->Finish = new QPushButton(centralWidget);
         this->Finish->setGeometry(QRect(RSZW(76), RSZH(81), RSZW(21), RSZH(6)));
@@ -176,9 +158,9 @@ void UI_MainWindow1::retranslateUi(QMainWindow *MainWindow)
 		this->comboBoxArchive->addItem(archiveTypes[i]);
 } // retranslateUi
 
-QLineEdit* UI_MainWindow1::getLineEdit()
+QLineEdit* UI_MainWindow1::getLineEditSource()
 {
-	return this->lineEdit;
+	return this->lineEditSource;
 }
 
 QLineEdit* UI_MainWindow1::getLineEditBranch()
@@ -186,9 +168,9 @@ QLineEdit* UI_MainWindow1::getLineEditBranch()
 	return this->lineEditBranch;
 }
 
-QLineEdit* UI_MainWindow1::getLineEdit1()
+QLineEdit* UI_MainWindow1::getLineEditDest()
 {
-	return this->lineEdit1;
+	return this->lineEditDest;
 }
 
 QLineEdit* UI_MainWindow1::getLineEditArchive()
@@ -196,19 +178,19 @@ QLineEdit* UI_MainWindow1::getLineEditArchive()
 	return this->lineEditArchive;
 }
 
-QPushButton* UI_MainWindow1::getParcourir()
+QPushButton* UI_MainWindow1::getButtonBrowseSource()
 {
-	return this->Parcourir;
+	return this->browseSource;
 }
 
-QPushButton* UI_MainWindow1::getParcourir1()
+QPushButton* UI_MainWindow1::getButtonBrowseDest()
 {
-	return this->Parcourir1;
+	return this->browseDest;
 }
 
-QPushButton* UI_MainWindow1::getParcourirArchive()
+QPushButton* UI_MainWindow1::getButtonBrowseArchive()
 {
-	return this->parcourirArchive;
+	return this->browseArchive;
 }
 
 QPushButton* UI_MainWindow1::getFinish()

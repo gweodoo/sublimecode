@@ -34,9 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui = new UI_MainWindow1();
 	ui->setupUi(this);
    
-	QObject::connect(ui->getParcourir(), SIGNAL(clicked()), this, SLOT(findSources()));
-	QObject::connect(ui->getParcourir1(), SIGNAL(clicked()), this, SLOT(findDestination()));
-	QObject::connect(ui->getParcourirArchive(), SIGNAL(clicked()), this, SLOT(findArchive()));
+	QObject::connect(ui->getButtonBrowseSource(), SIGNAL(clicked()), this, SLOT(findSources()));
+	QObject::connect(ui->getButtonBrowseDest(), SIGNAL(clicked()), this, SLOT(findDestination()));
+	QObject::connect(ui->getButtonBrowseArchive(), SIGNAL(clicked()), this, SLOT(findArchive()));
 	QObject::connect(ui->getFinish(), SIGNAL(clicked()), this, SLOT(Finish()));
 	
 	handlerThread = new HandlerThread;
@@ -47,7 +47,7 @@ MainWindow::~MainWindow() {}
 void MainWindow::findSources()
 {
 	fileNameSource = QFileDialog::getExistingDirectory(this, tr("Choose a Directory"),"~");
-	ui->getLineEdit()->setText(fileNameSource);
+	ui->getLineEditSource()->setText(fileNameSource);
 }
 
 bool MainWindow::removeDir(QString file)
@@ -69,7 +69,7 @@ void MainWindow::findDestination()
 	bool ok;
 	fileNameDestination = QFileDialog::getExistingDirectory(this, tr("Choose or Create a Directory"),"~");
 	QString fileNameDestinationRoot = fileNameDestination;
-	ui->getLineEdit1()->setText(fileNameDestination);
+	ui->getLineEditDest()->setText(fileNameDestination);
 
 	if(fileNameDestination=="")
 		fileNameDestination = "SublimeCode_build";
@@ -89,10 +89,10 @@ void MainWindow::findDestination()
 			}
 			else if (ok && fileNameDestination.isEmpty()){
 				QMessageBox::warning(this, "Empty field", "Build folder name cannot be empty !");
-				ui->getLineEdit1()->setText("");
+				ui->getLineEditDest()->setText("");
 			}
 			else if (!ok){
-				ui->getLineEdit1()->setText("");
+				ui->getLineEditDest()->setText("");
 			}
 		}
 	}
@@ -138,7 +138,7 @@ void MainWindow::Finish()
 	switch (currentTab){
 		case 0 :
 		{
-			fileNameSource = ui->getLineEdit()->text();
+			fileNameSource = ui->getLineEditSource()->text();
 
 			if(fileNameSource==""){
 				QMessageBox::critical(this, "Empty field", "Please provide project sources", QMessageBox::Ok);

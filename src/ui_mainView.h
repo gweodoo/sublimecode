@@ -42,43 +42,110 @@
 
 QT_BEGIN_NAMESPACE
 
+/**
+ * Ui mainView is the displayer (window maker) for main view
+ */
 class Ui_MainView
 {
 public:
-	~Ui_MainView();
+	///default destructor
+	~Ui_MainView();    
+	/**
+	 * graphical initializer
+	 * \param[in] MainView the base class MainView, our container
+	 */
 	void setupUi(QMainWindow *MainView);
+	/**
+	 * Translate buttons according to system language.
+	 * \param[in] MainView the base class MainView, our container
+	 */
 	void retranslateUi(QMainWindow *MainView);
+	/**
+	 * Main widget qt object getter
+	 * \return class member as pointer
+	 */
 	QWidget *getCentralWidget();
+	/**
+	 * Home webView qt object getter
+	 * \return class member as pointer
+	 */
 	QWebView *getWebView();
+	/**
+	 * Search button qt object getter
+	 * \return class member as pointer
+	 */
 	QPushButton * getPushButton();
+	/**
+	 * Open new project button qt object getter
+	 * \return class member as pointer
+	 */
 	QPushButton * getResetButton();
+	/**
+	 * Tag line edit qt object getter
+	 * \return class member as pointer
+	 */
 	QLineEdit * getLineEdit();
+	/**
+	 * Tag radio button qt object getter
+	 * \return class member as pointer
+	 */
 	QRadioButton *getRadioName();
+	/**
+	 * Type radio button qt object getter
+	 * \return class member as pointer
+	 */
 	QRadioButton *getRadioType();
+	/**
+	 * File radio button qt object getter
+	 * \return class member as pointer
+	 */	
 	QRadioButton *getRadioFile();
+	/**
+	 * Tag type selector qt object getter
+	 * \return class member as pointer
+	 */
 	QComboBox *gettypeSelector();
+	/**
+	 * Tab widget qt object getter
+	 * \return class member as pointer
+	 */
 	QTabWidget *getTabWidget();
+	/**
+	 * Enter keybord shortcut qt object getter
+	 * \return class member as pointer
+	 */
 	QShortcut *getShortcutEnter();
+	/**
+	 * Waiting spinner label qt object getter
+	 * \return class member as pointer
+	 */
 	QLabel *getWaitingLabel();
+	/**
+	 * Waiting spinner movie qt object getter
+	 * \return class member as pointer
+	 */
 	QMovie *getWaitingMovie();
     
 private:
-	QComboBox *typeSelector;
-	QWidget *centralWidget;
-	QWidget *leftWidget;
-	QGroupBox *tagGroupBox;
-	QGroupBox *projectGroupBox;
-	QPushButton *pushButton;
-	QPushButton *resetButton;
-	QLineEdit *lineEdit;
-	QWidget *rightWidget;
-	QWebView *webView;
-	QRadioButton *radio1, *radio2, *radio3;
-	QTabWidget *tabWidget;
-	QShortcut *enterShortcut;
-	int width, height;
-	QLabel *waitingLabel;
-	QMovie *waitingMovie;
+	QComboBox *typeSelector;                   ///< tag type selector
+	QWidget *centralWidget;                    ///< main widget 
+	QWidget *leftWidget;                       ///< left widget
+	QGroupBox *tagGroupBox;                    ///< tag search group box
+	QGroupBox *projectGroupBox;                ///< open new project group box
+	QPushButton *pushButton;                   ///< search button
+	QPushButton *resetButton;                  ///< open new project button
+	QLineEdit *lineEdit;                       ///< get tag line edit
+	QWidget *rightWidget;                      ///< right widget
+	QWebView *webView;                         ///< home web view
+	QRadioButton *radio1;                      ///< tag radio buttons
+	QRadioButton *radio2;                      ///< type radio buttons
+	QRadioButton *radio3;                      ///< file radio buttons
+	QTabWidget *tabWidget;                     ///< tab widget
+	QShortcut *enterShortcut;                  ///< keyboard enter shortcut
+	int width;                                 ///< window width 
+	int height;                                ///< window height
+	QLabel *waitingLabel;                      ///< waiting spinner label
+	QMovie *waitingMovie;                      ///< waiting spinner movie 
 };
 
 QT_END_NAMESPACE

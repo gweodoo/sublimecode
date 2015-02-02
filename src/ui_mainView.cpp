@@ -42,7 +42,6 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	leftWidget->setObjectName(QString("leftWidget"));
 	leftWidget->setGeometry(QRect(0, 0, RSZW(28), RSZH(100)));
 	
-
 	tagGroupBox = new QGroupBox(leftWidget);
 	tagGroupBox->setObjectName(QString("tagGroupBox"));
 	tagGroupBox->setGeometry(QRect(RSZW(2), RSZH(3), RSZW(24), RSZH(26)));
@@ -101,8 +100,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	tabWidget->setGeometry(QRect(RSZW(0), RSZH(0), RSZW(71), RSZH(100)));
 	tabWidget->addTab(webView, "Home");
 	tabWidget->setTabsClosable(true);
-	tabWidget->setStyleSheet("QTabBar::tab { min-width: 30ex; max-width: 30ex; } QTabBar::tab::hover {background: #F5F5F5; border-radius: 3px;}");
-
+	tabWidget->setStyleSheet("QTabBar::tab { min-width: 30ex; max-width: 30ex; } QTabBar::tab::hover {background: #F5F5F5; border-radius: 3px;} ");
 	
 	waitingMovie = new QMovie(":/mySpinner.gif");
 	waitingLabel = new QLabel(centralWidget);

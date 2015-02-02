@@ -41,59 +41,130 @@
 
 QT_BEGIN_NAMESPACE
 
+/**
+* Ui mainwindow is the displayer (window maker) for the project selection view
+*/
 class UI_MainWindow1
 {
 private: 
-    QWidget *centralWidget;
-    QWidget *directoryWidget;
-    QWidget *vcsWidget;
-    QWidget *archiveWidget;
-    QGroupBox *sourcesGroupBox;
-    QGroupBox *destinationGroupBox;
-    QTabWidget *tabs;
-    QPushButton *Parcourir;
-    QPushButton *Parcourir1;
-    QPushButton *parcourirArchive;
-    QPushButton *Finish;
-    QLineEdit *lineEdit;
-    QLineEdit *lineEdit1;
-    QLineEdit *lineEditVcs;
-    QLineEdit *lineEditArchive;
-    QLineEdit * lineEditBranch;
-    QMenuBar *menuBar;
-    QToolBar *mainToolBar;
-    QStatusBar *statusBar;
-    QLabel *labelBranch;
-    QLabel *labelParcourir;
-    QLabel *labelParcourir1;
-    int width, height;
-    QComboBox *comboBoxVcs;
-    QComboBox *comboBoxArchive;
-    QLabel *waitingLabel;
-    QMovie *waitingMovie;
+	QWidget *centralWidget;                      ///< main widget 
+	QWidget *directoryWidget;                    ///< directory widget
+	QWidget *vcsWidget;                          ///< vcs widget
+	QWidget *archiveWidget;                      ///< archive widget
+	QGroupBox *sourcesGroupBox;                  ///< sources group box
+	QGroupBox *destinationGroupBox;              ///< destination group box
+	QTabWidget *tabs;                            ///< tab widget
+	QPushButton *browseSource;                   ///< browse local sources button 
+	QPushButton *browseDest;                     ///< browse destination button
+	QPushButton *browseArchive;                  ///< browse archive button
+	QPushButton *Finish;                         ///< finish button
+	QLineEdit *lineEditSource;                   ///< local file sources line edit
+	QLineEdit *lineEditDest;                     ///< destination line edit
+	QLineEdit *lineEditVcs;                      ///< vcs line edit
+	QLineEdit *lineEditArchive;                  ///< archive line edit
+	QLineEdit * lineEditBranch;                  ///< branch vcs line edit 
+	QLabel *labelBranch;                         ///< branch label
+	QLabel *labelBrowseSource;                   ///< local sources label
+	QLabel *labelBrowseDest;                     ///< destination label
+	int width;                                   ///< window width 
+	int height;                                  ///< window height
+	QComboBox *comboBoxVcs;                      ///< vcs combo box
+	QComboBox *comboBoxArchive;                  ///< archive combo box
+	QLabel *waitingLabel;                        ///< waiting spinner label
+	QMovie *waitingMovie;                        ///< waiting spinner movie
+	static const char * const vcsTypes[];        ///< char* array of vcs types
+	static const char * const archiveTypes[];    ///< char* array of archive types
 
 public:
-    static const char * const vcsTypes[];
-    static const char * const archiveTypes[];
-    explicit UI_MainWindow1();
-    ~UI_MainWindow1();
-    void setupUi(QMainWindow *MainWindow);
-    void retranslateUi(QMainWindow *MainWindow);
-    QLineEdit *getLineEdit();
-    QLineEdit *getLineEditBranch();
-    QLineEdit *getLineEdit1();
-    QLineEdit *getLineEditArchive();
-    QLineEdit *getLineEditVcs();
-    QPushButton *getParcourir();
-    QPushButton *getParcourir1();
-    QPushButton *getParcourirArchive();
-    QPushButton *getFinish();
-    QTabWidget *getQTabWidget();
-    QComboBox *getComboBoxVcs();
-    QComboBox *getComboBoxArchive();
-    QMovie *getWaitingMovie();
-    QWidget *getCentralWidget();
-    QLabel *getWaitingLabel();
+	///default destructor
+	explicit UI_MainWindow1();
+	///default destructor
+	~UI_MainWindow1();
+	/**
+	* graphical initializer
+	* \param[in] MainWindow the base class MainWindow, our container
+	*/
+	void setupUi(QMainWindow *MainWindow);
+	/**
+	 * Translate buttons according to system language.
+	 * \param[in] MainWindow the base class MainWindow, our container
+	 */
+	void retranslateUi(QMainWindow *MainWindow);
+	/**
+	 * Local source file line edit qt object getter
+	 * \return class member as pointer
+	 */
+	QLineEdit *getLineEditSource();
+	/**
+	 * Archive branch line edit qt object getter
+	 * \return class member as pointer
+	 */
+	QLineEdit *getLineEditBranch();
+	/**
+	 * Destination line edit qt object getter
+	 * \return class member as pointer
+	 */
+	QLineEdit *getLineEditDest();
+	/**
+	 * Archive line edit qt object getter
+	 * \return class member as pointer
+	 */
+	QLineEdit *getLineEditArchive();
+	/**
+	 * Vcs line edit qt object getter
+	 * \return class member as pointer
+	 */
+	QLineEdit *getLineEditVcs();
+	/**
+	 * Browse local sources file button qt object getter
+	 * \return class member as pointer
+	 */
+	QPushButton *getButtonBrowseSource();
+	/**
+	 * Browse local destination file button qt object getter
+	 * \return class member as pointer
+	 */
+	QPushButton *getButtonBrowseDest();
+	/**
+	 * Browse local archive file button qt object getter
+	 * \return class member as pointer
+	 */
+	QPushButton *getButtonBrowseArchive();
+	/**
+	 * Finish button qt object getter
+	 * \return class member as pointer
+	 */
+	QPushButton *getFinish();
+	/**
+	 * Tabs widget qt object getter
+	 * \return class member as pointer
+	 */
+	QTabWidget *getQTabWidget();
+	/**
+	 * Vcs combo box qt object getter
+	 * \return class member as pointer
+	 */
+	QComboBox *getComboBoxVcs();
+	/**
+	 * Archive combo box qt object getter
+	 * \return class member as pointer
+	 */
+	QComboBox *getComboBoxArchive();
+	/**
+	 * Waiting spinner movie qt object getter
+	 * \return class member as pointer
+	 */
+	QMovie *getWaitingMovie();
+	/**
+	 * Main widget qt object getter
+	 * \return class member as pointer
+	 */
+	QWidget *getCentralWidget();
+	/**
+	 * Waiting spinner label qt object getter
+	 * \return class member as pointer
+	 */
+	QLabel *getWaitingLabel();
 };
 
 QT_END_NAMESPACE
