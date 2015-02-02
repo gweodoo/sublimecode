@@ -63,7 +63,7 @@ void Ui_MainView::setupUi(QMainWindow *MainView)
 	
 	radio1 = new QRadioButton(tagGroupBox);
 	radio1->setObjectName(QString("radio1"));
-	radio1->setGeometry(QRect(RSZW(2), RSZH(8), RSZW(9), RSZH(4)));
+	radio1->setGeometry(QRect(RSZW(2), RSZH(8), RSZW(10), RSZH(4)));
 	radio1->setText(": By Name");
 	radio1->setChecked(true);
 	
