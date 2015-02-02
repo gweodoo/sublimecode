@@ -348,7 +348,6 @@ void MainView::generateHighlightFunction(QString number)
 	researchList.push_back(cHTML->getList());
 	cur = researchList.at(ui->getTabWidget()->currentIndex()-1)->at(number.toInt() - 1);
 	QString ext = QString::fromStdString(cur->getFileName()).section('.',-1);
-		
 	if(ext!="js"){
 		cHTML->createListHighlightFunction(cur);
 		html = cHTML->TransformToHTML(xmlFile , xslHighlight);
@@ -381,20 +380,13 @@ void MainView::createNewSearchTab(QString html, string text)
 
 void MainView::createNewHighlightTab(QString html, string text)
 {
-	int index = 0;
-	index = checkAlreadyOpenedTab(text);
-	if(index >= 0 && index < ui->getTabWidget()->count()){
-		ui->getTabWidget()->setCurrentIndex(index);
-	} else {
-
-		ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
-		ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
-		QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
-		QWebView *webView = qobject_cast<QWebView *>(w);
-		webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
-		createHTMLFile(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html", html);
-		webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
-	}
+	ui->getTabWidget()->addTab(new QWebView, QString::fromStdString(text));
+	ui->getTabWidget()->setCurrentIndex(ui->getTabWidget()->count()-1);
+	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
+	QWebView *webView = qobject_cast<QWebView *>(w);
+	webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+	createHTMLFile(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html", html);
+	webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
 }
 
 void MainView::createHTMLFile(QString filename, QString html)
@@ -412,7 +404,7 @@ QString MainView::readFile (const QString& filename)
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream stream(&file);
-	qDebug() << stream.readAll();
+// 	qDebug() << stream.readAll();
         return stream.readAll();
     }
     return "";
