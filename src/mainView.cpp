@@ -62,7 +62,8 @@ MainView::MainView(Configuration *c, std::vector<std::string> fileList)
 	}
 	
 	fileSearchedVector = new std::vector<std::string>();
-	
+	QFile::copy(QString::fromStdString(config->getRootPath()+"/highlight.js"), QString::fromStdString(config->getDestDir()+"/highlight.js"));
+	QFile::copy(QString::fromStdString(config->getRootPath()+"/xcode.css"), QString::fromStdString(config->getDestDir()+"/xcode.css"));
 	this->show();
 	
 	cHTML = NULL;
@@ -406,8 +407,8 @@ void MainView::createNewHighlightTab(QString html, string text)
 	QWidget *w = ui->getTabWidget()->widget(ui->getTabWidget()->currentIndex());
 	QWebView *webView = qobject_cast<QWebView *>(w);
 	webView->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
-	createHTMLFile(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html", html);
-	webView->load(QUrl(QString::fromUtf8(config->getRootPath().c_str())+"/highlightFunction.html"));
+	createHTMLFile(QString::fromUtf8(config->getDestDir().c_str())+"/highlightFunction.html", html);
+	webView->load(QUrl(QString::fromUtf8(config->getDestDir().c_str())+"/highlightFunction.html"));
 }
 
 void MainView::createHTMLFile(QString filename, QString html)
