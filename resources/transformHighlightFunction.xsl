@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
 		<link rel="stylesheet" href="xcode.css"/>
-		<script src="highlight.pack.js">//</script>
+		<script src="highlight.js">//</script>
 		<script>hljs.initHighlightingOnLoad();</script>
 	</head>
 	<body>
