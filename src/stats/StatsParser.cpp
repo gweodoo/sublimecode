@@ -48,8 +48,8 @@ void StatsParser::load(){
 			item->fillFromString(cur);
 			tabLanguages.push_back(item);
 		}
-
 	}
+	UNUSED(ret);
 }
 
 void StatsParser::display() const {

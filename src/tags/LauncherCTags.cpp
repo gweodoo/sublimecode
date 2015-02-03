@@ -38,6 +38,7 @@ bool LauncherCTags::generateTagsFile() {
 	int chainSize = 0;
 	size_t i = 0;
 	int ret;
+
 	while(i < listPaths.size()){
 		chainStr = "";
 		chainSize = 0;
@@ -50,6 +51,7 @@ bool LauncherCTags::generateTagsFile() {
 		ret = system(command.c_str());
 		assert(ret != -1);
 	}
+	UNUSED(ret);
 	return true;
 
 }

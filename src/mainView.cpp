@@ -246,7 +246,7 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByTags(tag);
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslTag);
-		display = tabTypes[4] + " : "+tag;
+		display = tabTypes[4] + " name : "+tag;
 	}
 	else if (ui->getRadioType()->isChecked()){
 		xmlFile = QString::fromUtf8(config->getDestDir().c_str())+"/myXLMSearchByType_"+tabTypeNames[ui->gettypeSelector()->currentIndex()]+".xml";
@@ -256,7 +256,7 @@ void MainView::handlePushButton()
 		}
  		html = cHTML->TransformToHTML(xmlFile, xslType);ui->getWaitingMovie()->stop();
 		ui->getWaitingLabel()->setVisible(false);
-		display = tabTypes[4] + " : "+string(tabTypeNames[ui->gettypeSelector()->currentIndex()]);
+		display = tabTypes[4] + " type : "+string(tabTypeNames[ui->gettypeSelector()->currentIndex()]);
 	}
 	else if(ui->getRadioFile()->isChecked()){
 		QString filename_modified = QString::fromStdString(tag);
@@ -267,7 +267,7 @@ void MainView::handlePushButton()
 			cHTML->createXMLSearchByFile(tag);
 		}
 		html = cHTML->TransformToHTML(xmlFile , xslFile);
-		display = tabTypes[4] + " : "+tag;
+		display = tabTypes[4] + " file : "+tag;
 	}
 	researchList.push_back(cHTML->getList());
 	createNewSearchTab(html, display);

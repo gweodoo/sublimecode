@@ -40,7 +40,6 @@
 #define scDebug(u)
 #define scError(u) {std::cerr << "ERROR: " << u << std::endl; exit(1);} while(0)
 #define scWarning(u) {std::cerr << "WARNING: "<< u <<std::endl;} while(0)
-
 #else
 #define scDebug(u) {std::cerr << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; } while(0)
 #define scError(u) {std::cerr << "ERROR: " << u << " (" << __FILE__<<":"<<__LINE__<<")"<< std::endl; exit(1);} while(0)
@@ -50,7 +49,7 @@
 
 /// Global macro to restart application
 #define APPLICATION_REBOOT 12345789
-
+#define UNUSED(u) (void)(u)
 /**
  * check if a given command as string is in path
  * \param[in] command the command name to check
