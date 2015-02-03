@@ -25,7 +25,7 @@
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), ui(NULL)
+    QMainWindow(parent), ui(NULL), handler(NULL)
 {
 	if(! (checkCommandExistency("ctags", true) && checkCommandExistency("cscope", true) && checkCommandExistency("cloc", true))){
 		QMessageBox::critical(this, "Dependency issue", "Some dependencies aren't resolved.\n Check for dependency:\n\t- CTags\n\t- CScope\n\t- Cloc\n\nAdd then to your PATH environment");
@@ -230,7 +230,7 @@ void MainWindow::Finish()
 
 void MainWindow::closeEvent(QCloseEvent* e){
 	handlerThread->quit();
-	delete handler;
+	if(handler != NULL) delete handler;
 	delete handlerThread;
 	delete ui;
 	QMainWindow::closeEvent(e);
