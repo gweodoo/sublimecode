@@ -27,9 +27,9 @@ void StatsParser::load(){
 	std::string command = "cloc --quiet --by-file-by-lang --csv "+config->getSourcesDir()+ " --report-file="+filename+" > /dev/null", result="", cur="";
 	vector<string> header;
 	bool first = false;
-	
-	system(command.c_str());
-	
+	int ret;
+	ret = system(command.c_str());
+	assert(ret != -1);
 	ifstream flux(filename.c_str());
 	while(getline(flux, cur, '\n')){
 		if(cur.empty()) continue;

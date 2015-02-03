@@ -91,7 +91,8 @@ bool LauncherCscope::closeExternalTool()
 {
 	bool returnParam=false;
 	string commandFileRemove_1=string("rm -rf ")+(string)this->myConfiguration->getDestDir()+string("/cscope* ");
-	if(!system(commandFileRemove_1.c_str())==-1) returnParam=true ;
+	int ret = system(commandFileRemove_1.c_str());
+	if(ret!=-1) returnParam=true ;
 	return returnParam;
 	
 }

@@ -37,6 +37,7 @@ bool LauncherCTags::generateTagsFile() {
 	std::string command = "", chainStr = "";
 	int chainSize = 0;
 	size_t i = 0;
+	int ret;
 	while(i < listPaths.size()){
 		chainStr = "";
 		chainSize = 0;
@@ -46,7 +47,8 @@ bool LauncherCTags::generateTagsFile() {
 			i++;
 		}
 		command = pathExecutable + options + " -a " + GLOBAL_OPTIONS + " -f " + config->getDestDir() + "/tags " + chainStr;
-		system(command.c_str());
+		ret = system(command.c_str());
+		assert(ret != -1);
 	}
 	return true;
 
