@@ -58,7 +58,10 @@ void Dialog::Finish()
 			fileList.push_back(converti);
 		}
 	}
-
+	if(fileList.empty()){
+			QMessageBox::warning(this, "No selected file", "You must select at least one item in the tree.\nPlease try again");
+			return;
+	}
 	new MainView(this->config, fileList);
 	this->hide();
 }
